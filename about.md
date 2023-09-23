@@ -1,5 +1,5 @@
 # GDUtils (Geode Port)
-**by [Jouca](user:Jouca) and [Firee](user:-1)**
+**by [Jouca](user:41222420) and [Firee](user:28196106)**
 A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute, game fixes & more!
 ![Mod Example](gdutilsdevs.gdutils/Screenshot_1.png)
 # Features
