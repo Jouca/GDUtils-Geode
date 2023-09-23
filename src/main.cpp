@@ -677,14 +677,6 @@ class $modify(SecretVault, SecretLayer2) {
 
 // touhou time
 
-#include <Geode/modify/EndLevelLayer.hpp>
-class $modify(EndLevelLayer) {
-    const char* getEndText() {
-        return "Hooray - Well done!";
-    }
-};
-
-
 // When the socket connection is made
 $on_mod(Loaded) {
     log::info("GDUtils Mod Loaded");

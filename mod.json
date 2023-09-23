@@ -1,7 +1,7 @@
 {
 	"geode": "1.3.3",
 	"version": "v1.0.0",
-	"id": "gdutils",
+	"id": "gdutilsdevs.gdutils",
 	"name": "GDUtils",
 	"developer": "Jouca & Firee",
 	"description": "Realtime Rate Notifications, auto-song mute, game fixes & more!",
