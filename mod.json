@@ -1,0 +1,148 @@
+{
+	"geode": "1.3.3",
+	"version": "v1.0.0",
+	"id": "firee.gdutils",
+	"name": "GDUtils",
+	"developer": "Jouca & Firee",
+	"description": "Realtime Rate Notifications, auto-song mute, game fixes & more!",
+    "resources": {
+        "sprites": [
+            "resources/Screenshot_1.png"
+        ]
+    },
+    "settings": {
+        "test-notification": {
+            "name": "Test",
+            "description": "NONE",
+            "type": "custom"
+        },
+        "notification-section": {
+            "name": "Notifications",
+            "description": "This category is for where it should <cy>show notifications</c>, and also <cy>what notifications</c> precisely.",
+            "type": "custom",
+            "scale": 300,
+            "posX": 65
+        },
+        "everywhereElse": {
+            "name": "Everywhere Else",
+            "description": "If notifications should show on any screen.",
+            "type": "bool",
+            "default": true
+        },
+        "inEditor": {
+            "name": "In Editor",
+            "description": "If notifications should be shown in the editor.",
+            "type": "bool",
+            "default": true
+        },
+        "inLevels": {
+            "name": "In Levels",
+            "description": "If notifications should be shown when playing levels.",
+            "type": "bool",
+            "default": true
+        },
+        "newRate": {
+            "name": "New Rate",
+            "description": "Whether or not to notify about new <cy>Rated Levels</c>",
+            "type": "bool",
+            "default": true
+        },
+        "daily": {
+            "name": "Daily",
+            "description": "Whether or not to notify about upcoming <cy>Daily Levels</c>",
+            "type": "bool",
+            "default": true
+        },
+        "weekly": {
+            "name": "Weekly",
+            "description": "Whether or not to notify about upcoming <cy>Weekly Demons</c>",
+            "type": "bool",
+            "default": true
+        },
+        "sfx": {
+            "name": "Notification SFX",
+            "description": "If notifications should play a sound when they are shown.",
+            "type": "bool",
+            "default": true
+        },
+        "notification-placement-section": {
+            "name": "Notification Placement",
+            "description": "This category is for where to <cy>show the notification</c> in the screen on a specific corner.",
+            "type": "custom",
+            "scale": 300,
+            "posX": 100
+        },
+        "notificationPlacement": {
+            "name": "Placement",
+            "description": "Where the notification should be placed.\n1 = <cy>Top Left</c> | 2 = <cy>Top Right</c>\n3 = <cy>Bottom Left</c> | 4 = <cy>Bottom Right</c>",
+            "type": "custom"
+        },
+        "notification-appearance-section": {
+            "name": "Notification Appearance",
+            "description": "This category is for <cy>setting notification boxes</c> for how it should appear.\nYou can also use <cb>decimals</c> in these options, such as <cy>0.5 size</c>, or <cy>3.5 seconds.</c>",
+            "type": "custom",
+            "scale": 350,
+            "posX": 105
+        },
+        "size": {
+            "name": "Size",
+            "description": "How big the notification should be.",
+            "type": "float",
+            "default": 1,
+            "min": 0.1,
+            "max": 2,
+            "control": {
+                "slider-step": 0.1,
+                "arrows": false
+            }
+        },
+        "time": {
+            "name": "Time Hold",
+            "description": "How long the notification should be.",
+            "type": "float",
+            "default": 3,
+            "min": 0.0,
+            "max": 15,
+            "control": {
+                "slider-step": 0.1
+            }
+        },
+        "spotify-section": {
+            "name": "Spotify",
+            "description": "This category is for determining when <cg>Spotify</c> should toggle <cr>mute</c>.\nThis only works if you currently have the <cg>Spotify App</c> open.\n\n<cy>If your music volume is set to 0, </c><cg>Spotify</c><cy>\nwill not be affected.</c>",
+            "type": "custom",
+            "scale": 350,
+            "posX": 40
+        },
+        "inEditorSpotify": {
+            "name": "In Editor",
+            "description": "Disabling this will not auto-mute Spotify when you are playing music in the Editor.",
+            "type": "bool",
+            "default": true
+        },
+        "inLevelsSpotify": {
+            "name": "In Levels",
+            "description": "Disabling this will not auto-mute Spotify when you are playing a level, and music is playing.",
+            "type": "bool",
+            "default": true
+        },
+        "spotifyApp": {
+            "name": "Application",
+            "description": "This will decide what application should be auto-muted.",
+            "type": "custom",
+            "default": "Spotify.exe"
+        },
+        "credits-section": {
+            "name": "Credits",
+            "description": "Below are the credits for those that developed the mod, and beta-tested the mod!",
+            "type": "custom",
+            "scale": 300,
+            "posX": 40
+        },
+        "credit-buttons": {
+            "name": "Credit Buttons",
+            "type": "custom"
+        }
+
+    }
+}

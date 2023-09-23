@@ -1,0 +1,5 @@
+build-linux/
+libs/
+build.sh
+compile_commands.json
+
