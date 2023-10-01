@@ -37,12 +37,16 @@ endif()
 add_subdirectory($ENV{GEODE_SDK} ${CMAKE_CURRENT_BINARY_DIR}/geode)
 
 add_subdirectory(libs/socket.io-client-cpp)
-target_link_libraries(${PROJECT_NAME} sioclient comdlg32 ${CMAKE_CURRENT_SOURCE_DIR}/libs/FMOD/fmod.lib opengl32 ${CMAKE_CURRENT_SOURCE_DIR}/libs/glew/glew32.lib)
+if (CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin")
+  target_link_libraries(${PROJECT_NAME} sioclient)
+else()
+  target_link_libraries(${PROJECT_NAME} sioclient comdlg32 ${CMAKE_CURRENT_SOURCE_DIR}/libs/FMOD/fmod.lib opengl32 ${CMAKE_CURRENT_SOURCE_DIR}/libs/glew/glew32.lib)
+endif()
 if (CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
   message("compiling on linux!!")
   # why it requires advapi32 is beyond me
   target_link_libraries(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/libs/curl/libcurl_a.lib ws2_32 crypt32 wldap32 normaliz advapi32 comdlg32)
-else ()
+elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
   target_link_libraries(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/libs/curl/libcurl_a.lib ws2_32 Crypt32 Wldap32 Normaliz)
 endif()
 
