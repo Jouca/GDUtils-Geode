@@ -697,6 +697,7 @@ void SearchUserLayer::onValidate(CCObject* pSender) {
 // Utils
 
 // touhou time
+#ifdef GEODE_IS_WINDOWS
 #include "BadApple.h"
 std::string text_input = "";
 bool bad_apple = false;
@@ -767,7 +768,7 @@ class $modify(SecretVault, SecretLayer2) {
         SecretLayer2::updateSearchLabel(text);
     }
 };
-
+#endif
 // touhou time
 
 // When the socket connection is made
