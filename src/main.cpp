@@ -13,7 +13,14 @@
 #include "CustomSettings.hpp"
 #include "EventsPush.h"
 #include "ProcessLambdas.h"
+#ifdef GEODE_IS_WINDOWS
 #include "DownloadManager.h"
+#else // mac
+#include <pthread.h>
+#include <ctime>
+#include <unistd.h>
+#include <cstdlib> // ADD THIS
+#endif
 #include <queue>
 
 using namespace geode::prelude;
@@ -33,7 +40,11 @@ sio::message::ptr event_data = nullptr;
 std::mutex lock;
 std::unique_lock<std::mutex> unique_lock(lock);
 std::condition_variable cond;
+#ifdef GEODE_IS_WINDOWS
 HANDLE hThread;
+#else
+pthread_t hThread;
+#endif
 sio::socket::ptr current_socket;
 
 namespace ConnectionHandler {
@@ -74,7 +85,7 @@ bool setSocket(sio::socket::ptr sock) {
     return true;
 }
 
-DWORD WINAPI start_socket(void* self) {
+void start_socket_func() {
     sio::message::ptr data = sio::object_message::create();
     log::info("Starting socket...");
     sio::client sock;
@@ -91,16 +102,29 @@ DWORD WINAPI start_socket(void* self) {
     sock.socket()->on_error(ConnectionHandler::onError);
     setSocket(sock.socket());
     while (true) {
+        #ifdef GEODE_IS_WINDOWS
         Sleep(1000); // this code is for some reason the reason why the socket client still runs, even though it looks very wrong
+        #else 
+        sleep(1); // yeah sorry
+        #endif
         if (!still_connected) {
             log::info("not connected, restarting...");
-            start_socket(self);
+            start_socket_func();
             break;
         }
     }
-
+}
+#ifdef GEODE_IS_WINDOWS
+DWORD WINAPI start_socket(void* self) {
+    start_socket_func();
     return true;
 }
+#else
+void* start_socket(void* self) {
+    start_socket_func();
+    return NULL;
+}
+#endif
 
 std::string currentLayer = "";
 void processEvent(CCScene* self) {
@@ -160,7 +184,7 @@ class $modify(GameManager) {
 
 // Spotify
 bool is_muted = false;
-
+#ifdef GEODE_IS_WINDOWS
 #include <commdlg.h>
 #include <filesystem>
 #include <locale>
@@ -317,7 +341,77 @@ void toggleSpotifyMute(bool automatic = false, bool muted = false) {
         MuteAudioSessionByProcessId(processId, is_muted);
     }
 }
+#else // mac os, wont work on android or ios :(
+bool isApplicationRunning(const std::string& appName) {
+    // Construct the osascript command
+    std::string script = "osascript -e 'tell application \"System Events\" to (name of processes) contains \"" + appName + "\"'";
+    
+    // Open a pipe to execute the command and capture its output
+    FILE* pipe = popen(script.c_str(), "r");
+    if (!pipe) {
+        log::error("Error: Failed to execute command.");
+        return false;
+    }
 
+    // Read the command's output
+    char buffer[128];
+    std::string result = "";
+    while (!feof(pipe)) {
+        if (fgets(buffer, sizeof(buffer), pipe) != nullptr) {
+            result += buffer;
+        }
+    }
+
+    // Close the pipe
+    pclose(pipe);
+
+    // Check if the result contains "true" (application is running)
+    return (result.find("true") != std::string::npos);
+}
+void* MuteApplication(void* self) {
+    std::string targetName = Mod::get()->getSettingValue<SettingAppStruct>("spotifyApp").m_application;
+    // Remove the ".app" extension if it exists
+    size_t dotAppPos = targetName.find(".app");
+    if (dotAppPos != std::string::npos) {
+        targetName.erase(dotAppPos, 4); // Remove the ".app" extension
+    }
+    log::info("Mute Application " + targetName);
+    // chat jippity, applescript is amazing, i wish i could do this on windows instead of having to do all of this IMM device stuff
+    std::string checkCommand = "osascript -e 'tell application \"System Events\" to (name of processes) contains \"" + targetName + "\"'";
+    if (isApplicationRunning(targetName)) { // will show a popup, also listen i am not responsible if some malicious user does stuff here regarding applescript. please consider disabling all spotify options if you dont want to be vulnerable, then again this would only happen if the attacker were to modify the .json file, which wouldnt they inject their own dylib file anyways? tldr; you are responsible if you install malware onto your mac system ok
+        std::string muteCommand = "osascript -e 'tell application \"" + targetName + "\" to set volume ";
+
+        if (is_muted) {
+            system((muteCommand + "100'").c_str());
+            log::info(targetName + " has been unmuted.");
+        } else {
+            system((muteCommand + "0'").c_str());
+            log::info(targetName + " has been muted.");
+        }
+    } else {
+        log::info("Couldn't find application " + targetName + ", aborting.");
+    }
+}
+void toggleSpotifyMute(bool automatic = false, bool muted = false) {
+    if (!automatic) {
+        is_muted = !is_muted;
+    } else {
+        is_muted = muted;
+    }
+    if (is_muted) {
+        log::info("Muting Spotify...");
+    } else {
+        log::info("Unmuting Spotify...");
+    }
+    pthread_t thread;
+    int threadError;
+    // Create a thread to check if the application is running
+    threadError = pthread_create(&thread, NULL, MuteApplication, NULL);
+    if (threadError) {
+        log::error("Error creating thread: " + threadError);
+    }
+}
+#endif
 class $modify(PlayLayer) {
     bool init(GJGameLevel* level) {
         if (!PlayLayer::init(level)) return false;
@@ -373,7 +467,6 @@ class $modify(EditorUI) {
     }
     
 };
-
 // Spotify
 
 // Utils
@@ -692,7 +785,11 @@ $on_mod(Loaded) {
     Mod::get()->addCustomSetting<SettingSectionValue>("spotify-section", "none");
     Mod::get()->addCustomSetting<SettingSectionValue>("credits-section", "none");
     // ok listen here, you dont provide a way to JUST get the file name, you provide the full path which isnt what i want, so dont complain geode devs. Okay? we good? ok
-    Mod::get()->addCustomSetting<SettingAppValue>("spotifyApp", "Spotify.exe"); // crash
+    #ifdef GEODE_IS_WINDOWS
+    Mod::get()->addCustomSetting<SettingAppValue>("spotifyApp", "Spotify.exe");
+    #else
+    Mod::get()->addCustomSetting<SettingAppValue>("spotifyApp", "Spotify.app");
+    #endif
     //Mod::get()->addCustomSetting<class T>(const std::string &key, "Spotify.exe");
     Mod::get()->addCustomSetting<SettingCreditsValue>("credit-buttons", "none");
 }

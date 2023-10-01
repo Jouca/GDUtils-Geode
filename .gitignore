@@ -2,4 +2,5 @@ build-linux/
 libs/
 build.sh
 compile_commands.json
-
+# what is this
+.DS_Store

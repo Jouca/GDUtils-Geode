@@ -1,4 +1,6 @@
 #pragma once
+// windows only because i cant get this to work, actually im too lazy
+#ifdef GEODE_IS_WINDOWS
 #include <Geode/Geode.hpp>
 #include "BrownAlertDelegate.hpp"
 #include <fstream>
@@ -91,3 +93,4 @@ class DownloadManager : public BrownAlertDelegate {
         }
         static DWORD WINAPI curl_thread(void*);
 };
+#endif

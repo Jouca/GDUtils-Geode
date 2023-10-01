@@ -3,6 +3,7 @@
 // dont yell at me, i know theres an API made by fig for this
 #define PL_MPEG_IMPLEMENTATION
 #include "VideoPlayer.hpp"
+#ifdef GEODE_IS_WINDOWS
 #include <math.h>
 
 using namespace cocos2d;
@@ -292,3 +293,4 @@ namespace videoplayer {
         return m_paused;
     }
 }
+#endif

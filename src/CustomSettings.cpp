@@ -1,4 +1,5 @@
 #include "CustomSettings.hpp"
+#include <Geode/loader/Dirs.hpp>
 #include <filesystem>
 int cycleTypes = -1;
 
@@ -17,6 +18,7 @@ SettingNode* SettingPosValue::createNode(float width) {
 SettingNode* SettingCreditsValue::createNode(float width) {
     return SettingCreditsNode::create(this, width);
 }
+#ifdef GEODE_IS_WINDOWS
 std::string GetOpenFileName() {
     OPENFILENAME ofn;
     char szFile[MAX_PATH] = { 0 };
@@ -35,7 +37,26 @@ std::string GetOpenFileName() {
         return "";
     return "";
 }
+#endif
 void SettingAppNode::onPickFile(CCObject*) {
+    #ifdef GEODE_IS_MACOS
+    if (auto path = file::pickFile(
+        file::PickMode::OpenFile,
+        {
+            "/Applications", // sorry mac users but idk the path for spotify
+            {}
+        }
+    )) {
+        std::string strPath = path.unwrap().string();
+        size_t lastBackslashPos = strPath.find_last_of('/');
+        if (lastBackslashPos != std::string::npos) {
+            std::string lastPart = strPath.substr(lastBackslashPos + 1);
+            m_currentApp = lastPart;
+            defaultApp_input->setString(lastPart.c_str());
+            this->dispatchChanged();
+        }
+    }
+    #else
     std::string filePath = GetOpenFileName();
     if (!filePath.empty()) {
         std::filesystem::path fullPath(filePath);
@@ -46,6 +67,7 @@ void SettingAppNode::onPickFile(CCObject*) {
             this->dispatchChanged();
         }
     }
+    #endif
 }
 
 void SettingTestNode::onTestBtn(CCObject*) {

@@ -13,6 +13,7 @@ BadApple* BadApple::create() {
 
 bool BadApple::init() {
     auto menu = CCMenu::create();
+    #ifdef GEODE_IS_WINDOWS
     videoplayer::VideoPlayer* player = videoplayer::VideoPlayer::create("./gdutils/bad_apple.mpg", true);
     CCDirector* director = CCDirector::sharedDirector();
     CCSize size = director->getWinSize();
@@ -21,7 +22,7 @@ bool BadApple::init() {
     player->setZOrder(-1);
     //reinterpret_cast<CCNode*>(layer->getChildren()->objectAtIndex(0))->setVisible(false);
     this->addChild(player);
-
+    #endif
     setKeypadEnabled(true);
 
     return true;

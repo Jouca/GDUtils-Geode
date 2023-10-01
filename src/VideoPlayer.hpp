@@ -2,6 +2,7 @@
 #define _VIDEO_PLAYER_HPP
 
 #pragma warning(disable:4996)
+#ifdef GEODE_IS_WINDOWS
 #include "pl_mpeg.h"
 #pragma warning(default:4996)
 
@@ -113,4 +114,5 @@ namespace videoplayer {
     };
 }
 
+#endif
 #endif

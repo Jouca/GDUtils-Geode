@@ -1,4 +1,5 @@
 #include "DownloadManager.h"
+#ifdef GEODE_IS_WINDOWS // unfortunately figs video player not supported on mac becuase opengl32 doesnt want to compile correctly koeirjnfioewbnfejwf
 #include "ProcessLambdas.h"
 #include <math.h>
 
@@ -123,5 +124,5 @@ DownloadManager* DownloadManager::create(const char* url, const char* destinatio
     CC_SAFE_DELETE(pRet);
     return nullptr;
 };
-
 // below is copied from the gdr mod lol
+#endif

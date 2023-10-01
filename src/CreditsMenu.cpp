@@ -1,13 +1,26 @@
 #include "CreditsMenu.h"
+#include <cstdlib>
+#ifdef GEODE_IS_WINDOWS
 #include <shellapi.h>
+#endif
+
+void OpenURL(const std::string& url) {
+    #ifdef GEODE_IS_WINDOWS
+    ShellExecuteA(NULL, "open", url.c_str(), NULL, NULL, SW_SHOWNORMAL);
+    #else // mac or other platforms, though i might have to look how to do for android
+    std::string command = "open " + url;
+    std::system(command.c_str());
+    #endif
+}
+
 void CreditsMenu::onFireeBtn(CCObject*) {
-    ShellExecuteA(NULL, "open", "https://www.youtube.com/@gdfiree", NULL, NULL, SW_SHOWNORMAL);
+    OpenURL("https://www.youtube.com/@gdfiree");
 }
 void CreditsMenu::onJoucaBtn(CCObject*) {
-    ShellExecuteA(NULL, "open", "https://twitter.com/JoucaJouca", NULL, NULL, SW_SHOWNORMAL); // nitter.net if youre not signed in ok
+    OpenURL("https://twitter.com/JoucaJouca"); // nitter.net if youre not signed in ok
 }
 void CreditsMenu::onMaverickBtn(CCObject*) {
-    ShellExecuteA(NULL, "open", "https://www.youtube.com/channel/UCoFBsXJ-6o6l6ZYP-k6DE_g", NULL, NULL, SW_SHOWNORMAL);
+    OpenURL("https://www.youtube.com/channel/UCoFBsXJ-6o6l6ZYP-k6DE_g");
 }
 
 void CreditsMenu::setup() {

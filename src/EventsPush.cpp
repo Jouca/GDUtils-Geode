@@ -1,6 +1,7 @@
 #include "EventsPush.h"
 #include "CustomSettings.hpp"
 #include <queue>
+#include <Geode/utils/web.hpp>
 
 std::queue<sio::message::ptr> eventQueue;
 bool processingEvents = false;
@@ -260,22 +261,6 @@ GJGameLevel* convertLevelToJSON(std::string& data) {
     return level;
 }
 
-void EventsPush::onLoadFinished(cocos2d::extension::CCHttpClient* client, cocos2d::extension::CCHttpResponse* response) {
-    if (!(response->isSucceed())) return;
-    //auto scene = CCDirector::sharedDirector()->getRunningScene();
-    std::vector<char>* responseData = response->getResponseData();
-    std::string responseString(responseData->begin(), responseData->end());
-    int response_code = response->getResponseCode();
-    if (response_code == 200 && responseString != "-1") {
-        auto scene = CCScene::create();
-        auto layer = LevelInfoLayer::create(convertLevelToJSON(responseString));
-        // NOTE: downloadLevel requires custom gd.h!!!!!!!
-        layer->downloadLevel();
-        scene->addChild(layer);
-        CCDirector::sharedDirector()->pushScene(cocos2d::CCTransitionFade::create(0.5f, scene));
-    }
-}
-
 void EventsPush::onClickBtn(CCObject* ret) {
     auto scene = CCDirector::sharedDirector()->getRunningScene();
     auto layer = scene->getChildren()->objectAtIndex(0);
@@ -285,18 +270,31 @@ void EventsPush::onClickBtn(CCObject* ret) {
     if (events_layer->level->m_levelID == 0) return;
     std::string layerName = typeid(*layer).name() + 6;
     if (layerName != "PlayLayer" && layerName != "PauseLayer" && layerName != "LevelEditorLayer") { // redirect to level
-        cocos2d::extension::CCHttpRequest* request = new cocos2d::extension::CCHttpRequest;
-        request->setUrl("http://www.boomlings.com/database/getGJLevels21.php");
-        //request->setUrl("https://clarifygdps.com/getGJLevels21.php");
-        request->setRequestType(cocos2d::extension::CCHttpRequest::HttpRequestType::kHttpPost);
-        request->setResponseCallback(events_layer, httpresponse_selector(EventsPush::onLoadFinished));
-        auto postData = CCString::createWithFormat("secret=Wmfd2893gb7&gameVersion=21&type=0&binaryVersion=35&gdw=0&diff=-&len=-&count=1&str=%i", events_layer->level->m_levelID.value());
-        request->setRequestData(
-            postData->getCString(), strlen(postData->getCString())
-        );
-        cocos2d::extension::CCHttpClient::getInstance()->send(request);
-        request->autorelease();
+        std::string const& url = "http://www.boomlings.com/database/getGJLevels21.php";
+        #ifdef GEODE_IS_WINDOWS
+        int level_id = events_layer->level->m_levelID.value();
+        #else // mac os 
+        int level_id = events_layer->levelId;
+        #endif
+        //std::string const& url = "https://clarifygdps.com/getGJLevels21.php";
+        std::string const& fields = "secret=Wmfd2893gb7&gameVersion=21&type=0&binaryVersion=35&gdw=0&diff=-&len=-&count=1&str=" + std::to_string(level_id);
+        web::AsyncWebRequest().postFields(fields).postRequest().fetch(url).text().then([&](std::string & response) {
+            if (response != "-1") {
+                auto scene = CCScene::create();
+                //DailyLevelPage::create(false); // not working on this right now as i still have to figure out how to deal with daily and stuff, and idk if users would want the daily popup to just show up, or to include an option.
+                // aka, TODO: ask Jouca
+                auto layer = LevelInfoLayer::create(convertLevelToJSON(response));
+                layer->downloadLevel();
+                scene->addChild(layer);
+                CCDirector::sharedDirector()->pushScene(cocos2d::CCTransitionFade::create(0.5f, scene));
+            } else {
+                log::info("Level not found. (-1)");
+            }
+        }).expect([](std::string const& error) {
+            log::error("Error occured while doing a web request: " + error);
+        });
     } else { // copy to clipboard
+        #ifdef GEODE_IS_WINDOWS
         if (OpenClipboard(0)) {
             if (!EmptyClipboard()) {
                 CloseClipboard();
@@ -312,6 +310,10 @@ void EventsPush::onClickBtn(CCObject* ret) {
                 CloseClipboard();
             }
         }
+        #else // mac
+        std::string command = "echo " + std::to_string(events_layer->levelId) + " | pbcopy";
+        std::system(command.c_str());
+        #endif
     }
 }
 
@@ -346,6 +348,9 @@ bool EventsPush::init(sio::message::ptr const& data) {
         level->m_coins = coins;
         level->m_coinsVerified = areCoinsVerified;
         level->m_levelID = level_id;
+        #ifdef GEODE_IS_MACOS
+        this->levelId = level_id;
+        #endif
     }
     
     
@@ -354,6 +359,17 @@ bool EventsPush::init(sio::message::ptr const& data) {
     bool newRate = Mod::get()->getSettingValue<bool>("newRate");
     bool daily = Mod::get()->getSettingValue<bool>("daily");
     bool weekly = Mod::get()->getSettingValue<bool>("weekly");
+    switch (type) {
+        case 0: // Rate
+            eventType = EventType::Rate;
+            break;
+        case 1: // Daily
+            eventType = EventType::Daily;
+            break;
+        case 2: // Weekly
+            eventType = EventType::Weekly;
+            break;
+    }
     if (type == 0 && !newRate) {
         EventsPush::eventCompletedCallback(scene);
         return true;
