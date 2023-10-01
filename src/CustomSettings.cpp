@@ -98,7 +98,6 @@ void SettingTestNode::onTestBtn(CCObject*) {
             data->get_map()["starsum"] = sio::int_message::create(10);
             data->get_map()["level_name"] = sio::string_message::create("Stereo Madness");
             data->get_map()["level_creator"] = sio::string_message::create("by RobTop");
-            data->get_map()["level_id"] = sio::int_message::create(4270);
             data->get_map()["sprite"] = sio::string_message::create("GJ_square01.png");
             break;
         case 1: // daily

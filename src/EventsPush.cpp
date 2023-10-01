@@ -1,5 +1,6 @@
 #include "EventsPush.h"
 #include "CustomSettings.hpp"
+#include "Geode/utils/general.hpp"
 #include <queue>
 #include <Geode/utils/web.hpp>
 
@@ -270,6 +271,10 @@ void EventsPush::onClickBtn(CCObject* ret) {
     if (events_layer->level->m_levelID == 0) return;
     std::string layerName = typeid(*layer).name() + 6;
     if (layerName != "PlayLayer" && layerName != "PauseLayer" && layerName != "LevelEditorLayer") { // redirect to level
+        if (eventType != EventType::Rate) { // EventType::NA should never happen
+            DailyLevelPage::create(eventType == EventType::Weekly)->show();
+            return;
+        }
         std::string const& url = "http://www.boomlings.com/database/getGJLevels21.php";
         #ifdef GEODE_IS_WINDOWS
         int level_id = events_layer->level->m_levelID.value();
@@ -278,11 +283,13 @@ void EventsPush::onClickBtn(CCObject* ret) {
         #endif
         //std::string const& url = "https://clarifygdps.com/getGJLevels21.php";
         std::string const& fields = "secret=Wmfd2893gb7&gameVersion=21&type=0&binaryVersion=35&gdw=0&diff=-&len=-&count=1&str=" + std::to_string(level_id);
-        web::AsyncWebRequest().postFields(fields).postRequest().fetch(url).text().then([&](std::string & response) {
+        web::AsyncWebRequest()
+            .postFields(fields)
+            .postRequest()
+            .fetch(url).text()
+            .then([&](std::string & response) {
             if (response != "-1") {
                 auto scene = CCScene::create();
-                //DailyLevelPage::create(false); // not working on this right now as i still have to figure out how to deal with daily and stuff, and idk if users would want the daily popup to just show up, or to include an option.
-                // aka, TODO: ask Jouca
                 auto layer = LevelInfoLayer::create(convertLevelToJSON(response));
                 layer->downloadLevel();
                 scene->addChild(layer);
@@ -295,25 +302,11 @@ void EventsPush::onClickBtn(CCObject* ret) {
         });
     } else { // copy to clipboard
         #ifdef GEODE_IS_WINDOWS
-        if (OpenClipboard(0)) {
-            if (!EmptyClipboard()) {
-                CloseClipboard();
-            } else {
-                std::string strID = std::to_string(events_layer->level->m_levelID);
-                EmptyClipboard();
-                HGLOBAL hMem = GlobalAlloc(GMEM_MOVEABLE, strID.size() + 1);
-                memcpy(GlobalLock(hMem), strID.c_str(), strID.size() + 1);
-                GlobalUnlock(hMem);
-                SetClipboardData(CF_TEXT, hMem);
-                log::info("Copied ID to clipboard!");
-                // Close the clipboard
-                CloseClipboard();
-            }
-        }
-        #else // mac
-        std::string command = "echo " + std::to_string(events_layer->levelId) + " | pbcopy";
-        std::system(command.c_str());
+        clipboard::write(std::to_string(events_layer->level->m_levelID));
+        #else
+        clipboard::write(std::to_string(events_layer->levelId));
         #endif
+        log::info("Copied ID to clipboard!");
     }
 }
 

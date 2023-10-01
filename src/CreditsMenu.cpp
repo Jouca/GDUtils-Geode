@@ -1,26 +1,15 @@
 #include "CreditsMenu.h"
+#include "Geode/utils/web.hpp"
 #include <cstdlib>
-#ifdef GEODE_IS_WINDOWS
-#include <shellapi.h>
-#endif
-
-void OpenURL(const std::string& url) {
-    #ifdef GEODE_IS_WINDOWS
-    ShellExecuteA(NULL, "open", url.c_str(), NULL, NULL, SW_SHOWNORMAL);
-    #else // mac or other platforms, though i might have to look how to do for android
-    std::string command = "open " + url;
-    std::system(command.c_str());
-    #endif
-}
 
 void CreditsMenu::onFireeBtn(CCObject*) {
-    OpenURL("https://www.youtube.com/@gdfiree");
+    web::openLinkInBrowser("https://www.youtube.com/@gdfiree");
 }
 void CreditsMenu::onJoucaBtn(CCObject*) {
-    OpenURL("https://twitter.com/JoucaJouca"); // nitter.net if youre not signed in ok
+    web::openLinkInBrowser("https://twitter.com/JoucaJouca"); // nitter.net if youre not signed in ok
 }
 void CreditsMenu::onMaverickBtn(CCObject*) {
-    OpenURL("https://www.youtube.com/channel/UCoFBsXJ-6o6l6ZYP-k6DE_g");
+    web::openLinkInBrowser("https://www.youtube.com/channel/UCoFBsXJ-6o6l6ZYP-k6DE_g");
 }
 
 void CreditsMenu::setup() {
