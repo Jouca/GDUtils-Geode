@@ -3,4 +3,5 @@ libs/
 build.sh
 compile_commands.json
 # what is this
+build/
 .DS_Store
