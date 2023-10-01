@@ -1,10 +1,10 @@
 {
-	"geode": "1.3.4",
-	"version": "v1.0.2",
-	"id": "gdutilsdevs.gdutils",
-	"name": "GDUtils",
-	"developer": "Jouca & Firee",
-	"description": "Realtime Rate Notifications, auto-song mute, game fixes & more!",
+    "geode": "1.3.4",
+    "version": "v1.0.2",
+    "id": "gdutilsdevs.gdutils",
+    "name": "GDUtils",
+    "developer": "Jouca & Firee",
+    "description": "Realtime Rate Notifications, auto-song mute, game fixes & more!",
     "repository": "https://github.com/Jouca/GDUtils-Geode",
     "resources": {
         "sprites": [
