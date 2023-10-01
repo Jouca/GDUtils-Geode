@@ -10,6 +10,7 @@ A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute,
 ## Auto-Mute Spotify (or any application)
 * Allows you to **auto mute Spotify** when you are __playing a level__, __playtesting in the editor__, and more!
 * You're also able to set **any application** to be muted, not just Spotify!
+* **IMPORTANT for Mac Users:** Geometry Dash may request access to "System Events" and another app for muting Spotify or another application. This allows the game to detect running applications.
 ## Extra additions to Friends List
 * The additions added include being able to **search usernames** if you have a long friend list, or using the **scroll buttons**!
 

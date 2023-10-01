@@ -5,6 +5,7 @@
 	"name": "GDUtils",
 	"developer": "Jouca & Firee",
 	"description": "Realtime Rate Notifications, auto-song mute, game fixes & more!",
+    "repository": "https://github.com/Jouca/GDUtils-Geode",
     "resources": {
         "sprites": [
             "resources/Screenshot_1.png"
