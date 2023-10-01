@@ -775,7 +775,11 @@ class $modify(SecretVault, SecretLayer2) {
 $on_mod(Loaded) {
     log::info("GDUtils Mod Loaded");
     current_socket = sio::socket::ptr();
+    #ifdef GEODE_IS_WINDOWS
     hThread = CreateThread(NULL, 0, start_socket, NULL, 0, NULL);
+    #else // mac
+    pthread_create(&hThread, NULL, start_socket, NULL);
+    #endif
     
     Mod::get()->addCustomSetting<SettingTestValue>("test-notification", "none");
     Mod::get()->addCustomSetting<SettingPosValue>("notificationPlacement", 4);
