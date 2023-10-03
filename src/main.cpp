@@ -602,33 +602,46 @@ class $modify(FriendPage, FriendsProfilePage) {
     void onSearch(CCObject*) {
         SearchUserLayer::create()->show();
     }
-    public:
     static void searchUser(const char* username) {
+        auto sceneChildCount = CCDirector::sharedDirector()->getRunningScene()->getChildrenCount();
         auto self = reinterpret_cast<CCLayer*>(
-            CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(1)
-        );
-
-        auto customList = reinterpret_cast<TableView*>(
-            reinterpret_cast<CCLayer*>(
-                reinterpret_cast<CCLayer*>(
-                    reinterpret_cast<CCLayer*>(
-                        self->getChildren()->objectAtIndex(0)
-                    )->getChildren()->objectAtIndex(1)
-                )->getChildren()->objectAtIndex(0)
-            )->getChildren()->objectAtIndex(0)
-        );
-
+            CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(sceneChildCount - 2)
+        ); // other geode mods adding themselves onto the scene is great.
+        auto test1 = reinterpret_cast<CCLayer*>(self->getChildren()->objectAtIndex(0));
+        if (test1->getChildrenCount() < 18) {
+            // safeguard from crashing
+            FLAlertLayer::create(nullptr,
+                "Error",
+                "The mod could not find the <cy>FriendsProfilePage</c> layer. Please either <cg>try again later</c>, removing mods that may be interfering with the scene, or report this to the developers.",
+                "OK",
+                nullptr,
+                350.0F
+            )->show();
+            return;
+        }
+        auto test2 = reinterpret_cast<CCLayer*>(test1->getChildren()->objectAtIndex(1));
+        auto test3 = reinterpret_cast<CCLayer*>(test2->getChildren()->objectAtIndex(0));
+        // ^^ this might look bad, sorry.
+        if (test3->getChildrenCount() <= 0) {
+            // another safeguard
+            FLAlertLayer::create(nullptr,
+                "Error",
+                "You have <cy>no friends</c>!",
+                "OK",
+                nullptr,
+                200.0F
+            )->show();
+            return;
+        }
+        auto customList = reinterpret_cast<TableView*>(test3->getChildren()->objectAtIndex(0));
         CCContentLayer* contentLayer = reinterpret_cast<CCContentLayer*>(
             customList->getChildren()->objectAtIndex(0)
         );
-
         int counter_page = 0;
         bool found = false;
-
         for (int i = 0; i < contentLayer->getChildrenCount(); i++) {
             CCMenu* cell;
             CCLabelBMFont* label;
-
             cell = dynamic_cast<CCMenu*>(
                 reinterpret_cast<CCLayer*>(
                     reinterpret_cast<CCLayer*>(
@@ -662,9 +675,7 @@ class $modify(FriendPage, FriendsProfilePage) {
                     )
                 );
             }
-
             const char* str1 = label->getString();
-
             if (strcmp(toLowerCase(str1), toLowerCase(username)) == 0) {
                 customList->scrollLayer(-9999999);
                 customList->scrollLayer(counter_page);
@@ -692,7 +703,6 @@ class $modify(FriendPage, FriendsProfilePage) {
 
 void SearchUserLayer::onValidate(CCObject* pSender) {
     FriendPage::searchUser(input_username->getString());
-
     BrownAlertDelegate::onClose(pSender);
 }
 

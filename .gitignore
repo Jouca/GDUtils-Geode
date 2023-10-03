@@ -1,6 +1,7 @@
 build-linux/
 libs/
 build.sh
+debuild.sh
 compile_commands.json
 # what is this
 build/
