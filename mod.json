@@ -8,7 +8,8 @@
     "repository": "https://github.com/Jouca/GDUtils-Geode",
     "resources": {
         "sprites": [
-            "resources/Screenshot_1.png"
+            "resources/Screenshot_1.png",
+            "resources/discord_btn.png"
         ]
     },
     "settings": {
