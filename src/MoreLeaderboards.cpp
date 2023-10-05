@@ -1,5 +1,7 @@
 #include "MoreLeaderboards.h"
 
+static StatsListType g_tab = StatsListType::Diamonds;
+
 std::vector<std::string> MoreLeaderboards::getWords(std::string s, std::string delim) {
     std::vector<std::string> res;
     std::string token = "";
@@ -20,6 +22,25 @@ std::vector<std::string> MoreLeaderboards::getWords(std::string s, std::string d
     }
     res.push_back(token);
     return res;
+}
+
+CCDictionary* MoreLeaderboards::responseToDict(const std::string& response){
+    auto dict = CCDictionary::create();
+
+    std::stringstream responseStream(response);
+    std::string currentKey;
+    std::string keyID;
+
+    unsigned int i = 0;
+    while(getline(responseStream, currentKey, ':')){
+
+        if(i % 2 == 0) keyID = currentKey;
+        else dict->setObject(CCString::create(currentKey.c_str()),keyID);
+
+        i++;
+    }
+
+    return dict;
 }
 
 void MoreLeaderboards::onMoreLeaderboards(CCObject* pSender) {
@@ -82,7 +103,54 @@ bool MoreLeaderboards::init(std::string type) {
     this->addChild(menu);
 
     if (type == "more") {
-        // Adding soon for more leaderboards
+        // create menus
+        m_menu = CCMenu::create();
+
+        m_diamondsTabBtn = TabButton::create("Diamonds", this, menu_selector(MoreLeaderboards::onTab));
+        m_diamondsTabBtn->setPosition(-95.f, 132.5f);
+        m_diamondsTabBtn->setTag(static_cast<int>(StatsListType::Diamonds));
+        m_diamondsTabBtn->setZOrder(2);
+        m_menu->addChild(m_diamondsTabBtn);
+
+        m_usercoinsTabBtn = TabButton::create("User Coins", this, menu_selector(MoreLeaderboards::onTab));
+        m_usercoinsTabBtn->setPosition(0.f, 132.5f);
+        m_usercoinsTabBtn->setTag(static_cast<int>(StatsListType::UserCoins));
+        m_usercoinsTabBtn->setZOrder(2);
+        m_menu->addChild(m_usercoinsTabBtn);
+
+        m_demonsTabBtn = TabButton::create("Demons", this, menu_selector(MoreLeaderboards::onTab));
+        m_demonsTabBtn->setPosition(95.f, 132.5f);
+        m_demonsTabBtn->setTag(static_cast<int>(StatsListType::Demons));
+        m_demonsTabBtn->setZOrder(2);
+        m_menu->addChild(m_demonsTabBtn);
+
+        // tabs gradient
+        m_tabsGradientNode = CCClippingNode::create();
+        m_tabsGradientNode->setContentSize(this->getContentSize());
+        m_tabsGradientNode->setAnchorPoint({0.5f, 0.5f});
+        m_tabsGradientNode->ignoreAnchorPointForPosition(true);
+        m_tabsGradientNode->setZOrder(0);
+        m_tabsGradientNode->setInverted(false);
+        m_tabsGradientNode->setAlphaThreshold(0.7f);
+
+        m_tabsGradientSprite = CCSprite::create("tab-gradient.png"_spr);
+        m_tabsGradientNode->addChild(m_tabsGradientSprite);
+
+        m_tabsGradientStencil = CCSprite::create("tab-gradient-mask.png"_spr);
+        m_tabsGradientStencil->setAnchorPoint({0.f, 0.f});
+        m_tabsGradientStencil->setColor({172, 255, 67});
+        m_tabsGradientStencil->setZOrder(1);
+        m_tabsGradientNode->setStencil(m_tabsGradientStencil);
+
+        // add menus
+        m_menu->setZOrder(1);
+
+        this->addChild(m_tabsGradientNode);
+        this->addChild(m_tabsGradientStencil);
+        this->addChild(m_menu);
+
+        // select first tab
+        this->onTab(nullptr);
     } else if (type == "mods") {
         startLoadingMods();
         loadPageMods();
@@ -99,7 +167,7 @@ void MoreLeaderboards::fadeLoadingCircle() {
     loading_circle->fadeAndRemove();
 };
 
-void MoreLeaderboards::handle_request(std::string const& data) {
+void MoreLeaderboards::handle_request_mods(std::string const& data) {
     if(!displayedData) { displayedData = CCArray::create(); displayedData->retain(); };
 
     if (data != "-1") {
@@ -130,7 +198,7 @@ void MoreLeaderboards::startLoadingMods() {
     .then([this](std::string const& data) {
         fadeLoadingCircle();
 
-        handle_request(data);
+        handle_request_mods(data);
     })
     .expect([this](std::string const& error) {
         fadeLoadingCircle();
@@ -147,4 +215,121 @@ void MoreLeaderboards::loadPageMods() {
     listLayer->setPosition(winSize / 2 - listLayer->getScaledContentSize() / 2 - CCPoint(0,5));
 
     addChild(listLayer);
+}
+
+void MoreLeaderboards::startLoadingMore() {
+    loading_circle = LoadingCircle::create();
+    loading_circle->setParentLayer(this);
+    loading_circle->show();
+
+    std::string type = "";
+
+    if (g_tab == StatsListType::Diamonds) {
+        type = "diamonds";
+    } else if (g_tab == StatsListType::UserCoins) {
+        type = "coins";
+    } else if (g_tab == StatsListType::Demons) {
+        type = "demons";
+    }
+
+    web::AsyncWebRequest()
+    .postRequest()
+    .postFields(fmt::format("type={}", type))
+    .fetch("https://clarifygdps.com/gdutils/moreleaderboards.php")
+    .text()
+    .then([this, type](std::string const& data) {
+        fadeLoadingCircle();
+
+        handle_request_more(data);
+        loading = false;
+
+        m_diamondsTabBtn->setEnabled(true);
+        m_usercoinsTabBtn->setEnabled(true);
+        m_demonsTabBtn->setEnabled(true);
+    })
+    .expect([this, type](std::string const& error) {
+        fadeLoadingCircle();
+        loading = false;
+
+        m_diamondsTabBtn->setEnabled(true);
+        m_usercoinsTabBtn->setEnabled(true);
+        m_demonsTabBtn->setEnabled(true);
+    });
+};
+
+void MoreLeaderboards::handle_request_more(std::string const& data) {
+    if(!displayedData) { displayedData = CCArray::create(); displayedData->retain(); };
+
+    if (data != "-1") {
+        displayedData = CCArray::create();
+        
+        std::vector<std::string> users = getWords(data, "|");
+
+        while (users.size() > 0) {
+            std::string user = users[0];
+
+            auto score = GJUserScore::create(
+                MoreLeaderboards::responseToDict(user)
+            );
+            displayedData->addObject(score);
+            users.erase(users.begin());
+        };
+    }
+
+    loadPageMore();
+}
+
+void MoreLeaderboards::loadPageMore() {
+    if(listLayer != nullptr) listLayer->removeFromParentAndCleanup(true);
+
+    auto winSize = CCDirector::sharedDirector()->getWinSize();
+
+    leaderboardViewScore = CustomListView::create(displayedData, 220.f, 356.f, 0, BoomListType::Score);
+    listLayer = GJListLayer::create(leaderboardViewScore, nullptr, {191, 114, 62, 255}, 356.f, 220.f);
+    listLayer->setPosition(winSize / 2 - listLayer->getScaledContentSize() / 2 - CCPoint(0,5));
+
+    addChild(listLayer);
+}
+
+void MoreLeaderboards::onTab(CCObject* pSender) {
+    if (loading) return;
+
+    loading = true;
+
+    m_diamondsTabBtn->setEnabled(false);
+    m_usercoinsTabBtn->setEnabled(false);
+    m_demonsTabBtn->setEnabled(false);
+
+    if (displayedData) {
+        displayedData->release();
+        displayedData = cocos2d::CCArray::create();
+        displayedData->retain();
+    }
+
+    if (pSender) {
+        g_tab = static_cast<StatsListType>(pSender->getTag());
+    }
+
+    auto toggleTab = [this](CCMenuItemToggler* member) -> void {
+        auto isSelected = member->getTag() == static_cast<int>(g_tab);
+        auto targetMenu = m_menu;
+        member->toggle(isSelected);
+        if (member->getParent() != targetMenu) {
+            member->retain();
+            member->removeFromParent();
+            targetMenu->addChild(member);
+            member->release();
+        }
+        if (isSelected && m_tabsGradientStencil)
+            m_tabsGradientStencil->setPosition(member->m_onButton->convertToWorldSpace({0.f, 0.f}));
+    };
+
+    toggleTab(m_diamondsTabBtn);
+    toggleTab(m_usercoinsTabBtn);
+    toggleTab(m_demonsTabBtn);
+
+    if (loading) {
+        startLoadingMore();
+        loadPageMore();
+    }
 }

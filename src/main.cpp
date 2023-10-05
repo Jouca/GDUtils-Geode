@@ -713,7 +713,7 @@ class $modify(LeaderboardsLayer) {
 
         auto menu = CCMenu::create();
 
-        /*auto plusSpr = CCSprite::createWithSpriteFrameName("GJ_plusBtn_001.png");
+        auto plusSpr = CCSprite::createWithSpriteFrameName("GJ_plusBtn_001.png");
         plusSpr->setScale(.8f);
         auto plusBtn = CCMenuItemSpriteExtra::create(
             plusSpr,
@@ -721,7 +721,7 @@ class $modify(LeaderboardsLayer) {
             menu_selector(MoreLeaderboards::onMoreLeaderboards)
         );
         plusBtn->setPosition(239, 20);
-        menu->addChild(plusBtn);*/
+        menu->addChild(plusBtn);
 
         auto modsSpr = CCSprite::createWithSpriteFrameName("modBadge_01_001.png");
         modsSpr->setScale(1.5f);
