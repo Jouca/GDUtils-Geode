@@ -1,4 +1,5 @@
 #include "MoreLeaderboardsCell.h"
+#include <Geode/utils/web.hpp>
 
 void MoreLeaderboardsCell::loadFromDict(cocos2d::CCDictionary* content) // 
 {
@@ -123,5 +124,5 @@ void MoreLeaderboardsCell::callback_user(CCObject* pSender) {
 
 void MoreLeaderboardsCell::callback_link(CCObject* pSender) {
     auto data = static_cast<CCString*>(static_cast<CCNode*>(pSender)->getUserObject());
-    ShellExecute(0, 0, data->getCString(), 0, 0 , SW_SHOW );
+    web::openLinkInBrowser(data->getCString());
 }
