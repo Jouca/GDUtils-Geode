@@ -23,7 +23,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
+        with:
+          submodules: 'recursive'
+          
       - name: Build the mod
         uses: geode-sdk/build-geode-mod@main
         with:
