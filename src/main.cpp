@@ -14,9 +14,9 @@
 #include "CustomSettings.hpp"
 #include "EventsPush.h"
 #include "ProcessLambdas.h"
+#include "MoreLeaderboards.h"
 #ifdef GEODE_IS_WINDOWS
 #include "DownloadManager.h"
-#include "MoreLeaderboards.h"
 #else // mac
 #include <pthread.h>
 #include <ctime>
