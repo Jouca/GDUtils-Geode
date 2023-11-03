@@ -15,13 +15,10 @@ A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute,
 * The additions added include being able to **search usernames** if you have a long friend list, or using the **scroll buttons**!
 
 ## Libraries Used
-- Geode
-- curl
-- filesystem (ghc)
+- [Geode](https://github.com/geode-sdk/geode)
+- [curl](https://github.com/curl/curl)
 - [socket.io-client-cpp](https://github.com/socketio/socket.io-client-cpp)
-- FMOD
-- glew
-- `pl_mpeg`
+- [pl_mpeg](https://github.com/phoboslab/pl_mpeg)
 
 ## Credits
 * [Jouca](https://twitter.com/JoucaJouca)
