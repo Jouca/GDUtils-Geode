@@ -7,9 +7,8 @@
 #pragma warning(default:4996)
 
 #include <queue>
-#include "filesystem.hpp"
-#include "fmod.hpp"
 #include <Geode/Geode.hpp>
+#include <Geode/utils/file.hpp>
 #include <Geode/fmod/fmod.h>
 
 typedef unsigned int GLuint;
