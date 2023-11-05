@@ -15,14 +15,14 @@
 #include "EventsPush.h"
 #include "ProcessLambdas.h"
 #include "MoreLeaderboards.h"
+#include <chrono>
 #ifdef GEODE_IS_WINDOWS
 #include "DownloadManager.h"
 #else // mac
-#include <pthread.h>
 #include <ctime>
-#include <unistd.h>
 #include <cstdlib> // ADD THIS
 #endif
+#include <thread>
 #include <queue>
 
 using namespace geode::prelude;
@@ -42,11 +42,6 @@ sio::message::ptr event_data = nullptr;
 std::mutex lock;
 std::unique_lock<std::mutex> unique_lock(lock);
 std::condition_variable cond;
-#ifdef GEODE_IS_WINDOWS
-HANDLE hThread;
-#else
-pthread_t hThread;
-#endif
 sio::socket::ptr current_socket;
 
 namespace ConnectionHandler {
@@ -104,11 +99,7 @@ void start_socket_func() {
     sock.socket()->on_error(ConnectionHandler::onError);
     setSocket(sock.socket());
     while (true) {
-        #ifdef GEODE_IS_WINDOWS
-        Sleep(1000); // this code is for some reason the reason why the socket client still runs, even though it looks very wrong
-        #else 
-        sleep(1); // yeah sorry
-        #endif
+        std::this_thread::sleep_for(std::chrono::seconds(1));
         if (!still_connected) {
             log::info("not connected, restarting...");
             start_socket_func();
@@ -116,17 +107,6 @@ void start_socket_func() {
         }
     }
 }
-#ifdef GEODE_IS_WINDOWS
-DWORD WINAPI start_socket(void* self) {
-    start_socket_func();
-    return true;
-}
-#else
-void* start_socket(void* self) {
-    start_socket_func();
-    return NULL;
-}
-#endif
 
 std::string currentLayer = "";
 void processEvent(CCScene* self) {
@@ -382,7 +362,6 @@ void* MuteApplication(void* self) {
     std::string checkCommand = "osascript -e 'tell application \"System Events\" to (name of processes) contains \"" + targetName + "\"'";
     if (isApplicationRunning(targetName)) { // will show a popup, also listen i am not responsible if some malicious user does stuff here regarding applescript. please consider disabling all spotify options if you dont want to be vulnerable, then again this would only happen if the attacker were to modify the .json file, which wouldnt they inject their own dylib file anyways? tldr; you are responsible if you install malware onto your mac system ok
         std::string muteCommand = "osascript -e 'tell application \"" + targetName + "\" to set volume ";
-
         if (is_muted) {
             system((muteCommand + "100'").c_str());
             log::info(targetName + " has been unmuted.");
@@ -390,8 +369,10 @@ void* MuteApplication(void* self) {
             system((muteCommand + "0'").c_str());
             log::info(targetName + " has been muted.");
         }
+        return NULL;
     } else {
         log::info("Couldn't find application " + targetName + ", aborting.");
+        return NULL;
     }
 }
 void toggleSpotifyMute(bool automatic = false, bool muted = false) {
@@ -405,13 +386,8 @@ void toggleSpotifyMute(bool automatic = false, bool muted = false) {
     } else {
         log::info("Unmuting Spotify...");
     }
-    pthread_t thread;
-    int threadError;
-    // Create a thread to check if the application is running
-    threadError = pthread_create(&thread, NULL, MuteApplication, NULL);
-    if (threadError) {
-        log::error("Error creating thread: " + threadError);
-    }
+    std::thread hThread(MuteApplication);
+    hThread.detach();
 }
 #endif
 class $modify(PlayLayer) {
@@ -492,11 +468,6 @@ class SearchUserLayer : public BrownAlertDelegate {
     protected:
         virtual void setup() {
             auto winSize = cocos2d::CCDirector::sharedDirector()->getWinSize();
-
-            /*input_username->setPosition(
-                winSize.width / 2,
-                winSize.height / 2 + 10
-            );*/
             input_username->setPositionY(10);
             this->m_buttonMenu->addChild(input_username);
 
@@ -820,11 +791,8 @@ class $modify(SecretVault, SecretLayer2) {
 $on_mod(Loaded) {
     log::info("GDUtils Mod Loaded");
     current_socket = sio::socket::ptr();
-    #ifdef GEODE_IS_WINDOWS
-    hThread = CreateThread(NULL, 0, start_socket, NULL, 0, NULL);
-    #else // mac
-    pthread_create(&hThread, NULL, start_socket, NULL);
-    #endif
+    std::thread hThread(start_socket_func);
+    hThread.detach();
     
     Mod::get()->addCustomSetting<SettingTestValue>("test-notification", "none");
     Mod::get()->addCustomSetting<SettingPosValue>("notificationPlacement", 4);

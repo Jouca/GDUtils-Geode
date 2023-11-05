@@ -2,6 +2,8 @@
 #ifdef GEODE_IS_WINDOWS // unfortunately figs video player not supported on mac becuase opengl32 doesnt want to compile correctly koeirjnfioewbnfejwf
 #include "ProcessLambdas.h"
 #include <math.h>
+#include <Geode/utils/web.hpp>
+#include <Geode/utils/file.hpp>
 
 // ------
 // 204 = MAX
@@ -51,32 +53,6 @@ int DownloadManager::progress_func(void*, double totalDownload, double downloadA
     }
     return 0;
 }
-DWORD WINAPI DownloadManager::curl_thread(void* self) {
-    auto layer = reinterpret_cast<DownloadManager*>(self);
-    auto response = layer->sendWebRequest(layer->m_sUrl);
-    if (response.curlCode != CURLE_OK) {
-        log::error("curl not ok. " + std::to_string(response.curlCode));
-        layer->error_box1->setVisible(true);
-        layer->error_box2->removeFromParentAndCleanup(true);
-    } else {
-        log::debug("dumpToFile");
-        if (layer->dumpToFile(layer->m_sDestination, response.content)) {
-            //(layer->*layer->m_pSelector)(layer);
-            ProcessLambdas::callMenuHandler(layer, layer->m_pSelector);
-            //ConnectionHandler::callSELMenuHandler(layer, layer->m_pSelector);
-            layer->error_box1->removeFromParentAndCleanup(true);
-            layer->error_box2->removeFromParentAndCleanup(true);
-        } else {
-            layer->error_box2->setVisible(true);
-            layer->error_box1->removeFromParentAndCleanup(true);
-        }
-        //std::cout << "success, not calling because crash rn lol" << std::endl;
-        //gd::FLAlertLayer::create(nullptr, "Success!", "OK", nullptr, 300.0F, "<cy>GDUtils</c> has been updated to the <cg>latest version</c> !\nIf you want to apply the update, restart <cy>Geometry Dash</c>.")->show();
-    }
-    layer->onClose(CCNode::create());
-    return true;
-}
-
 
 void DownloadManager::setup() {
     log::debug("DownloadManager::setup()");
@@ -93,10 +69,7 @@ void DownloadManager::setup() {
     this->setTag(6942084);
     this->m_mainLayer->addChild(progressBar);
 
-    error_box1->show();
-    error_box2->show();
-    error_box1->setVisible(false);
-    error_box2->setVisible(false);
+
     auto text = cocos2d::CCLabelBMFont::create("Do not close this menu while the file is being downloaded.", "chatFont.fnt");
     text->setPosition(
         winSize.width / 2,
@@ -107,7 +80,25 @@ void DownloadManager::setup() {
     text->setScale(.5F);
     this->m_mainLayer->addChild(text);
     setTouchEnabled(true);
-    CreateThread(NULL, 0, DownloadManager::curl_thread, (void*)this, 0, NULL);
+
+    // def not copied from geode hahahaha
+
+    web::AsyncWebRequest()
+        .join("bad-apple")
+        .fetch(this->m_sUrl)
+        .into(this->m_sDestination)
+        .then([this](auto) {
+            log::debug("dumpToFile");
+            ProcessLambdas::callMenuHandler(this, this->m_pSelector);
+            this->onClose(CCNode::create());
+        })
+        .expect([](std::string const& err) {
+            FLAlertLayer::create(nullptr, "Error!", "An error occured while trying to send a request to the servers. Check <cy>logs</c> for more information.", "OK", nullptr, 200.0F)->show();
+            log::error(fmt::format("Error downloading: {}", err));
+        })
+        .progress([](auto&, double now, double total) {
+            progress_func(NULL, total, now, 0.0, 0.0);
+        });
 }
 
 DownloadManager* DownloadManager::create(const char* url, const char* destination, cocos2d::SEL_MenuHandler selector) {
