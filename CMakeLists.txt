@@ -26,7 +26,6 @@ target_include_directories(${PROJECT_NAME} PRIVATE
   libs/pl_mpeg/
   libs/glew/
   libs/socket.io-client-cpp/src
-  libs/curl/include
 )
 
 if (NOT DEFINED ENV{GEODE_SDK})
@@ -46,9 +45,9 @@ endif()
 if (CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
   message("compiling on linux!!")
   # why it requires advapi32 is beyond me
-  target_link_libraries(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/libs/curl/libcurl_a.lib ws2_32 crypt32 wldap32 normaliz advapi32 comdlg32)
+  target_link_libraries(${PROJECT_NAME} ws2_32 crypt32 wldap32 normaliz advapi32 comdlg32)
 elseif(WIN32)
-  target_link_libraries(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/libs/curl/libcurl_a.lib ws2_32 Crypt32 Wldap32 Normaliz)
+  target_link_libraries(${PROJECT_NAME} ws2_32 Crypt32 Wldap32 Normaliz)
 endif()
 
 # Set up dependencies, resources, link Geode

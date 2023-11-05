@@ -4,15 +4,6 @@
 #include <Geode/Geode.hpp>
 #include "BrownAlertDelegate.hpp"
 #include <fstream>
-#include <curlmod/curl.h> // listen here devs, i know what you're going to say, USE GEODE WEB REQUESTS INSTEAD
-                          // but listen, if you look more into the code, youll see i have a progress bar 
-                          // geode web requests doesnt have a progress bar......
-struct HttpResponse {
-    std::string header;
-    std::string content;
-    CURLcode curlCode;
-    long responseCode;
-};
 class ProgressBar : public CCNode {
     protected:
         float m_pPercentage = 0;

@@ -16,7 +16,6 @@ A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute,
 
 ## Libraries Used
 - [Geode](https://github.com/geode-sdk/geode)
-- [curl](https://github.com/curl/curl)
 - [socket.io-client-cpp](https://github.com/socketio/socket.io-client-cpp)
 - [pl_mpeg](https://github.com/phoboslab/pl_mpeg)
 
