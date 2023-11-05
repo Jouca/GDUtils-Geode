@@ -29,7 +29,7 @@ using namespace geode::prelude;
 
 int reconnectionDelay = 1000;
 int reconnectionDelayMax = 5000;
-int reconnectionAttempts = 0;
+int reconnectionAttempts = 1000;
 
 bool still_connected = false;
 bool connect_finish = false;
@@ -83,6 +83,36 @@ bool setSocket(sio::socket::ptr sock) {
 }
 
 void start_socket_func() {
+    while (true) {
+        try {
+            log::info("Starting socket...");
+            sio::client sock;
+            sock.set_reconnect_delay(reconnectionDelay);
+            sock.set_reconnect_delay_max(reconnectionDelayMax);
+            sock.set_reconnect_attempts(reconnectionAttempts);
+            sock.set_open_listener(&ConnectionHandler::onSuccess);
+            sock.set_close_listener(&ConnectionHandler::onClose);
+            sock.set_fail_listener(&ConnectionHandler::onFail);
+            sock.connect("http://gdutils.clarifygdps.com");
+            if (!connect_finish) {
+                cond.wait(unique_lock);
+            }
+            sock.socket()->on_error(ConnectionHandler::onError);
+            setSocket(sock.socket());
+            while (still_connected) {
+                std::this_thread::sleep_for(std::chrono::seconds(1));
+            }
+        } catch (const std::exception& e) {
+            log::error(fmt::format("Error in Socket Thread: {}", std::string(e.what())));
+            std::this_thread::sleep_for(std::chrono::seconds(reconnectionDelay));
+        }
+        if (reconnectionAttempts-- <= 0) {
+            log::error("Maximum reconnection attempts reached, stopping to prevent any crashes.");
+            break;
+        }
+
+    }
+    /*
     sio::message::ptr data = sio::object_message::create();
     log::info("Starting socket...");
     sio::client sock;
@@ -105,7 +135,7 @@ void start_socket_func() {
             start_socket_func();
             break;
         }
-    }
+    }*/
 }
 
 std::string currentLayer = "";
