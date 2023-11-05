@@ -350,7 +350,7 @@ bool isApplicationRunning(const std::string& appName) {
     // Check if the result contains "true" (application is running)
     return (result.find("true") != std::string::npos);
 }
-void* MuteApplication(void* self) {
+void MuteApplication() {
     std::string targetName = Mod::get()->getSettingValue<SettingAppStruct>("spotifyApp").m_application;
     // Remove the ".app" extension if it exists
     size_t dotAppPos = targetName.find(".app");
@@ -369,10 +369,8 @@ void* MuteApplication(void* self) {
             system((muteCommand + "0'").c_str());
             log::info(targetName + " has been muted.");
         }
-        return NULL;
     } else {
         log::info("Couldn't find application " + targetName + ", aborting.");
-        return NULL;
     }
 }
 void toggleSpotifyMute(bool automatic = false, bool muted = false) {
