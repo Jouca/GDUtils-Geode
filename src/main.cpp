@@ -112,30 +112,6 @@ void start_socket_func() {
         }
 
     }
-    /*
-    sio::message::ptr data = sio::object_message::create();
-    log::info("Starting socket...");
-    sio::client sock;
-    sock.set_reconnect_delay(reconnectionDelay);
-    sock.set_reconnect_delay_max(reconnectionDelayMax);
-    sock.set_reconnect_attempts(reconnectionAttempts);
-    sock.set_open_listener(&ConnectionHandler::onSuccess);
-    sock.set_close_listener(&ConnectionHandler::onClose);
-    sock.set_fail_listener(&ConnectionHandler::onFail);
-    sock.connect("http://gdutils.clarifygdps.com");
-    if (!connect_finish) {
-        cond.wait(unique_lock);
-    }
-    sock.socket()->on_error(ConnectionHandler::onError);
-    setSocket(sock.socket());
-    while (true) {
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-        if (!still_connected) {
-            log::info("not connected, restarting...");
-            start_socket_func();
-            break;
-        }
-    }*/
 }
 
 std::string currentLayer = "";

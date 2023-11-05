@@ -109,19 +109,19 @@ bool MoreLeaderboards::init(std::string type) {
         m_diamondsTabBtn = TabButton::create("Diamonds", this, menu_selector(MoreLeaderboards::onTab));
         m_diamondsTabBtn->setPosition(-95.f, 132.5f);
         m_diamondsTabBtn->setTag(static_cast<int>(StatsListType::Diamonds));
-        m_diamondsTabBtn->setZOrder(2);
+        m_diamondsTabBtn->setZOrder(30);
         m_menu->addChild(m_diamondsTabBtn);
 
         m_usercoinsTabBtn = TabButton::create("User Coins", this, menu_selector(MoreLeaderboards::onTab));
         m_usercoinsTabBtn->setPosition(0.f, 132.5f);
         m_usercoinsTabBtn->setTag(static_cast<int>(StatsListType::UserCoins));
-        m_usercoinsTabBtn->setZOrder(2);
+        m_usercoinsTabBtn->setZOrder(30);
         m_menu->addChild(m_usercoinsTabBtn);
 
         m_demonsTabBtn = TabButton::create("Demons", this, menu_selector(MoreLeaderboards::onTab));
         m_demonsTabBtn->setPosition(95.f, 132.5f);
         m_demonsTabBtn->setTag(static_cast<int>(StatsListType::Demons));
-        m_demonsTabBtn->setZOrder(2);
+        m_demonsTabBtn->setZOrder(30);
         m_menu->addChild(m_demonsTabBtn);
 
         // tabs gradient
@@ -155,13 +155,18 @@ bool MoreLeaderboards::init(std::string type) {
         startLoadingMods();
         loadPageMods();
     }
-
+    setTouchEnabled(true);
+    setKeypadEnabled(true);
     return true;
 }
 
 void MoreLeaderboards::backButton(cocos2d::CCObject*) {
     cocos2d::CCDirector::sharedDirector()->popSceneWithTransition(0.5F, cocos2d::PopTransition::kPopTransitionFade);
 };
+
+void MoreLeaderboards::keyBackClicked() {
+    backButton(CCNode::create());
+}
 
 void MoreLeaderboards::fadeLoadingCircle() {
     loading_circle->fadeAndRemove();
@@ -286,6 +291,7 @@ void MoreLeaderboards::loadPageMore() {
 
     leaderboardViewScore = CustomListView::create(displayedData, 220.f, 356.f, 0, BoomListType::Score);
     listLayer = GJListLayer::create(leaderboardViewScore, nullptr, {191, 114, 62, 255}, 356.f, 220.f);
+    listLayer->setZOrder(31);
     listLayer->setPosition(winSize / 2 - listLayer->getScaledContentSize() / 2 - CCPoint(0,5));
 
     addChild(listLayer);

@@ -34,6 +34,7 @@ class MoreLeaderboards : public CCLayer {
 
     protected:
         virtual bool init(std::string type);
+        virtual void keyBackClicked();
         void startLoadingMods();
         void loadPageMods();
         void startLoadingMore();
