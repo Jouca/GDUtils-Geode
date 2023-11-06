@@ -928,7 +928,7 @@ class $modify(CustomLevelInfo, LevelInfoLayer) {
             log::info("Sending a request to pointercrate...");
             web::AsyncWebRequest()
                 .join("pointercrate-level")
-                .fetch(fmt::format("https://pointercrate.com/api/v2/demons/listed/?name={}", level->m_levelName))
+                .fetch(fmt::format("https://pointercrate.com/api/v2/demons/listed/?name={}", level->m_levelName.c_str()))
                 .json()
                 .then([this, level, levelID, loading_circle, positionLabel, demonSpr, winSize](json::Value const& json) {
                     loading_circle->fadeAndRemove();
@@ -943,7 +943,7 @@ class $modify(CustomLevelInfo, LevelInfoLayer) {
                         positionLabel->setVisible(true);
                         demonSpr->setVisible(true);
                         set(levelID, position);
-                        log::info(fmt::format("Level found in Pointercrate! {} at #{}", level->m_levelName, position));
+                        log::info(fmt::format("Level found in Pointercrate! {} at #{}", level->m_levelName.c_str(), position));
                     }
                 })
                 .expect([this, loading_circle](std::string const& error) {

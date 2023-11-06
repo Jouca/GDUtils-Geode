@@ -24,4 +24,5 @@ A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute,
 * [Jouca](https://twitter.com/JoucaJouca)
 * [Firee](https://youtube.com/@gdfiree)
 * [Maverick](https://www.youtube.com/channel/UCoFBsXJ-6o6l6ZYP-k6DE_g)
+
 **Thank you to RobTopGames for his trust on the mod.**
