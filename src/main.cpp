@@ -9,7 +9,9 @@
 #include <Geode/modify/FriendsProfilePage.hpp>
 #include <Geode/modify/SecretLayer2.hpp>
 #include <Geode/modify/LeaderboardsLayer.hpp>
+#include <Geode/modify/LevelInfoLayer.hpp>
 #include <Geode/loader/Log.hpp>
+#include <Geode/utils/web.hpp>
 #include "includes.h"
 #include "CustomSettings.hpp"
 #include "EventsPush.h"
@@ -24,6 +26,7 @@
 #endif
 #include <thread>
 #include <queue>
+#include <unordered_map>
 
 using namespace geode::prelude;
 
@@ -791,6 +794,174 @@ class $modify(SecretVault, SecretLayer2) {
 #endif
 // touhou time
 
+// demon list
+//
+
+std::unordered_map<int, int> demonListCache; // Will clear after game exit, or if user deletes level
+
+class $modify(CustomLevelInfo, LevelInfoLayer) {
+    // chat jippity
+    void set(int key, int value) {
+        demonListCache[key] = value;
+    }
+
+    // Function to check if a key exists in the cache.
+    bool exists(int key) {
+        return demonListCache.find(key) != demonListCache.end();
+    }
+
+    // Function to get a value from the cache.
+    int get(int key) {
+        auto it = demonListCache.find(key);
+        if (it != demonListCache.end()) {
+            return it->second;
+        }
+        // Return -1 or some other default value to indicate the key wasn't found.
+        return -1;
+    }
+
+    bool remove(int key) {
+        return demonListCache.erase(key) == 1;
+    }
+
+    void moveCoinsDown(GJGameLevel* level) {
+        if (level->m_coins > 0) {
+            // move coins down
+            float toMoveY = 160.F;
+            int coin1Index = 1;
+            int coin2Index = 1;
+            int coin3Index = 1;
+            int coinCounted = 0;
+            for (size_t i = 0; i < this->getChildrenCount(); i++) {
+                auto node = static_cast<CCNode*>(this->getChildren()->objectAtIndex(i));
+                std::string layerName = typeid(*node).name() + 6;
+                if (layerName == "cocos2d::CCSprite") {
+                    if (node->getPositionY() == 176.5F) {
+                        coinCounted++;
+                        if (coinCounted > level->m_coins) break;
+                        switch (coinCounted) {
+                            case 1:
+                                coin1Index = i;
+                                break;
+                            case 2:
+                                coin2Index = i;
+                                break;
+                            case 3:
+                                coin3Index = i;
+                                break;
+                        } 
+                    }
+                }
+                //std::cout << layerName << " | " << node->getPositionY() << " | " << i << std::endl;
+            }
+            auto coin1 = static_cast<CCNode*>(this->getChildren()->objectAtIndex(coin1Index));
+            auto coin2 = static_cast<CCNode*>(this->getChildren()->objectAtIndex(coin2Index));
+            auto coin3 = static_cast<CCNode*>(this->getChildren()->objectAtIndex(coin3Index));
+            if (coin1 == nullptr && coin2 == nullptr && coin3 == nullptr) return; // should never happen
+            switch (level->m_coins) { // sorry
+                case 3:
+                    std::cout << "go " << coin1Index << "|" << coin2Index << "|" << coin3Index << std::endl;
+                    coin1->setPositionY(toMoveY);
+                    coin2->setPositionY(toMoveY);
+                    coin3->setPositionY(toMoveY);
+                    break;
+                case 2:
+                    coin1->setPositionY(toMoveY);
+                    coin2->setPositionY(toMoveY);
+                    break;
+                case 1:
+                    coin1->setPositionY(toMoveY);
+                    break;
+            }
+        }
+    }
+    float getScaleBasedPos(int pos) {
+        if (pos > 0 && pos < 10) return 0.5F;
+        if (pos > 10 && pos < 100) return 0.4F;
+        if (pos > 100 && pos < 1000) return 0.3F;
+        return 0.1F;
+    }
+    bool init(GJGameLevel* level) { // inspiration le gdbrowser
+        if (!LevelInfoLayer::init(level)) return false;
+        
+        if (level->m_demon.value() == 0 || level->m_stars.value() != 10) return true;
+        if (level->m_demonDifficulty != 6) return true;
+        
+        auto director = CCDirector::sharedDirector();
+        auto winSize = director->getWinSize();
+        auto demonSpr = CCSprite::createWithSpriteFrameName("diffIcon_06_btn_001.png");
+        //auto demonSpr = CCSprite::createWithSpriteFrameName("difficulty_06_btn_001.png");
+        demonSpr->setPosition({(winSize.width / 2) - 85, (winSize.height / 2) + 18});
+        demonSpr->setScale(0.5F);
+        auto positionLabel = CCLabelBMFont::create("N/A", "bigFont.fnt");
+        positionLabel->setPosition({(winSize.width / 2) - 107, (winSize.height / 2) + 18}); // 178
+        positionLabel->setScale(0.5F);
+        positionLabel->setVisible(false);
+        demonSpr->setVisible(false);
+        this->addChild(demonSpr);
+        this->addChild(positionLabel);
+        int levelID = level->m_levelID.value();
+        if (exists(levelID)) {
+            int position = get(levelID);
+            if (position > 0) {
+                positionLabel->setString(fmt::format("#{}", position).c_str());
+                positionLabel->setScale(getScaleBasedPos(position));
+                positionLabel->setVisible(true);
+                demonSpr->setVisible(true);
+            }
+        } else {
+            auto loading_circle = LoadingCircle::create();
+            if (level->m_coins > 0) {
+                loading_circle->setPosition({-100, -2});
+                loading_circle->setScale(0.3F);
+            } else {
+                loading_circle->setPosition({-100, 8});
+                loading_circle->setScale(0.4F);
+            }
+            loading_circle->setParentLayer(this);
+            loading_circle->show();
+            log::info("Sending a request to pointercrate...");
+            web::AsyncWebRequest()
+                .join("pointercrate-level")
+                .fetch(fmt::format("https://pointercrate.com/api/v2/demons/listed/?name={}", level->m_levelName))
+                .json()
+                .then([this, level, levelID, loading_circle, positionLabel, demonSpr, winSize](json::Value const& json) {
+                    loading_circle->fadeAndRemove();
+                    if (json.dump() == "[]") { //idk how to check size, doing .count crashes
+                        log::info("Level not found in pointercrate.");
+                    } else {
+                        auto info = json.get<json::Value>(0);
+                        auto position = info.get<int>("position");
+                        if (position != NULL) {
+                            moveCoinsDown(level);
+                            positionLabel->setString(fmt::format("#{}", position).c_str());
+                            positionLabel->setScale(getScaleBasedPos(position));
+                            positionLabel->setVisible(true);
+                            demonSpr->setVisible(true);
+                            set(levelID, position);
+                            log::info(fmt::format("Level found in Pointercrate! {} at #{}", level->m_levelName, position));
+                        }
+                    }
+                })
+                .expect([this, loading_circle](std::string const& error) {
+                    loading_circle->fadeAndRemove();
+                    log::error(fmt::format("Error while sending a request to Pointercrate: {}", error));
+                    FLAlertLayer::create(nullptr,
+                        "Error",
+                        "Failed to make a request to <cy>Pointercrate</c>. Please either <cg>try again later</c>, look at the error logs to see what might have happened, or report this to the developers.",
+                        "OK",
+                        nullptr,
+                        350.0F
+                    )->show();
+                    FLAlertLayer::create("Error", "lmao", "OK")->show();
+                });
+        }
+        
+        return true;
+    }
+};
+// demon list
+
 // When the socket connection is made
 $on_mod(Loaded) {
     log::info("GDUtils Mod Loaded");
@@ -816,20 +987,3 @@ $on_mod(Loaded) {
     Mod::get()->addCustomSetting<SettingCreditsValue>("credit-buttons", "none");
 }
 
-//#include "SecretVault.h"
-
-$execute {
-    /*Mod::get()->addHook(
-        reinterpret_cast<void*>(geode::base::get() + 0x221ac0),
-        &SecretVault::hook,
-        "SecretVault::init",
-        tulip::hook::TulipConvention::Thiscall
-    );
-    
-    Mod::get()->addHook(
-        reinterpret_cast<void*>(geode::base::get() + 0x222FC0),
-        &SecretVault::hookupdateSearchLabel,
-        "SecretVault::updateSearchLabel",
-        tulip::hook::TulipConvention::Thiscall
-    );*/
-}
