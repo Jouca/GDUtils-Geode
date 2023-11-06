@@ -524,6 +524,21 @@ CCLayer* CreditsBetaMenu::getPage(int pageNum) {
             Icon3Link->setPosition({ 95, 44 });
             menu->addChild(Icon3Link);
 
+            auto Icon4 = SimplePlayer::create(53);
+            auto firstColorIcon4 = ccColor3B {0, 125, 255};
+            auto secondColorIcon4 = ccColor3B {255,255,255};
+            Icon4->setChildColor(firstColorIcon4);
+            Icon4->setSecondColor(secondColorIcon4);
+            Icon4->setGlowOutline(true);
+            Icon4->setPosition({ -93, -58 });
+            page5betaSection->addChild(Icon4);
+            auto Icon4Label = CCLabelBMFont::create("SharKing09", "goldFont.fnt");
+            Icon4Label->setScale(.7F);
+            auto Icon4Link = CCMenuItemSpriteExtra::create(Icon4Label, this, menu_selector(CreditsBetaMenu::goToURL));
+            Icon4Link->setUserObject(CCString::create("https://www.google.com"));
+            Icon4Link->setPosition({ -93, -24 });
+            menu->addChild(Icon4Link);
+
             menu->addChild(page5betaSection);
             break;
         }

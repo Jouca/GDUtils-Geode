@@ -37,8 +37,8 @@ void MoreLeaderboardsCell::loadFromDict(cocos2d::CCDictionary* content) //
                 auto discordBtn = CCMenuItemSpriteExtra::create(
                     discordSpr,
                     this,
-                    menu_selector(MoreLeaderboardsCell::callback_link)
-                );
+            menu_selector(MoreLeaderboardsCell::callback_link)
+            );
                 auto discord_link = CCString::create(name);
                 discordBtn->setUserObject(discord_link);
                 mediaMenu->addChild(discordBtn);

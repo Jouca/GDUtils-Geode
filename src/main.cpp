@@ -900,6 +900,10 @@ class $modify(CustomLevelInfo, LevelInfoLayer) {
         demonSpr->setVisible(false);
         this->addChild(demonSpr);
         this->addChild(positionLabel);
+        if (level->m_coins > 0) {
+            positionLabel->setPositionY(positionLabel->getPositionY() - 18);
+            demonSpr->setPositionY(demonSpr->getPositionY() - 18);
+        }
         int levelID = level->m_levelID.value();
         if (exists(levelID)) {
             int position = get(levelID);
@@ -932,15 +936,13 @@ class $modify(CustomLevelInfo, LevelInfoLayer) {
                     } else {
                         auto info = json.get<json::Value>(0);
                         auto position = info.get<int>("position");
-                        if (position != NULL) {
-                            moveCoinsDown(level);
-                            positionLabel->setString(fmt::format("#{}", position).c_str());
-                            positionLabel->setScale(getScaleBasedPos(position));
-                            positionLabel->setVisible(true);
-                            demonSpr->setVisible(true);
-                            set(levelID, position);
-                            log::info(fmt::format("Level found in Pointercrate! {} at #{}", level->m_levelName, position));
-                        }
+                        //moveCoinsDown(level);
+                        positionLabel->setString(fmt::format("#{}", position).c_str());
+                        positionLabel->setScale(getScaleBasedPos(position));
+                        positionLabel->setVisible(true);
+                        demonSpr->setVisible(true);
+                        set(levelID, position);
+                        log::info(fmt::format("Level found in Pointercrate! {} at #{}", level->m_levelName, position));
                     }
                 })
                 .expect([this, loading_circle](std::string const& error) {
@@ -953,7 +955,6 @@ class $modify(CustomLevelInfo, LevelInfoLayer) {
                         nullptr,
                         350.0F
                     )->show();
-                    FLAlertLayer::create("Error", "lmao", "OK")->show();
                 });
         }
         

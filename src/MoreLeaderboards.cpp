@@ -30,16 +30,30 @@ CCDictionary* MoreLeaderboards::responseToDict(const std::string& response){
     std::stringstream responseStream(response);
     std::string currentKey;
     std::string keyID;
+    std::string playerID;
+    std::string username;
+    std::string accountID;
 
+    GameLevelManager* glm = GameLevelManager::sharedState();
     unsigned int i = 0;
     while(getline(responseStream, currentKey, ':')){
-
-        if(i % 2 == 0) keyID = currentKey;
-        else dict->setObject(CCString::create(currentKey.c_str()),keyID);
-
+        if(i % 2 == 0) {
+            keyID = currentKey;
+        } else {
+            if (keyID == "2") { // Player ID
+                playerID = currentKey;
+            } else if (keyID == "16") {
+                accountID = currentKey;
+            } else if (keyID == "1") {
+                username = currentKey;
+            }
+            dict->setObject(CCString::create(currentKey.c_str()),keyID);
+        }
         i++;
     }
-
+    if (playerID.length() > 0 && username.length() > 0 && accountID.length() > 0) {
+        glm->storeUserName(std::stoi(playerID), std::stoi(accountID), username);
+    }
     return dict;
 }
 
