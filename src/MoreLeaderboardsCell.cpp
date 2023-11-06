@@ -7,34 +7,17 @@ void MoreLeaderboardsCell::loadFromDict(cocos2d::CCDictionary* content) //
     auto name = content->valueForKey("modstring")->getCString();
 
     auto mediaMenu = CCMenu::create();
+    std::string usernameTemp = "";
 
     std::vector<std::string> data = MoreLeaderboards::getWords(name, "?");
+    std::vector<std::string> data2 = data;
 
     while (data.size() > 0) {
         std::string id = data[0];
         std::string name = data[1];
 
         if (id == "1") {
-            auto username = cocos2d::CCLabelBMFont::create(name.c_str(), "goldFont.fnt");
-            username->setPosition({ 57, 20 });
-            username->setScale(.725f);
-
-            auto playerID = CCString::create(data[3]);
-            
-            auto usernameBtn = CCMenuItemSpriteExtra::create(
-                username,
-                this,
-                menu_selector(MoreLeaderboardsCell::callback_user)
-            );
-            usernameBtn->setPosition({0, 0});
-            usernameBtn->setAnchorPoint({0, 0.5});
-            usernameBtn->setUserObject(playerID);
-
-            auto menu = CCMenu::create();
-            menu->addChild(usernameBtn);
-            menu->setPosition({ 55, 20 });
-
-            this->m_mainLayer->addChild(menu);
+            usernameTemp = name;
         } else if (id == "3") {
             if (name == "1") {
                 auto elderModBadge = cocos2d::CCSprite::createWithSpriteFrameName("modBadge_02_001.png");
@@ -90,6 +73,30 @@ void MoreLeaderboardsCell::loadFromDict(cocos2d::CCDictionary* content) //
         data.erase(data.begin());
     }
 
+    auto username = cocos2d::CCLabelBMFont::create(usernameTemp.c_str(), "goldFont.fnt");
+    username->setPosition({ 57, 20 });
+    username->setScale(.725f);
+
+    auto dictData = CCDictionary::create();
+    dictData->setObject(CCString::create(data2[3]), "accountID");
+    dictData->setObject(CCString::create(data2[13]), "playerID");
+    dictData->setObject(CCString::create(usernameTemp.c_str()), "username");
+    
+    auto usernameBtn = CCMenuItemSpriteExtra::create(
+        username,
+        this,
+        menu_selector(MoreLeaderboardsCell::callback_user)
+    );
+    usernameBtn->setPosition({0, 0});
+    usernameBtn->setAnchorPoint({0, 0.5});
+    usernameBtn->setUserObject(dictData);
+
+    auto menu = CCMenu::create();
+    menu->addChild(usernameBtn);
+    menu->setPosition({ 55, 20 });
+
+    this->m_mainLayer->addChild(menu);
+
     mediaMenu->alignItemsHorizontallyWithPadding(5);
     mediaMenu->setAnchorPoint({1, 0.5});
     mediaMenu->setPosition({ 320, 20 });
@@ -118,8 +125,16 @@ MoreLeaderboardsCell* MoreLeaderboardsCell::create(const char* key, CCSize size)
 }
 
 void MoreLeaderboardsCell::callback_user(CCObject* pSender) {
-    CCString* playerID = static_cast<CCString*>(static_cast<CCNode*>(pSender)->getUserObject());
-    ProfilePage::create(std::stoi(playerID->getCString()), false)->show();
+    GameLevelManager* glm = GameLevelManager::sharedState();
+
+    auto data = static_cast<CCDictionary*>(static_cast<CCNode*>(pSender)->getUserObject());
+    auto accountID = data->valueForKey("accountID")->getCString();
+    auto playerID = data->valueForKey("playerID")->getCString();
+    auto username = data->valueForKey("username")->getCString();
+
+    glm->storeUserName(std::stoi(playerID), std::stoi(accountID), username);
+
+    ProfilePage::create(std::stoi(accountID), true)->show();
 }
 
 void MoreLeaderboardsCell::callback_link(CCObject* pSender) {
