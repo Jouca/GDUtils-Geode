@@ -13,6 +13,12 @@ A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute,
 * **IMPORTANT for Mac Users:** Geometry Dash may request access to "System Events" and another app for muting Spotify or another application. This allows the game to detect running applications.
 ## Extra additions to Friends List
 * The additions added include being able to **search usernames** if you have a long friend list, or using the **scroll buttons**!
+## More Leaderboards
+* Thanks to Updated Leaderboards, it's now possible for you to view leaderboards for users with the most **Diamonds**, **User Coins**, and **Demons!**
+## Moderator List 
+* You can view the list of **Elder Moderators**/**Moderators** and their socials!
+## View Demon List Placement
+* Instead of having to go to Pointercrate to view the demon placement of a level, you can now **view the position** of an extreme demon!
 
 # Credits
 * [Jouca](https://twitter.com/JoucaJouca)

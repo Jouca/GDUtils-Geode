@@ -17,6 +17,7 @@
 #include "EventsPush.h"
 #include "ProcessLambdas.h"
 #include "MoreLeaderboards.h"
+#include <fmt/format.h>
 #include <chrono>
 #ifdef GEODE_IS_WINDOWS
 #include "DownloadManager.h"
