@@ -23,7 +23,7 @@
 #include "DownloadManager.h"
 #else // mac
 #include <ctime>
-#include <cstdlib> // ADD THIS
+#include <cxxabi.h>
 #endif
 #include <thread>
 #include <queue>
@@ -48,6 +48,26 @@ std::mutex lock;
 std::unique_lock<std::mutex> unique_lock(lock);
 std::condition_variable cond;
 sio::socket::ptr current_socket;
+
+// theres no including Geode Util class funcs so, https://github.com/geode-sdk/DevTools
+std::string getNodeName(CCObject* node) {
+#ifdef GEODE_IS_WINDOWS
+    return typeid(*node).name() + 6;
+#else 
+    {
+        std::string ret;
+
+        int status = 0;
+        auto demangle = abi::__cxa_demangle(typeid(*node).name(), 0, 0, &status);
+        if (status == 0) {
+            ret = demangle;
+        }
+        free(demangle);
+
+        return ret;
+    }
+#endif
+}
 
 namespace ConnectionHandler {
     void onSuccess() {
@@ -140,11 +160,7 @@ class $modify(GameManager) {
         if (ProcessLambdas::shouldProcessMenuHandler()) {
             ProcessLambdas::processMenuHandler();
         }
-        #ifdef GEODE_IS_WINDOWS
-        std::string layerName = typeid(*layer).name() + 6;
-        #else 
-        std::string layerName = typeid(*layer).name(); // very weird
-        #endif
+        std::string layerName = getNodeName(layer);
         if (layerName == "cocos2d::CCLayerColor") return;
         if (currentLayer != layerName) {
             //log::debug("GameManager::update - " + layerName);
@@ -593,11 +609,7 @@ class $modify(FriendPage, FriendsProfilePage) {
         for (unsigned int i = 0; i < scene->getChildrenCount(); i++) {
             auto layer = dynamic_cast<CCLayer*>(sceneChildren->objectAtIndex(i));
             if (layer != nullptr) {
-                #ifdef GEODE_IS_WINDOWS
-                std::string layerName = typeid(*layer).name() + 6;
-                #else 
-                std::string layerName = typeid(*layer).name();
-                #endif
+                std::string layerName = getNodeName(layer);
                 if (layerName == "FriendsProfilePage") {
                     test1 = dynamic_cast<CCLayer*>(layer->getChildren()->objectAtIndex(0));
                     break; // assume its FriendsProfilePage
