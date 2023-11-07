@@ -140,7 +140,11 @@ class $modify(GameManager) {
         if (ProcessLambdas::shouldProcessMenuHandler()) {
             ProcessLambdas::processMenuHandler();
         }
+        #ifdef GEODE_IS_WINDOWS
         std::string layerName = typeid(*layer).name() + 6;
+        #else 
+        std::string layerName = typeid(*layer).name(); // very weird
+        #endif
         if (layerName == "cocos2d::CCLayerColor") return;
         if (currentLayer != layerName) {
             //log::debug("GameManager::update - " + layerName);
@@ -519,6 +523,7 @@ class SearchUserLayer : public BrownAlertDelegate {
 class $modify(FriendPage, FriendsProfilePage) {
     bool init(UserListType type) {
         if (!FriendsProfilePage::init(type)) return false;
+        if (!Mod::get()->getSettingValue<bool>("friendSearch")) return true;
         auto menu = this->m_buttonMenu;
 
         auto downSpr = CCSprite::createWithSpriteFrameName("edit_downBtn2_001.png");
@@ -588,7 +593,11 @@ class $modify(FriendPage, FriendsProfilePage) {
         for (unsigned int i = 0; i < scene->getChildrenCount(); i++) {
             auto layer = dynamic_cast<CCLayer*>(sceneChildren->objectAtIndex(i));
             if (layer != nullptr) {
+                #ifdef GEODE_IS_WINDOWS
                 std::string layerName = typeid(*layer).name() + 6;
+                #else 
+                std::string layerName = typeid(*layer).name();
+                #endif
                 if (layerName == "FriendsProfilePage") {
                     test1 = dynamic_cast<CCLayer*>(layer->getChildren()->objectAtIndex(0));
                     break; // assume its FriendsProfilePage
@@ -845,58 +854,6 @@ class $modify(CustomLevelInfo, LevelInfoLayer) {
     bool remove(int key) {
         return demonListCache.erase(key) == 1;
     }
-
-    void moveCoinsDown(GJGameLevel* level) {
-        if (level->m_coins > 0) {
-            // move coins down
-            float toMoveY = 160.F;
-            int coin1Index = 1;
-            int coin2Index = 1;
-            int coin3Index = 1;
-            int coinCounted = 0;
-            for (size_t i = 0; i < this->getChildrenCount(); i++) {
-                auto node = static_cast<CCNode*>(this->getChildren()->objectAtIndex(i));
-                std::string layerName = typeid(*node).name() + 6;
-                if (layerName == "cocos2d::CCSprite") {
-                    if (node->getPositionY() == 176.5F) {
-                        coinCounted++;
-                        if (coinCounted > level->m_coins) break;
-                        switch (coinCounted) {
-                            case 1:
-                                coin1Index = i;
-                                break;
-                            case 2:
-                                coin2Index = i;
-                                break;
-                            case 3:
-                                coin3Index = i;
-                                break;
-                        } 
-                    }
-                }
-                //std::cout << layerName << " | " << node->getPositionY() << " | " << i << std::endl;
-            }
-            auto coin1 = static_cast<CCNode*>(this->getChildren()->objectAtIndex(coin1Index));
-            auto coin2 = static_cast<CCNode*>(this->getChildren()->objectAtIndex(coin2Index));
-            auto coin3 = static_cast<CCNode*>(this->getChildren()->objectAtIndex(coin3Index));
-            if (coin1 == nullptr && coin2 == nullptr && coin3 == nullptr) return; // should never happen
-            switch (level->m_coins) { // sorry
-                case 3:
-                    std::cout << "go " << coin1Index << "|" << coin2Index << "|" << coin3Index << std::endl;
-                    coin1->setPositionY(toMoveY);
-                    coin2->setPositionY(toMoveY);
-                    coin3->setPositionY(toMoveY);
-                    break;
-                case 2:
-                    coin1->setPositionY(toMoveY);
-                    coin2->setPositionY(toMoveY);
-                    break;
-                case 1:
-                    coin1->setPositionY(toMoveY);
-                    break;
-            }
-        }
-    }
     float getScaleBasedPos(int pos) {
         if (pos > 0 && pos < 10) return 0.5F;
         if (pos > 10 && pos < 100) return 0.4F;
@@ -905,6 +862,7 @@ class $modify(CustomLevelInfo, LevelInfoLayer) {
     }
     bool init(GJGameLevel* level) { // inspiration le gdbrowser
         if (!LevelInfoLayer::init(level)) return false;
+        if (!Mod::get()->getSettingValue<bool>("demonListPlacement")) return true;
         
         if (level->m_demon.value() == 0 || level->m_stars.value() != 10) return true;
         if (level->m_demonDifficulty != 6) return true;
@@ -958,7 +916,6 @@ class $modify(CustomLevelInfo, LevelInfoLayer) {
                     } else {
                         auto info = json.get<json::Value>(0);
                         auto position = info.get<int>("position");
-                        //moveCoinsDown(level);
                         positionLabel->setString(fmt::format("#{}", position).c_str());
                         positionLabel->setScale(getScaleBasedPos(position));
                         positionLabel->setVisible(true);
@@ -999,6 +956,7 @@ $on_mod(Loaded) {
     Mod::get()->addCustomSetting<SettingSectionValue>("notification-placement-section", "none");
     Mod::get()->addCustomSetting<SettingSectionValue>("notification-appearance-section", "none");
     Mod::get()->addCustomSetting<SettingSectionValue>("spotify-section", "none");
+    Mod::get()->addCustomSetting<SettingSectionValue>("misc-section", "none");
     Mod::get()->addCustomSetting<SettingSectionValue>("credits-section", "none");
     // ok listen here, you dont provide a way to JUST get the file name, you provide the full path which isnt what i want, so dont complain geode devs. Okay? we good? ok
     #ifdef GEODE_IS_WINDOWS

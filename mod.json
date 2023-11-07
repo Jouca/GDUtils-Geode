@@ -136,6 +136,25 @@
             "type": "custom",
             "default": "Spotify.exe"
         },
+        "misc-section": {
+            "name": "Miscellaneous",
+            "description": "This category is for any other feature for <cy>GDUtils</c>.\nYou can choose whether to <cy>enable</c> or <cy>disable</c> some options if you do not want them.",
+            "type": "custom",
+            "scale": 300,
+            "posX": 65
+        },
+        "friendSearch": {
+            "name": "Search Friends",
+            "description": "Whether or not to show the search button in the <cg>Friends List Menu</c>.",
+            "type": "bool",
+            "default": true
+        },
+        "demonListPlacement": {
+            "name": "Demon Placements",
+            "description": "Whether or not to show placements for <cr>Extreme Demons</c> from <cy>Pointercrate</c>.",
+            "type": "bool",
+            "default": true
+        },
         "credits-section": {
             "name": "Credits",
             "description": "Below are the credits for those that developed the mod, and beta-tested the mod!",

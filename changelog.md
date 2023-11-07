@@ -1,7 +1,8 @@
 # v1.1.1
+    - Added new settings! (Toggling friend searching & Toggling Demon List)
     - Allowed use of partially searching usernames. (Like "fi" instead of "Fire")
     - Fixed Pointercrate issue on levels with spaces (Mac Only)
-    - Fixed issue with friend list searching not working.
+    - Fixed issue with friend list searching not working
 # v1.1.0
     - More Leaderboards added (Diamonds, User Coins, Demons)
     - Added Moderator List
