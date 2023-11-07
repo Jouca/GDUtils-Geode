@@ -28,6 +28,7 @@
 #include <thread>
 #include <queue>
 #include <unordered_map>
+#include <algorithm>
 
 using namespace geode::prelude;
 
@@ -478,7 +479,6 @@ class SearchUserLayer : public BrownAlertDelegate {
             auto winSize = cocos2d::CCDirector::sharedDirector()->getWinSize();
             input_username->setPositionY(10);
             this->m_buttonMenu->addChild(input_username);
-
             auto validate_spr = ButtonSprite::create("Search", 60, true, "bigFont.fnt", "GJ_button_01.png", 30, .5F);
             auto validate_btn = CCMenuItemSpriteExtra::create(
                 validate_spr,
@@ -582,12 +582,20 @@ class $modify(FriendPage, FriendsProfilePage) {
         SearchUserLayer::create()->show();
     }
     static void searchUser(const char* username) {
-        auto sceneChildCount = CCDirector::sharedDirector()->getRunningScene()->getChildrenCount();
-        auto self = reinterpret_cast<CCLayer*>(
-            CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(sceneChildCount - 2)
-        ); // other geode mods adding themselves onto the scene is great.
-        auto test1 = reinterpret_cast<CCLayer*>(self->getChildren()->objectAtIndex(0));
-        if (test1->getChildrenCount() < 18) {
+        auto scene = CCDirector::sharedDirector()->getRunningScene();
+        auto sceneChildren = scene->getChildren();
+        CCLayer* test1 = nullptr;
+        for (unsigned int i = 0; i < scene->getChildrenCount(); i++) {
+            auto layer = dynamic_cast<CCLayer*>(sceneChildren->objectAtIndex(i));
+            if (layer != nullptr) {
+                std::string layerName = typeid(*layer).name() + 6;
+                if (layerName == "FriendsProfilePage") {
+                    test1 = dynamic_cast<CCLayer*>(layer->getChildren()->objectAtIndex(0));
+                    break; // assume its FriendsProfilePage
+                }
+            }
+        }
+        if (test1 == nullptr) {
             // safeguard from crashing
             FLAlertLayer::create(nullptr,
                 "Error",
@@ -598,9 +606,8 @@ class $modify(FriendPage, FriendsProfilePage) {
             )->show();
             return;
         }
-        auto test2 = reinterpret_cast<CCLayer*>(test1->getChildren()->objectAtIndex(1));
-        auto test3 = reinterpret_cast<CCLayer*>(test2->getChildren()->objectAtIndex(0));
-        // ^^ this might look bad, sorry.
+        auto test2 = static_cast<CCLayer*>(test1->getChildren()->objectAtIndex(1));
+        auto test3 = static_cast<CCLayer*>(test2->getChildren()->objectAtIndex(0));
         if (test3->getChildrenCount() <= 0) {
             // another safeguard
             FLAlertLayer::create(nullptr,
@@ -612,8 +619,8 @@ class $modify(FriendPage, FriendsProfilePage) {
             )->show();
             return;
         }
-        auto customList = reinterpret_cast<TableView*>(test3->getChildren()->objectAtIndex(0));
-        CCContentLayer* contentLayer = reinterpret_cast<CCContentLayer*>(
+        auto customList = static_cast<TableView*>(test3->getChildren()->objectAtIndex(0));
+        CCContentLayer* contentLayer = static_cast<CCContentLayer*>(
             customList->getChildren()->objectAtIndex(0)
         );
         int counter_page = 0;
@@ -655,7 +662,7 @@ class $modify(FriendPage, FriendsProfilePage) {
                 );
             }
             const char* str1 = label->getString();
-            if (strcmp(toLowerCase(str1), toLowerCase(username)) == 0) {
+            if (strstr(toLowerCase(str1), toLowerCase(username)) != nullptr) {
                 customList->scrollLayer(-9999999);
                 customList->scrollLayer(counter_page);
 
@@ -663,10 +670,8 @@ class $modify(FriendPage, FriendsProfilePage) {
 
                 break;
             }
-
             counter_page += 45;
         }
-
         if (!found) {
             std::string str = username;
             FLAlertLayer::create(nullptr,
@@ -800,6 +805,22 @@ class $modify(SecretVault, SecretLayer2) {
 
 std::unordered_map<int, int> demonListCache; // Will clear after game exit, or if user deletes level
 
+// love url encoded characters :D
+// also for some reason this is required on mac because Geode's web requests doesnt automatically append this for some reason.
+// SURELY THIS WONT AFFECT LEVELS WITH SOME OTHER BREAKING SYMBOLS.
+std::string url_encode(const std::string& value) {
+    std::string encoded;
+    encoded.reserve(value.size());
+    for (char c : value) {
+        if (c == ' ') {
+            encoded += "%20";
+        } else {
+            encoded += c;
+        }
+    }
+    return encoded;
+}
+
 class $modify(CustomLevelInfo, LevelInfoLayer) {
     // chat jippity
     void set(int key, int value) {
@@ -928,7 +949,7 @@ class $modify(CustomLevelInfo, LevelInfoLayer) {
             log::info("Sending a request to pointercrate...");
             web::AsyncWebRequest()
                 .join("pointercrate-level")
-                .fetch(fmt::format("https://pointercrate.com/api/v2/demons/listed/?name={}", level->m_levelName.c_str()))
+                .fetch(fmt::format("https://pointercrate.com/api/v2/demons/listed/?name={}", url_encode(level->m_levelName).c_str()))
                 .json()
                 .then([this, level, levelID, loading_circle, positionLabel, demonSpr, winSize](json::Value const& json) {
                     loading_circle->fadeAndRemove();
