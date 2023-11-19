@@ -257,6 +257,21 @@ void MoreLeaderboards::startLoadingMore() {
     .fetch("https://clarifygdps.com/gdutils/moreleaderboards.php")
     .text()
     .then([this, type](std::string const& data) {
+        if (data == "-1" || data.length() < 2) {
+            fadeLoadingCircle();
+            loading = false;
+            geode::createQuickPopup(
+                "Error",
+                "An error occured while sending a request to <cy>GDBrowser</c>. Please try again later.",
+                "OK", nullptr,
+                [this](auto, bool btn2) {
+                    if (!btn2) {
+                        keyBackClicked();
+                    }
+                }
+            );
+            return;
+        }
         fadeLoadingCircle();
 
         handle_request_more(data);
@@ -267,6 +282,16 @@ void MoreLeaderboards::startLoadingMore() {
         m_demonsTabBtn->setEnabled(true);
     })
     .expect([this, type](std::string const& error) {
+        geode::createQuickPopup(
+            "Error",
+            "An error occured while sending a request to <cy>GDBrowser</c>. Please try again later.",
+            "OK", nullptr,
+            [this](auto, bool btn2) {
+                if (!btn2) {
+                    keyBackClicked();
+                }
+            }
+        );
         fadeLoadingCircle();
         loading = false;
 

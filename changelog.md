@@ -1,3 +1,5 @@
+# v1.1.2
+    - Stopped more leaderboards from crashing in case if GDBrowser is down, or the user has no internet.
 # v1.1.1
     - Added new settings! (Toggling friend searching & Toggling Demon List)
     - Allowed use of partially searching usernames. (Like "fi" instead of "Fire")

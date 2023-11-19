@@ -26,6 +26,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
   libs/pl_mpeg/
   libs/glew/
   libs/socket.io-client-cpp/src
+  libs/discord-rpc/include
 )
 
 if (NOT DEFINED ENV{GEODE_SDK})
@@ -38,9 +39,9 @@ add_subdirectory($ENV{GEODE_SDK} ${CMAKE_CURRENT_BINARY_DIR}/geode)
 
 add_subdirectory(libs/socket.io-client-cpp)
 if (APPLE)
-  target_link_libraries(${PROJECT_NAME} sioclient "-framework OpenGL")
+  target_link_libraries(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/libs/link-libs/discocrd-rpc/libdiscord-rpc.a sioclient "-framework OpenGL")
 else()
-  target_link_libraries(${PROJECT_NAME} sioclient opengl32)
+  target_link_libraries(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/libs/link-libs/discord-rpc/discord-rpc.lib sioclient opengl32)
 endif()
 if (CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
   message("compiling on linux!!")

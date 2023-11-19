@@ -17,6 +17,7 @@
 #include "EventsPush.h"
 #include "ProcessLambdas.h"
 #include "MoreLeaderboards.h"
+#include "Discord.h"
 #include <fmt/format.h>
 #include <chrono>
 #ifdef GEODE_IS_WINDOWS
@@ -163,7 +164,7 @@ class $modify(GameManager) {
         std::string layerName = getNodeName(layer);
         if (layerName == "cocos2d::CCLayerColor") return;
         if (currentLayer != layerName) {
-            //log::debug("GameManager::update - " + layerName);
+            //Discord::update(layerName.c_str()); for next update ;)
             currentLayer = layerName;
             EventsPush::stopNow(scene);
             bool everywhereElse = Mod::get()->getSettingValue<bool>("everywhereElse");
@@ -960,6 +961,8 @@ $on_mod(Loaded) {
     current_socket = sio::socket::ptr();
     std::thread hThread(start_socket_func);
     hThread.detach();
+    //Discord::init(); for next update ;)
+    // also for whatever reason, discord rpc doesnt work on vanilla gd, instead it shows absolutes MH icon for some reason even though I dont own MH. can someone explain that
     
     Mod::get()->addCustomSetting<SettingTestValue>("test-notification", "none");
     Mod::get()->addCustomSetting<SettingPosValue>("notificationPlacement", 4);
