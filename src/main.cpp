@@ -17,7 +17,7 @@
 #include "EventsPush.h"
 #include "ProcessLambdas.h"
 #include "MoreLeaderboards.h"
-#include "Discord.h"
+//#include "Discord.h"
 #include <fmt/format.h>
 #include <chrono>
 #ifdef GEODE_IS_WINDOWS

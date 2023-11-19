@@ -1,5 +1,5 @@
 #include "Discord.h"
-#include <Geode/Geode.hpp>
+/*#include <Geode/Geode.hpp>
 #include <Geode/modify/GameManager.hpp>
 using namespace geode::prelude;
 
@@ -39,4 +39,4 @@ void Discord::update(const char* layerName) {
     discordPresence.largeImageText = gm->m_playerName.c_str();
     discordPresence.instance = 0;
     Discord_UpdatePresence(&discordPresence);
-}
+}*/
