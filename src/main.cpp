@@ -2,8 +2,8 @@
 // Ported with help by Firee
 // Mod made by Jouca & Firee
 
-#include <Geode/Geode.hpp>
-#include <Geode/modify/GameManager.hpp>
+//#include <Geode/modify/GameManager.hpp>
+#include <Geode/modify/CCScheduler.hpp>
 #include <Geode/modify/PlayLayer.hpp>
 #include <Geode/modify/EditorUI.hpp>
 #include <Geode/modify/FriendsProfilePage.hpp>
@@ -17,10 +17,10 @@
 #include "EventsPush.h"
 #include "ProcessLambdas.h"
 #include "MoreLeaderboards.h"
-//#include "Discord.h"
+#include "Discord.h"
 #include <fmt/format.h>
 #include <chrono>
-#ifdef GEODE_IS_WINDOWS
+#ifndef GEODE_IS_MACOS
 #include "DownloadManager.h"
 #else // mac
 #include <ctime>
@@ -30,8 +30,6 @@
 #include <queue>
 #include <unordered_map>
 #include <algorithm>
-
-using namespace geode::prelude;
 
 int reconnectionDelay = 1000;
 int reconnectionDelayMax = 5000;
@@ -50,25 +48,7 @@ std::unique_lock<std::mutex> unique_lock(lock);
 std::condition_variable cond;
 sio::socket::ptr current_socket;
 
-// theres no including Geode Util class funcs so, https://github.com/geode-sdk/DevTools
-std::string getNodeName(CCObject* node) {
-#ifdef GEODE_IS_WINDOWS
-    return typeid(*node).name() + 6;
-#else 
-    {
-        std::string ret;
-
-        int status = 0;
-        auto demangle = abi::__cxa_demangle(typeid(*node).name(), 0, 0, &status);
-        if (status == 0) {
-            ret = demangle;
-        }
-        free(demangle);
-
-        return ret;
-    }
-#endif
-}
+// for some reason log and fmt dont work together on android
 
 namespace ConnectionHandler {
     void onSuccess() {
@@ -149,10 +129,9 @@ void processEvent(CCScene* self) {
         EventsPush::pushRateLevel(self, data);
     }
 }
-
-class $modify(GameManager) {
+class $modify(CCScheduler) { // used to be GameManager
     void update(float dt) {
-        GameManager::update(dt);
+        CCScheduler::update(dt);
         bool waitUntilExit = false;
         auto scene = CCDirector::sharedDirector()->getRunningScene();
         if (scene->getChildrenCount() == 0) return;
@@ -161,7 +140,7 @@ class $modify(GameManager) {
         if (ProcessLambdas::shouldProcessMenuHandler()) {
             ProcessLambdas::processMenuHandler();
         }
-        std::string layerName = getNodeName(layer);
+        std::string layerName = misc::getNodeName(layer);
         if (layerName == "cocos2d::CCLayerColor") return;
         if (currentLayer != layerName) {
             //Discord::update(layerName.c_str()); for next update ;)
@@ -355,7 +334,7 @@ void toggleSpotifyMute(bool automatic = false, bool muted = false) {
         MuteAudioSessionByProcessId(processId, is_muted);
     }
 }
-#else // mac os, wont work on android or ios :(
+#elif GEODE_IS_MACOS // mac os, wont work on android or ios :(
 bool isApplicationRunning(const std::string& appName) {
     // Construct the osascript command
     std::string script = "osascript -e 'tell application \"System Events\" to (name of processes) contains \"" + appName + "\"'";
@@ -419,13 +398,20 @@ void toggleSpotifyMute(bool automatic = false, bool muted = false) {
     std::thread hThread(MuteApplication);
     hThread.detach();
 }
+#else // any other platform
+void toggleSpotifyMute(bool automatic = false, bool muted = false) {
+    // nothing because im not sure!
+}
 #endif
+#ifndef GEODE_IS_ANDROID
 class $modify(PlayLayer) {
-    bool init(GJGameLevel* level) {
-        if (!PlayLayer::init(level)) return false;
+    bool init(GJGameLevel* level, bool p1, bool p2) {
+        if (!PlayLayer::init(level, p1, p2)) return false;
         if (!Mod::get()->getSettingValue<bool>("inLevelsSpotify")) return true;
-        auto gm = FMODAudioEngine::sharedEngine();
-        if (gm->m_backgroundMusicVolume > 0.0f) {
+        //auto gm = FMODAudioEngine::sharedEngine();
+        //if (gm->m_backgroundMusicVolume > 0.0f) {
+        // uncomment when fmod gets these fields 
+        if (1.0F > 0.0F) {
             toggleSpotifyMute(true, true);
         }
         return true;
@@ -444,7 +430,8 @@ class $modify(EditorUI) {
         EditorUI::onPlaytest(sender);
         if (!Mod::get()->getSettingValue<bool>("inEditorSpotify")) return;
         auto gm = FMODAudioEngine::sharedEngine();
-        if (gm->m_backgroundMusicVolume > 0.0f) {
+        //if (gm->m_backgroundMusicVolume > 0.0f) {
+        if (1 > 0.0F) { // temp until someone adds fields
             toggleSpotifyMute();
         }
     }
@@ -461,7 +448,8 @@ class $modify(EditorUI) {
         if (!Mod::get()->getSettingValue<bool>("inEditorSpotify")) return;
 
         auto gm = FMODAudioEngine::sharedEngine();
-        if (gm->m_backgroundMusicVolume > 0.0f) {
+        //if (gm->m_backgroundMusicVolume > 0.0f) {
+        if (1 > 0.0F) { // temp until someone adds fields
             toggleSpotifyMute();
         }
     }
@@ -473,8 +461,8 @@ class $modify(EditorUI) {
         }
         EditorUI::onPause(sender);
     }
-    
 };
+#endif
 // Spotify
 
 // Utils
@@ -606,17 +594,7 @@ class $modify(FriendPage, FriendsProfilePage) {
     static void searchUser(const char* username) {
         auto scene = CCDirector::sharedDirector()->getRunningScene();
         auto sceneChildren = scene->getChildren();
-        CCLayer* test1 = nullptr;
-        for (unsigned int i = 0; i < scene->getChildrenCount(); i++) {
-            auto layer = dynamic_cast<CCLayer*>(sceneChildren->objectAtIndex(i));
-            if (layer != nullptr) {
-                std::string layerName = getNodeName(layer);
-                if (layerName == "FriendsProfilePage") {
-                    test1 = dynamic_cast<CCLayer*>(layer->getChildren()->objectAtIndex(0));
-                    break; // assume its FriendsProfilePage
-                }
-            }
-        }
+        CCLayer* test1 = dynamic_cast<CCLayer*>(misc::findNode("FriendsProfilePage"));
         if (test1 == nullptr) {
             // safeguard from crashing
             FLAlertLayer::create(nullptr,
@@ -628,6 +606,7 @@ class $modify(FriendPage, FriendsProfilePage) {
             )->show();
             return;
         }
+        test1 = dynamic_cast<CCLayer*>(test1->getChildren()->objectAtIndex(0));
         auto test2 = static_cast<CCLayer*>(test1->getChildren()->objectAtIndex(1));
         auto test3 = static_cast<CCLayer*>(test2->getChildren()->objectAtIndex(0));
         if (test3->getChildrenCount() <= 0) {
@@ -712,7 +691,6 @@ void SearchUserLayer::onValidate(CCObject* pSender) {
     BrownAlertDelegate::onClose(pSender);
 }
 
-
 class $modify(LeaderboardsLayer) {
     bool init(LeaderboardState state) {
         if (!LeaderboardsLayer::init(state)) return false;
@@ -748,7 +726,7 @@ class $modify(LeaderboardsLayer) {
 // Utils
 
 // touhou time
-#ifdef GEODE_IS_WINDOWS
+//#ifdef GEODE_IS_WINDOWS
 #include "BadApple.h"
 std::string text_input = "";
 bool bad_apple = false;
@@ -759,8 +737,8 @@ class $modify(SecretVault, SecretLayer2) {
         bad_apple = false;
         return true;
     }
-    bool onSubmit(CCObject* obj) {
-        if (!SecretLayer2::onSubmit(obj)) return false;
+    void onSubmit(CCObject* obj) {
+        SecretLayer2::onSubmit(obj);
         CCLabelBMFont* vault_text = dynamic_cast<cocos2d::CCLabelBMFont*>(this->getChildren()->objectAtIndex(3));
         CCMenu* menu = nullptr;
         if (this->getChildrenCount() > 8) {
@@ -770,7 +748,7 @@ class $modify(SecretVault, SecretLayer2) {
         }
         if (!strcmp(text_input.c_str(), "bad apple")) {
             if (!bad_apple) {
-                std::filesystem::create_directory("gdutils");
+                ghc::filesystem::create_directory("gdutils");
                 bad_apple = true;
 
                 vault_text->setString("It's time... Touhou Fan");
@@ -790,11 +768,9 @@ class $modify(SecretVault, SecretLayer2) {
                 this->addChild(badappleLabel);
             }
         }
-
-        return true;
     }
     void launchBadApple(CCObject* pSender) {
-        GameSoundManager::sharedManager()->stopBackgroundMusic();
+        //GameSoundManager::sharedManager()->stopBackgroundMusic();
         auto scene = cocos2d::CCScene::create();
         auto layer = BadApple::create();
         scene->addChild(layer);
@@ -802,7 +778,7 @@ class $modify(SecretVault, SecretLayer2) {
     }
 
     void onLaunchBadApple(CCObject* pSender) {
-        if (std::filesystem::exists("gdutils/bad_apple.mpg")) {
+        if (ghc::filesystem::exists("gdutils/bad_apple.mpg")) {
             auto node = CCNode::create();
             node->setTag(10);
             SecretVault::launchBadApple(node);
@@ -819,7 +795,6 @@ class $modify(SecretVault, SecretLayer2) {
         SecretLayer2::updateSearchLabel(text);
     }
 };
-#endif
 // touhou time
 
 // demon list
@@ -873,8 +848,8 @@ class $modify(CustomLevelInfo, LevelInfoLayer) {
         if (pos > 100 && pos < 1000) return 0.3F;
         return 0.1F;
     }
-    bool init(GJGameLevel* level) { // inspiration le gdbrowser
-        if (!LevelInfoLayer::init(level)) return false;
+    bool init(GJGameLevel* level, bool p1) { // inspiration le gdbrowser, what does p1 do? idk
+        if (!LevelInfoLayer::init(level, p1)) return false;
         if (!Mod::get()->getSettingValue<bool>("demonListPlacement")) return true;
         
         if (level->m_demon.value() == 0 || level->m_stars.value() != 10) return true;
@@ -907,6 +882,7 @@ class $modify(CustomLevelInfo, LevelInfoLayer) {
                 demonSpr->setVisible(true);
             }
         } else {
+            this->retain();
             auto loading_circle = LoadingCircle::create();
             if (level->m_coins > 0) {
                 loading_circle->setPosition({-100, -2});
@@ -919,13 +895,18 @@ class $modify(CustomLevelInfo, LevelInfoLayer) {
             loading_circle->show();
             log::info("Sending a request to pointercrate...");
             web::AsyncWebRequest()
-                .join("pointercrate-level")
                 .fetch(fmt::format("https://pointercrate.com/api/v2/demons/listed/?name={}", url_encode(level->m_levelName).c_str()))
                 .json()
                 .then([this, level, levelID, loading_circle, positionLabel, demonSpr, winSize](json::Value const& json) {
-                    loading_circle->fadeAndRemove();
+                    if (loading_circle != nullptr) {
+                        loading_circle->fadeAndRemove();
+                    }
+                    auto scene = CCDirector::sharedDirector()->getRunningScene();
+                    //auto layer = misc::findNode("LevelInfoLayer");
+                    //if (layer == nullptr) return;
                     if (json.dump() == "[]") { //idk how to check size, doing .count crashes
                         log::info("Level not found in pointercrate.");
+                        this->release();
                     } else {
                         auto info = json.get<json::Value>(0);
                         auto position = info.get<int>("position");
@@ -935,10 +916,13 @@ class $modify(CustomLevelInfo, LevelInfoLayer) {
                         demonSpr->setVisible(true);
                         set(levelID, position);
                         log::info(fmt::format("Level found in Pointercrate! {} at #{}", level->m_levelName.c_str(), position));
+                        this->release();
                     }
                 })
                 .expect([this, loading_circle](std::string const& error) {
-                    loading_circle->fadeAndRemove();
+                    if (loading_circle != nullptr) {
+                        loading_circle->fadeAndRemove();
+                    }
                     log::error(fmt::format("Error while sending a request to Pointercrate: {}", error));
                     FLAlertLayer::create(nullptr,
                         "Error",
@@ -947,6 +931,7 @@ class $modify(CustomLevelInfo, LevelInfoLayer) {
                         nullptr,
                         350.0F
                     )->show();
+                    this->release();
                 });
         }
         

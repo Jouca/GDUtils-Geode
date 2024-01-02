@@ -13,7 +13,7 @@ MoreLeaderboardsListView* MoreLeaderboardsListView::create(cocos2d::CCArray* lev
     return ret;
 };
 
-void MoreLeaderboardsListView::setupList() {
+void MoreLeaderboardsListView::setupList(float d) {
     this->m_itemSeparation = 40.0f;
 
     this->m_tableView->reloadData();

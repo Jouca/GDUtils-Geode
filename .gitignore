@@ -1,9 +1,11 @@
 build-linux/
+build-android/
 .cache/
 #libs/
 libs.old/
 build.sh
 debuild.sh
+build-android.sh
 compile_commands.json
 # what is this
 build/

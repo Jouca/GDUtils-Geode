@@ -1,3 +1,6 @@
+# v1.1.3 
+    - Fixed crash with Demon List if you have No Transition and instantly exit
+    - Fixed more leaderboards from crashing with exiting quickly
 # v1.1.2
     - Stopped more leaderboards from crashing in case if GDBrowser is down, or the user has no internet.
 # v1.1.1

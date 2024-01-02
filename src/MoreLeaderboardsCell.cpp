@@ -32,8 +32,7 @@ void MoreLeaderboardsCell::loadFromDict(cocos2d::CCDictionary* content) //
             }
         } else if (id == "4") {
             if (name != "NULL") {
-                auto discordSpr = CCSprite::create("discord_btn.png"_spr);
-                discordSpr->setScale(2.f);
+                auto discordSpr = CCSprite::createWithSpriteFrameName("gj_discordIcon_001.png");
                 auto discordBtn = CCMenuItemSpriteExtra::create(
                     discordSpr,
                     this,

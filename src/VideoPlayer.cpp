@@ -1,6 +1,9 @@
 // https://github.com/phoboslab/pl_mpeg/blob/master/pl_mpeg_player.c
 // https://katyscode.wordpress.com/2013/02/28/cutting-your-teeth-on-fmod-part-5-real-time-streaming-of-programmatically-generated-audio/
 // dont yell at me, i know theres an API made by fig for this
+
+// NO MUSIC BECUASE SOMEONE FORGOT TO ADD FMOD FIELDS :(
+
 #define PL_MPEG_IMPLEMENTATION
 #include "VideoPlayer.hpp"
 #ifdef GEODE_IS_WINDOWS
@@ -63,7 +66,7 @@ namespace videoplayer {
         m_loop = loop;
 
         plm_set_video_decode_callback(m_stream, VideoPlayer::videoCallback, this);
-        plm_set_audio_decode_callback(m_stream, VideoPlayer::audioCallback, this);
+        //plm_set_audio_decode_callback(m_stream, VideoPlayer::audioCallback, this);
 
         // VIDEO
         m_dimensions = CCSize(m_stream->video_decoder->mb_width, m_stream->video_decoder->mb_height);
@@ -114,7 +117,7 @@ namespace videoplayer {
     };
 
     void VideoPlayer::initAudio() {
-        FMODAudioEngine* engine = FMODAudioEngine::sharedEngine();
+        /*FMODAudioEngine* engine = FMODAudioEngine::sharedEngine();
 
         int sampleRate = plm_get_samplerate(m_stream);
 
@@ -139,7 +142,7 @@ namespace videoplayer {
         m_channel->setVolume(m_volume);
         
         m_channel->setUserData(this);
-        if (m_loop) m_channel->setCallback(&VideoPlayer::audioCallback);
+        if (m_loop) m_channel->setCallback(&VideoPlayer::audioCallback);*/
     }
 
     FMOD_RESULT F_CALLBACK videoplayer::VideoPlayer::audioCallback(FMOD_CHANNELCONTROL *chanControl, FMOD_CHANNELCONTROL_TYPE controlType, FMOD_CHANNELCONTROL_CALLBACK_TYPE callbackType, void *commandData1, void *commandData2) {

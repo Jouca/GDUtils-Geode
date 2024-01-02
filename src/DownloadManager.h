@@ -1,6 +1,6 @@
 #pragma once
 // windows only because i cant get this to work, actually im too lazy
-#ifdef GEODE_IS_WINDOWS
+#ifndef GEODE_IS_MACOS
 #include <Geode/Geode.hpp>
 #include "BrownAlertDelegate.hpp"
 #include <fstream>

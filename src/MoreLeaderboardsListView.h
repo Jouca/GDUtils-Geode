@@ -5,7 +5,7 @@ using namespace geode::prelude;
 
 class MoreLeaderboardsListView : public CustomListView {
     protected:
-        void setupList() override;
+        void setupList(float) override;
         TableViewCell* getListCell(const char* key) override;
         void loadCell(TableViewCell* cell, int index) override;
         static CCRect calculateNodeCoverage(CCArray* nodes);

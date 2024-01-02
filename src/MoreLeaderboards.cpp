@@ -1,4 +1,5 @@
 #include "MoreLeaderboards.h"
+#include "includes.h"
 
 static StatsListType g_tab = StatsListType::Diamonds;
 
@@ -23,10 +24,8 @@ std::vector<std::string> MoreLeaderboards::getWords(std::string s, std::string d
     res.push_back(token);
     return res;
 }
-
 CCDictionary* MoreLeaderboards::responseToDict(const std::string& response){
     auto dict = CCDictionary::create();
-
     std::stringstream responseStream(response);
     std::string currentKey;
     std::string keyID;
@@ -56,7 +55,6 @@ CCDictionary* MoreLeaderboards::responseToDict(const std::string& response){
     }
     return dict;
 }
-
 void MoreLeaderboards::onMoreLeaderboards(CCObject* pSender) {
     auto scene = CCScene::create();
     auto layer = MoreLeaderboards::create("more");
@@ -183,12 +181,12 @@ void MoreLeaderboards::keyBackClicked() {
 }
 
 void MoreLeaderboards::fadeLoadingCircle() {
+    if (loading_circle == nullptr) return;
     loading_circle->fadeAndRemove();
 };
 
 void MoreLeaderboards::handle_request_mods(std::string const& data) {
     if(!displayedData) { displayedData = CCArray::create(); displayedData->retain(); };
-
     if (data != "-1") {
         displayedData = CCArray::create();
         
@@ -202,7 +200,6 @@ void MoreLeaderboards::handle_request_mods(std::string const& data) {
             mods.erase(mods.begin());
         };
     }
-
     loadPageMods();
 }
 
@@ -230,7 +227,7 @@ void MoreLeaderboards::loadPageMods() {
     auto winSize = CCDirector::sharedDirector()->getWinSize();
 
     leaderboardView = MoreLeaderboardsListView::create(displayedData, 356.f, 220.f);
-    listLayer = GJListLayer::create(leaderboardView, "GD Moderators", {191, 114, 62, 255}, 356.f, 220.f);
+    listLayer = GJListLayer::create(leaderboardView, "GD Moderators", {191, 114, 62, 255}, 356.f, 220.f, 0);
     listLayer->setPosition(winSize / 2 - listLayer->getScaledContentSize() / 2 - CCPoint(0,5));
 
     addChild(listLayer);
@@ -251,25 +248,32 @@ void MoreLeaderboards::startLoadingMore() {
         type = "demons";
     }
 
+    this->retain();
     web::AsyncWebRequest()
     .postRequest()
     .postFields(fmt::format("type={}", type))
     .fetch("https://clarifygdps.com/gdutils/moreleaderboards.php")
     .text()
     .then([this, type](std::string const& data) {
+        loading = false;
+        auto scene = CCDirector::sharedDirector()->getRunningScene();
+        auto layer = scene->getChildren()->objectAtIndex(0);
+        if (layer == nullptr) return this->release();
+        if (misc::getNodeName(layer) != "MoreLeaderboards") return this->release(); // prevent le crash, even though the layer shouldve already been destructed
         if (data == "-1" || data.length() < 2) {
             fadeLoadingCircle();
-            loading = false;
             geode::createQuickPopup(
                 "Error",
                 "An error occured while sending a request to <cy>GDBrowser</c>. Please try again later.",
                 "OK", nullptr,
                 [this](auto, bool btn2) {
                     if (!btn2) {
+                        g_tab = StatsListType::Diamonds;
                         keyBackClicked();
                     }
                 }
             );
+            this->release();
             return;
         }
         fadeLoadingCircle();
@@ -280,24 +284,31 @@ void MoreLeaderboards::startLoadingMore() {
         m_diamondsTabBtn->setEnabled(true);
         m_usercoinsTabBtn->setEnabled(true);
         m_demonsTabBtn->setEnabled(true);
+        this->release();
     })
     .expect([this, type](std::string const& error) {
+        loading = false;
+        auto scene = CCDirector::sharedDirector()->getRunningScene();
+        auto layer = scene->getChildren()->objectAtIndex(0);
+        if (layer == nullptr) return this->release();
+        if (misc::getNodeName(layer) != "MoreLeaderboards") return this->release();
         geode::createQuickPopup(
             "Error",
             "An error occured while sending a request to <cy>GDBrowser</c>. Please try again later.",
             "OK", nullptr,
             [this](auto, bool btn2) {
                 if (!btn2) {
+                    g_tab = StatsListType::Diamonds;
                     keyBackClicked();
                 }
             }
         );
         fadeLoadingCircle();
         loading = false;
-
         m_diamondsTabBtn->setEnabled(true);
         m_usercoinsTabBtn->setEnabled(true);
         m_demonsTabBtn->setEnabled(true);
+        this->release();
     });
 };
 
@@ -327,9 +338,8 @@ void MoreLeaderboards::loadPageMore() {
     if(listLayer != nullptr) listLayer->removeFromParentAndCleanup(true);
 
     auto winSize = CCDirector::sharedDirector()->getWinSize();
-
-    leaderboardViewScore = CustomListView::create(displayedData, 220.f, 356.f, 0, BoomListType::Score);
-    listLayer = GJListLayer::create(leaderboardViewScore, nullptr, {191, 114, 62, 255}, 356.f, 220.f);
+    leaderboardViewScore = CustomListView::create(displayedData, nullptr, 220.f, 356.f, 0, BoomListType::Score, 0.0F);
+    listLayer = GJListLayer::create(leaderboardViewScore, nullptr, {191, 114, 62, 255}, 356.f, 220.f, 0);
     listLayer->setZOrder(31);
     listLayer->setPosition(winSize / 2 - listLayer->getScaledContentSize() / 2 - CCPoint(0,5));
 

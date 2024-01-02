@@ -60,7 +60,6 @@ void EventsPush::destroySelf() {
     EventsPush::eventCompletedCallback(scene);
 }
 // stole from GDR mod lol 
-
 GJDifficulty getDifficulty(int stars) {
     switch(stars){
         default:
@@ -109,12 +108,12 @@ std::vector<std::string> split_str(std::string &string, char separator) {
 GJGameLevel* convertLevelToJSON(std::string& data) {
     // Robtop to JSON
     GJGameLevel* level = GJGameLevel::create();
+#ifndef GEODE_IS_ANDROID64 // for some reason a field isnt known
     auto gamelevelmanager = GameLevelManager::sharedState();
     auto gamestatslevel = GameStatsManager::sharedState();
 
     std::string auto_level = "0";
     std::string demon = "0";
-    //std::cout << data << std::endl;
     auto datas_list = split_str(data, '#');
     std::string level_data = datas_list[0];
     std::string creator_data = datas_list[1];
@@ -246,11 +245,8 @@ GJGameLevel* convertLevelToJSON(std::string& data) {
             level->m_chk = levelFromSaved->m_chk;
             level->m_isChkValid = levelFromSaved->m_isChkValid;
             level->m_isCompletionLegitimate = levelFromSaved->m_isCompletionLegitimate;
-            
             level->m_isVerified = levelFromSaved->m_isVerified;
             level->m_isUploaded = levelFromSaved->m_isUploaded;
-
-            log::debug("Percentage : " + std::to_string(levelFromSaved->m_normalPercent));
         }
     }
 
@@ -259,6 +255,7 @@ GJGameLevel* convertLevelToJSON(std::string& data) {
     level->m_creatorName = creator_data_list[1];
     std::string levelAccountIDStr = creator_data_list[2];
     level->m_accountID = std::stoi(levelAccountIDStr);
+#endif
     return level;
 }
 
@@ -272,11 +269,11 @@ void EventsPush::onClickBtn(CCObject* ret) {
     std::string layerName = typeid(*layer).name() + 6;
     if (layerName != "PlayLayer" && layerName != "PauseLayer" && layerName != "LevelEditorLayer") { // redirect to level
         if (eventType != EventType::Rate) { // EventType::NA should never happen
-            DailyLevelPage::create(eventType == EventType::Weekly)->show();
+            //DailyLevelPage::create(eventType == EventType::Weekly)->show();
             return;
         }
         std::string const& url = "http://www.boomlings.com/database/getGJLevels21.php";
-        #ifdef GEODE_IS_WINDOWS
+        #ifndef GEODE_IS_MACOS
         int level_id = events_layer->level->m_levelID.value();
         #else // mac os 
         int level_id = events_layer->levelId;
@@ -288,20 +285,20 @@ void EventsPush::onClickBtn(CCObject* ret) {
             .postRequest()
             .fetch(url).text()
             .then([&](std::string & response) {
-            if (response != "-1") {
-                auto scene = CCScene::create();
-                auto layer = LevelInfoLayer::create(convertLevelToJSON(response));
-                layer->downloadLevel();
-                scene->addChild(layer);
-                CCDirector::sharedDirector()->pushScene(cocos2d::CCTransitionFade::create(0.5f, scene));
-            } else {
-                log::info("Level not found. (-1)");
-            }
+                if (response != "-1") {
+                    auto scene = CCScene::create();
+                    auto layer = LevelInfoLayer::create(convertLevelToJSON(response), false);
+                    layer->downloadLevel();
+                    scene->addChild(layer);
+                    CCDirector::sharedDirector()->pushScene(cocos2d::CCTransitionFade::create(0.5f, scene));
+                } else {
+                    log::info("Level not found. (-1)");
+                }
         }).expect([](std::string const& error) {
             log::error("Error occured while doing a web request: " + error);
         });
     } else { // copy to clipboard
-        #ifdef GEODE_IS_WINDOWS
+        #ifndef GEODE_IS_MACOS
         clipboard::write(std::to_string(events_layer->level->m_levelID));
         #else
         clipboard::write(std::to_string(events_layer->levelId));
@@ -309,7 +306,6 @@ void EventsPush::onClickBtn(CCObject* ret) {
         log::info("Copied ID to clipboard!");
     }
 }
-
 bool EventsPush::init(sio::message::ptr const& data) {
     auto scene = CCDirector::sharedDirector()->getRunningScene();
     // type
@@ -560,7 +556,7 @@ bool EventsPush::init(sio::message::ptr const& data) {
         nullptr
     ));
 
-    if (Mod::get()->getSettingValue<bool>("sfx")) GameSoundManager::sharedManager()->playEffect("crystal01.ogg", 1, 1, 1);
+    if (Mod::get()->getSettingValue<bool>("sfx")) FMODAudioEngine::sharedEngine()->playEffect("crystal01.ogg", 1, 1, 1);
 
     return true;
 }

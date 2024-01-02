@@ -42,15 +42,15 @@ if (APPLE)
   target_link_libraries(${PROJECT_NAME} sioclient "-framework OpenGL")
   #${CMAKE_CURRENT_SOURCE_DIR}/libs/link-libs/discord-rpc/libdiscord-rpc.a
 else()
-  target_link_libraries(${PROJECT_NAME} sioclient opengl32)
+  target_link_libraries(${PROJECT_NAME} sioclient)
   #${CMAKE_CURRENT_SOURCE_DIR}/libs/link-libs/discord-rpc/discord-rpc.lib
 endif()
-if (CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
+if (CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux" AND WIN32)
   message("compiling on linux!!")
   # why it requires advapi32 is beyond me
-  target_link_libraries(${PROJECT_NAME} ws2_32 crypt32 wldap32 normaliz advapi32 comdlg32)
+  target_link_libraries(${PROJECT_NAME} opengl32 ws2_32 crypt32 wldap32 normaliz advapi32 comdlg32)
 elseif(WIN32)
-  target_link_libraries(${PROJECT_NAME} ws2_32 Crypt32 Wldap32 Normaliz)
+  target_link_libraries(${PROJECT_NAME} opengl32 ws2_32 Crypt32 Wldap32 Normaliz)
 endif()
 
 # Set up dependencies, resources, link Geode

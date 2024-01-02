@@ -57,6 +57,7 @@ void SettingAppNode::onPickFile(CCObject*) {
         }
     }
     #else
+    #ifdef GEODE_IS_WINDOWS // i get an error, i so badly want to use elif but it gives me an error
     std::string filePath = GetOpenFileName();
     if (!filePath.empty()) {
         std::filesystem::path fullPath(filePath);
@@ -67,6 +68,14 @@ void SettingAppNode::onPickFile(CCObject*) {
             this->dispatchChanged();
         }
     }
+    #else 
+    FLAlertLayer::create(nullptr,
+        "Error",
+        "This setting is not supported on this platform.",
+        "OK",
+        nullptr
+    )->show();
+    #endif
     #endif
 }
 
