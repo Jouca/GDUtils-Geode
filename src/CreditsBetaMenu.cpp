@@ -87,11 +87,11 @@ void CreditsBetaMenu::goToURL(CCObject* ret) {
 
 CCLayer* CreditsBetaMenu::getPage(int pageNum) {
     
-#ifdef GEODE_IS_ANDROID32 // uncommenting only when SimplePlayer gets added for Windows
     auto winSize = cocos2d::CCDirector::sharedDirector()->getWinSize();
     auto layer = CCLayer::create();
     auto menu = CCMenu::create();
     layer->addChild(menu);
+    #ifdef GEODE_IS_ANDROID32 // uncommenting only when SimplePlayer gets added for Windows
     switch (pageNum) {
         case 0: {
             auto page1betaSection = CCNode::create();
@@ -537,8 +537,8 @@ CCLayer* CreditsBetaMenu::getPage(int pageNum) {
             break;
         }
     }
-    return layer;
     #endif
+    return layer;
 }
 
 void CreditsBetaMenu::nextPage(CCObject*) {
