@@ -9,7 +9,6 @@
     "resources": {
         "sprites": [
             "resources/Screenshot_1.png",
-            "resources/discord_btn.png",
             "resources/tab-gradient.png",
             "resources/tab-gradient-mask.png"
         ]
