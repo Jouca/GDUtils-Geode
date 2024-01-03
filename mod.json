@@ -10,7 +10,27 @@
         "sprites": [
             "resources/Screenshot_1.png",
             "resources/tab-gradient.png",
-            "resources/tab-gradient-mask.png"
+            "resources/tab-gradient-mask.png",
+            "resources/difficulty_01_mythicIcon.png",
+            "resources/difficulty_02_mythicIcon.png",
+            "resources/difficulty_03_mythicIcon.png",
+            "resources/difficulty_04_mythicIcon.png",
+            "resources/difficulty_05_mythicIcon.png",
+            "resources/difficulty_06_mythicIcon.png",
+            "resources/difficulty_07_mythicIcon.png",
+            "resources/difficulty_08_mythicIcon.png",
+            "resources/difficulty_09_mythicIcon.png",
+            "resources/difficulty_10_mythicIcon.png",
+            "resources/difficulty_01_legendaryIcon.png",
+            "resources/difficulty_02_legendaryIcon.png",
+            "resources/difficulty_03_legendaryIcon.png",
+            "resources/difficulty_04_legendaryIcon.png",
+            "resources/difficulty_05_legendaryIcon.png",
+            "resources/difficulty_06_legendaryIcon.png",
+            "resources/difficulty_07_legendaryIcon.png",
+            "resources/difficulty_08_legendaryIcon.png",
+            "resources/difficulty_09_legendaryIcon.png",
+            "resources/difficulty_10_legendaryIcon.png"
         ]
     },
     "settings": {
@@ -65,6 +85,12 @@
         "sfx": {
             "name": "Notification SFX",
             "description": "If notifications should play a sound when they are shown.",
+            "type": "bool",
+            "default": true
+        },
+        "customDifficultyFaces": {
+            "name": "Custom Difficulty Faces",
+            "description": "Enable custom difficulty faces for Legendary/Mythic",
             "type": "bool",
             "default": true
         },

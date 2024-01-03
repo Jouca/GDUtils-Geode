@@ -445,20 +445,77 @@ bool EventsPush::init(sio::message::ptr const& data) {
         switch (rateType) {
             case 1: // Featured
                 bg->addChild(featured);
+                bg->addChild(diffFace);
                 break;
             case 2: // Epic
                 bg->addChild(epic);
+                bg->addChild(diffFace);
                 break;
             case 3: // Legendary
                 bg->addChild(legendary);
+                bg->addChild(diffFace);
+
+                if (Mod::get()->getSettingValue<bool>("customDifficultyFaces")) {
+                    CCSprite* legendaryFace = nullptr;
+                    if (isDemon == 0) {
+                        if (starsum >= 10) {
+                            std::string diffStr = std::to_string(static_cast<int>(getDifficulty(starsum)));
+                            auto name = "difficulty_0" + diffStr + "_legendaryIcon.png";
+                            legendaryFace = CCSprite::create(Mod::get()->expandSpriteName(name.c_str()));
+                        }
+                    } else {
+                        if (starsum < 6) {
+                            std::string diffStr = std::to_string(static_cast<int>(getDemonDifficulty(starsum)));
+                            auto name = "difficulty_0" + diffStr + "_legendaryIcon.png";
+                            legendaryFace = CCSprite::create(Mod::get()->expandSpriteName(name.c_str()));
+                        } else {
+                            std::string diffStr = std::to_string(static_cast<int>(getDemonDifficulty(starsum)));
+                            auto name = "difficulty_" + diffStr + "_legendaryIcon.png";
+                            legendaryFace = CCSprite::create(Mod::get()->expandSpriteName(name.c_str()));
+                        }
+                    }
+
+                    if (legendaryFace != nullptr) {
+                        legendaryFace->setPosition({26.f, 48.f});
+                        legendaryFace->setScale(.8F);
+                        bg->addChild(legendaryFace);
+                    }
+                }
+
                 break;
             case 4: // Mythic
                 bg->addChild(mythic);
+
+                if (Mod::get()->getSettingValue<bool>("customDifficultyFaces")) {
+                    CCSprite* mythicFace = nullptr;
+                    if (isDemon == 0) {
+                        if (starsum >= 10) {
+                            std::string diffStr = std::to_string(static_cast<int>(getDifficulty(starsum)));
+                            auto name = "difficulty_0" + diffStr + "_mythicIcon.png";
+                            mythicFace = CCSprite::create(Mod::get()->expandSpriteName(name.c_str()));
+                        }
+                    } else {
+                        if (starsum < 6) {
+                            std::string diffStr = std::to_string(static_cast<int>(getDemonDifficulty(starsum)));
+                            auto name = "difficulty_0" + diffStr + "_mythicIcon.png";
+                            mythicFace = CCSprite::create(Mod::get()->expandSpriteName(name.c_str()));
+                        } else {
+                            std::string diffStr = std::to_string(static_cast<int>(getDemonDifficulty(starsum)));
+                            auto name = "difficulty_" + diffStr + "_mythicIcon.png";
+                            mythicFace = CCSprite::create(Mod::get()->expandSpriteName(name.c_str()));
+                        }
+                    }
+
+                    if (mythicFace != nullptr) {
+                        mythicFace->setPosition({26.f, 48.f});
+                        mythicFace->setScale(.8F);
+                        bg->addChild(mythicFace);
+                    }
+                }
+
                 break;
         }
     }
-
-    if (rateType < 4) bg->addChild(diffFace);
     
     auto node = CCNode::create();
     
