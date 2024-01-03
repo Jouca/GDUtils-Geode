@@ -330,6 +330,7 @@ bool EventsPush::init(sio::message::ptr const& data) {
     int rateType = dataMap["rate"]->get_int();
     int coins = dataMap["coins"]->get_int();
     int areCoinsVerified = dataMap["verified_coins"]->get_int();
+    int isPlatformer = dataMap["platformer"]->get_int();
     int level_id = 0;
     if (dataMap.find("level_id") != dataMap.end()) {
         level_id = dataMap["level_id"]->get_int();
@@ -396,10 +397,13 @@ bool EventsPush::init(sio::message::ptr const& data) {
     //this->addChild(bg);
 
     CCSprite* diffFace;
+    GJDifficultySprite* mythic = nullptr;
     if (isDemon == 0) {
         diffFace = cocos2d::CCSprite::createWithSpriteFrameName(getDifficultyIcon(starsum));
+        mythic = GJDifficultySprite::create(static_cast<int>(getDifficulty(starsum)), static_cast<GJDifficultyName>(0));
     } else {
         diffFace = cocos2d::CCSprite::createWithSpriteFrameName(getDemonDifficultyIcon(starsum));
+        mythic = GJDifficultySprite::create(static_cast<int>(getDemonDifficulty(starsum)), static_cast<GJDifficultyName>(0));
     }
     if (!strcmp(level_by_label.c_str(), "UPDATE")) {
         diffFace = CCSprite::createWithSpriteFrameName("GJ_downloadBtn_001.png");
@@ -409,8 +413,11 @@ bool EventsPush::init(sio::message::ptr const& data) {
         diffFace->setPosition({26.f, 43.f});
         diffFace->setScale(.8F);
         CCSprite* star = cocos2d::CCSprite::createWithSpriteFrameName("star_small01_001.png");
+        CCSprite* moon = cocos2d::CCSprite::createWithSpriteFrameName("moon_small01_001.png");
         CCSprite* featured = cocos2d::CCSprite::createWithSpriteFrameName("GJ_featuredCoin_001.png");
         CCSprite* epic = cocos2d::CCSprite::createWithSpriteFrameName("GJ_epicCoin_001.png");
+        CCSprite* legendary = cocos2d::CCSprite::createWithSpriteFrameName("GJ_epicCoin2_001.png");
+        mythic->updateFeatureState(static_cast<GJFeatureState>(4));
 
         std::string starcountstr = std::to_string(stars);
         auto starcount = cocos2d::CCLabelBMFont::create(starcountstr.c_str(), "bigFont.fnt");
@@ -420,11 +427,20 @@ bool EventsPush::init(sio::message::ptr const& data) {
         bg->addChild(starcount);
         star->setPosition({31, 18});
         star->setScale(.775F);
-        bg->addChild(star);
+        moon->setPosition({31, 18});
+        moon->setScale(.775F);
+
+        if (isPlatformer == 1) bg->addChild(moon);
+        else bg->addChild(star);
+
         featured->setPosition({26.f, 43.f});
         epic->setPosition({26.f, 43.f});
+        legendary->setPosition({26.f, 43.f});
+        mythic->setPosition({26.f, 43.f});
         featured->setScale(.8F);
         epic->setScale(.8F);
+        legendary->setScale(.8F);
+        mythic->setScale(.8F);
 
         switch (rateType) {
             case 1: // Featured
@@ -433,9 +449,17 @@ bool EventsPush::init(sio::message::ptr const& data) {
             case 2: // Epic
                 bg->addChild(epic);
                 break;
+            case 3: // Legendary
+                bg->addChild(legendary);
+                break;
+            case 4: // Mythic
+                bg->addChild(mythic);
+                break;
         }
     }
-    bg->addChild(diffFace);
+
+    if (rateType < 4) bg->addChild(diffFace);
+    
     auto node = CCNode::create();
     
     auto title = cocos2d::CCLabelBMFont::create(label_title.c_str(), "goldFont.fnt");
@@ -544,8 +568,6 @@ bool EventsPush::init(sio::message::ptr const& data) {
             moveX = -((bg->getContentSize().width) * lrScale);
             break;
     }
-
-
     
     bg->runAction(CCSequence::create(
         CCEaseOut::create(CCMoveBy::create(0.5f, { moveX, 0.0f }), 0.6f),
