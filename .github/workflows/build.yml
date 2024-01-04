@@ -13,10 +13,17 @@ jobs:
       matrix:
         config:
         - name: Windows
-          os: windows-latest
-          
-        - name: macOS
-          os: macos-latest
+          os: windows-latest  
+        # will uncomment mac only when it releases
+        #- name: macOS
+        #  os: macos-latest
+        - name: Android32
+          os: ubuntu-latest
+          target: Android32
+        - name: Android64
+          os: ubuntu-latest
+          target: Android64
+        
 
     name: ${{ matrix.config.name }}
     runs-on: ${{ matrix.config.os }}
@@ -29,6 +36,7 @@ jobs:
       - name: Build the mod
         uses: geode-sdk/build-geode-mod@main
         with:
+          sdk: nightly
           combine: true
       
   package:
