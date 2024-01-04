@@ -818,7 +818,7 @@ std::string url_encode(const std::string& value) {
     return encoded;
 }
 
-class $modify(CustomLevelInfo, LevelInfoLayer) {
+class $modify(LevelInfoLayer) {
     // chat jippity
     void set(int key, int value) {
         demonListCache[key] = value;
@@ -939,6 +939,8 @@ class $modify(CustomLevelInfo, LevelInfoLayer) {
     }
 };
 // demon list
+
+
 
 // When the socket connection is made
 $on_mod(Loaded) {

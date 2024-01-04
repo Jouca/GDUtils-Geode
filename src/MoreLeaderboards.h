@@ -12,6 +12,7 @@ enum class StatsListType {
     Diamonds,
     UserCoins,
     Demons,
+    Moons,
 };
 
 class MoreLeaderboards : public CCLayer {
@@ -28,6 +29,7 @@ class MoreLeaderboards : public CCLayer {
     CCMenuItemToggler* m_diamondsTabBtn;
     CCMenuItemToggler* m_usercoinsTabBtn;
     CCMenuItemToggler* m_demonsTabBtn;
+    CCMenuItemToggler* m_moonsTabBtn;
     CCClippingNode* m_tabsGradientNode = nullptr;
     CCSprite* m_tabsGradientSprite = nullptr;
     CCSprite* m_tabsGradientStencil = nullptr;
