@@ -13,7 +13,8 @@ BadApple* BadApple::create() {
 
 bool BadApple::init() {
     auto menu = CCMenu::create();
-    #ifndef GEODE_IS_MACOS
+    //#ifndef GEODE_IS_MACOS
+    #ifdef GEODE_IS_WINDOWS
     videoplayer::VideoPlayer* player = videoplayer::VideoPlayer::create("./gdutils/bad_apple.mpg", true);
     CCDirector* director = CCDirector::sharedDirector();
     CCSize size = director->getWinSize();

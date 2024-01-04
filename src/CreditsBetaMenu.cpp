@@ -91,7 +91,6 @@ CCLayer* CreditsBetaMenu::getPage(int pageNum) {
     auto layer = CCLayer::create();
     auto menu = CCMenu::create();
     layer->addChild(menu);
-    #ifdef GEODE_IS_ANDROID32 // uncommenting only when SimplePlayer gets added for Windows
     switch (pageNum) {
         case 0: {
             auto page1betaSection = CCNode::create();
@@ -101,8 +100,9 @@ CCLayer* CreditsBetaMenu::getPage(int pageNum) {
             auto secondColorIcon1 = ccColor3B {255,255,255};
             Icon1->setChildColor(firstColorIcon1);
             Icon1->setSecondColor(secondColorIcon1);
-            Icon1->enableCustomGlowColor(secondColorIcon1);
+            Icon1->setGlowOutline(secondColorIcon1);
             Icon1->setPosition({ -93, 11 });
+            Icon1->updateColors();
             page1betaSection->addChild(Icon1);
             auto Icon1Label = CCLabelBMFont::create("TMNono", "goldFont.fnt");
             Icon1Label->setScale(.8F);
@@ -116,7 +116,8 @@ CCLayer* CreditsBetaMenu::getPage(int pageNum) {
             auto secondColorIcon2 = ccColor3B {175, 0, 75};
             Icon2->setChildColor(firstColorIcon2);
             Icon2->setSecondColor(secondColorIcon2);
-            Icon2->enableCustomGlowColor(secondColorIcon2);
+            Icon2->setGlowOutline(secondColorIcon2);
+            Icon2->updateColors();
             Icon2->setPosition({ 3, 11 });
             page1betaSection->addChild(Icon2);
             auto Icon2Label = CCLabelBMFont::create("Devilmine", "goldFont.fnt");
@@ -131,8 +132,9 @@ CCLayer* CreditsBetaMenu::getPage(int pageNum) {
             auto secondColorIcon3 = ccColor3B {125, 255, 175};
             Icon3->setChildColor(firstColorIcon3);
             Icon3->setSecondColor(secondColorIcon3);
-            Icon3->enableCustomGlowColor(secondColorIcon3);
+            Icon3->setGlowOutline(secondColorIcon3);
             Icon3->setPosition({ 95, 11 });
+            Icon3->updateColors();
             page1betaSection->addChild(Icon3);
             auto Icon3Label = CCLabelBMFont::create("SupuGD", "goldFont.fnt");
             Icon3Label->setScale(.8F);
@@ -146,8 +148,9 @@ CCLayer* CreditsBetaMenu::getPage(int pageNum) {
             auto secondColorIcon4 = ccColor3B {255, 255, 0};
             Icon4->setChildColor(firstColorIcon4);
             Icon4->setSecondColor(secondColorIcon4);
-            Icon4->enableCustomGlowColor(secondColorIcon4);
+            Icon4->setGlowOutline(secondColorIcon4);
             Icon4->setPosition({ -93, -58 });
+            Icon4->updateColors();
             page1betaSection->addChild(Icon4);
             auto Icon4Label = CCLabelBMFont::create("Silvow", "goldFont.fnt");
             Icon4Label->setScale(.8F);
@@ -162,6 +165,7 @@ CCLayer* CreditsBetaMenu::getPage(int pageNum) {
             Icon5->setChildColor(firstColorIcon5);
             Icon5->setSecondColor(secondColorIcon5);
             Icon5->setPosition({ 2, -58 });
+            Icon5->updateColors();
             page1betaSection->addChild(Icon5);
             auto Icon5Label = CCLabelBMFont::create("SantyBoyMX", "goldFont.fnt");
             Icon5Label->setScale(.6F);
@@ -175,8 +179,9 @@ CCLayer* CreditsBetaMenu::getPage(int pageNum) {
             auto secondColorIcon6 = ccColor3B {255, 255, 255};
             Icon6->setChildColor(firstColorIcon6);
             Icon6->setSecondColor(secondColorIcon6);
-            Icon6->enableCustomGlowColor(secondColorIcon6);
+            Icon6->setGlowOutline(secondColorIcon6);
             Icon6->setPosition({ 96, -58 });
+            Icon6->updateColors();
             page1betaSection->addChild(Icon6);
             auto Icon6Label = CCLabelBMFont::create("Tygore", "goldFont.fnt");
             Icon6Label->setScale(.8F);
@@ -196,8 +201,9 @@ CCLayer* CreditsBetaMenu::getPage(int pageNum) {
             auto secondColorIcon1 = ccColor3B {0, 255, 255};
             Icon1->setChildColor(firstColorIcon1);
             Icon1->setSecondColor(secondColorIcon1);
-            Icon1->enableCustomGlowColor(secondColorIcon1);
+            Icon1->setGlowOutline(secondColorIcon1);
             Icon1->setPosition({ -93, 11 });
+            Icon1->updateColors();
             page2betaSection->addChild(Icon1);
             auto Icon1Label = CCLabelBMFont::create("Hir0Shi", "goldFont.fnt");
             Icon1Label->setScale(.8F);
@@ -212,6 +218,7 @@ CCLayer* CreditsBetaMenu::getPage(int pageNum) {
             Icon2->setChildColor(firstColorIcon2);
             Icon2->setSecondColor(secondColorIcon2);
             Icon2->setPosition({ 3, 11 });
+            Icon2->updateColors();
             page2betaSection->addChild(Icon2);
             auto Icon2Label = CCLabelBMFont::create("Komatic5", "goldFont.fnt");
             Icon2Label->setScale(.7F);
@@ -225,8 +232,9 @@ CCLayer* CreditsBetaMenu::getPage(int pageNum) {
             auto secondColorIcon3 = ccColor3B {255, 255, 255};
             Icon3->setChildColor(firstColorIcon3);
             Icon3->setSecondColor(secondColorIcon3);
-            Icon3->enableCustomGlowColor(secondColorIcon3);
+            Icon3->setGlowOutline(secondColorIcon3);
             Icon3->setPosition({ 95, 11 });
+            Icon3->updateColors();
             page2betaSection->addChild(Icon3);
             auto Icon3Label = CCLabelBMFont::create("Xanii", "goldFont.fnt");
             Icon3Label->setScale(.8F);
@@ -240,8 +248,9 @@ CCLayer* CreditsBetaMenu::getPage(int pageNum) {
             auto secondColorIcon4 = ccColor3B {0, 255, 255};
             Icon4->setChildColor(firstColorIcon4);
             Icon4->setSecondColor(secondColorIcon4);
-            Icon4->enableCustomGlowColor(secondColorIcon4);
+            Icon4->setGlowOutline(secondColorIcon4);
             Icon4->setPosition({ -93, -58 });
+            Icon4->updateColors();
             page2betaSection->addChild(Icon4);
             auto Icon4Label = CCLabelBMFont::create("maverick", "goldFont.fnt");
             Icon4Label->setScale(.7F);
@@ -255,8 +264,9 @@ CCLayer* CreditsBetaMenu::getPage(int pageNum) {
             auto secondColorIcon5 = ccColor3B {0, 200, 255};
             Icon5->setChildColor(firstColorIcon5);
             Icon5->setSecondColor(secondColorIcon5);
-            Icon5->enableCustomGlowColor(secondColorIcon5);
+            Icon5->setGlowOutline(secondColorIcon5);
             Icon5->setPosition({ 2, -58 });
+            Icon5->updateColors();
             page2betaSection->addChild(Icon5);
             auto Icon5Label = CCLabelBMFont::create("arcanin", "goldFont.fnt");
             Icon5Label->setScale(.7F);
@@ -270,8 +280,9 @@ CCLayer* CreditsBetaMenu::getPage(int pageNum) {
             auto secondColorIcon6 = ccColor3B {125, 255, 175};
             Icon6->setChildColor(firstColorIcon6);
             Icon6->setSecondColor(secondColorIcon6);
-            Icon6->enableCustomGlowColor(secondColorIcon6);
+            Icon6->setGlowOutline(secondColorIcon6);
             Icon6->setPosition({ 96, -58 });
+            Icon6->updateColors();
             page2betaSection->addChild(Icon6);
             auto Icon6Label = CCLabelBMFont::create("Ficelo", "goldFont.fnt");
             Icon6Label->setScale(.8F);
@@ -291,8 +302,9 @@ CCLayer* CreditsBetaMenu::getPage(int pageNum) {
             auto secondColorIcon1 = ccColor3B {0, 255, 255};
             Icon1->setChildColor(firstColorIcon1);
             Icon1->setSecondColor(secondColorIcon1);
-            Icon1->enableCustomGlowColor(secondColorIcon1);
+            Icon1->setGlowOutline(secondColorIcon1);
             Icon1->setPosition({ -93, 11 });
+            Icon1->updateColors();
             page3betaSection->addChild(Icon1);
             auto Icon1Label = CCLabelBMFont::create("JustL3o", "goldFont.fnt");
             Icon1Label->setScale(.8F);
@@ -306,8 +318,9 @@ CCLayer* CreditsBetaMenu::getPage(int pageNum) {
             auto secondColorIcon2 = ccColor3B {255, 255, 255};
             Icon2->setChildColor(firstColorIcon2);
             Icon2->setSecondColor(secondColorIcon2);
-            Icon2->enableCustomGlowColor(secondColorIcon2);
+            Icon2->setGlowOutline(secondColorIcon2);
             Icon2->setPosition({ 3, 11 });
+            Icon2->updateColors();
             page3betaSection->addChild(Icon2);
             auto Icon2Label = CCLabelBMFont::create("TheRealWeenside", "goldFont.fnt");
             Icon2Label->setScale(.45F);
@@ -321,8 +334,9 @@ CCLayer* CreditsBetaMenu::getPage(int pageNum) {
             auto secondColorIcon3 = ccColor3B {0, 255, 255};
             Icon3->setChildColor(firstColorIcon3);
             Icon3->setSecondColor(secondColorIcon3);
-            Icon3->enableCustomGlowColor(secondColorIcon3);
+            Icon3->setGlowOutline(secondColorIcon3);
             Icon3->setPosition({ 95, 11 });
+            Icon3->updateColors();
             page3betaSection->addChild(Icon3);
             auto Icon3Label = CCLabelBMFont::create("Klafterno", "goldFont.fnt");
             Icon3Label->setScale(.6F);
@@ -337,6 +351,7 @@ CCLayer* CreditsBetaMenu::getPage(int pageNum) {
             Icon4->setChildColor(firstColorIcon4);
             Icon4->setSecondColor(secondColorIcon4);
             Icon4->setPosition({ -93, -58 });
+            Icon4->updateColors();
             page3betaSection->addChild(Icon4);
             auto Icon4Label = CCLabelBMFont::create("MarkyForce", "goldFont.fnt");
             Icon4Label->setScale(.6F);
@@ -350,8 +365,9 @@ CCLayer* CreditsBetaMenu::getPage(int pageNum) {
             auto secondColorIcon5 = ccColor3B {0, 255, 255};
             Icon5->setChildColor(firstColorIcon5);
             Icon5->setSecondColor(secondColorIcon5);
-            Icon5->enableCustomGlowColor(secondColorIcon5);
+            Icon5->setGlowOutline(secondColorIcon5);
             Icon5->setPosition({ 2, -58 });
+            Icon5->updateColors();
             page3betaSection->addChild(Icon5);
             auto Icon5Label = CCLabelBMFont::create("Cobalium", "goldFont.fnt");
             Icon5Label->setScale(.7F);
@@ -366,6 +382,7 @@ CCLayer* CreditsBetaMenu::getPage(int pageNum) {
             Icon6->setChildColor(firstColorIcon6);
             Icon6->setSecondColor(secondColorIcon6);
             Icon6->setPosition({ 96, -58 });
+            Icon6->updateColors();
             page3betaSection->addChild(Icon6);
             auto Icon6Label = CCLabelBMFont::create("jihotv01", "goldFont.fnt");
             Icon6Label->setScale(.8F);
@@ -385,8 +402,9 @@ CCLayer* CreditsBetaMenu::getPage(int pageNum) {
             auto secondColorIcon1 = ccColor3B {255, 0, 0};
             Icon1->setChildColor(firstColorIcon1);
             Icon1->setSecondColor(secondColorIcon1);
-            Icon1->enableCustomGlowColor(secondColorIcon1);
+            Icon1->setGlowOutline(secondColorIcon1);
             Icon1->setPosition({ -93, 11 });
+            Icon1->updateColors();
             page4betaSection->addChild(Icon1);
             auto Icon1Label = CCLabelBMFont::create("Paultam", "goldFont.fnt");
             Icon1Label->setScale(.7F);
@@ -401,6 +419,7 @@ CCLayer* CreditsBetaMenu::getPage(int pageNum) {
             Icon2->setChildColor(firstColorIcon2);
             Icon2->setSecondColor(secondColorIcon2);
             Icon2->setPosition({ 3, 11 });
+            Icon2->updateColors();
             page4betaSection->addChild(Icon2);
             auto Icon2Label = CCLabelBMFont::create("ItzElectrix", "goldFont.fnt");
             Icon2Label->setScale(.5F);
@@ -414,8 +433,9 @@ CCLayer* CreditsBetaMenu::getPage(int pageNum) {
             auto secondColorIcon3 = ccColor3B {255, 255, 0};
             Icon3->setChildColor(firstColorIcon3);
             Icon3->setSecondColor(secondColorIcon3);
-            Icon3->enableCustomGlowColor(secondColorIcon3);
+            Icon3->setGlowOutline(secondColorIcon3);
             Icon3->setPosition({ 95, 11 });
+            Icon3->updateColors();
             page4betaSection->addChild(Icon3);
             auto Icon3Label = CCLabelBMFont::create("Ausk", "goldFont.fnt");
             Icon3Label->setScale(.8F);
@@ -429,8 +449,9 @@ CCLayer* CreditsBetaMenu::getPage(int pageNum) {
             auto secondColorIcon4 = ccColor3B {0, 75, 175};
             Icon4->setChildColor(firstColorIcon4);
             Icon4->setSecondColor(secondColorIcon4);
-            Icon4->enableCustomGlowColor(secondColorIcon4);
+            Icon4->setGlowOutline(secondColorIcon4);
             Icon4->setPosition({ -93, -58 });
+            Icon4->updateColors();
             page4betaSection->addChild(Icon4);
             auto Icon4Label = CCLabelBMFont::create("krenogd", "goldFont.fnt");
             Icon4Label->setScale(.7F);
@@ -444,8 +465,9 @@ CCLayer* CreditsBetaMenu::getPage(int pageNum) {
             auto secondColorIcon5 = ccColor3B {175, 175, 175};
             Icon5->setChildColor(firstColorIcon5);
             Icon5->setSecondColor(secondColorIcon5);
-            Icon5->enableCustomGlowColor(secondColorIcon5);
+            Icon5->setGlowOutline(secondColorIcon5);
             Icon5->setPosition({ 2, -58 });
+            Icon5->updateColors();
             page4betaSection->addChild(Icon5);
             auto Icon5Label = CCLabelBMFont::create("realwhata", "goldFont.fnt");
             Icon5Label->setScale(.7F);
@@ -460,6 +482,7 @@ CCLayer* CreditsBetaMenu::getPage(int pageNum) {
             Icon6->setChildColor(firstColorIcon6);
             Icon6->setSecondColor(secondColorIcon6);
             Icon6->setPosition({ 96, -58 });
+            Icon6->updateColors();
             page4betaSection->addChild(Icon6);
             auto Icon6Label = CCLabelBMFont::create("OmegaT", "goldFont.fnt");
             Icon6Label->setScale(.8F);
@@ -479,8 +502,9 @@ CCLayer* CreditsBetaMenu::getPage(int pageNum) {
             auto secondColorIcon1 = ccColor3B {0, 200, 255};
             Icon1->setChildColor(firstColorIcon1);
             Icon1->setSecondColor(secondColorIcon1);
-            Icon1->enableCustomGlowColor(secondColorIcon1);
+            Icon1->setGlowOutline(secondColorIcon1);
             Icon1->setPosition({ -93, 11 });
+            Icon1->updateColors();
             page5betaSection->addChild(Icon1);
             auto Icon1Label = CCLabelBMFont::create("Gepsoni4", "goldFont.fnt");
             Icon1Label->setScale(.7F);
@@ -495,6 +519,7 @@ CCLayer* CreditsBetaMenu::getPage(int pageNum) {
             Icon2->setChildColor(firstColorIcon2);
             Icon2->setSecondColor(secondColorIcon2);
             Icon2->setPosition({ 3, 11 });
+            Icon2->updateColors();
             page5betaSection->addChild(Icon2);
             auto Icon2Label = CCLabelBMFont::create("YuyuGMD", "goldFont.fnt");
             Icon2Label->setScale(.8F);
@@ -508,8 +533,9 @@ CCLayer* CreditsBetaMenu::getPage(int pageNum) {
             auto secondColorIcon3 = ccColor3B {0, 255, 255};
             Icon3->setChildColor(firstColorIcon3);
             Icon3->setSecondColor(secondColorIcon3);
-            Icon3->enableCustomGlowColor(secondColorIcon3);
+            Icon3->setGlowOutline(secondColorIcon3);
             Icon3->setPosition({ 95, 11 });
+            Icon3->updateColors();
             page5betaSection->addChild(Icon3);
             auto Icon3Label = CCLabelBMFont::create("DashTY", "goldFont.fnt");
             Icon3Label->setScale(.8F);
@@ -523,8 +549,9 @@ CCLayer* CreditsBetaMenu::getPage(int pageNum) {
             auto secondColorIcon4 = ccColor3B {255,255,255};
             Icon4->setChildColor(firstColorIcon4);
             Icon4->setSecondColor(secondColorIcon4);
-            Icon4->enableCustomGlowColor(secondColorIcon4);
+            Icon4->setGlowOutline(secondColorIcon4);
             Icon4->setPosition({ -93, -58 });
+            Icon4->updateColors();
             page5betaSection->addChild(Icon4);
             auto Icon4Label = CCLabelBMFont::create("SharKing09", "goldFont.fnt");
             Icon4Label->setScale(.7F);
@@ -537,7 +564,6 @@ CCLayer* CreditsBetaMenu::getPage(int pageNum) {
             break;
         }
     }
-    #endif
     return layer;
 }
 

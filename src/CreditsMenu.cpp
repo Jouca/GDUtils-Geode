@@ -13,29 +13,29 @@ void CreditsMenu::onMaverickBtn(CCObject*) {
 }
 
 void CreditsMenu::setup() {
-#ifdef GEODE_IS_ANDROID32 // uncommenting only when SimplePlayer gets added for Windows
     auto fireeIcon = SimplePlayer::create(98);
     auto firstColorFiree = ccColor3B {125,0,255};
     auto secondColorFiree = ccColor3B {255,255,255};
-    fireeIcon->setChildColor(firstColorFiree);
+    fireeIcon->setColor(firstColorFiree);
     fireeIcon->setSecondColor(secondColorFiree);
-    fireeIcon->m_glowColor = secondColorFiree;
-    fireeIcon->m_hasGlowOutline = true;
-    fireeIcon->enableCustomGlowColor(secondColorFiree);
+    fireeIcon->setGlowOutline(secondColorFiree);
+    fireeIcon->updateColors();
     
     auto joucaIcon = SimplePlayer::create(133);
     auto firstColorJouca = ccColor3B {255,0,255};
     auto secondColorJouca = ccColor3B {255,0,125};
     joucaIcon->setSecondColor(firstColorJouca);
     joucaIcon->setChildColor(secondColorJouca);
-    joucaIcon->enableCustomGlowColor(secondColorJouca);
+    joucaIcon->setGlowOutline(secondColorJouca);
+    joucaIcon->updateColors();
 
     auto maverickIcon = SimplePlayer::create(127);
     auto firstColorMaverick = ccColor3B {0,255,254};
     auto secondColorMaverick = ccColor3B {255,0,125};
     maverickIcon->setSecondColor(firstColorMaverick);
     maverickIcon->setChildColor(secondColorMaverick);
-    maverickIcon->enableCustomGlowColor(secondColorMaverick);
+    maverickIcon->setGlowOutline(secondColorMaverick);
+    maverickIcon->updateColors();
 
     fireeIcon->setScale(1.25F);
     joucaIcon->setScale(1.25F);
@@ -74,7 +74,6 @@ void CreditsMenu::setup() {
     this->m_buttonMenu->addChild(joucaIcon);
     this->m_buttonMenu->addChild(maverickIcon);
     setTouchEnabled(true);
-#endif
 }
 
 CreditsMenu* CreditsMenu::create() {

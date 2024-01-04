@@ -19,10 +19,10 @@ public:
     SettingTestValue(std::string const& key, std::string const& modID, std::string const& placeholder)
       : SettingValue(key, modID), m_placeholder(placeholder) {}
 
-    bool load(json::Value const& json) override {
+    bool load(matjson::Value const& json) override {
         return true;
     }
-    bool save(json::Value& json) const override {
+    bool save(matjson::Value& json) const override {
         return true;
     }
     SettingNode* createNode(float width) override;
@@ -104,10 +104,10 @@ public:
     SettingSectionValue(std::string const& key, std::string const& modID, std::string const& placeholder)
       : SettingValue(key, modID), m_placeholder(placeholder) {}
 
-    bool load(json::Value const& json) override {
+    bool load(matjson::Value const& json) override {
         return true;
     }
-    bool save(json::Value& json) const override {
+    bool save(matjson::Value& json) const override {
         return true;
     }
     SettingNode* createNode(float width) override;
@@ -206,7 +206,7 @@ public:
     SettingPosValue(std::string const& key, std::string const& modID, int const& position)
       : SettingValue(key, modID), m_pos(position) {}
 
-    bool load(json::Value const& json) override {
+    bool load(matjson::Value const& json) override {
         try {
             m_pos = static_cast<int>(json.as<int>());
             return true;
@@ -214,7 +214,7 @@ public:
             return false;
         }
     }
-    bool save(json::Value& json) const override {
+    bool save(matjson::Value& json) const override {
         json = static_cast<int>(m_pos);
         return true;
     }
@@ -396,7 +396,7 @@ public:
     SettingAppValue(std::string const& key, std::string const& modID, std::string const& application)
       : SettingValue(key, modID), m_application(application) {}
 
-    bool load(json::Value const& json) override {
+    bool load(matjson::Value const& json) override {
         try {
             m_application = static_cast<std::string>(json.as<std::string>());
             return true;
@@ -404,7 +404,7 @@ public:
             return false;
         }
     }
-    bool save(json::Value& json) const override {
+    bool save(matjson::Value& json) const override {
         json = static_cast<std::string>(m_application);
         return true;
     }
@@ -568,10 +568,10 @@ public:
     SettingCreditsValue(std::string const& key, std::string const& modID, std::string const& placeholder)
       : SettingValue(key, modID), m_placeholder(placeholder) {}
 
-    bool load(json::Value const& json) override {
+    bool load(matjson::Value const& json) override {
         return true;
     }
-    bool save(json::Value& json) const override {
+    bool save(matjson::Value& json) const override {
         return true;
     }
     SettingNode* createNode(float width) override;
