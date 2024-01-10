@@ -259,7 +259,7 @@ void MoreLeaderboards::startLoadingMore() {
     this->retain();
     web::AsyncWebRequest()
     .postRequest()
-    .postFields(fmt::format("type={}", type))
+    .bodyRaw(fmt::format("type={}", type))
     .fetch("https://clarifygdps.com/gdutils/moreleaderboards.php")
     .text()
     .then([this, type](std::string const& data) {

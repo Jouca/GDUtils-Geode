@@ -281,7 +281,7 @@ void EventsPush::onClickBtn(CCObject* ret) {
         //std::string const& url = "https://clarifygdps.com/getGJLevels21.php";
         std::string const& fields = "secret=Wmfd2893gb7&gameVersion=21&type=0&binaryVersion=35&gdw=0&diff=-&len=-&count=1&str=" + std::to_string(level_id);
         web::AsyncWebRequest()
-            .postFields(fields)
+            .bodyRaw(fields)
             .postRequest()
             .fetch(url).text()
             .then([&](std::string & response) {
