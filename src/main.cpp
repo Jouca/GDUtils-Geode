@@ -129,6 +129,7 @@ void processEvent(CCScene* self) {
         EventsPush::pushRateLevel(self, data);
     }
 }
+
 class $modify(CCScheduler) { // used to be GameManager
     void update(float dt) {
         CCScheduler::update(dt);
@@ -142,6 +143,7 @@ class $modify(CCScheduler) { // used to be GameManager
         }
         std::string layerName = misc::getNodeName(layer);
         if (layerName == "cocos2d::CCLayerColor") return;
+        if (layerName == "LoadingLayer") return;
         if (currentLayer != layerName) {
             //Discord::update(layerName.c_str()); for next update ;)
             currentLayer = layerName;
@@ -172,6 +174,58 @@ class $modify(CCScheduler) { // used to be GameManager
         dataQueue.push(event_data);
         event_data = nullptr;
         if (pushEvent) processEvent(scene);
+    }
+};
+
+class $modify(CCScheduler) { // GD Protocol part
+    void update(float dt) {
+        CCScheduler::update(dt);
+        auto scene = CCDirector::sharedDirector()->getRunningScene();
+        if (scene->getChildrenCount() == 0) return;
+        auto layer = scene->getChildren()->objectAtIndex(0);
+        if (layer == nullptr) return;
+        if (ProcessLambdas::shouldProcessMenuHandler()) {
+            ProcessLambdas::processMenuHandler();
+        }
+        std::string layerName = misc::getNodeName(layer);
+        
+        if (layerName == "LevelEditorLayer") return;
+        if (layerName == "PlayLayer") return;
+        if (layerName == "LoadingLayer") return;
+
+        for (const auto & entry : std::filesystem::directory_iterator("gdutils")) {
+            if (entry.path().extension() == ".flag") {
+                std::string path = entry.path().string();
+                std::string filename = entry.path().filename().string();
+                std::string levelName = filename.substr(0, filename.length() - 4);
+
+                std::filesystem::remove("gdutils/" + filename);
+                
+                auto glm = GameLevelManager::sharedState();
+                std::string const& url = "https://www.boomlings.com/database/getGJLevels21.php";
+                std::string const& fields = "secret=Wmfd2893gb7&gameVersion=22&type=0&binaryVersion=35&gdw=0&diff=-&len=-&count=1&str=" + levelName;
+                web::AsyncWebRequest()
+                    .bodyRaw(fields)
+                    .postRequest()
+                    .fetch(url).text()
+                    .then([&](std::string & response) {
+                        std::cout << response << std::endl;
+                        if (response != "-1") {
+                            auto scene = CCScene::create();
+                            auto dict = glm->responseToDict(gd::string(response), false);
+                            auto gjgl = GJGameLevel::create(dict, false);
+                            auto layer = LevelInfoLayer::create(gjgl, false);
+                            layer->downloadLevel();
+                            scene->addChild(layer);
+                            CCDirector::sharedDirector()->pushScene(cocos2d::CCTransitionFade::create(0.5f, scene));
+                        } else {
+                            log::info("Level not found. (-1)");
+                        }
+                }).expect([](std::string const& error) {
+                    log::error("Error occured while doing a web request: " + error);
+                });
+            }
+        }
     }
 };
 
@@ -968,5 +1022,109 @@ $on_mod(Loaded) {
     #endif
     //Mod::get()->addCustomSetting<class T>(const std::string &key, "Spotify.exe");
     Mod::get()->addCustomSetting<SettingCreditsValue>("credit-buttons", "none");
+
+    #ifdef GEODE_IS_WINDOWS
+    #include <Windows.h>
+    #include <iostream>
+
+    std::array<WCHAR, MAX_PATH> buffer;
+    GetModuleFileNameW(NULL, buffer.data(), MAX_PATH);
+    auto aaaa = buffer.data();
+    std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+    std::string nameStr = fmt::format("cmd /k cd \"{}\\gdutils\" && \"gd_protocol.bat\" %1 && exit", dirs::getGameDir());
+
+    std::wstring fullPath = std::wstring(buffer.data());
+    size_t lastBackslashPos = fullPath.find_last_of(L"\\");
+    std::wstring exeName;
+    if (lastBackslashPos != std::wstring::npos) {
+        exeName = fullPath.substr(lastBackslashPos + 1);
+    }
+
+    // Create the key for the custom protocol in user registry
+    HKEY hCurrentUserKey;
+    if (RegOpenKeyEx(HKEY_CURRENT_USER, "Software\\Classes", 0, KEY_SET_VALUE, &hCurrentUserKey) == ERROR_SUCCESS) {
+        HKEY hKey;
+        if (RegCreateKeyEx(hCurrentUserKey, "gdutils", 0, NULL, 0, KEY_SET_VALUE, NULL, &hKey, NULL) == ERROR_SUCCESS) {
+            // Define the default value for the protocol key
+            if (RegSetValueEx(hKey, NULL, 0, REG_SZ, (BYTE*)"URL:gdutils Protocol", sizeof("URL:gdutils Protocol")) == ERROR_SUCCESS) {
+                // Create the key "shell\open\command" for specify the exe path
+                HKEY hCommandKey;
+                if (RegCreateKeyEx(hKey, "shell\\open\\command", 0, NULL, 0, KEY_SET_VALUE, NULL, &hCommandKey, NULL) == ERROR_SUCCESS) {
+                    if (RegSetValueExA(hCommandKey, NULL, 0, REG_SZ, (const BYTE*)nameStr.c_str(), nameStr.length() + 1) == ERROR_SUCCESS) {
+                        log::info("Le protocole a été enregistré avec succès pour cet utilisateur.");
+                    } else {
+                        log::error("Erreur lors de la définition de la valeur du chemin de l'exécutable.");
+                    }
+                    RegCloseKey(hCommandKey);
+                } else {
+                    log::error("Erreur lors de la création de la clé shell\\open\\command.");
+                }
+
+                RegSetValueEx(hKey, "URL Protocol", 0, REG_SZ, NULL, NULL);
+            } else {
+                log::error("Erreur lors de la définition de la valeur par défaut du protocole.");
+            }
+            RegCloseKey(hKey);
+        } else {
+            log::error("Erreur lors de la création de la clé du protocole.");
+        }
+        RegCloseKey(hCurrentUserKey);
+    } else {
+        log::error("Erreur lors de l'ouverture de la clé du registre utilisateur.");
+    }
+
+    ghc::filesystem::create_directory("gdutils");
+    if (!ghc::filesystem::exists("gdutils/gd_protocol.bat")) {
+        std::ofstream file("gdutils/gd_protocol.bat");
+        file << R"(
+@echo off
+setlocal enabledelayedexpansion
+
+        )";
+        file << fmt::format("set \"appName={}\"", converter.to_bytes(exeName));
+        file << R"(
+set "argument=%1"
+set "number="
+
+REM Check if the argument contains /
+echo !argument! | find "/" > nul
+if not errorlevel 1 (
+    REM If / is found, extract the number part after the /
+    for /f "tokens=2 delims=/" %%a in ("!argument!") do (
+        set "number=%%a"
+    )
+) else (
+    REM If / is not found, the argument is in the format gdutils:123
+    for /f "tokens=2 delims=:" %%a in ("!argument!") do (
+        set "number=%%a"
+    )
+)
+
+if not defined number (
+    echo Invalid argument format: %1
+    exit /b 1
+)
+
+set "flagFile=%number%.flag"
+
+REM Check if the application is already running
+tasklist /FI "IMAGENAME eq %appName%" | find /i "%appName%" > nul
+if errorlevel 1 (
+    REM If not running, start the application with the provided argument
+    cd ..
+    start "" "%appName%"
+    cd gdutils
+    type nul > "%flagFile%"
+) else (
+    REM If running, create an empty file based on the extracted number
+    type nul > "%flagFile%"
+)
+
+endlocal
+        )";
+        file.close();
+    }
+
+    #endif
 }
 
