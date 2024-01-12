@@ -26,4 +26,5 @@ class EventsPush : public CCLayer {
         static void processNextEvent(CCScene* self);
         static void eventCompletedCallback(CCScene* self);
         static void stopNow(CCScene* scene);
+        static GJGameLevel* convertLevelToJSON(std::string& data);
 };

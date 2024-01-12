@@ -105,7 +105,7 @@ std::vector<std::string> split_str(std::string &string, char separator) {
     return splitlist;
 };
 
-GJGameLevel* convertLevelToJSON(std::string& data) {
+GJGameLevel* EventsPush::convertLevelToJSON(std::string& data) {
     // Robtop to JSON
     GJGameLevel* level = GJGameLevel::create();
 #ifndef GEODE_IS_ANDROID64 // for some reason a field isnt known
@@ -287,7 +287,7 @@ void EventsPush::onClickBtn(CCObject* ret) {
             .then([&](std::string & response) {
                 if (response != "-1") {
                     auto scene = CCScene::create();
-                    auto layer = LevelInfoLayer::create(convertLevelToJSON(response), false);
+                    auto layer = LevelInfoLayer::create(EventsPush::convertLevelToJSON(response), false);
                     layer->downloadLevel();
                     scene->addChild(layer);
                     CCDirector::sharedDirector()->pushScene(cocos2d::CCTransitionFade::create(0.5f, scene));
