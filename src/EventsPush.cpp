@@ -62,8 +62,7 @@ void EventsPush::destroySelf() {
 // stole from GDR mod lol 
 GJDifficulty getDifficulty(int stars) {
     switch(stars){
-        default:
-        case 0: 
+        case 0:
             return GJDifficulty::Auto;
         case 10:
             return GJDifficulty::Easy;
@@ -443,6 +442,9 @@ bool EventsPush::init(sio::message::ptr const& data) {
         mythic->setScale(.8F);
 
         switch (rateType) {
+            default: // Rate
+                bg->addChild(diffFace);
+                break;
             case 1: // Featured
                 bg->addChild(featured);
                 bg->addChild(diffFace);
