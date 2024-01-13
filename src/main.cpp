@@ -10,6 +10,7 @@
 #include <Geode/modify/SecretLayer2.hpp>
 #include <Geode/modify/LeaderboardsLayer.hpp>
 #include <Geode/modify/LevelInfoLayer.hpp>
+#include <Geode/modify/InfoLayer.hpp>
 #include <Geode/loader/Log.hpp>
 #include <Geode/utils/web.hpp>
 #include "includes.h"
@@ -17,6 +18,7 @@
 #include "EventsPush.h"
 #include "ProcessLambdas.h"
 #include "MoreLeaderboards.h"
+#include "InfoNewLayer.h"
 #include "Discord.h"
 #include <fmt/format.h>
 #include <chrono>
@@ -1013,7 +1015,27 @@ class $modify(LevelInfoLayer) {
 };
 // demon list
 
+// Copy button for sharing levels
+class $modify(InfoLayer) {
+    bool init(GJGameLevel* level, GJUserScore* userscore, GJLevelList* levellist) {
+        if (!InfoLayer::init(level, userscore, levellist)) return false;
 
+        std::string levelID = std::to_string(level->m_levelID.value());
+
+        auto menu = this->m_buttonMenu;
+        auto copySpr = CCSprite::createWithSpriteFrameName("GJ_undoBtn_001.png");
+        copySpr->setScale(.7f);
+        copySpr->setFlipX(true);
+        auto copyBtn = CCMenuItemSpriteExtra::create(
+            copySpr,
+            this,
+            menu_selector(InfoNewLayer::onCopyLevelURL)
+        );
+        copyBtn->setUserObject(cocos2d::CCString::create(gd::string(levelID)));
+        copyBtn->setPosition(-195, -70);
+        menu->addChild(copyBtn);
+    }
+};
 
 // When the socket connection is made
 $on_mod(Loaded) {
