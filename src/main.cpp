@@ -11,6 +11,7 @@
 #include <Geode/modify/LeaderboardsLayer.hpp>
 #include <Geode/modify/LevelInfoLayer.hpp>
 #include <Geode/modify/InfoLayer.hpp>
+#include <Geode/modify/ProfilePage.hpp>
 #include <Geode/loader/Log.hpp>
 #include <Geode/utils/web.hpp>
 #include "includes.h"
@@ -19,6 +20,7 @@
 #include "ProcessLambdas.h"
 #include "MoreLeaderboards.h"
 #include "InfoNewLayer.h"
+#include "NewProfilePage.h"
 #include "Discord.h"
 #include <fmt/format.h>
 #include <chrono>
@@ -1020,6 +1022,9 @@ class $modify(InfoLayer) {
     bool init(GJGameLevel* level, GJUserScore* userscore, GJLevelList* levellist) {
         if (!InfoLayer::init(level, userscore, levellist)) return false;
 
+        // Check if it's InfoLayer for level
+        if (level == nullptr) return true;
+
         std::string levelID = std::to_string(level->m_levelID.value());
 
         auto menu = this->m_buttonMenu;
@@ -1034,6 +1039,60 @@ class $modify(InfoLayer) {
         copyBtn->setUserObject(cocos2d::CCString::create(gd::string(levelID)));
         copyBtn->setPosition(-195, -70);
         menu->addChild(copyBtn);
+    }
+};
+
+// Mod badges descriptions
+class $modify(ProfilePage) {
+    void loadPageFromUserInfo(GJUserScore* a2) {
+        ProfilePage::loadPageFromUserInfo(a2);
+
+        auto scene = CCDirector::sharedDirector()->getRunningScene();
+        if(auto layer = m_mainLayer) {
+            // inspecting all children of the layer to find the badge
+            CCSprite* badge = nullptr;
+            CCObject* obj = nullptr;
+            CCARRAY_FOREACH(layer->getChildren(), obj) {
+                auto sprite = dynamic_cast<CCSprite*>(obj);
+                if (sprite == nullptr) continue;
+                
+                auto* texture = sprite->getTexture();
+                auto* frame_cache = CCSpriteFrameCache::sharedSpriteFrameCache();
+                auto* cached_frames = public_cast(frame_cache, frame_cache->m_pSpriteFrames);
+                const auto rect = sprite->getTextureRect();
+                CCDictElement* el = nullptr;
+                CCDICT_FOREACH(cached_frames, el) {
+                    auto* frame = static_cast<CCSpriteFrame*>(el->getObject());
+                    if (frame->getTexture() == texture && frame->getRect() == rect) {
+                        if (el->getStrKey() == "modBadge_01_001.png" || el->getStrKey() == "modBadge_02_001.png" || el->getStrKey() == "modBadge_03_001.png") {
+                            badge = sprite;
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            if (badge != nullptr) {
+                CCMenu* menu = nullptr;
+                CCObject* obj2 = nullptr;
+                CCARRAY_FOREACH(layer->getChildren(), obj2) {
+                    auto menu_ = dynamic_cast<CCMenu*>(obj2);
+                    if (menu_ != nullptr) {
+                        menu = menu_;
+                        break;
+                    }
+                }
+
+                auto badgeBtn = CCMenuItemSpriteExtra::create(
+                    badge,
+                    this,
+                    menu_selector(NewProfilePage::onBadgePressed)
+                );
+                CCPoint pos = badge->getPosition();
+                badgeBtn->setPosition(pos);
+                menu->addChild(badgeBtn);
+            }
+        }
     }
 };
 
