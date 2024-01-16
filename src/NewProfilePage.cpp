@@ -85,3 +85,17 @@ There's currently <cp>no way</c> to become a <cb>Leaderboard Moderator</c> by ap
             break;
     }
 }
+
+void NewProfilePage::onGDUtilsBadgePressed(CCObject* pSender) {
+    FLAlertLayer::create(
+        nullptr,
+        "GDUtils Developer",
+        R"text(
+You found a <co>GDUtils developer</c>! :O
+        )text",
+        "OK",
+        nullptr,
+        250.0f
+    )->show();
+
+}

@@ -19,13 +19,18 @@ void MoreLeaderboardsCell::loadFromDict(cocos2d::CCDictionary* content) //
         if (id == "1") {
             usernameTemp = name;
         } else if (id == "3") {
-            if (name == "1") {
-                auto elderModBadge = cocos2d::CCSprite::createWithSpriteFrameName("modBadge_02_001.png");
+            if (name == "2") {
+                auto elderModBadge = cocos2d::CCSprite::createWithSpriteFrameName("modBadge_01_001.png");
                 elderModBadge->setPosition({ 30, 20 });
                 elderModBadge->setScale(1.225f);
                 this->m_mainLayer->addChild(elderModBadge);
-            } else {
-                auto modBadge = cocos2d::CCSprite::createWithSpriteFrameName("modBadge_01_001.png");
+            } else if (name == "1") {
+                auto modBadge = cocos2d::CCSprite::createWithSpriteFrameName("modBadge_02_001.png");
+                modBadge->setPosition({ 30, 20 });
+                modBadge->setScale(1.225f);
+                this->m_mainLayer->addChild(modBadge);
+            } else if (name == "3") {
+                auto modBadge = cocos2d::CCSprite::createWithSpriteFrameName("modBadge_03_001.png");
                 modBadge->setPosition({ 30, 20 });
                 modBadge->setScale(1.225f);
                 this->m_mainLayer->addChild(modBadge);

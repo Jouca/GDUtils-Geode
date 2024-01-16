@@ -7,4 +7,5 @@ using namespace geode::prelude;
 class NewProfilePage : public CCLayer {
     public:
         void onBadgePressed(CCObject* pSender);
+        void onGDUtilsBadgePressed(CCObject* pSender);
 };

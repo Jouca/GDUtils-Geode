@@ -1042,13 +1042,50 @@ class $modify(InfoLayer) {
     }
 };
 
-// Mod badges descriptions
+// Mod badges descriptions & GDUtils dev badge
 class $modify(ProfilePage) {
     void loadPageFromUserInfo(GJUserScore* a2) {
+        auto layer = m_mainLayer;
+
         ProfilePage::loadPageFromUserInfo(a2);
 
+        // GDUtils dev badge
+        if (layer) {
+            std::vector<int> gdutils_accountID_devs = { 7026949, 6253758, 5509312 };
+            if (std::find(gdutils_accountID_devs.begin(), gdutils_accountID_devs.end(), a2->m_accountID) != gdutils_accountID_devs.end()) {
+                CCLabelBMFont* label = nullptr;
+                CCObject* obj3 = nullptr;
+                CCPoint* pos_label = nullptr;
+                CCARRAY_FOREACH(layer->getChildren(), obj3) {
+                    auto label_ = dynamic_cast<CCLabelBMFont*>(obj3);
+                    if (label_ != nullptr) {
+                        if (strcmp(label_->getString(), a2->m_userName.c_str()) == 0) {
+                            label = label_;
+                            pos_label = new CCPoint(label_->getPosition());
+                            break;
+                        }
+                    }
+                }
+
+                if (label != nullptr) {
+                    auto badgeGDUtil = CCSprite::create(Mod::get()->expandSpriteName("gdutils_badge.png"));
+                    badgeGDUtil->setScale(.3f);
+                    auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
+                        badgeGDUtil,
+                        this,
+                        menu_selector(NewProfilePage::onGDUtilsBadgePressed)
+                    );
+                    
+                    badgeGDUtilBtn->setPosition({207.5f - (strlen(label->getString()) * (label->getScale() * 12)), -11});
+                    auto menu = this->m_buttonMenu;
+                    menu->addChild(badgeGDUtilBtn);
+                }
+            }
+        }
+
+        // mod description badge
         auto scene = CCDirector::sharedDirector()->getRunningScene();
-        if(auto layer = m_mainLayer) {
+        if(layer) {
             // inspecting all children of the layer to find the badge
             CCSprite* badge = nullptr;
             CCObject* obj = nullptr;
