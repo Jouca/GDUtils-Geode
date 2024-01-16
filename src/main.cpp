@@ -1052,22 +1052,20 @@ class $modify(ProfilePage) {
             // inspecting all children of the layer to find the badge
             CCSprite* badge = nullptr;
             CCObject* obj = nullptr;
+            bool finished = false;
             CCARRAY_FOREACH(layer->getChildren(), obj) {
+                if (finished) continue;
+
                 auto sprite = dynamic_cast<CCSprite*>(obj);
                 if (sprite == nullptr) continue;
                 
-                auto* texture = sprite->getTexture();
-                auto* frame_cache = CCSpriteFrameCache::sharedSpriteFrameCache();
-                auto* cached_frames = public_cast(frame_cache, frame_cache->m_pSpriteFrames);
+                auto* cachedFrames = CCSpriteFrameCache::sharedSpriteFrameCache()->m_pSpriteFrames;
                 const auto rect = sprite->getTextureRect();
-                CCDictElement* el = nullptr;
-                CCDICT_FOREACH(cached_frames, el) {
-                    auto* frame = static_cast<CCSpriteFrame*>(el->getObject());
-                    if (frame->getTexture() == texture && frame->getRect() == rect) {
-                        if (el->getStrKey() == "modBadge_01_001.png" || el->getStrKey() == "modBadge_02_001.png" || el->getStrKey() == "modBadge_03_001.png") {
-                            badge = sprite;
-                            break;
-                        }
+                for (auto [key, frame] : CCDictionaryExt<std::string, CCSpriteFrame*>(cachedFrames)) {
+                    if (key.starts_with("modBadge")) {
+                        badge = sprite;
+                        finished = true;
+                        break;
                     }
                 }
             }
@@ -1083,12 +1081,13 @@ class $modify(ProfilePage) {
                     }
                 }
 
+                CCPoint pos = badge->getPosition();
+
                 auto badgeBtn = CCMenuItemSpriteExtra::create(
                     badge,
                     this,
                     menu_selector(NewProfilePage::onBadgePressed)
                 );
-                CCPoint pos = badge->getPosition();
                 badgeBtn->setPosition(pos);
                 menu->addChild(badgeBtn);
             }
