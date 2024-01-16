@@ -1052,20 +1052,24 @@ class $modify(ProfilePage) {
             // inspecting all children of the layer to find the badge
             CCSprite* badge = nullptr;
             CCObject* obj = nullptr;
+            CCPoint pos = {0, 0};
             bool finished = false;
             CCARRAY_FOREACH(layer->getChildren(), obj) {
-                if (finished) continue;
 
                 auto sprite = dynamic_cast<CCSprite*>(obj);
                 if (sprite == nullptr) continue;
+                if (finished) continue;
                 
                 auto* cachedFrames = CCSpriteFrameCache::sharedSpriteFrameCache()->m_pSpriteFrames;
                 const auto rect = sprite->getTextureRect();
                 for (auto [key, frame] : CCDictionaryExt<std::string, CCSpriteFrame*>(cachedFrames)) {
-                    if (key.starts_with("modBadge")) {
-                        badge = sprite;
-                        finished = true;
-                        break;
+                    if (frame->getTexture() == sprite->getTexture() && frame->getRect() == rect) {
+                        if (key.starts_with("modBadge")) {
+                            pos = sprite->getPosition();
+                            badge = CCSprite::createWithSpriteFrame(frame);
+                            sprite->removeFromParentAndCleanup(true);
+                            finished = true;
+                        }
                     }
                 }
             }
@@ -1081,14 +1085,13 @@ class $modify(ProfilePage) {
                     }
                 }
 
-                CCPoint pos = badge->getPosition();
-
                 auto badgeBtn = CCMenuItemSpriteExtra::create(
                     badge,
                     this,
                     menu_selector(NewProfilePage::onBadgePressed)
                 );
-                badgeBtn->setPosition(pos);
+                badgeBtn->setUserObject(a2);
+                badgeBtn->setPosition({pos.x - menu->getPosition().x, pos.y - menu->getPosition().y});
                 menu->addChild(badgeBtn);
             }
         }
