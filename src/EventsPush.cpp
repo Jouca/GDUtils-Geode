@@ -637,7 +637,7 @@ bool EventsPush::init(sio::message::ptr const& data) {
         nullptr
     ));
 
-    if (Mod::get()->getSettingValue<bool>("sfx")) FMODAudioEngine::sharedEngine()->playEffect("crystal01.ogg", 1, 1, 1);
+    if (Mod::get()->getSettingValue<bool>("sfx")) FMODAudioEngine::sharedEngine()->playEffect("crystal01.ogg");
 
     return true;
 }

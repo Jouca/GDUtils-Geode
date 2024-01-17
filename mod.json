@@ -1,6 +1,7 @@
 {
     "geode": "2.0.0",
     "version": "v1.1.21",
+    "gd": "2.204",
     "id": "gdutilsdevs.gdutils",
     "name": "GDUtils",
     "developer": "Jouca & Firee",

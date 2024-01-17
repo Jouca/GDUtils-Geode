@@ -764,7 +764,7 @@ class $modify(FriendPage, FriendsProfilePage) {
 };
 
 void SearchUserLayer::onValidate(CCObject* pSender) {
-    FriendPage::searchUser(input_username->getString());
+    FriendPage::searchUser(input_username->getString().c_str());
     BrownAlertDelegate::onClose(pSender);
 }
 
