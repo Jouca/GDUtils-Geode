@@ -294,7 +294,7 @@ void EventsPush::onClickBtn(CCObject* ret) {
                     log::info("Level not found. (-1)");
                 }
         }).expect([](std::string const& error) {
-            log::error("Error occured while doing a web request: " + error);
+            log::error("Error occured while doing a web request: {}", error);
         });
     } else { // copy to clipboard
         #ifndef GEODE_IS_MACOS

@@ -63,7 +63,7 @@ namespace ConnectionHandler {
     }
 
     void onClose(sio::client::close_reason const& reason) {
-        log::warn("Connection closed: " + std::to_string(reason));
+        log::warn("Connection closed: {}", std::to_string(reason));
         still_connected = false;
     }
 
@@ -73,7 +73,7 @@ namespace ConnectionHandler {
     }
 
     void onError(sio::message::ptr const& message) {
-        log::error("Sock Error: " + message->get_string());
+        log::error("Sock Error: {}", message->get_string());
     }
 }
 bool setSocket(sio::socket::ptr sock) {
@@ -113,7 +113,7 @@ void start_socket_func() {
                 std::this_thread::sleep_for(std::chrono::seconds(1));
             }
         } catch (const std::exception& e) {
-            log::error(fmt::format("Error in Socket Thread: {}", std::string(e.what())));
+            log::error("Error in Socket Thread: {}", std::string(e.what()));
             std::this_thread::sleep_for(std::chrono::seconds(reconnectionDelay));
         }
         if (reconnectionAttempts-- <= 0) {
@@ -992,7 +992,7 @@ class $modify(LevelInfoLayer) {
                         positionLabel->setVisible(true);
                         demonSpr->setVisible(true);
                         set(levelID, position);
-                        log::info(fmt::format("Level found in Pointercrate! {} at #{}", level->m_levelName.c_str(), position));
+                        log::info("Level found in Pointercrate! {} at #{}", level->m_levelName.c_str(), position);
                         this->release();
                     }
                 })
@@ -1000,7 +1000,7 @@ class $modify(LevelInfoLayer) {
                     if (loading_circle != nullptr) {
                         loading_circle->fadeAndRemove();
                     }
-                    log::error(fmt::format("Error while sending a request to Pointercrate: {}", error));
+                    log::error("Error while sending a request to Pointercrate: {}", error);
                     FLAlertLayer::create(nullptr,
                         "Error",
                         "Failed to make a request to <cy>Pointercrate</c>. Please either <cg>try again later</c>, look at the error logs to see what might have happened, or report this to the developers.",

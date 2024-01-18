@@ -56,7 +56,7 @@ int DownloadManager::progress_func(void*, double totalDownload, double downloadA
 
 void DownloadManager::setup() {
     log::debug("DownloadManager::setup()");
-    log::debug(m_sUrl);
+    //log::debug(m_sUrl);
     auto winSize = cocos2d::CCDirector::sharedDirector()->getWinSize();
     loading_circle->setParentLayer(this);
     loading_circle->setScale(0.675f);
@@ -94,7 +94,7 @@ void DownloadManager::setup() {
         })
         .expect([](std::string const& err) {
             FLAlertLayer::create(nullptr, "Error!", "An error occured while trying to send a request to the servers. Check <cy>logs</c> for more information.", "OK", nullptr, 200.0F)->show();
-            log::error(fmt::format("Error downloading: {}", err));
+            log::error("Error downloading: {}", err);
         })
         .progress([](auto&, double now, double total) {
             progress_func(NULL, total, now, 0.0, 0.0);
