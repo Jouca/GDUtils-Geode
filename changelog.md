@@ -1,3 +1,12 @@
+# v1.2.0
+    - 2.2 support (2.204)
+
+    - Added level URL sharing feature and button for copying level URL on level info
+    - Added moons leaderboard
+    - Added leaderboard moderators in Moderator List
+    - Added moderator info when clicking their badge
+    - Updated notifications with legendary/mythic rate
+    - Added custom faces for legendary/mythic rating in notifications
 # v1.1.3 
     - Fixed crash with Demon List if you have No Transition and instantly exit
     - Fixed more leaderboards from crashing with exiting quickly
