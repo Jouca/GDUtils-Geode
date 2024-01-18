@@ -272,7 +272,7 @@ void MoreLeaderboards::startLoadingMore() {
             fadeLoadingCircle();
             geode::createQuickPopup(
                 "Error",
-                "An error occured while sending a request to <cy>GDBrowser</c>. Please try again later.",
+                "An error occured while sending a request on <cy>our server</c>. Please try again later.",
                 "OK", nullptr,
                 [this](auto, bool btn2) {
                     if (!btn2) {
@@ -303,7 +303,7 @@ void MoreLeaderboards::startLoadingMore() {
         if (misc::getNodeName(layer) != "MoreLeaderboards") return this->release();
         geode::createQuickPopup(
             "Error",
-            "An error occured while sending a request to <cy>GDBrowser</c>. Please try again later.",
+            "An error occured while sending a request on <cy>our server</c>. Please try again later.",
             "OK", nullptr,
             [this](auto, bool btn2) {
                 if (!btn2) {

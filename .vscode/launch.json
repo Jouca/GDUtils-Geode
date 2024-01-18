@@ -8,10 +8,10 @@
             "name": "(Windows) Launch",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "C:\\Users\\proga\\Desktop\\ClarifyGDPS 2.202 GEODE\\GeometryDash.exe",
+            "program": "C:\\Users\\proga\\Desktop\\ClarifyGDPS 2.204 GEODE\\GeometryDash.exe",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "C:\\Users\\proga\\Desktop\\ClarifyGDPS 2.202 GEODE\\",
+            "cwd": "C:\\Users\\proga\\Desktop\\ClarifyGDPS 2.204 GEODE\\",
             "environment": [],
             "console": "internalConsole"
         }
