@@ -74,6 +74,8 @@ GJDifficulty getDifficulty(int stars) {
             return GJDifficulty::Insane;
         case 60:
             return GJDifficulty::Auto;
+        default:
+            return GJDifficulty::Auto;
     }
 }
 
