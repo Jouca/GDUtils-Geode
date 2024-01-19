@@ -1040,6 +1040,7 @@ class $modify(InfoLayer) {
         copyBtn->setUserObject(cocos2d::CCString::create(gd::string(levelID)));
         copyBtn->setPosition(-195, -70);
         menu->addChild(copyBtn);
+        
         return true;
     }
 };

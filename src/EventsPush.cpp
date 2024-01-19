@@ -62,8 +62,6 @@ void EventsPush::destroySelf() {
 // stole from GDR mod lol 
 GJDifficulty getDifficulty(int stars) {
     switch(stars){
-        case 0:
-            return GJDifficulty::Auto;
         case 10:
             return GJDifficulty::Easy;
         case 20:
@@ -74,6 +72,8 @@ GJDifficulty getDifficulty(int stars) {
             return GJDifficulty::Harder;
         case 50:
             return GJDifficulty::Insane;
+        case 60:
+            return GJDifficulty::Auto;
     }
 }
 
