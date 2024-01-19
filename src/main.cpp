@@ -180,7 +180,7 @@ class $modify(CCScheduler) { // used to be GameManager
         if (pushEvent) processEvent(scene);
     }
 };
-
+#ifndef GEODE_IS_ANDROID
 class $modify(CCScheduler) { // GD Protocol part
     void update(float dt) {
         CCScheduler::update(dt);
@@ -251,6 +251,7 @@ class $modify(CCScheduler) { // GD Protocol part
         }
     }
 };
+#endif
 
 // Spotify
 bool is_muted = false;
@@ -1039,6 +1040,7 @@ class $modify(InfoLayer) {
         copyBtn->setUserObject(cocos2d::CCString::create(gd::string(levelID)));
         copyBtn->setPosition(-195, -70);
         menu->addChild(copyBtn);
+        return true;
     }
 };
 
@@ -1057,7 +1059,8 @@ class $modify(ProfilePage) {
                 CCObject* obj3 = nullptr;
                 CCPoint* pos_label = nullptr;
                 CCARRAY_FOREACH(layer->getChildren(), obj3) {
-                    auto label_ = dynamic_cast<CCLabelBMFont*>(obj3);
+                    if (misc::getNodeName(obj3) != "cocos2d::CCLabelBMFont") continue;
+                    auto label_ = static_cast<CCLabelBMFont*>(obj3);
                     if (label_ != nullptr) {
                         if (strcmp(label_->getString(), a2->m_userName.c_str()) == 0) {
                             label = label_;
@@ -1092,11 +1095,10 @@ class $modify(ProfilePage) {
             CCPoint pos = {0, 0};
             bool finished = false;
             CCARRAY_FOREACH(layer->getChildren(), obj) {
-
-                auto sprite = dynamic_cast<CCSprite*>(obj);
+                if (misc::getNodeName(obj) != "cocos2d::CCSprite") continue;
+                auto sprite = static_cast<CCSprite*>(obj);
                 if (sprite == nullptr) continue;
                 if (finished) continue;
-                
                 auto* cachedFrames = CCSpriteFrameCache::sharedSpriteFrameCache()->m_pSpriteFrames;
                 const auto rect = sprite->getTextureRect();
                 for (auto [key, frame] : CCDictionaryExt<std::string, CCSpriteFrame*>(cachedFrames)) {
@@ -1115,11 +1117,9 @@ class $modify(ProfilePage) {
                 CCMenu* menu = nullptr;
                 CCObject* obj2 = nullptr;
                 CCARRAY_FOREACH(layer->getChildren(), obj2) {
-                    auto menu_ = dynamic_cast<CCMenu*>(obj2);
-                    if (menu_ != nullptr) {
-                        menu = menu_;
-                        break;
-                    }
+                    if (misc::getNodeName(obj2) != "cocos2d::CCMenu") continue;
+                    menu = static_cast<CCMenu*>(obj2);
+                    break;
                 }
 
                 auto badgeBtn = CCMenuItemSpriteExtra::create(

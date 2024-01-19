@@ -1,6 +1,7 @@
 #include "MoreLeaderboardsListView.h"
 #include "MoreLeaderboards.h"
 #include "MoreLeaderboardsCell.h"
+#include "includes.h"
 
 MoreLeaderboardsListView* MoreLeaderboardsListView::create(cocos2d::CCArray* levels, float width, float height) {
     auto ret = new MoreLeaderboardsListView();
@@ -32,9 +33,9 @@ cocos2d::CCRect MoreLeaderboardsListView::calculateNodeCoverage(CCArray* nodes){
     CCRect coverage;
     CCObject* childObj;
     CCARRAY_FOREACH(nodes, childObj) {
-        CCNode* child = dynamic_cast<CCNode*>(childObj);
+        if (misc::getNodeName(childObj) != "cocos2d::CCNode" && misc::getNodeName(childObj) != "MoreLeaderboardsCell") continue;
+        CCNode* child = static_cast<CCNode*>(childObj); // android doesnt like dynamic_cast
         if(child == nullptr) continue;
-
         auto contentSize = child->getScaledContentSize();
         contentSize.width *= child->getAnchorPoint().x;
         contentSize.height *= child->getAnchorPoint().y;

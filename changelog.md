@@ -1,3 +1,5 @@
+# v1.2.1
+    - Added Android support
 # v1.2.0
     - 2.2 support (2.204)
 

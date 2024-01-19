@@ -1,10 +1,10 @@
 #include "NewProfilePage.h"
 
 void NewProfilePage::onBadgePressed(CCObject* pSender) {
-    GJUserScore* score = reinterpret_cast<GJUserScore*>(reinterpret_cast<CCNode*>(pSender)->getUserObject());
-    
+    GJUserScore* score = static_cast<GJUserScore*>(static_cast<CCNode*>(pSender)->getUserObject());
     switch (score->m_modBadge) {
         case 1:
+#ifndef GEODE_IS_ANDROID
             FLAlertLayer::create(
                 nullptr,
                 "Geometry Dash Moderator",
@@ -32,8 +32,27 @@ If you display these qualities over time, there is a chance that <cy>other Moder
                 100.0f,
                 1.0f
             )->show();
+#else
+            FLAlertLayer::create(
+                nullptr,
+                "Geometry Dash Moderator",
+                R"text(
+A <cl>Geometry Dash Moderator</c> is a user that has been chosen by <cj>RobTop</c> and other <cy>Moderators</c> on the team by suggestions.
+
+Their first task is to suggest levels to be rated to <cj>RobTop</c>, the current developer of the game and the maintainer of the <co>level rating system</c>, he is the only one that can rate levels.
+                )text",
+                "OK",
+                nullptr,
+                400.0f,
+                true,
+                100.0f,
+                1.0f
+            )->show();
+
+#endif
             break;
         case 2:
+#ifndef GEODE_IS_ANDROID // android height broken
             FLAlertLayer::create(
                 nullptr,
                 "Geometry Dash Elder Moderator",
@@ -61,6 +80,23 @@ If you display these qualities over time, there is a chance that <cy>other Moder
                 100.0f,
                 1.0f
             )->show();
+#else 
+            FLAlertLayer::create(
+                nullptr,
+                "Geometry Dash Elder Moderator",
+                R"text(
+A <cg>Geometry Dash Elder Moderator</c> is a user that has been chosen by <cj>RobTop</c> and other <cy>Moderators</c> on the team by suggestions and was already a <cy>Geometry Dash Moderator</c> before his promotion. They are the <cp>pillars</c> of the moderation team.
+
+Their first task is to suggest levels to be rated to <cj>RobTop</c>, the current developer of the game and the maintainer of the <co>level rating system</c>, which he is the only one that can rate levels. But they also have the power to <cg>moderate comments</c>, <cg>whitelists Newgrounds artists</c> and <cg>unlocks updates for old rated levels</c>.
+                )text",
+                "OK",
+                nullptr,
+                400.0f,
+                true,
+                100.0f,
+                1.0f
+            )->show();
+#endif
             break;
         case 3:
             FLAlertLayer::create(
