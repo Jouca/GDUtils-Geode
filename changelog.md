@@ -1,3 +1,6 @@
+# v1.2.12
+    - Added creators leaderboard
+    - Fixed level URL sharing button that was having conflicts with the left page button for levels comments
 # v1.2.1
     - Added Android support
 # v1.2.0
