@@ -119,28 +119,39 @@ bool MoreLeaderboards::init(std::string type) {
         m_menu = CCMenu::create();
 
         m_diamondsTabBtn = TabButton::create("Diamonds", this, menu_selector(MoreLeaderboards::onTab));
-        m_diamondsTabBtn->setPosition(-144.f, 132.5f);
+        m_diamondsTabBtn->setPosition(-155.f, 132);
         m_diamondsTabBtn->setTag(static_cast<int>(StatsListType::Diamonds));
         m_diamondsTabBtn->setZOrder(30);
+        m_diamondsTabBtn->setScale(0.8f);
         m_menu->addChild(m_diamondsTabBtn);
 
         m_usercoinsTabBtn = TabButton::create("User Coins", this, menu_selector(MoreLeaderboards::onTab));
-        m_usercoinsTabBtn->setPosition(-48.f, 132.5f);
+        m_usercoinsTabBtn->setPosition(-77.f, 132);
         m_usercoinsTabBtn->setTag(static_cast<int>(StatsListType::UserCoins));
         m_usercoinsTabBtn->setZOrder(30);
+        m_usercoinsTabBtn->setScale(0.8f);
         m_menu->addChild(m_usercoinsTabBtn);
 
         m_demonsTabBtn = TabButton::create("Demons", this, menu_selector(MoreLeaderboards::onTab));
-        m_demonsTabBtn->setPosition(48.f, 132.5f);
+        m_demonsTabBtn->setPosition(0.f, 132);
         m_demonsTabBtn->setTag(static_cast<int>(StatsListType::Demons));
         m_demonsTabBtn->setZOrder(30);
+        m_demonsTabBtn->setScale(0.8f);
         m_menu->addChild(m_demonsTabBtn);
 
         m_moonsTabBtn = TabButton::create("Moons", this, menu_selector(MoreLeaderboards::onTab));
-        m_moonsTabBtn->setPosition(144.f, 132.5f);
+        m_moonsTabBtn->setPosition(78.f, 132);
         m_moonsTabBtn->setTag(static_cast<int>(StatsListType::Moons));
         m_moonsTabBtn->setZOrder(30);
+        m_moonsTabBtn->setScale(0.8f);
         m_menu->addChild(m_moonsTabBtn);
+
+        m_creatorsTabBtn = TabButton::create("Creators", this, menu_selector(MoreLeaderboards::onTab));
+        m_creatorsTabBtn->setPosition(156.f, 132);
+        m_creatorsTabBtn->setTag(static_cast<int>(StatsListType::Creators));
+        m_creatorsTabBtn->setZOrder(30);
+        m_creatorsTabBtn->setScale(0.8f);
+        m_menu->addChild(m_creatorsTabBtn);
 
         // tabs gradient
         m_tabsGradientNode = CCClippingNode::create();
@@ -148,6 +159,7 @@ bool MoreLeaderboards::init(std::string type) {
         m_tabsGradientNode->setAnchorPoint({0.5f, 0.5f});
         m_tabsGradientNode->ignoreAnchorPointForPosition(true);
         m_tabsGradientNode->setZOrder(0);
+        m_tabsGradientNode->setScale(0.8f);
         m_tabsGradientNode->setInverted(false);
         m_tabsGradientNode->setAlphaThreshold(0.7f);
 
@@ -158,6 +170,7 @@ bool MoreLeaderboards::init(std::string type) {
         m_tabsGradientStencil->setAnchorPoint({0.f, 0.f});
         m_tabsGradientStencil->setColor({172, 255, 67});
         m_tabsGradientStencil->setZOrder(1);
+        m_tabsGradientStencil->setScale(0.8f);
         m_tabsGradientNode->setStencil(m_tabsGradientStencil);
 
         // add menus
@@ -254,6 +267,8 @@ void MoreLeaderboards::startLoadingMore() {
         type = "demons";
     } else if (g_tab == StatsListType::Moons) {
         type = "moons";
+    } else if (g_tab == StatsListType::Creators) {
+        type = "creators";
     }
 
     this->retain();
@@ -293,6 +308,7 @@ void MoreLeaderboards::startLoadingMore() {
         m_usercoinsTabBtn->setEnabled(true);
         m_demonsTabBtn->setEnabled(true);
         m_moonsTabBtn->setEnabled(true);
+        m_creatorsTabBtn->setEnabled(true);
         this->release();
     })
     .expect([this, type](std::string const& error) {
@@ -318,6 +334,7 @@ void MoreLeaderboards::startLoadingMore() {
         m_usercoinsTabBtn->setEnabled(true);
         m_demonsTabBtn->setEnabled(true);
         m_moonsTabBtn->setEnabled(true);
+        m_creatorsTabBtn->setEnabled(true);
         this->release();
     });
 };
@@ -365,6 +382,7 @@ void MoreLeaderboards::onTab(CCObject* pSender) {
     m_usercoinsTabBtn->setEnabled(false);
     m_demonsTabBtn->setEnabled(false);
     m_moonsTabBtn->setEnabled(false);
+    m_creatorsTabBtn->setEnabled(false);
 
     if (displayedData) {
         displayedData->release();
@@ -394,6 +412,7 @@ void MoreLeaderboards::onTab(CCObject* pSender) {
     toggleTab(m_usercoinsTabBtn);
     toggleTab(m_demonsTabBtn);
     toggleTab(m_moonsTabBtn);
+    toggleTab(m_creatorsTabBtn);
 
     if (loading) {
         startLoadingMore();
