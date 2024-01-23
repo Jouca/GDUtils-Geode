@@ -1,9 +1,9 @@
 {
     "geode": "2.0.0",
-    "version": "v1.2.12",
+    "version": "v1.2.13",
     "gd": {
         "win": "2.204",
-        "android": "2.200"
+        "android": "2.205"
     },
     "id": "gdutilsdevs.gdutils",
     "name": "GDUtils",
