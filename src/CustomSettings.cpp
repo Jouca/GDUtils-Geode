@@ -163,6 +163,7 @@ void SettingTestNode::onTestBtn(CCObject*) {
             data->get_map()["level_name"] = sio::string_message::create("Back On Track");
             data->get_map()["level_creator"] = sio::string_message::create("by RobTop");
             data->get_map()["sprite"] = sio::string_message::create("GJ_square01.png");
+            data->get_map()["rate"] = sio::int_message::create(1);
             break;
         default: // not possible
             data->get_map()["title"] = sio::string_message::create("hi there hxd user, ghidra user or ida user. (or hi RobTop) Here's a little easter egg for you :)");
