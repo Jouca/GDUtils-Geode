@@ -197,7 +197,7 @@
             "type": "custom"
         },
         "enable-pings": {
-            "name": "Enable Pinging https://gdutils.clarifygdps.com in the background.",
+            "name": "Enable Pinging https://gdutils.clarifygdps.com in the background",
             "description": "Enables pinging https://gdutils.clarifygdps.com",
             "type": "bool",
             "default": true
