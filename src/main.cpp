@@ -39,6 +39,13 @@
 #include <unordered_map>
 #include <algorithm>
 
+int reconnectionDelay = 1000;
+int reconnectionDelayMax = 5000;
+int reconnectionAttempts = 1000;
+
+bool still_connected = false;
+bool connect_finish = false;
+
 bool event_fired = false;
 
 std::queue <sio::message::ptr> dataQueue;
@@ -47,8 +54,82 @@ sio::message::ptr event_data = nullptr;
 std::mutex lock;
 std::unique_lock <std::mutex> unique_lock(lock);
 std::condition_variable cond;
+sio::socket::ptr current_socket;
 
 // for some reason log and fmt dont work together on android
+
+namespace ConnectionHandler {
+    void onSuccess() {
+        log::info("Socket Connection successful!");
+        connect_finish = true;
+        still_connected = true;
+        cond.notify_all();
+    }
+
+    void onClose(sio::client::close_reason const &reason) {
+        log::warn("Connection closed: {}", std::to_string(reason));
+        still_connected = false;
+    }
+
+    void onFail() {
+        log::error("Connection failed.");
+        still_connected = false;
+    }
+
+    void onError(sio::message::ptr const &message) {
+        log::error("Sock Error: {}", message->get_string());
+    }
+}
+
+bool setSocket(sio::socket::ptr sock) {
+    current_socket = sock;
+    log::info("listening for events");
+    current_socket->emit("geode-" + Mod::get()->getVersion().toString());
+    current_socket->on("rate", sio::socket::event_listener_aux(
+            [&](std::string const &user, sio::message::ptr const &data, bool isAck, sio::message::list &ack_resp) {
+                log::info("call rate event");
+                event_fired = true;
+                event_data = data;
+            }));
+
+    current_socket->on("connect", sio::socket::event_listener_aux(
+            [&](std::string const &user, sio::message::ptr const &data, bool isAck, sio::message::list &ack_resp) {
+                log::info("Connect Event");
+            }));
+    return true;
+}
+
+void start_socket_func() {
+    while (true) {
+        try {
+            log::info("Starting socket...");
+            sio::client sock;
+            sock.set_reconnect_delay(reconnectionDelay);
+            sock.set_reconnect_delay_max(reconnectionDelayMax);
+            sock.set_reconnect_attempts(reconnectionAttempts);
+            sock.set_open_listener(&ConnectionHandler::onSuccess);
+            sock.set_close_listener(&ConnectionHandler::onClose);
+            sock.set_fail_listener(&ConnectionHandler::onFail);
+            sock.connect("http://gdutils.clarifygdps.com");
+            if (!connect_finish) {
+                cond.wait(unique_lock);
+            }
+            sock.socket()->on_error(ConnectionHandler::onError);
+            setSocket(sock.socket());
+            while (still_connected) {
+                std::this_thread::sleep_for(std::chrono::seconds(1));
+            }
+        } catch (const std::exception &e) {
+            log::error("Error in Socket Thread: {}", std::string(e.what()));
+            std::this_thread::sleep_for(std::chrono::seconds(reconnectionDelay));
+        }
+        if (reconnectionAttempts-- <= 0) {
+            log::error("Maximum reconnection attempts reached, stopping to prevent any crashes.");
+            break;
+        }
+
+    }
+}
 
 std::string currentLayer = "";
 
@@ -1097,8 +1178,16 @@ class $modify(ProfilePage) {
 
 // When the socket connection is made
 $on_mod(Loaded) {
+        Mod::get()->addCustomSetting<SettingSectionValue>("enable-pings", "none");
+        auto enable_pings = Mod::get()->getSettingValue<bool>("enable-pings");
+
         log::info("GDUtils Mod Loaded");
-        current_socket = sio::socket::ptr();
+
+        if (enable_pings) {
+            current_socket = sio::socket::ptr();
+            std::thread hThread(start_socket_func);
+            hThread.detach();
+        }
         //Discord::init(); for next update ;)
         // also for whatever reason, discord rpc doesnt work on vanilla gd, instead it shows absolutes MH icon for some reason even though I dont own MH. can someone explain that
 
@@ -1111,6 +1200,7 @@ $on_mod(Loaded) {
         Mod::get()->addCustomSetting<SettingSectionValue>("spotify-section", "none");
         Mod::get()->addCustomSetting<SettingSectionValue>("misc-section", "none");
         Mod::get()->addCustomSetting<SettingSectionValue>("credits-section", "none");
+
         // ok listen here, you dont provide a way to JUST get the file name, you provide the full path which isnt what i want, so dont complain geode devs. Okay? we good? ok
 #ifdef GEODE_IS_WINDOWS
         Mod::get()->addCustomSetting<SettingAppValue>("spotifyApp", "Spotify.exe");
@@ -1224,4 +1314,3 @@ endlocal
 
 #endif
 }
-

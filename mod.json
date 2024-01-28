@@ -195,7 +195,12 @@
         "credit-buttons": {
             "name": "Credit Buttons",
             "type": "custom"
+        },
+        "enable-pings": {
+            "name": "Enable Pings",
+            "description": "Enables pinging https://gdutils.clarifygdps.com",
+            "type": "bool",
+            "default": true
         }
-
     }
 }
