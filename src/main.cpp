@@ -199,56 +199,58 @@ class $modify(CCScheduler) { // GD Protocol part
 
         auto glm = GameLevelManager::sharedState();
 
-        for (const auto & entry : std::filesystem::directory_iterator("gdutils")) {
-            if (entry.path().extension() == ".flag") {
-                std::string path = entry.path().string();
-                std::string filename = entry.path().filename().string();
-                std::string levelName = filename.substr(0, filename.length() - 5);
+        try {
+            for (const auto & entry : std::filesystem::directory_iterator("gdutils")) {
+                if (entry.path().extension() == ".flag") {
+                    std::string path = entry.path().string();
+                    std::string filename = entry.path().filename().string();
+                    std::string levelName = filename.substr(0, filename.length() - 5);
 
-                try {
-                    std::filesystem::remove("gdutils/" + filename);
-                } catch (const std::exception& e) {
-                    break;
+                    try {
+                        std::filesystem::remove("gdutils/" + filename);
+                    } catch (const std::exception& e) {
+                        break;
+                    }
+                    
+                    std::string const& url = "https://www.boomlings.com/database/getGJLevels21.php";
+                    std::string const& fields = "secret=Wmfd2893gb7&type=0&str=" + levelName;
+
+                    std::cout << fields << std::endl;
+                    web::AsyncWebRequest()
+                        .bodyRaw(fields)
+                        .postRequest()
+                        .fetch(url).text()
+                        .then([&](std::string & response) {
+                            if (response != "-1") {
+                                auto scene = CCScene::create();
+
+                                GJGameLevel* gjgl = EventsPush::convertLevelToJSON(response);
+
+                                auto layer = LevelInfoLayer::create(gjgl, false);
+                                layer->downloadLevel();
+                                scene->addChild(layer);
+                                CCDirector::sharedDirector()->pushScene(cocos2d::CCTransitionFade::create(0.5f, scene));
+                            } else {
+                                FLAlertLayer::create(nullptr,
+                                    "Error",
+                                    "Level not found.",
+                                    "OK",
+                                    nullptr,
+                                    180.0F
+                                )->show();
+                            }
+                    }).expect([](std::string const& error) {
+                        FLAlertLayer::create(nullptr,
+                            "Error",
+                            "An error happened when trying to fetch the level.",
+                            "OK",
+                            nullptr,
+                            350.0F
+                        )->show();
+                    });
                 }
-                
-                std::string const& url = "https://www.boomlings.com/database/getGJLevels21.php";
-                std::string const& fields = "secret=Wmfd2893gb7&type=0&str=" + levelName;
-
-                std::cout << fields << std::endl;
-                web::AsyncWebRequest()
-                    .bodyRaw(fields)
-                    .postRequest()
-                    .fetch(url).text()
-                    .then([&](std::string & response) {
-                        if (response != "-1") {
-                            auto scene = CCScene::create();
-
-                            GJGameLevel* gjgl = EventsPush::convertLevelToJSON(response);
-
-                            auto layer = LevelInfoLayer::create(gjgl, false);
-                            layer->downloadLevel();
-                            scene->addChild(layer);
-                            CCDirector::sharedDirector()->pushScene(cocos2d::CCTransitionFade::create(0.5f, scene));
-                        } else {
-                            FLAlertLayer::create(nullptr,
-                                "Error",
-                                "Level not found.",
-                                "OK",
-                                nullptr,
-                                180.0F
-                            )->show();
-                        }
-                }).expect([](std::string const& error) {
-                    FLAlertLayer::create(nullptr,
-                        "Error",
-                        "An error happened when trying to fetch the level.",
-                        "OK",
-                        nullptr,
-                        350.0F
-                    )->show();
-                });
             }
-        }
+        } catch (const std::exception& e) {}
     }
 };
 #endif
