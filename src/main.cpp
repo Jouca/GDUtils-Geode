@@ -644,37 +644,23 @@ class $modify(FriendPage, FriendsProfilePage) {
     
     void onDown(CCObject*) {
         // JOUCA WHAT IS THIS LOL
-        auto customList = reinterpret_cast<TableView*>(
-            reinterpret_cast<CCLayer*>(
-                reinterpret_cast<CCLayer*>(
-                    reinterpret_cast<CCLayer*>(
-                        this->getChildren()->objectAtIndex(0)
-                    )->getChildren()->objectAtIndex(1)
-                )->getChildren()->objectAtIndex(0)
-            )->getChildren()->objectAtIndex(0)
-        );
+        auto scene = CCDirector::sharedDirector()->getRunningScene();
+        auto sceneChildren = scene->getChildren();
+        auto customList = getCustomList(sceneChildren);
 
         customList->scrollLayer(200);
     }
     void onUp(CCObject*) {
         // NANI
-        auto customList = reinterpret_cast<TableView*>(
-            reinterpret_cast<CCLayer*>(
-                reinterpret_cast<CCLayer*>(
-                    reinterpret_cast<CCLayer*>(
-                        this->getChildren()->objectAtIndex(0)
-                    )->getChildren()->objectAtIndex(1)
-                )->getChildren()->objectAtIndex(0)
-            )->getChildren()->objectAtIndex(0)
-        );
+        auto scene = CCDirector::sharedDirector()->getRunningScene();
+        auto sceneChildren = scene->getChildren();
+        auto customList = getCustomList(sceneChildren);
         customList->scrollLayer(-200);
     }
     void onSearch(CCObject*) {
         SearchUserLayer::create()->show();
     }
-    static void searchUser(const char* username) {
-        auto scene = CCDirector::sharedDirector()->getRunningScene();
-        auto sceneChildren = scene->getChildren();
+    static TableView* getCustomList(CCArray* sceneChildren) {
         CCLayer* test1 = dynamic_cast<CCLayer*>(misc::findNode("FriendsProfilePage"));
         if (test1 == nullptr) {
             // safeguard from crashing
@@ -685,7 +671,7 @@ class $modify(FriendPage, FriendsProfilePage) {
                 nullptr,
                 350.0F
             )->show();
-            return;
+            return nullptr;
         }
         test1 = dynamic_cast<CCLayer*>(test1->getChildren()->objectAtIndex(0));
         CCLayer* test2 = nullptr;
@@ -699,12 +685,12 @@ class $modify(FriendPage, FriendsProfilePage) {
             // safeguard from crashing
             FLAlertLayer::create(nullptr,
                 "Error",
-                "The mod could not find the <cy>GjCommentListLayer</c> layer. Please either <cg>try again later</c>, removing mods that may be interfering with the scene, or report this to the developers.",
+                "The mod could not find the <cy>GJCommentListLayer</c> layer. Please either <cg>try again later</c>, removing mods that may be interfering with the scene, or report this to the developers.",
                 "OK",
                 nullptr,
                 350.0F
             )->show();
-            return;
+            return nullptr;
         }
 
         auto test3 = static_cast<CCLayer*>(test2->getChildren()->objectAtIndex(0));
@@ -718,9 +704,14 @@ class $modify(FriendPage, FriendsProfilePage) {
                 nullptr,
                 200.0F
             )->show();
-            return;
+            return nullptr;
         }
-        auto customList = static_cast<TableView*>(test3->getChildren()->objectAtIndex(0));
+        return static_cast<TableView*>(test3->getChildren()->objectAtIndex(0));
+    }
+    static void searchUser(const char* username) {
+        auto scene = CCDirector::sharedDirector()->getRunningScene();
+        auto sceneChildren = scene->getChildren();
+        auto customList = getCustomList(sceneChildren);
         CCContentLayer* contentLayer = static_cast<CCContentLayer*>(
             customList->getChildren()->objectAtIndex(0)
         );
