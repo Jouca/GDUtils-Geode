@@ -12,6 +12,7 @@
 #include <Geode/modify/LevelInfoLayer.hpp>
 #include <Geode/modify/InfoLayer.hpp>
 #include <Geode/modify/ProfilePage.hpp>
+#include <Geode/modify/CreatorLayer.hpp>
 #include <Geode/loader/Log.hpp>
 #include <Geode/utils/web.hpp>
 #include "includes.h"
@@ -687,8 +688,27 @@ class $modify(FriendPage, FriendsProfilePage) {
             return;
         }
         test1 = dynamic_cast<CCLayer*>(test1->getChildren()->objectAtIndex(0));
-        auto test2 = static_cast<CCLayer*>(test1->getChildren()->objectAtIndex(1));
+        CCLayer* test2 = nullptr;
+        for (int i = 0; i < test1->getChildrenCount(); i++) {
+            if (misc::getNodeName(test1->getChildren()->objectAtIndex(i)) == "GJCommentListLayer") {
+                test2 = static_cast<CCLayer*>(test1->getChildren()->objectAtIndex(i));
+                break;
+            }
+        }
+        if (test2 == nullptr) {
+            // safeguard from crashing
+            FLAlertLayer::create(nullptr,
+                "Error",
+                "The mod could not find the <cy>GjCommentListLayer</c> layer. Please either <cg>try again later</c>, removing mods that may be interfering with the scene, or report this to the developers.",
+                "OK",
+                nullptr,
+                350.0F
+            )->show();
+            return;
+        }
+
         auto test3 = static_cast<CCLayer*>(test2->getChildren()->objectAtIndex(0));
+        
         if (test3->getChildrenCount() <= 0) {
             // another safeguard
             FLAlertLayer::create(nullptr,
