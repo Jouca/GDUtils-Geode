@@ -1,3 +1,5 @@
+# v1.2.14
+    - Fixed compatibility with Gradient Pages mod
 # v1.2.12
     - Added creators leaderboard
     - Fixed level URL sharing button that was having conflicts with the left page button for levels comments

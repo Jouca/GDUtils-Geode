@@ -17,9 +17,9 @@ A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute,
 ## Extra additions to Friends List
 * The additions added include being able to **search usernames** if you have a long friend list, or using the **scroll buttons**!
 ## More Leaderboards
-* Thanks to Updated Leaderboards, it's now possible for you to view leaderboards for users with the most **Moons**, **Diamonds**, **User Coins**, and **Demons!**
+* Thanks to Updated Leaderboards, it's now possible for you to view leaderboards for users with the most **Moons**, **Diamonds**, **User Coins**,**Demons!** and **Creator Points**!
 ## Moderator List 
-* You can view the list of **Elder Moderators**/**Moderators** and their socials!
+* You can view the list of **Elder Moderators**/**Moderators**/**Leaderboard Moderators** and their socials!
 ## Moderator Info
 * You can view a description of either the Moderator, Elder Moderator, or other badges users have by clicking on the badge itself on the profile!
 ## View Demon List Placement
