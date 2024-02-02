@@ -350,6 +350,8 @@ bool EventsPush::init(sio::message::ptr const& data) {
     bool newRate = Mod::get()->getSettingValue<bool>("newRate");
     bool daily = Mod::get()->getSettingValue<bool>("daily");
     bool weekly = Mod::get()->getSettingValue<bool>("weekly");
+    bool smallChest = Mod::get()->getSettingValue<bool>("smallChest");
+    bool largeChest = Mod::get()->getSettingValue<bool>("largeChest");
     switch (type) {
         case 0: // Rate
             eventType = EventType::Rate;
@@ -359,6 +361,12 @@ bool EventsPush::init(sio::message::ptr const& data) {
             break;
         case 2: // Weekly
             eventType = EventType::Weekly;
+            break;
+        case 3: // Small chest
+            eventType = EventType::smallChest;
+            break;
+        case 4: // Large chest
+            eventType = EventType::largeChest;
             break;
     }
     if (type == 0 && !newRate) {
@@ -370,6 +378,16 @@ bool EventsPush::init(sio::message::ptr const& data) {
         return true;
     }
     if (type == 2 && !weekly) {
+        EventsPush::eventCompletedCallback(scene);
+        return true;
+    }
+
+    if (type == 3 && !smallChest) {
+        EventsPush::eventCompletedCallback(scene);
+        return true;
+    }
+
+    if (type == 4 && !largeChest) {
         EventsPush::eventCompletedCallback(scene);
         return true;
     }
@@ -397,20 +415,18 @@ bool EventsPush::init(sio::message::ptr const& data) {
     this->addChild(bg);
     //this->addChild(bg);
 
-    CCSprite* diffFace;
-    GJDifficultySprite* mythic = nullptr;
-    if (isDemon == 0) {
-        diffFace = cocos2d::CCSprite::createWithSpriteFrameName(getDifficultyIcon(starsum));
-        mythic = GJDifficultySprite::create(static_cast<int>(getDifficulty(starsum)), static_cast<GJDifficultyName>(0));
-    } else {
-        diffFace = cocos2d::CCSprite::createWithSpriteFrameName(getDemonDifficultyIcon(starsum));
-        mythic = GJDifficultySprite::create(static_cast<int>(getDemonDifficulty(starsum)), static_cast<GJDifficultyName>(0));
-    }
-    if (!strcmp(level_by_label.c_str(), "UPDATE")) {
-        diffFace = CCSprite::createWithSpriteFrameName("GJ_downloadBtn_001.png");
-        diffFace->setPosition({26.f, 37.f});
-        diffFace->setScale(.9F);
-    } else {
+    auto node = CCNode::create();
+
+    if (type < 3 && type > 4) {
+        CCSprite* diffFace;
+        GJDifficultySprite* mythic = nullptr;
+        if (isDemon == 0) {
+            diffFace = cocos2d::CCSprite::createWithSpriteFrameName(getDifficultyIcon(starsum));
+            mythic = GJDifficultySprite::create(static_cast<int>(getDifficulty(starsum)), static_cast<GJDifficultyName>(0));
+        } else {
+            diffFace = cocos2d::CCSprite::createWithSpriteFrameName(getDemonDifficultyIcon(starsum));
+            mythic = GJDifficultySprite::create(static_cast<int>(getDemonDifficulty(starsum)), static_cast<GJDifficultyName>(0));
+        }
         diffFace->setPosition({26.f, 43.f});
         diffFace->setScale(.8F);
         CCSprite* star = cocos2d::CCSprite::createWithSpriteFrameName("star_small01_001.png");
@@ -519,12 +535,49 @@ bool EventsPush::init(sio::message::ptr const& data) {
 
                 break;
         }
+
+        auto verifiedCoinSpr1 = cocos2d::CCSprite::createWithSpriteFrameName("GJ_coinsIcon2_001.png");
+        verifiedCoinSpr1->setScale(0.35f);
+        auto verifiedCoinSpr2 = cocos2d::CCSprite::createWithSpriteFrameName("GJ_coinsIcon2_001.png");
+        verifiedCoinSpr2->setScale(0.35f);
+        auto verifiedCoinSpr3 = cocos2d::CCSprite::createWithSpriteFrameName("GJ_coinsIcon2_001.png");
+        verifiedCoinSpr3->setScale(0.35f);
+
+        if (areCoinsVerified == 0) {
+            verifiedCoinSpr1->setColor({255, 175, 75});
+            verifiedCoinSpr2->setColor({255, 175, 75});
+            verifiedCoinSpr3->setColor({255, 175, 75});
+        }
+
+        if (coins == 1 || coins == 3) {
+            verifiedCoinSpr2->setPosition({ -52, -22 });
+            node->addChild(verifiedCoinSpr2);
+
+            if (coins == 3) {
+                verifiedCoinSpr1->setPosition({ -60, -22 });
+                verifiedCoinSpr3->setPosition({ -44, -22 });
+
+                node->addChild(verifiedCoinSpr1);
+                node->addChild(verifiedCoinSpr3);
+            }
+        } else if (coins == 2) {
+            verifiedCoinSpr1->setPosition({ -55, -22 });
+            verifiedCoinSpr2->setPosition({ -48, -22 });
+
+            node->addChild(verifiedCoinSpr1);
+            node->addChild(verifiedCoinSpr2);
+        }
     }
     
-    auto node = CCNode::create();
-    
     auto title = cocos2d::CCLabelBMFont::create(label_title.c_str(), "goldFont.fnt");
-    title->setPosition({ -27, 23 });
+    if (type == 3) {
+        title->setPosition({ -65, 26 });
+    } else if (type == 4) {
+        title->setPosition({ -54, 26 });
+    }
+    else {
+        title->setPosition({ -27, 23 });
+    }
     title->setScale(.575F);
     title->setAnchorPoint({ 0, 0.5 });
     node->addChild(title);
@@ -534,55 +587,12 @@ bool EventsPush::init(sio::message::ptr const& data) {
     level_title->setScale(.46F);
     
     level_title->setAnchorPoint({ 0, 0.5 });
-    if (strcmp(level_by_label.c_str(), "UPDATE")) {
-        auto level_by = cocos2d::CCLabelBMFont::create(level_by_label.c_str(), "goldFont.fnt");
-        level_by->setPosition({-27, -11 });
-        level_by->setScale(.46F);
-        level_by->limitLabelWidth(120, 0.46f, 0.1f);
-        level_by->setAnchorPoint({ 0, 0.5 });
-        node->addChild(level_by);
-        level_title->limitLabelWidth(120, 0.46f, 0.1f);
-    } else {
-        level_title->setPositionY(-1);
-        level_title->setScale(.3F);
-        //level_title->setAlignment(kCCTextAlignmentCenter);
-    }
+    level_title->setPositionY(-1);
+    level_title->setScale(.3F);
 
     node->addChild(level_title);
 
-    auto verifiedCoinSpr1 = cocos2d::CCSprite::createWithSpriteFrameName("GJ_coinsIcon2_001.png");
-    verifiedCoinSpr1->setScale(0.35f);
-    auto verifiedCoinSpr2 = cocos2d::CCSprite::createWithSpriteFrameName("GJ_coinsIcon2_001.png");
-    verifiedCoinSpr2->setScale(0.35f);
-    auto verifiedCoinSpr3 = cocos2d::CCSprite::createWithSpriteFrameName("GJ_coinsIcon2_001.png");
-    verifiedCoinSpr3->setScale(0.35f);
-
-    if (areCoinsVerified == 0) {
-        verifiedCoinSpr1->setColor({255, 175, 75});
-        verifiedCoinSpr2->setColor({255, 175, 75});
-        verifiedCoinSpr3->setColor({255, 175, 75});
-    }
-
-    if (coins == 1 || coins == 3) {
-        verifiedCoinSpr2->setPosition({ -52, -22 });
-        node->addChild(verifiedCoinSpr2);
-
-        if (coins == 3) {
-            verifiedCoinSpr1->setPosition({ -60, -22 });
-            verifiedCoinSpr3->setPosition({ -44, -22 });
-
-            node->addChild(verifiedCoinSpr1);
-            node->addChild(verifiedCoinSpr3);
-        }
-    } else if (coins == 2) {
-        verifiedCoinSpr1->setPosition({ -55, -22 });
-        verifiedCoinSpr2->setPosition({ -48, -22 });
-
-        node->addChild(verifiedCoinSpr1);
-        node->addChild(verifiedCoinSpr2);
-    }
-
-    if (type > 0) {
+    if (type > 0 && type < 3) {
         CCSprite* crown;
         if (type == 1) {
             crown = cocos2d::CCSprite::createWithSpriteFrameName("gj_dailyCrown_001.png");
@@ -592,6 +602,17 @@ bool EventsPush::init(sio::message::ptr const& data) {
         crown->setScale(.45F);
         crown->setPosition({ 45, 45 });
         node->addChild(crown);
+    } else if (type == 3) {
+        auto chest = cocos2d::CCSprite::createWithSpriteFrameName("chest_01_02_001.png");
+        chest->setScale(.45F);
+        chest->setPosition({ 45, -3 });
+        node->addChild(chest);
+    } else if (type == 4) {
+        auto chest = cocos2d::CCSprite::createWithSpriteFrameName("chest_02_02_001.png");
+        chest->setScale(.4F);
+        chest->setPosition({ 45, -3 });
+        node->addChild(chest);
+
     }
 
     node->setAnchorPoint({ 0.5, 0.5 });
@@ -639,7 +660,8 @@ bool EventsPush::init(sio::message::ptr const& data) {
         nullptr
     ));
 
-    if (Mod::get()->getSettingValue<bool>("sfx")) FMODAudioEngine::sharedEngine()->playEffect("crystal01.ogg");
+    if (Mod::get()->getSettingValue<bool>("sfx") && type != 3 && type != 4) FMODAudioEngine::sharedEngine()->playEffect("crystal01.ogg");
+    if (Mod::get()->getSettingValue<bool>("sfx") && (type == 3 || type == 4)) FMODAudioEngine::sharedEngine()->playEffect("reward01.ogg");
 
     return true;
 }

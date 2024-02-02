@@ -13,6 +13,7 @@
 #include <Geode/modify/InfoLayer.hpp>
 #include <Geode/modify/ProfilePage.hpp>
 #include <Geode/modify/CreatorLayer.hpp>
+#include <Geode/modify/MenuLayer.hpp>
 #include <Geode/loader/Log.hpp>
 #include <Geode/utils/web.hpp>
 #include "includes.h"
@@ -23,6 +24,7 @@
 #include "InfoNewLayer.h"
 #include "NewProfilePage.h"
 #include "Discord.h"
+#include "DailyChest.h"
 #include <fmt/format.h>
 #include <chrono>
 #ifndef GEODE_IS_MACOS
@@ -36,6 +38,10 @@
 #include <unordered_map>
 #include <algorithm>
 
+#include <random>
+#include <string>
+#include <sstream>
+
 int reconnectionDelay = 1000;
 int reconnectionDelayMax = 5000;
 int reconnectionAttempts = 1000;
@@ -44,6 +50,8 @@ bool still_connected = false;
 bool connect_finish = false;
 
 bool event_fired = false;
+
+bool is_dailychest_ready = false;
 
 std::queue<sio::message::ptr> dataQueue;
 
@@ -54,6 +62,14 @@ std::condition_variable cond;
 sio::socket::ptr current_socket;
 
 // for some reason log and fmt dont work together on android
+
+std::string xorEncrypt(const std::string& input, const std::string& key) {
+    std::string result;
+    for (size_t i = 0; i < input.size(); ++i) {
+        result += input[i] ^ key[i % key.size()];
+    }
+    return result;
+}
 
 namespace ConnectionHandler {
     void onSuccess() {
@@ -255,6 +271,30 @@ class $modify(CCScheduler) { // GD Protocol part
     }
 };
 #endif
+
+// Daily chests notifications
+
+void dailyChestThread() {
+    while (true) {
+        auto dailyChest = new DailyChest();
+        dailyChest->getRewards(0);
+
+        std::this_thread::sleep_for(std::chrono::minutes(10));
+    }
+}
+class $modify(MenuLayer) {
+    bool init() {
+        if (!MenuLayer::init()) return false;
+        
+        if (!is_dailychest_ready) {
+            std::thread hThread(dailyChestThread);
+            hThread.detach();
+            is_dailychest_ready = true;
+        }
+
+        return true;
+    }
+};
 
 // Spotify
 bool is_muted = false;
@@ -1146,6 +1186,27 @@ class $modify(ProfilePage) {
                 menu->addChild(badgeBtn);
             }
         }
+    }
+};
+
+// GDUtils online menu
+class $modify(CreatorLayer) {
+    bool init() {
+        if (!CreatorLayer::init()) return false;
+
+        auto menu = CCMenu::create();
+        auto spr = CCSprite::create(Mod::get()->expandSpriteName("gdutils_badge.png"));
+        spr->setScale(.65f);
+        auto sprBtn = CCMenuItemSpriteExtra::create(
+            spr,
+            this,
+            nullptr
+        );
+        sprBtn->setPosition(262, -47);
+        menu->addChild(sprBtn);
+        this->addChild(menu);
+        
+        return true;
     }
 };
 
