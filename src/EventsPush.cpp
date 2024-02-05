@@ -417,7 +417,7 @@ bool EventsPush::init(sio::message::ptr const& data) {
 
     auto node = CCNode::create();
 
-    if (type < 3 && type > 4) {
+    if (type != 3 && type != 4) {
         CCSprite* diffFace;
         GJDifficultySprite* mythic = nullptr;
         if (isDemon == 0) {
@@ -574,8 +574,7 @@ bool EventsPush::init(sio::message::ptr const& data) {
         title->setPosition({ -65, 26 });
     } else if (type == 4) {
         title->setPosition({ -54, 26 });
-    }
-    else {
+    } else {
         title->setPosition({ -27, 23 });
     }
     title->setScale(.575F);
@@ -587,8 +586,14 @@ bool EventsPush::init(sio::message::ptr const& data) {
     level_title->setScale(.46F);
     
     level_title->setAnchorPoint({ 0, 0.5 });
-    level_title->setPositionY(-1);
-    level_title->setScale(.3F);
+
+    auto level_by = cocos2d::CCLabelBMFont::create(level_by_label.c_str(), "goldFont.fnt");
+    level_by->setPosition({-27, -11 });
+    level_by->setScale(.46F);
+    level_by->limitLabelWidth(120, 0.46f, 0.1f);
+    level_by->setAnchorPoint({ 0, 0.5 });
+    node->addChild(level_by);
+    level_title->limitLabelWidth(120, 0.46f, 0.1f);
 
     node->addChild(level_title);
 
