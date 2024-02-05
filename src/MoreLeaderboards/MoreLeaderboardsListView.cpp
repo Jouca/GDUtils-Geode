@@ -1,7 +1,7 @@
 #include "MoreLeaderboardsListView.h"
 #include "MoreLeaderboards.h"
 #include "MoreLeaderboardsCell.h"
-#include "includes.h"
+#include "../includes.h"
 
 MoreLeaderboardsListView* MoreLeaderboardsListView::create(cocos2d::CCArray* levels, float width, float height) {
     auto ret = new MoreLeaderboardsListView();

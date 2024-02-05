@@ -2,8 +2,8 @@
 #include <Geode/loader/SettingNode.hpp>
 #include "CreditsBetaMenu.h"
 #include "CreditsMenu.h"
-#include "EventsPush.h"
-#include "includes.h"
+#include "../Notifications/EventsPush.h"
+#include "../includes.h"
 using namespace geode::prelude;
 
 /*

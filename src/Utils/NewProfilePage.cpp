@@ -1,4 +1,6 @@
 #include "NewProfilePage.h"
+#include "../includes.h"
+#include <Geode/modify/ProfilePage.hpp>
 
 void NewProfilePage::onBadgePressed(CCObject* pSender) {
     GJUserScore* score = static_cast<GJUserScore*>(static_cast<CCNode*>(pSender)->getUserObject());
@@ -135,3 +137,94 @@ You found a <co>GDUtils developer</c>! :O
     )->show();
 
 }
+
+// Mod badges descriptions & GDUtils dev badge
+class $modify(ProfilePage) {
+    void loadPageFromUserInfo(GJUserScore* a2) {
+        auto layer = m_mainLayer;
+
+        ProfilePage::loadPageFromUserInfo(a2);
+
+        // GDUtils dev badge
+        if (layer) {
+            std::vector<int> gdutils_accountID_devs = { 7026949, 6253758, 5509312 };
+            if (std::find(gdutils_accountID_devs.begin(), gdutils_accountID_devs.end(), a2->m_accountID) != gdutils_accountID_devs.end()) {
+                CCLabelBMFont* label = nullptr;
+                CCObject* obj3 = nullptr;
+                CCPoint* pos_label = nullptr;
+                CCARRAY_FOREACH(layer->getChildren(), obj3) {
+                    if (misc::getNodeName(obj3) != "cocos2d::CCLabelBMFont") continue;
+                    auto label_ = static_cast<CCLabelBMFont*>(obj3);
+                    if (label_ != nullptr) {
+                        if (strcmp(label_->getString(), a2->m_userName.c_str()) == 0) {
+                            label = label_;
+                            pos_label = new CCPoint(label_->getPosition());
+                            break;
+                        }
+                    }
+                }
+
+                if (label != nullptr) {
+                    auto badgeGDUtil = CCSprite::create(Mod::get()->expandSpriteName("gdutils_badge.png"));
+                    badgeGDUtil->setScale(.3f);
+                    auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
+                        badgeGDUtil,
+                        this,
+                        menu_selector(NewProfilePage::onGDUtilsBadgePressed)
+                    );
+                    
+                    badgeGDUtilBtn->setPosition({207.5f - (strlen(label->getString()) * (label->getScale() * 12)), -11});
+                    auto menu = this->m_buttonMenu;
+                    menu->addChild(badgeGDUtilBtn);
+                }
+            }
+        }
+
+        // mod description badge
+        auto scene = CCDirector::sharedDirector()->getRunningScene();
+        if(layer) {
+            // inspecting all children of the layer to find the badge
+            CCSprite* badge = nullptr;
+            CCObject* obj = nullptr;
+            CCPoint pos = {0, 0};
+            bool finished = false;
+            CCARRAY_FOREACH(layer->getChildren(), obj) {
+                if (misc::getNodeName(obj) != "cocos2d::CCSprite") continue;
+                auto sprite = static_cast<CCSprite*>(obj);
+                if (sprite == nullptr) continue;
+                if (finished) continue;
+                auto* cachedFrames = CCSpriteFrameCache::sharedSpriteFrameCache()->m_pSpriteFrames;
+                const auto rect = sprite->getTextureRect();
+                for (auto [key, frame] : CCDictionaryExt<std::string, CCSpriteFrame*>(cachedFrames)) {
+                    if (frame->getTexture() == sprite->getTexture() && frame->getRect() == rect) {
+                        if (key.starts_with("modBadge")) {
+                            pos = sprite->getPosition();
+                            badge = CCSprite::createWithSpriteFrame(frame);
+                            sprite->removeFromParentAndCleanup(true);
+                            finished = true;
+                        }
+                    }
+                }
+            }
+            
+            if (badge != nullptr) {
+                CCMenu* menu = nullptr;
+                CCObject* obj2 = nullptr;
+                CCARRAY_FOREACH(layer->getChildren(), obj2) {
+                    if (misc::getNodeName(obj2) != "cocos2d::CCMenu") continue;
+                    menu = static_cast<CCMenu*>(obj2);
+                    break;
+                }
+
+                auto badgeBtn = CCMenuItemSpriteExtra::create(
+                    badge,
+                    this,
+                    menu_selector(NewProfilePage::onBadgePressed)
+                );
+                badgeBtn->setUserObject(a2);
+                badgeBtn->setPosition({pos.x - menu->getPosition().x, pos.y - menu->getPosition().y});
+                menu->addChild(badgeBtn);
+            }
+        }
+    }
+};

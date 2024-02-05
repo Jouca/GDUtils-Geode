@@ -1,12 +1,10 @@
 #pragma once
+#include "../includes.h"
 #include <Geode/utils/web.hpp>
 #include "MoreLeaderboardsListView.h"
 
 #include <iostream>
 #include <vector>
-
-using namespace cocos2d;
-using namespace geode::prelude;
 
 enum class StatsListType {
     Diamonds,

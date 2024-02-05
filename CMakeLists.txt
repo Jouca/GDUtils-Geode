@@ -15,6 +15,11 @@ project(${PROJECT_NAME} VERSION 1.0.0)
 # under src/ 
 file(GLOB SOURCES
 	src/*.cpp
+    src/MoreLeaderboards/*.cpp
+    src/Notifications/*.cpp
+    src/Secret/*.cpp
+    src/Settings/*.cpp
+    src/Utils/*.cpp
 )
 
 # Set up the mod binary

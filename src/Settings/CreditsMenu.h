@@ -1,5 +1,5 @@
 #pragma once
-#include "BrownAlertDelegate.hpp"
+#include "../BrownAlertDelegate.hpp"
 class CreditsMenu : public BrownAlertDelegate {
     protected:
         virtual void setup();

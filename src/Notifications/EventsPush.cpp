@@ -1,5 +1,5 @@
 #include "EventsPush.h"
-#include "CustomSettings.hpp"
+#include "../Settings/CustomSettings.hpp"
 #include "Geode/utils/general.hpp"
 #include <queue>
 #include <Geode/utils/web.hpp>

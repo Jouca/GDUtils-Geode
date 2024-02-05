@@ -1,10 +1,6 @@
 #pragma once
 #include "MoreLeaderboards.h"
-
 #include <Geode/Bindings.hpp>
-
-using namespace cocos2d;
-using namespace geode::prelude;
 
 class MoreLeaderboardsCell : public GenericListCell {
     void draw() override;

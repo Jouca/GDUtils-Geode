@@ -197,6 +197,18 @@
             "type": "bool",
             "default": true
         },
+        "levelsProtocol": {
+            "name": "Allow Levels Protocol",
+            "description": "Whether or not to allow <cg>Geometry Dash</c> to <cy>redirect to a level</c> if you were to use a <cy>https://gdutils.com/</c> url, or <cy>gdutils:</c> protocol.",
+            "type": "bool",
+            "default": true
+        },
+        "socketServer": {
+            "name": "Notifications Server",
+            "description": "Allows you to <cg>receive rate notifications.</c> (Recommended to keep enabled)\n\nRestart the game to apply changes.",
+            "type": "bool",
+            "default": true
+        },
         "credits-section": {
             "name": "Credits",
             "description": "Below are the credits for those that developed the mod, and beta-tested the mod!",

@@ -1,5 +1,5 @@
 #include "MoreLeaderboards.h"
-#include "includes.h"
+#include <Geode/modify/LeaderboardsLayer.hpp>
 
 static StatsListType g_tab = StatsListType::Diamonds;
 
@@ -419,3 +419,35 @@ void MoreLeaderboards::onTab(CCObject* pSender) {
         loadPageMore();
     }
 }
+
+class $modify(LeaderboardsLayer) {
+    bool init(LeaderboardState state) {
+        if (!LeaderboardsLayer::init(state)) return false;
+
+        auto menu = CCMenu::create();
+
+        auto plusSpr = CCSprite::createWithSpriteFrameName("GJ_plusBtn_001.png");
+        plusSpr->setScale(.8f);
+        auto plusBtn = CCMenuItemSpriteExtra::create(
+            plusSpr,
+            this,
+            menu_selector(MoreLeaderboards::onMoreLeaderboards)
+        );
+        plusBtn->setPosition(239, 20);
+        menu->addChild(plusBtn);
+
+        auto modsSpr = CCSprite::createWithSpriteFrameName("modBadge_01_001.png");
+        modsSpr->setScale(1.5f);
+        auto modsBtn = CCMenuItemSpriteExtra::create(
+            modsSpr,
+            this,
+            menu_selector(MoreLeaderboards::onModsList)
+        );
+        modsBtn->setPosition(239, -24);
+        menu->addChild(modsBtn);
+
+        this->addChild(menu);
+
+        return true;
+    }
+};

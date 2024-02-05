@@ -1,7 +1,7 @@
 #pragma once
 #include <Geode/Geode.hpp>
 #include <Geode/loader/Mod.hpp>
-#include "includes.h"
+#include "../includes.h"
 using namespace geode::prelude;
 enum EventType {
     Rate,

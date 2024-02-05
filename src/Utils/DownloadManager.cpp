@@ -1,6 +1,6 @@
 #include "DownloadManager.h"
 #ifndef GEODE_IS_MACOS // unfortunately figs video player not supported on mac becuase opengl32 doesnt want to compile correctly koeirjnfioewbnfejwf
-#include "ProcessLambdas.h"
+#include "../ProcessLambdas.h"
 #include <math.h>
 #include <Geode/utils/web.hpp>
 #include <Geode/utils/file.hpp>
