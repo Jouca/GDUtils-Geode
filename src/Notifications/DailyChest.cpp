@@ -21,11 +21,8 @@ void DailyChest::rewardsStatusFinished(int p0) {
     // Get the rewards
     int time1_value = 0x1;
     int time2_value = 0x2;
-    GJRewardItem* time1 = dynamic_cast<GJRewardItem*>(gsm->m_rewardItems->objectForKey(time1_value));
-    GJRewardItem* time2 = dynamic_cast<GJRewardItem*>(gsm->m_rewardItems->objectForKey(time2_value));
-
-    geode::log::info("Small Daily Chest: {}", time1);
-    geode::log::info("Big Daily Chest: {}", time2);
+    GJRewardItem* time1 = typeinfo_cast<GJRewardItem*>(gsm->m_rewardItems->objectForKey(time1_value));
+    GJRewardItem* time2 = typeinfo_cast<GJRewardItem*>(gsm->m_rewardItems->objectForKey(time2_value));
 
     sio::message::ptr msg = sio::object_message::create();
     msg->get_map()["sprite"] = sio::string_message::create("GJ_square04-uhd.png");
@@ -65,7 +62,7 @@ void dailyChestThread() {
         std::this_thread::sleep_for(std::chrono::minutes(10));
     }
 }
-class $modify(MenuLayer) {
+/*class $modify(MenuLayer) {
     bool init() {
         if (!MenuLayer::init()) return false;
         
@@ -77,4 +74,4 @@ class $modify(MenuLayer) {
 
         return true;
     }
-};
+};*/
