@@ -89,35 +89,32 @@ bool setSocket(sio::socket::ptr sock) {
 }
 
 void start_socket_func() {
-
     while (true) {
-        try {
             log::info("Starting socket...");
-            sio::client sock;
-            sock.set_reconnect_delay(reconnectionDelay);
-            sock.set_reconnect_delay_max(reconnectionDelayMax);
-            sock.set_reconnect_attempts(reconnectionAttempts);
-            sock.set_open_listener(&ConnectionHandler::onSuccess);
-            sock.set_close_listener(&ConnectionHandler::onClose);
-            sock.set_fail_listener(&ConnectionHandler::onFail);
-            sock.connect("http://gdutils.clarifygdps.com");
-            if (!connect_finish) {
-                cond.wait(unique_lock);
-            }
-            sock.socket()->on_error(ConnectionHandler::onError);
-            setSocket(sock.socket());
-            while (still_connected) {
-                std::this_thread::sleep_for(std::chrono::seconds(1));
-            }
-        } catch (const std::exception& e) {
-            log::error("Error in Socket Thread: {}", std::string(e.what()));
+        sio::client sock;
+        sock.set_reconnect_delay(reconnectionDelay);
+        sock.set_reconnect_delay_max(reconnectionDelayMax);
+        sock.set_reconnect_attempts(reconnectionAttempts);
+        sock.set_open_listener(&ConnectionHandler::onSuccess);
+        sock.set_close_listener(&ConnectionHandler::onClose);
+        sock.set_fail_listener(&ConnectionHandler::onFail);
+        sock.connect("http://gdutils.clarifygdps.com");
+        if (!connect_finish) {
+            cond.wait(unique_lock);
+        }
+        sock.socket()->on_error(ConnectionHandler::onError);
+        setSocket(sock.socket());
+        while (still_connected) {
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+        }
+        if (!still_connected) {
+            log::warn("Disconnected from server. Attempting to reconnect...");
             std::this_thread::sleep_for(std::chrono::seconds(reconnectionDelay));
         }
         if (reconnectionAttempts-- <= 0) {
             log::error("Maximum reconnection attempts reached, stopping to prevent any crashes.");
             break;
         }
-
     }
 }
 
@@ -178,6 +175,9 @@ class $modify(CCScheduler) { // used to be GameManager
         if (pushEvent) processEvent(scene);
     }
 };
+
+// NOTE: try catch statements crash on android
+
 #ifndef GEODE_IS_ANDROID
 class $modify(CCScheduler) { // GD Protocol part
     void update(float dt) {
