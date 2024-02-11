@@ -59,13 +59,13 @@ class $modify(SecretVault, SecretLayer2) {
         return true;
     }
     void onSubmit(CCObject* obj) {
-        SecretLayer2::onSubmit(obj);
-        CCLabelBMFont* vault_text = dynamic_cast<cocos2d::CCLabelBMFont*>(this->getChildren()->objectAtIndex(3));
+        SecretLayer2::onSubmit(obj);dynamic
+        CCLabelBMFont* vault_text = typeinfo_cast<cocos2d::CCLabelBMFont*>(this->getChildren()->objectAtIndex(3));
         CCMenu* menu = nullptr;
         if (this->getChildrenCount() > 8) {
-            menu = dynamic_cast<cocos2d::CCMenu*>(this->getChildren()->objectAtIndex(8)); //6 before
+            menu = typeinfo_cast<cocos2d::CCMenu*>(this->getChildren()->objectAtIndex(8)); //6 before
         } else {
-            menu = dynamic_cast<cocos2d::CCMenu*>(this->getChildren()->objectAtIndex(6));
+            menu = typeinfo_cast<cocos2d::CCMenu*>(this->getChildren()->objectAtIndex(6));
         }
         if (!strcmp(text_input.c_str(), "bad apple")) {
             if (!bad_apple) {

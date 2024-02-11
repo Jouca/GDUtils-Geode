@@ -134,6 +134,7 @@ void processEvent(CCScene* self) {
 class $modify(CCScheduler) { // used to be GameManager
     void update(float dt) {
         CCScheduler::update(dt);
+
         bool waitUntilExit = false;
         auto scene = CCDirector::sharedDirector()->getRunningScene();
         if (scene->getChildrenCount() == 0) return;

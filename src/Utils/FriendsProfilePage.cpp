@@ -115,7 +115,7 @@ class $modify(FriendPage, FriendsProfilePage) {
         SearchUserLayer::create()->show();
     }
     static TableView* getCustomList(CCArray* sceneChildren) {
-        CCLayer* test1 = dynamic_cast<CCLayer*>(misc::findNode("FriendsProfilePage"));
+        CCLayer* test1 = typeinfo_cast<CCLayer*>(misc::findNode("FriendsProfilePage"));
         if (test1 == nullptr) {
             // safeguard from crashing
             FLAlertLayer::create(nullptr,
@@ -127,7 +127,7 @@ class $modify(FriendPage, FriendsProfilePage) {
             )->show();
             return nullptr;
         }
-        test1 = dynamic_cast<CCLayer*>(test1->getChildren()->objectAtIndex(0));
+        test1 = typeinfo_cast<CCLayer*>(test1->getChildren()->objectAtIndex(0));
         CCLayer* test2 = nullptr;
         for (int i = 0; i < test1->getChildrenCount(); i++) {
             if (misc::getNodeName(test1->getChildren()->objectAtIndex(i)) == "GJCommentListLayer") {
@@ -174,7 +174,7 @@ class $modify(FriendPage, FriendsProfilePage) {
         for (int i = 0; i < contentLayer->getChildrenCount(); i++) {
             CCMenu* cell;
             CCLabelBMFont* label;
-            cell = dynamic_cast<CCMenu*>(
+            cell = typeinfo_cast<CCMenu*>(
                 reinterpret_cast<CCLayer*>(
                     reinterpret_cast<CCLayer*>(
                         reinterpret_cast<CCLayer*>(
