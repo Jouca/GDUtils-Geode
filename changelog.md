@@ -1,3 +1,5 @@
+# v1.2.15
+    - Added settings for level sharing protocol & receiving all notifications from the server
 # v1.2.14
     - Fixed compatibility with Gradient Pages mod
 # v1.2.12

@@ -90,7 +90,7 @@ bool setSocket(sio::socket::ptr sock) {
 
 void start_socket_func() {
     while (true) {
-            log::info("Starting socket...");
+        log::info("Starting socket...");
         sio::client sock;
         sock.set_reconnect_delay(reconnectionDelay);
         sock.set_reconnect_delay_max(reconnectionDelayMax);

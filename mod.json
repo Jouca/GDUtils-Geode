@@ -87,18 +87,6 @@
             "type": "bool",
             "default": true
         },
-        "smallChest": {
-            "name": "Small Daily Chest",
-            "description": "Whether or not to notify about upcoming <cy>Small Daily Chest</c>",
-            "type": "bool",
-            "default": true
-        },
-        "largeChest": {
-            "name": "Big Daily Chest",
-            "description": "Whether or not to notify about upcoming <cy>Big Daily Chest</c>",
-            "type": "bool",
-            "default": true
-        },
         "sfx": {
             "name": "Notification SFX",
             "description": "If notifications should play a sound when they are shown.",
