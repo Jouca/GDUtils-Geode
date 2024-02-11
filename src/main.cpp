@@ -254,7 +254,7 @@ class $modify(CCScheduler) { // GD Protocol part
 #endif
 
 // GDUtils online menu
-class $modify(CreatorLayer) {
+/*class $modify(CreatorLayer) {
     bool init() {
         if (!CreatorLayer::init()) return false;
 
@@ -272,7 +272,7 @@ class $modify(CreatorLayer) {
         
         return true;
     }
-};
+};*/
 
 // When the socket connection is made
 $on_mod(Loaded) {
