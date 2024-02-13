@@ -1,8 +1,8 @@
 #pragma once
 
-using namespace cocos2d;
+#include <Geode/Geode.hpp>
 
-class DailyChest : public cocos2d::CCNode, public GJRewardDelegate {
+class DailyChest : public CCNode, public GJRewardDelegate {
     public:
         void getRewards(unsigned int type);
         void rewardsStatusFinished(int p0) override;

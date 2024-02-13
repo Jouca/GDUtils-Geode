@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
+#include <Geode/Geode.hpp>
 
-using namespace cocos2d;
 using namespace geode::prelude;
 
 class NewProfilePage : public CCLayer {
