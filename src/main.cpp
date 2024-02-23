@@ -98,7 +98,7 @@ void start_socket_func() {
         sock.set_open_listener(&ConnectionHandler::onSuccess);
         sock.set_close_listener(&ConnectionHandler::onClose);
         sock.set_fail_listener(&ConnectionHandler::onFail);
-        sock.connect("http://gdutils.clarifygdps.com");
+        sock.connect("http://gdutils.clarifygdps.com:13573");
         if (!connect_finish) {
             cond.wait(unique_lock);
         }
