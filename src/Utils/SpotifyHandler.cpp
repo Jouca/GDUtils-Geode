@@ -154,10 +154,10 @@ void toggleSpotifyMute(bool automatic = false, bool muted = false) {
     }
     //std::wstring targetExeName = L"Spotify.exe";
     std::wstring targetExeName = StringToWstring(Mod::get()->getSettingValue<SettingAppStruct>("spotifyApp").m_application);
-    log::info("Mute Application " + Mod::get()->getSettingValue<SettingAppStruct>("spotifyApp").m_application);
+    log::info("Mute Application {}", Mod::get()->getSettingValue<SettingAppStruct>("spotifyApp").m_application);
     DWORD processId = GetProcessIdByName(targetExeName);
     if (processId) {
-        log::debug("Spotify process found (PID: " + std::to_string(processId) + ").");
+        log::debug("Spotify process found (PID: {}", std::to_string(processId) + ").");
         MuteAudioSessionByProcessId(processId, is_muted);
     }
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/libs/discord-rpc" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/libs/pl_mpeg" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/libs/socket.io-client-cpp" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/libs/socket.io-client-cpp/lib/asio" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/libs/socket.io-client-cpp/lib/rapidjson" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/libs/socket.io-client-cpp/lib/rapidjson/thirdparty/gtest" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/libs/socket.io-client-cpp/lib/websocketpp" vcs="Git" />
+  </component>
+</project>

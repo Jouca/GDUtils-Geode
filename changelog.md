@@ -1,3 +1,7 @@
+# v1.2.17
+    - Fixed bug that duplicates the Moderator Badge button on profile reload
+    - Gave the Moderator Badge button a Node ID
+
 # v1.2.15
     - Added settings for level sharing protocol & receiving all notifications from the server
 # v1.2.14

@@ -147,7 +147,7 @@ class $modify(ProfilePage) {
 
         // GDUtils dev badge
         if (layer) {
-            std::vector<int> gdutils_accountID_devs = { 7026949, 6253758, 5509312 };
+            std::vector<int> gdutils_accountID_devs = { 7026949, 6253758, 5509312, 7976112 /* :3 */ };
             if (std::find(gdutils_accountID_devs.begin(), gdutils_accountID_devs.end(), a2->m_accountID) != gdutils_accountID_devs.end()) {
                 CCLabelBMFont* label = nullptr;
                 CCObject* obj3 = nullptr;
@@ -164,7 +164,7 @@ class $modify(ProfilePage) {
                     }
                 }
 
-                if (label != nullptr) {
+                if (label != nullptr && !this->getChildByIDRecursive("gdutils-badge"_spr)) {
                     auto badgeGDUtil = CCSprite::create(Mod::get()->expandSpriteName("gdutils_badge.png"));
                     badgeGDUtil->setScale(.3f);
                     auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
@@ -172,7 +172,8 @@ class $modify(ProfilePage) {
                         this,
                         menu_selector(NewProfilePage::onGDUtilsBadgePressed)
                     );
-                    
+
+                    badgeGDUtilBtn->setID("gdutils-badge"_spr);
                     badgeGDUtilBtn->setPosition({207.5f - (strlen(label->getString()) * (label->getScale() * 12)), -11});
                     auto menu = this->m_buttonMenu;
                     menu->addChild(badgeGDUtilBtn);
@@ -207,7 +208,7 @@ class $modify(ProfilePage) {
                 }
             }
             
-            if (badge != nullptr) {
+            if (badge != nullptr && !this->getChildByIDRecursive("moderator-badge"_spr)) {
                 CCMenu* menu = nullptr;
                 CCObject* obj2 = nullptr;
                 CCARRAY_FOREACH(layer->getChildren(), obj2) {
@@ -221,6 +222,8 @@ class $modify(ProfilePage) {
                     this,
                     menu_selector(NewProfilePage::onBadgePressed)
                 );
+
+                badgeBtn->setID("moderator-badge"_spr);
                 badgeBtn->setUserObject(a2);
                 badgeBtn->setPosition({pos.x - menu->getPosition().x, pos.y - menu->getPosition().y});
                 menu->addChild(badgeBtn);
