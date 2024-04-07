@@ -7,6 +7,9 @@ void MoreLeaderboardsCell::loadFromDict(cocos2d::CCDictionary* content) //
     auto name = content->valueForKey("modstring")->getCString();
 
     auto mediaMenu = CCMenu::create();
+    float mediaXPosition = 327;
+    int mediaCount = 0;
+
     std::string usernameTemp = "";
 
     std::vector<std::string> data = MoreLeaderboards::getWords(name, "?");
@@ -41,11 +44,12 @@ void MoreLeaderboardsCell::loadFromDict(cocos2d::CCDictionary* content) //
                 auto discordBtn = CCMenuItemSpriteExtra::create(
                     discordSpr,
                     this,
-            menu_selector(MoreLeaderboardsCell::callback_link)
-            );
+                    menu_selector(MoreLeaderboardsCell::callback_link)
+                );
                 auto discord_link = CCString::create(name);
                 discordBtn->setUserObject(discord_link);
                 mediaMenu->addChild(discordBtn);
+                mediaCount++;
             }
         } else if (id == "5") {
             if (name != "NULL") {
@@ -58,6 +62,7 @@ void MoreLeaderboardsCell::loadFromDict(cocos2d::CCDictionary* content) //
                 auto twitch_link = CCString::create(name);
                 twitchBtn->setUserObject(twitch_link);
                 mediaMenu->addChild(twitchBtn);
+                mediaCount++;
             }
         } else if (id == "6") {
             if (name != "NULL") {
@@ -70,6 +75,7 @@ void MoreLeaderboardsCell::loadFromDict(cocos2d::CCDictionary* content) //
                 auto youtube_link = CCString::create(name);
                 youtubeBtn->setUserObject(youtube_link);
                 mediaMenu->addChild(youtubeBtn);
+                mediaCount++;
             }
         }
 
@@ -101,9 +107,17 @@ void MoreLeaderboardsCell::loadFromDict(cocos2d::CCDictionary* content) //
 
     this->m_mainLayer->addChild(menu);
 
+    if (mediaCount == 1) {
+        mediaXPosition = 327;
+    } else if (mediaCount == 2) {
+        mediaXPosition = 308;
+    } else if (mediaCount == 3) {
+        mediaXPosition = 289;
+    }
+
     mediaMenu->alignItemsHorizontallyWithPadding(5);
     mediaMenu->setAnchorPoint({1, 0.5});
-    mediaMenu->setPosition({ 320, 20 });
+    mediaMenu->setPosition({ mediaXPosition, 20 });
     this->m_mainLayer->addChild(mediaMenu);
 
     this->m_mainLayer->setVisible(true);

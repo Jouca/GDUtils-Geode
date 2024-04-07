@@ -577,6 +577,123 @@ public:
     SettingNode* createNode(float width) override;
 };
 
+/*
+Setting for selecting color
+*/
+const std::string DEFAULT_COLOR = "#FFFFFF";
+
+struct SettingColorStruct {
+    std::string m_color;
+};
+
+class SettingColorValue;
+
+class SettingColorValue : public SettingValue {
+protected:
+    std::string m_color;
+public:
+    SettingColorValue(std::string const& key, std::string const& modID, std::string const& color)
+      : SettingValue(key, modID), m_color(color) {}
+
+    bool load(matjson::Value const& json) override {
+        try {
+            m_color = static_cast<std::string>(json.as<std::string>());
+            return true;
+        } catch(...) {
+            return false;
+        }
+    }
+    bool save(matjson::Value& json) const override {
+        json = static_cast<std::string>(m_color);
+        return true;
+    }
+    SettingNode* createNode(float width) override;
+    void setColor(std::string color) {
+        m_color = color;
+    }
+    std::string getColor() const {
+        return m_color;
+    }
+};
+
+class SettingColorNode : public SettingNode {
+protected:
+    bool init(SettingColorValue* value, float width) {
+        if (!SettingNode::init(value))
+            return false;
+        this->setContentSize({ width, 40.f });
+        auto menu = CCMenu::create();
+        auto label = CCLabelBMFont::create("Background color", "bigFont.fnt");
+        label->setScale(.5F);
+        label->setPositionX(-75);
+
+        //auto infoBtn
+        auto infoSpr = CCSprite::createWithSpriteFrameName("GJ_infoIcon_001.png");
+        infoSpr->setScale(.6F);
+        auto infoBtn = CCMenuItemSpriteExtra::create(
+            infoSpr,
+            this,
+            menu_selector(SettingColorNode::onInfoBtn)
+        );
+        infoBtn->setPositionX(18);
+
+        auto colorBtn = CCMenuItemSpriteExtra::create(
+            ButtonSprite::create("Select", "bigFont.fnt", "GJ_button_01.png"),
+            this,
+            menu_selector(SettingColorNode::onColorBtn)
+        );
+        colorBtn->setPositionX(100);
+        menu->setPosition(width / 2, 20.f);
+        menu->addChild(label);
+        menu->addChild(colorBtn);
+        menu->addChild(infoBtn);
+        this->addChild(menu);
+        return true;
+    }
+
+    void onColorBtn(CCObject*) {}
+
+    void onInfoBtn(CCObject* sender) {
+        FLAlertLayer::create(
+            Mod::get()->getSettingDefinition(this->m_value->getKey())->get<CustomSetting>()->json->get<std::string>("name").c_str(),
+            Mod::get()->getSettingDefinition(this->m_value->getKey())->get<CustomSetting>()->json->get<std::string>("description").c_str(),
+            "OK"
+        )->show();
+    }
+
+public:
+    void commit() override {
+        // Let the UI know you have committed the value
+        this->dispatchCommitted();
+    }
+
+    // Geode calls this to query if the setting value has been changed, 
+    // and those changes haven't been committed
+    bool hasUncommittedChanges() override {
+        return false;
+    }
+
+    // Geode calls this to query if the setting has a value that is 
+    // different from its default value
+    bool hasNonDefaultValue() override {
+        return true;
+    }
+
+    // Geode calls this to reset the setting's value back to default
+    void resetToDefault() override {
+
+    }
+    static SettingColorNode* create(SettingColorValue* value, float width) {
+        auto ret = new SettingColorNode;
+        if (ret && ret->init(value, width)) {
+            ret->autorelease();
+            return ret;
+        }
+        CC_SAFE_DELETE(ret);
+        return nullptr;
+    }
+};
+
 
 class SettingCreditsNode : public SettingNode {
 protected:

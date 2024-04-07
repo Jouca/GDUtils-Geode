@@ -197,6 +197,13 @@
             "type": "bool",
             "default": true
         },
+        "background": {
+            "name": "Background",
+            "description": "Change the color of GD backgrounds.",
+            "type": "custom",
+            "scale": 300,
+            "posX": 40
+        },
         "credits-section": {
             "name": "Credits",
             "description": "Below are the credits for those that developed the mod, and beta-tested the mod!",

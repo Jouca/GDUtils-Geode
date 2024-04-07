@@ -301,6 +301,7 @@ $on_mod(Loaded) {
     #else
     Mod::get()->addCustomSetting<SettingAppValue>("spotifyApp", "Spotify.app");
     #endif
+    Mod::get()->addCustomSetting<SettingColorValue>("background", "#FFFFFF");
     //Mod::get()->addCustomSetting<class T>(const std::string &key, "Spotify.exe");
     Mod::get()->addCustomSetting<SettingCreditsValue>("credit-buttons", "none");
 

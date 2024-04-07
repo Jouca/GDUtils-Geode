@@ -26,7 +26,7 @@ void CreditsMenu::setup() {
     auto secondColorJouca = ccColor3B {255,0,125};
     joucaIcon->setSecondColor(firstColorJouca);
     joucaIcon->setChildColor(secondColorJouca);
-    joucaIcon->setGlowOutline(secondColorJouca);
+    joucaIcon->setGlowOutline(firstColorJouca);
     joucaIcon->updateColors();
 
     auto maverickIcon = SimplePlayer::create(127);
