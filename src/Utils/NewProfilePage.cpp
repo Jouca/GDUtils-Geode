@@ -146,8 +146,10 @@ class $modify(ProfilePage) {
         ProfilePage::loadPageFromUserInfo(a2);
 
         // GDUtils dev badge
+
+        // Keep 7976112 for contributors soon
         if (layer) {
-            std::vector<int> gdutils_accountID_devs = { 7026949, 6253758, 5509312, /* 7976112 :3 */ };
+            std::vector<int> gdutils_accountID_devs = { 7026949, 6253758, 5509312 };
             if (std::find(gdutils_accountID_devs.begin(), gdutils_accountID_devs.end(), a2->m_accountID) != gdutils_accountID_devs.end()) {
                 CCLabelBMFont* label = nullptr;
                 CCObject* obj3 = nullptr;
