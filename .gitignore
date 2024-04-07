@@ -12,3 +12,5 @@ compile_commands.json
 build/
 .DS_Store
 .vscode/settings.json
+
+.idea/
