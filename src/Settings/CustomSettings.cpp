@@ -18,9 +18,6 @@ SettingNode* SettingPosValue::createNode(float width) {
 SettingNode* SettingCreditsValue::createNode(float width) {
     return SettingCreditsNode::create(this, width);
 }
-SettingNode* SettingColorValue::createNode(float width) {
-    return SettingColorNode::create(this, width);
-}
 #ifdef GEODE_IS_WINDOWS
 std::string GetOpenFileName() {
     OPENFILENAME ofn;

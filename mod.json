@@ -39,17 +39,17 @@
         ]
     },
     "settings": {
-        "test-notification": {
-            "name": "Test",
-            "description": "NONE",
-            "type": "custom"
-        },
         "notification-section": {
             "name": "Notifications",
             "description": "This category is for where it should <cy>show notifications</c>, and also <cy>what notifications</c> precisely.",
             "type": "custom",
             "scale": 300,
             "posX": 65
+        },
+        "test-notification": {
+            "name": "Test",
+            "description": "NONE",
+            "type": "custom"
         },
         "everywhereElse": {
             "name": "Everywhere Else",
@@ -197,12 +197,42 @@
             "type": "bool",
             "default": true
         },
+        "background-section": {
+            "name": "Backgrounds",
+            "description": "This category is for changing the <cy>background colors</c>.",
+            "type": "custom",
+            "scale": 350,
+            "posX": 60
+        },
+        "activate-background": {
+            "name": "Activate Background",
+            "description": "Enables custom background and child backgrounds colors for GD.",
+            "type": "bool",
+            "default": false
+        },
         "background": {
             "name": "Background",
             "description": "Change the color of GD backgrounds.",
-            "type": "custom",
-            "scale": 300,
-            "posX": 40
+            "type": "color",
+            "default": "#0066FF"
+        },
+        "child-background": {
+            "name": "Child Background",
+            "description": "Change the color of GD child backgrounds (associated with GD backgrounds).",
+            "type": "color",
+            "default": "#00388D"
+        },
+        "syncBGcolor": {
+            "name": "Sync BG Color",
+            "description": "Allows you to <cg>synchronise the GD backgrounds</c> with the child backgrounds.",
+            "type": "bool",
+            "default": true
+        },
+        "addChildBDGradient": {
+            "name": "Add child BG Gradient",
+            "description": "Adds a gradient to the child background (only for level browsing).",
+            "type": "bool",
+            "default": true
         },
         "credits-section": {
             "name": "Credits",

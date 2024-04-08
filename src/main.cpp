@@ -4,6 +4,8 @@
 
 #include <Geode/modify/CCScheduler.hpp>
 #include <Geode/modify/CreatorLayer.hpp>
+#include <Geode/modify/CCSprite.hpp>
+#include <Geode/modify/CCScale9Sprite.hpp>
 #include <Geode/loader/Log.hpp>
 #include <Geode/utils/web.hpp>
 #include "includes.h"
@@ -274,6 +276,92 @@ class $modify(CCScheduler) { // GD Protocol part
     }
 };*/
 
+// Backgrounds
+class $modify(CCSprite) {
+    bool isGradient;
+    bool initWithFile(char const* name) {
+        if (!CCSprite::initWithFile(name)) return false;
+
+        if (!strcmp(name, "GJ_gradientBG.png")) {
+            m_fields->isGradient = true;
+        }
+        return true;
+    }
+    void setColor(const ccColor3B& color) {
+        CCSprite::setColor(color);
+        if (m_fields->isGradient) {
+            CCSprite::setColor(Mod::get()->getSettingValue<ccColor3B>("background"));
+        }
+    }
+};
+
+// Child background
+class $modify(CCScale9Sprite) {
+    bool isGradient;
+    bool initWithFile(char const* name, CCRect rect) {
+        if (!CCScale9Sprite::initWithFile(name, rect)) return false;
+
+        geode::log::info("Name: {}", name);
+
+        if (!strcmp(name, "square02b_001.png") || !strcmp(name, "square02b_small.png")) {
+            if (Mod::get()->getSettingValue<bool>("activate-background")) {
+                m_fields->isGradient = true;
+            }
+        }
+        return true;
+    }
+
+    void setColor(const ccColor3B& color) {
+        CCScale9Sprite::setColor(color);
+        if (m_fields->isGradient && (CCScale9Sprite::getColor().r == 0 && CCScale9Sprite::getColor().g == 56 && CCScale9Sprite::getColor().b == 141)) {
+            ccColor3B new_color = Mod::get()->getSettingValue<ccColor3B>("child-background");
+            if (Mod::get()->getSettingValue<bool>("syncBGcolor")) {
+                new_color = Mod::get()->getSettingValue<ccColor3B>("background");
+            }
+            if (Mod::get()->getSettingValue<bool>("addChildBDGradient")) {
+                new_color = cocos2d::ccColor3B(new_color.r * 0.79, new_color.g * 0.79, new_color.b * 0.79);
+            }
+            CCScale9Sprite::setColor(new_color);
+        } else if (m_fields->isGradient && (CCScale9Sprite::getColor().r == 0 && CCScale9Sprite::getColor().g == 39 && CCScale9Sprite::getColor().b == 98)) {
+            ccColor3B new_color = Mod::get()->getSettingValue<ccColor3B>("child-background");
+            if (Mod::get()->getSettingValue<bool>("syncBGcolor")) {
+                new_color = Mod::get()->getSettingValue<ccColor3B>("background");
+            }
+            if (Mod::get()->getSettingValue<bool>("addChildBDGradient")) {
+                new_color = cocos2d::ccColor3B(new_color.r * 0.71, new_color.g * 0.71, new_color.b * 0.71);
+            }
+            CCScale9Sprite::setColor(new_color);
+        } else if (m_fields->isGradient && (CCScale9Sprite::getColor().r == 0 && CCScale9Sprite::getColor().g == 46 && CCScale9Sprite::getColor().b == 117)) {
+            ccColor3B new_color = Mod::get()->getSettingValue<ccColor3B>("child-background");
+            if (Mod::get()->getSettingValue<bool>("syncBGcolor")) {
+                new_color = Mod::get()->getSettingValue<ccColor3B>("background");
+            }
+            if (Mod::get()->getSettingValue<bool>("addChildBDGradient")) {
+                new_color = cocos2d::ccColor3B(new_color.r * 0.74, new_color.g * 0.74, new_color.b * 0.74);
+            }
+            CCScale9Sprite::setColor(new_color);
+        } else if (m_fields->isGradient && (CCScale9Sprite::getColor().r == 0 && CCScale9Sprite::getColor().g == 36 && CCScale9Sprite::getColor().b == 91)) {
+            ccColor3B new_color = Mod::get()->getSettingValue<ccColor3B>("child-background");
+            if (Mod::get()->getSettingValue<bool>("syncBGcolor")) {
+                new_color = Mod::get()->getSettingValue<ccColor3B>("background");
+            }
+            if (Mod::get()->getSettingValue<bool>("addChildBDGradient")) {
+                new_color = cocos2d::ccColor3B(new_color.r * 0.70, new_color.g * 0.70, new_color.b * 0.70);
+            }
+            CCScale9Sprite::setColor(new_color);
+        } else if (m_fields->isGradient && (CCScale9Sprite::getColor().r == 0 && CCScale9Sprite::getColor().g == 31 && CCScale9Sprite::getColor().b == 79)) {
+            ccColor3B new_color = Mod::get()->getSettingValue<ccColor3B>("child-background");
+            if (Mod::get()->getSettingValue<bool>("syncBGcolor")) {
+                new_color = Mod::get()->getSettingValue<ccColor3B>("background");
+            }
+            if (Mod::get()->getSettingValue<bool>("addChildBDGradient")) {
+                new_color = cocos2d::ccColor3B(new_color.r * 0.67, new_color.g * 0.67, new_color.b * 0.67);
+            }
+            CCScale9Sprite::setColor(new_color);
+        }
+    }
+};
+
 // When the socket connection is made
 $on_mod(Loaded) {
     log::info("GDUtils Mod Loaded");
@@ -294,6 +382,7 @@ $on_mod(Loaded) {
     Mod::get()->addCustomSetting<SettingSectionValue>("notification-appearance-section", "none");
     Mod::get()->addCustomSetting<SettingSectionValue>("spotify-section", "none");
     Mod::get()->addCustomSetting<SettingSectionValue>("misc-section", "none");
+    Mod::get()->addCustomSetting<SettingSectionValue>("background-section", "none");
     Mod::get()->addCustomSetting<SettingSectionValue>("credits-section", "none");
     // ok listen here, you dont provide a way to JUST get the file name, you provide the full path which isnt what i want, so dont complain geode devs. Okay? we good? ok
     #ifdef GEODE_IS_WINDOWS
@@ -301,7 +390,6 @@ $on_mod(Loaded) {
     #else
     Mod::get()->addCustomSetting<SettingAppValue>("spotifyApp", "Spotify.app");
     #endif
-    Mod::get()->addCustomSetting<SettingColorValue>("background", "#FFFFFF");
     //Mod::get()->addCustomSetting<class T>(const std::string &key, "Spotify.exe");
     Mod::get()->addCustomSetting<SettingCreditsValue>("credit-buttons", "none");
 
