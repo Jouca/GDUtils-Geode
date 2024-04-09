@@ -3,6 +3,7 @@
     - Added custom backgrounds & transparency
     - Gave the button badges Node IDs
     - Fixed bug that duplicates the button badges upon profile reload
+    - Fixed mod list that was "noclipping" outside of the list
 # v1.2.15
     - Added settings for level sharing protocol & receiving all notifications from the server
 # v1.2.14
