@@ -1,6 +1,6 @@
 {
     "geode": "2.0.0",
-    "version": "v1.2.17",
+    "version": "v1.2.18",
     "gd": {
         "win": "2.204",
         "android": "2.205"
@@ -239,6 +239,17 @@
             "description": "Change the transparency of child backgrounds.",
             "type": "bool",
             "default": false
+        },
+        "bgchild-transparency-scroll": {
+            "name": "Transparency Opacity",
+            "description": "Change the opacity of the transparency of child backgrounds.\n\n<cy>0</c> - Totally <cy>transparent</c>\n<cy>255</c> - Totally <cy>opaque</c>\n\n<cy>Only works if Add child BG Gradient is enabled.</c>",
+            "type": "int",
+            "default": 0,
+            "min": 0,
+            "max": 255,
+            "control": {
+                "slider": true
+            }
         },
         "credits-section": {
             "name": "Credits",

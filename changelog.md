@@ -1,3 +1,7 @@
+# v1.2.18
+    - Added opacity scale for your child backgrounds
+    - Fixed bug that all backgrounds colours were changed (even without activating the feature)
+    - Fixed "The Shop" when entering on it
 # v1.2.17
     - Added GDUtils Discord support server for assistance or informations about next updates
     - Added custom backgrounds & transparency
