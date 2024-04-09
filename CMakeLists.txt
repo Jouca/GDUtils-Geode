@@ -5,6 +5,7 @@ set(CMAKE_OSX_ARCHITECTURES "x86_64")
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
 set(GEODE_COMPILER "clang-cl")
+set(GEODE_CCACHE_VARIANT "sccache")
 set(GEODE_TRIPLE "i686-unknown-windows-msvc")
 
 set(PROJECT_NAME GDUtils)

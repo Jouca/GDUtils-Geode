@@ -289,8 +289,15 @@ class $modify(CCSprite) {
     }
     void setColor(const ccColor3B& color) {
         CCSprite::setColor(color);
-        if (m_fields->isGradient) {
-            CCSprite::setColor(Mod::get()->getSettingValue<ccColor3B>("background"));
+        auto scene = CCDirector::sharedDirector()->getRunningScene();
+        if (scene->getChildrenCount() == 0) return;
+        auto layer = scene->getChildren()->objectAtIndex(0);
+        std::string layerName = misc::getNodeName(layer);
+
+        if (m_fields->isGradient && Mod::get()->getSettingValue<bool>("activate-background")) {
+            if (color.r == 0 && color.g == 102 && color.b == 255) {
+                CCSprite::setColor(Mod::get()->getSettingValue<ccColor3B>("background"));
+            }
         }
     }
 };
@@ -300,8 +307,6 @@ class $modify(CCScale9Sprite) {
     bool isGradient;
     bool initWithFile(char const* name, CCRect rect) {
         if (!CCScale9Sprite::initWithFile(name, rect)) return false;
-
-        geode::log::info("Name: {}", name);
 
         if (!strcmp(name, "square02b_001.png") || !strcmp(name, "square02b_small.png")) {
             if (Mod::get()->getSettingValue<bool>("activate-background")) {
