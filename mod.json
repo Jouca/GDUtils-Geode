@@ -1,5 +1,5 @@
 {
-    "geode": "2.0.0",
+    "geode": "2.0.0-beta.23",
     "version": "v1.2.19",
     "gd": {
         "win": "2.204",
@@ -7,7 +7,7 @@
     },
     "id": "gdutilsdevs.gdutils",
     "name": "GDUtils",
-    "developer": "Jouca & Firee",
+    "developers": ["Jouca", "Firee"],
     "description": "Realtime Rate Notifications, auto-song mute, game fixes & more!",
     "repository": "https://github.com/Jouca/GDUtils-Geode",
     "resources": {
