@@ -1,3 +1,5 @@
+# v1.2.19 
+    - Fix performance issues with the bg color (Thanks camila!)
 # v1.2.18
     - Added opacity scale for your child backgrounds
     - Fixed bug that all backgrounds colours were changed (even without activating the feature)
