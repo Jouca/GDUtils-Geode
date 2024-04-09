@@ -24,6 +24,8 @@ A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute,
 * You can view a description of either the Moderator, Elder Moderator, or other badges users have by clicking on the badge itself on the profile!
 ## View Demon List Placement
 * Instead of having to go to Pointercrate to view the demon placement of a level, you can now **view the position** of an extreme demon!
+## Custom backgrounds
+* Custom your **backgrounds colors** or you can even make it **transparent**!
 
 # Credits
 * [Jouca](https://twitter.com/JoucaJouca)
@@ -32,6 +34,6 @@ A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute,
 * [nekitdev](https://twitter.com/nekitdev)
 
 # Contributors
-* [sofabeddd](user:sofabeddd)
+* [sofabeddd](user:7976112)
 
 **Thank you to RobTopGames for his trust on the mod.**

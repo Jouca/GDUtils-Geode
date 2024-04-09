@@ -224,15 +224,21 @@
         },
         "syncBGcolor": {
             "name": "Sync BG Color",
-            "description": "Allows you to <cg>synchronise the GD backgrounds</c> with the child backgrounds.",
+            "description": "Allows you to <cg>synchronise the GD backgrounds</c> with child backgrounds.",
             "type": "bool",
             "default": true
         },
         "addChildBDGradient": {
             "name": "Add child BG Gradient",
-            "description": "Adds a gradient to the child background (only for level browsing).",
+            "description": "Adds a gradient to child backgrounds (only for level browsing).",
             "type": "bool",
             "default": true
+        },
+        "bgchild-transparency": {
+            "name": "BG Child Transparency",
+            "description": "Change the transparency of child backgrounds.",
+            "type": "bool",
+            "default": false
         },
         "credits-section": {
             "name": "Credits",

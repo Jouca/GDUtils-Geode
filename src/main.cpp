@@ -321,6 +321,9 @@ class $modify(CCScale9Sprite) {
             if (Mod::get()->getSettingValue<bool>("addChildBDGradient")) {
                 new_color = cocos2d::ccColor3B(new_color.r * 0.79, new_color.g * 0.79, new_color.b * 0.79);
             }
+            if (Mod::get()->getSettingValue<bool>("bgchild-transparency")) {
+                CCScale9Sprite::setOpacity(0);
+            }
             CCScale9Sprite::setColor(new_color);
         } else if (m_fields->isGradient && (CCScale9Sprite::getColor().r == 0 && CCScale9Sprite::getColor().g == 39 && CCScale9Sprite::getColor().b == 98)) {
             ccColor3B new_color = Mod::get()->getSettingValue<ccColor3B>("child-background");
@@ -329,6 +332,9 @@ class $modify(CCScale9Sprite) {
             }
             if (Mod::get()->getSettingValue<bool>("addChildBDGradient")) {
                 new_color = cocos2d::ccColor3B(new_color.r * 0.71, new_color.g * 0.71, new_color.b * 0.71);
+            }
+            if (Mod::get()->getSettingValue<bool>("bgchild-transparency")) {
+                CCScale9Sprite::setOpacity(0);
             }
             CCScale9Sprite::setColor(new_color);
         } else if (m_fields->isGradient && (CCScale9Sprite::getColor().r == 0 && CCScale9Sprite::getColor().g == 46 && CCScale9Sprite::getColor().b == 117)) {
@@ -339,6 +345,9 @@ class $modify(CCScale9Sprite) {
             if (Mod::get()->getSettingValue<bool>("addChildBDGradient")) {
                 new_color = cocos2d::ccColor3B(new_color.r * 0.74, new_color.g * 0.74, new_color.b * 0.74);
             }
+            if (Mod::get()->getSettingValue<bool>("bgchild-transparency")) {
+                CCScale9Sprite::setOpacity(0);
+            }
             CCScale9Sprite::setColor(new_color);
         } else if (m_fields->isGradient && (CCScale9Sprite::getColor().r == 0 && CCScale9Sprite::getColor().g == 36 && CCScale9Sprite::getColor().b == 91)) {
             ccColor3B new_color = Mod::get()->getSettingValue<ccColor3B>("child-background");
@@ -348,6 +357,9 @@ class $modify(CCScale9Sprite) {
             if (Mod::get()->getSettingValue<bool>("addChildBDGradient")) {
                 new_color = cocos2d::ccColor3B(new_color.r * 0.70, new_color.g * 0.70, new_color.b * 0.70);
             }
+            if (Mod::get()->getSettingValue<bool>("bgchild-transparency")) {
+                CCScale9Sprite::setOpacity(0);
+            }
             CCScale9Sprite::setColor(new_color);
         } else if (m_fields->isGradient && (CCScale9Sprite::getColor().r == 0 && CCScale9Sprite::getColor().g == 31 && CCScale9Sprite::getColor().b == 79)) {
             ccColor3B new_color = Mod::get()->getSettingValue<ccColor3B>("child-background");
@@ -356,6 +368,9 @@ class $modify(CCScale9Sprite) {
             }
             if (Mod::get()->getSettingValue<bool>("addChildBDGradient")) {
                 new_color = cocos2d::ccColor3B(new_color.r * 0.67, new_color.g * 0.67, new_color.b * 0.67);
+            }
+            if (Mod::get()->getSettingValue<bool>("bgchild-transparency")) {
+                CCScale9Sprite::setOpacity(0);
             }
             CCScale9Sprite::setColor(new_color);
         }
