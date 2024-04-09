@@ -2,6 +2,10 @@
 **By [Jouca](https://github.com/Jouca) and [Firee](https://github.com/FireMario211)**
 A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute, game fixes & more!
 ![Mod Example](resources/Screenshot_1.png)
+
+## Need help?
+* You can join our [Discord server](https://discord.gg/MU4Rpc6xbJ) for **any assistance** or about **next updates**, **sneak peeks** & **more**!
+
 ## Features
 ### Realtime Notifications
 * This includes any new levels being **rated**, new **daily levels**, and new **weekly levels!**
@@ -17,13 +21,15 @@ A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute,
 ### Extra additions to Friends List
 * The additions added include being able to **search usernames** if you have a long friend list, or using the **scroll buttons**!
 ### More Leaderboards
-* Thanks to Updated Leaderboards, it's now possible for you to view leaderboards for users with the most **Moons**, **Diamonds**, **User Coins**, and **Demons!**
+* Thanks to Updated Leaderboards, it's now possible for you to view leaderboards for users with the most **Moons**, **Diamonds**, **User Coins**,**Demons!** and **Creator Points**!
 ### Moderator List 
-* You can view the list of **Elder Moderators**/**Moderators** and their socials!
+* You can view the list of **Elder Moderators**/**Moderators**/**Leaderboard Moderators** and their socials!
 ### Moderator Info
 * You can view a description of either the Moderator, Elder Moderator, or other badges users have by clicking on the badge itself on the profile!
 ### View Demon List Placement
 * Instead of having to go to Pointercrate to view the demon placement of a level, you can now **view the position** of an extreme demon!
+### Custom backgrounds
+* Custom your **backgrounds colors** or you can even make it **transparent**!
 
 ## Libraries Used
 - [Geode](https://github.com/geode-sdk/geode)
