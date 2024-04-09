@@ -1,5 +1,6 @@
 # v1.2.17
-    - Added custom backgrounds
+    - Added GDUtils Discord support server for assistance or informations about next updates
+    - Added custom backgrounds & transparency
     - Gave the button badges Node IDs
     - Fixed bug that duplicates the button badges upon profile reload
 # v1.2.15
