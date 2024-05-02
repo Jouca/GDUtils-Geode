@@ -109,7 +109,7 @@ std::vector<std::string> split_str(std::string &string, char separator) {
 GJGameLevel* EventsPush::convertLevelToJSON(std::string& data) {
     // Robtop to JSON
     GJGameLevel* level = GJGameLevel::create();
-#ifndef GEODE_IS_ANDROID64 // for some reason a field isnt known
+#ifdef GEODE_IS_WINDOWS
     auto gamelevelmanager = GameLevelManager::sharedState();
     auto gamestatslevel = GameStatsManager::sharedState();
 

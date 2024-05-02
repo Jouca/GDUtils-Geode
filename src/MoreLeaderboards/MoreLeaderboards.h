@@ -30,7 +30,11 @@ class MoreLeaderboards : public CCLayer {
     CCMenuItemToggler* m_demonsTabBtn;
     CCMenuItemToggler* m_moonsTabBtn;
     CCMenuItemToggler* m_creatorsTabBtn;
+    #ifndef GEODE_IS_IOS
     CCClippingNode* m_tabsGradientNode = nullptr;
+    #else
+    CCNode* m_tabsGradientNode = nullptr;
+    #endif
     CCSprite* m_tabsGradientSprite = nullptr;
     CCSprite* m_tabsGradientStencil = nullptr;
 

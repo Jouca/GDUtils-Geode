@@ -161,7 +161,7 @@ void toggleSpotifyMute(bool automatic = false, bool muted = false) {
         MuteAudioSessionByProcessId(processId, is_muted);
     }
 }
-#elif GEODE_IS_MACOS // mac os, wont work on android or ios :(
+#elif defined(GEODE_IS_MACOS) // mac os, wont work on android or ios :(
 bool isApplicationRunning(const std::string& appName) {
     // Construct the osascript command
     std::string script = "osascript -e 'tell application \"System Events\" to (name of processes) contains \"" + appName + "\"'";
@@ -230,7 +230,7 @@ void toggleSpotifyMute(bool automatic = false, bool muted = false) {
     // nothing because im not sure!
 }
 #endif
-#ifndef GEODE_IS_ANDROID
+#ifdef GEODE_IS_DESKTOP 
 class $modify(PlayLayer) {
     bool init(GJGameLevel* level, bool p1, bool p2) {
         if (!PlayLayer::init(level, p1, p2)) return false;

@@ -154,14 +154,20 @@ bool MoreLeaderboards::init(std::string type) {
         m_menu->addChild(m_creatorsTabBtn);
 
         // tabs gradient
+        #ifndef GEODE_IS_IOS
         m_tabsGradientNode = CCClippingNode::create();
+        #else
+        m_tabsGradientNode = CCNode::create();
+        #endif
         m_tabsGradientNode->setContentSize(this->getContentSize());
         m_tabsGradientNode->setAnchorPoint({0.5f, 0.5f});
         m_tabsGradientNode->ignoreAnchorPointForPosition(true);
         m_tabsGradientNode->setZOrder(0);
         m_tabsGradientNode->setScale(0.8f);
+        #ifndef GEODE_IS_IOS
         m_tabsGradientNode->setInverted(false);
         m_tabsGradientNode->setAlphaThreshold(0.7f);
+        #endif
 
         m_tabsGradientSprite = CCSprite::create("tab-gradient.png"_spr);
         m_tabsGradientNode->addChild(m_tabsGradientSprite);
@@ -171,7 +177,10 @@ bool MoreLeaderboards::init(std::string type) {
         m_tabsGradientStencil->setColor({172, 255, 67});
         m_tabsGradientStencil->setZOrder(1);
         m_tabsGradientStencil->setScale(0.8f);
+
+        #ifndef GEODE_IS_IOS
         m_tabsGradientNode->setStencil(m_tabsGradientStencil);
+        #endif
 
         // add menus
         m_menu->setZOrder(1);

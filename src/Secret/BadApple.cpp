@@ -1,12 +1,11 @@
 // SPOILERSSS
 #include "BadApple.h"
-#ifndef GEODE_IS_MACOS
+#ifdef GEODE_IS_WINDOWS
 #include "../Utils/DownloadManager.h"
 #else // mac
 #include <ctime>
 #include <cxxabi.h>
 #endif
-#include <filesystem>
 BadApple* BadApple::create() {
     auto pRet = new BadApple();
     if (pRet && pRet->BadApple::init()) {
@@ -105,7 +104,9 @@ class $modify(SecretVault, SecretLayer2) {
             SecretVault::launchBadApple(node);
         } else {
             log::info("wait for bad apple");
+#ifdef GEODE_IS_WINDOWS
             DownloadManager::create("https://clarifygdps.com/videos/bad_apple.mpg", "gdutils/bad_apple.mpg", menu_selector(SecretVault::launchBadApple))->show();
+#endif
         }
     }
 

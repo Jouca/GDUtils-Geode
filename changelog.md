@@ -1,3 +1,5 @@
+# v1.2.20
+    - Added iOS support (Only BG and notifications currently work)
 # v1.2.19 
     - Fix performance issues with the bg color (Thanks camila!)
 # v1.2.18

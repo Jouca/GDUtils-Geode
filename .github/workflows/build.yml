@@ -23,6 +23,9 @@ jobs:
         - name: Android64
           os: ubuntu-latest
           target: Android64
+        - name: iOS
+          os: macos-latest
+          target: iOS
         
 
     name: ${{ matrix.config.name }}
@@ -34,11 +37,11 @@ jobs:
           submodules: 'recursive'
           
       - name: Build the mod
-        uses: geode-sdk/build-geode-mod@main
+        #uses: geode-sdk/build-geode-mod@main
+        uses: RoootTheFox/build-geode-mod@main
         with:
           #sdk: nightly
           combine: true
-          configure-args: '-DGEODE_DISABLE_FMT_CONSTEVAL=1'
           target: ${{ matrix.config.target }}
 
   package:
@@ -46,7 +49,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: ['build']
     steps:
-      - uses: geode-sdk/build-geode-mod@combine
+      #- uses: geode-sdk/build-geode-mod@combine
+      - uses: RoootTheFox/build-geode-mod/combine@main
         id: build
 
       - uses: actions/upload-artifact@v3

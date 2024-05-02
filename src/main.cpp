@@ -318,7 +318,7 @@ class $modify(CCScale9Sprite) {
                         new_color = Mod::get()->getSettingValue<ccColor3B>("background");
                     }
                     if (Mod::get()->getSettingValue<bool>("addChildBDGradient")) {
-                        new_color = cocos2d::ccColor3B(new_color.r * 0.79, new_color.g * 0.79, new_color.b * 0.79);
+                        new_color = ccc3(new_color.r * 0.79, new_color.g * 0.79, new_color.b * 0.79);
                     }
                     if (Mod::get()->getSettingValue<bool>("bgchild-transparency")) {
                         int opacity = Mod::get()->getSettingValue<int64_t>("bgchild-transparency-scroll");
@@ -331,7 +331,7 @@ class $modify(CCScale9Sprite) {
                         new_color = Mod::get()->getSettingValue<ccColor3B>("background");
                     }
                     if (Mod::get()->getSettingValue<bool>("addChildBDGradient")) {
-                        new_color = cocos2d::ccColor3B(new_color.r * 0.71, new_color.g * 0.71, new_color.b * 0.71);
+                        new_color = ccc3(new_color.r * 0.71, new_color.g * 0.71, new_color.b * 0.71);
                     }
                     if (Mod::get()->getSettingValue<bool>("bgchild-transparency")) {
                         int opacity = Mod::get()->getSettingValue<int64_t>("bgchild-transparency-scroll");
@@ -344,7 +344,7 @@ class $modify(CCScale9Sprite) {
                         new_color = Mod::get()->getSettingValue<ccColor3B>("background");
                     }
                     if (Mod::get()->getSettingValue<bool>("addChildBDGradient")) {
-                        new_color = cocos2d::ccColor3B(new_color.r * 0.74, new_color.g * 0.74, new_color.b * 0.74);
+                        new_color = ccc3(new_color.r * 0.74, new_color.g * 0.74, new_color.b * 0.74);
                     }
                     if (Mod::get()->getSettingValue<bool>("bgchild-transparency")) {
                         int opacity = Mod::get()->getSettingValue<int64_t>("bgchild-transparency-scroll");
@@ -357,7 +357,7 @@ class $modify(CCScale9Sprite) {
                         new_color = Mod::get()->getSettingValue<ccColor3B>("background");
                     }
                     if (Mod::get()->getSettingValue<bool>("addChildBDGradient")) {
-                        new_color = cocos2d::ccColor3B(new_color.r * 0.70, new_color.g * 0.70, new_color.b * 0.70);
+                        new_color = ccc3(new_color.r * 0.70, new_color.g * 0.70, new_color.b * 0.70);
                     }
                     if (Mod::get()->getSettingValue<bool>("bgchild-transparency")) {
                         int opacity = Mod::get()->getSettingValue<int64_t>("bgchild-transparency-scroll");
@@ -370,7 +370,7 @@ class $modify(CCScale9Sprite) {
                         new_color = Mod::get()->getSettingValue<ccColor3B>("background");
                     }
                     if (Mod::get()->getSettingValue<bool>("addChildBDGradient")) {
-                        new_color = cocos2d::ccColor3B(new_color.r * 0.67, new_color.g * 0.67, new_color.b * 0.67);
+                        new_color = ccc3(new_color.r * 0.67, new_color.g * 0.67, new_color.b * 0.67);
                     }
                     if (Mod::get()->getSettingValue<bool>("bgchild-transparency")) {
                         int opacity = Mod::get()->getSettingValue<int64_t>("bgchild-transparency-scroll");
