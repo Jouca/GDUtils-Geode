@@ -62,7 +62,7 @@ void dailyChestThread() {
         std::this_thread::sleep_for(std::chrono::minutes(10));
     }
 }
-/*class $modify(MenuLayer) {
+class $modify(MenuLayer) {
     bool init() {
         if (!MenuLayer::init()) return false;
         
@@ -74,4 +74,4 @@ void dailyChestThread() {
 
         return true;
     }
-};*/
+};
