@@ -2,7 +2,7 @@
 #define _VIDEO_PLAYER_HPP
 
 #pragma warning(disable:4996)
-#ifdef GEODE_IS_WINDOWS
+#ifndef GEODE_IS_ANDROID
 #include "pl_mpeg.h"
 #pragma warning(default:4996)
 
