@@ -25,7 +25,7 @@ void DailyChest::rewardsStatusFinished(int p0) {
     GJRewardItem* time2 = typeinfo_cast<GJRewardItem*>(gsm->m_rewardItems->objectForKey(time2_value));
 
     sio::message::ptr msg = sio::object_message::create();
-    msg->get_map()["sprite"] = sio::string_message::create("GJ_square04-uhd.png");
+    msg->get_map()["sprite"] = sio::string_message::create("GJ_square04.png");
     msg->get_map()["level_name"] = sio::string_message::create(" ");
     msg->get_map()["level_creator"] = sio::string_message::create(" ");
     msg->get_map()["demon"] = sio::int_message::create(0);
