@@ -90,13 +90,13 @@
         },
         "smallChest": {
             "name": "Small Chest Notification",
-            "description": "Whether or not to notify about upcoming <cy>Daily Small Chest</c>",
+            "description": "Whether or not to notify about upcoming <cy>Daily Small Chests</c>",
             "type": "bool",
             "default": true
         },
         "largeChest": {
-            "name": "Large Chest Notification",
-            "description": "Whether or not to notify about upcoming <cy>Daily Large Chest</c>",
+            "name": "Big Chest Notification",
+            "description": "Whether or not to notify about upcoming <cy>Daily Big Chests</c>",
             "type": "bool",
             "default": true
         },
