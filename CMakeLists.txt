@@ -30,6 +30,7 @@ file(GLOB SOURCES
     src/Secret/*.cpp
     src/Settings/*.cpp
     src/Utils/*.cpp
+    src/Styles/*.cpp
 )
 
 # Set up the mod binary
