@@ -17,7 +17,16 @@ class $modify(GauntletSelectLayer) {
                 auto page = typeinfo_cast<CCMenu*>(typeinfo_cast<CCLayer*>(pages->objectAtIndex(i))->getChildren()->objectAtIndex(0))->getChildren();
 
                 for (int j = 0; j < page->count(); j++) {
-                    GauntletNode* node = typeinfo_cast<GauntletNode*>(typeinfo_cast<CCMenuItemSpriteExtra*>(page->objectAtIndex(j))->getChildByIDRecursive("gauntlet-node"));
+                    CCMenuItemSpriteExtra* item = typeinfo_cast<CCMenuItemSpriteExtra*>(page->objectAtIndex(j));
+
+                    // Handle spaces
+                    if (j == 0) {
+                        item->setPositionX(item->getPositionX() - 20.0f);
+                    } else if (j == 2) {
+                        item->setPositionX(item->getPositionX() + 20.0f);
+                    }
+
+                    GauntletNode* node = typeinfo_cast<GauntletNode*>(item->getChildByIDRecursive("gauntlet-node"));
 
                     CCLabelBMFont* label = typeinfo_cast<CCLabelBMFont*>(node->getChildByID("gauntlet-name-label"));
                     CCLabelBMFont* label_shadow = typeinfo_cast<CCLabelBMFont*>(node->getChildByID("gauntlet-name-shadow-label"));
@@ -40,6 +49,18 @@ class $modify(GauntletSelectLayer) {
                     std::string gauntletName = label->getString();
                     if (gauntletName == "World") {
                         CCSprite* sprite = CCSprite::create(Mod::get()->expandSpriteName("world_gauntlet.png"));
+                        sprite->setPosition(bg->getPosition());
+                        sprite->setScale(1.225f);
+                        sprite->setZOrder(0);
+                        node->addChild(sprite);
+                    } else if (gauntletName == "Fantasy") {
+                        CCSprite* sprite = CCSprite::create(Mod::get()->expandSpriteName("fantasy_gauntlet.png"));
+                        sprite->setPosition(bg->getPosition());
+                        sprite->setScale(1.225f);
+                        sprite->setZOrder(0);
+                        node->addChild(sprite);
+                    } else if (gauntletName == "Portal") {
+                        CCSprite* sprite = CCSprite::create(Mod::get()->expandSpriteName("portal_gauntlet.png"));
                         sprite->setPosition(bg->getPosition());
                         sprite->setScale(1.225f);
                         sprite->setZOrder(0);
