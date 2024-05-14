@@ -11,6 +11,13 @@
     "developers": ["Jouca", "Firee"],
     "description": "Realtime Rate Notifications, auto-song mute, game fixes & more!",
     "repository": "https://github.com/Jouca/GDUtils-Geode",
+    "dependencies": [
+        {
+            "id": "geode.node-ids",
+            "version": "v1.9.1",
+            "importance": "required"
+        }
+    ],
     "resources": {
         "sprites": [
             "resources/Screenshot_1.png",
