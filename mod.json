@@ -46,7 +46,8 @@
             "resources/gdutils_badge.png",
             "resources/world_gauntlet.png",
             "resources/fantasy_gauntlet.png",
-            "resources/portal_gauntlet.png"
+            "resources/portal_gauntlet.png",
+            "resources/demon_gauntlet.png"
         ]
     },
     "settings": {
