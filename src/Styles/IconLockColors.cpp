@@ -1,7 +1,7 @@
 #include "../includes.h"
 #include <Geode/modify/GJGarageLayer.hpp>
 #include <Geode/Geode.hpp>
-
+#ifndef GEODE_IS_IOS
 class IconLockColors {
     public:
         void onP1(CCObject* pSender) {
@@ -130,3 +130,4 @@ class $modify(GJGarageLayer) {
         IconLockColors::createIconColor();
     }
 };
+#endif
