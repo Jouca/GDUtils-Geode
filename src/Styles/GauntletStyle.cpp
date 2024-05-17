@@ -21,9 +21,9 @@ class $modify(GauntletSelectLayer) {
 
                     // Handle spaces
                     if (j == 0) {
-                        item->setPositionX(item->getPositionX() - 20.0f);
+                        item->setPositionX(item->getPositionX() - 25.0f);
                     } else if (j == 2) {
-                        item->setPositionX(item->getPositionX() + 20.0f);
+                        item->setPositionX(item->getPositionX() + 25.0f);
                     }
 
                     GauntletNode* node = typeinfo_cast<GauntletNode*>(item->getChildByIDRecursive("gauntlet-node"));
@@ -50,7 +50,7 @@ class $modify(GauntletSelectLayer) {
                     if (gauntletName == "World") {
                         CCSprite* sprite = CCSprite::create(Mod::get()->expandSpriteName("world_gauntlet.png"));
                         sprite->setPosition(bg->getPosition());
-                        sprite->setScale(1.225f);
+                        sprite->setScale(1.270f);
                         sprite->setZOrder(0);
                         node->addChild(sprite);
                     } else if (gauntletName == "Fantasy") {
@@ -68,7 +68,13 @@ class $modify(GauntletSelectLayer) {
                     } else if (gauntletName == "Demon") {
                         CCSprite* sprite = CCSprite::create(Mod::get()->expandSpriteName("demon_gauntlet.png"));
                         sprite->setPosition(bg->getPosition());
-                        sprite->setScale(1.225f);
+                        sprite->setScale(1.275f);
+                        sprite->setZOrder(0);
+                        node->addChild(sprite);
+                    } else if (gauntletName == "Castle") {
+                        CCSprite* sprite = CCSprite::create(Mod::get()->expandSpriteName("castle_gauntlet.png"));
+                        sprite->setPosition(bg->getPosition());
+                        sprite->setScale(1.275f);
                         sprite->setZOrder(0);
                         node->addChild(sprite);
                     } else {
