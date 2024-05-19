@@ -21,17 +21,16 @@ class $modify(InfoLayer) {
 
         std::string levelID = std::to_string(level->m_levelID.value());
 
-        auto menu = this->m_buttonMenu;
-        auto copySpr = CCSprite::createWithSpriteFrameName("GJ_undoBtn_001.png");
+        CCMenu* menu = typeinfo_cast<CCMenu*>(this->getChildByIDRecursive("left-side-menu"));
+        auto copySpr = CCSprite::createWithSpriteFrameName("GJ_redoBtn_001.png");
         copySpr->setScale(.7f);
-        copySpr->setFlipX(true);
         auto copyBtn = CCMenuItemSpriteExtra::create(
             copySpr,
             this,
             menu_selector(InfoNewLayer::onCopyLevelURL)
         );
         copyBtn->setUserObject(cocos2d::CCString::create(gd::string(levelID)));
-        copyBtn->setPosition(-195, -85);
+        copyBtn->setPosition(14, -11);
         menu->addChild(copyBtn);
         
         return true;
