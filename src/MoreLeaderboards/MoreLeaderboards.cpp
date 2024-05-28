@@ -46,7 +46,6 @@ CCDictionary* MoreLeaderboards::responseToDict(const std::string& response){
             } else if (keyID == "1") {
                 username = currentKey;
             }
-            dict->setObject(CCString::create(currentKey.c_str()),keyID);
         }
         i++;
     }
