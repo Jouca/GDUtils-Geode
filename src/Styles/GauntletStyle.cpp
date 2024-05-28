@@ -1,6 +1,7 @@
 #include "../includes.h"
 #include <Geode/modify/GauntletSelectLayer.hpp>
 #include <Geode/Geode.hpp>
+#include "../Utils/ParticleManager.hpp"
 
 class $modify(GauntletSelectLayer) {
     void setupGauntlets() {
@@ -59,6 +60,11 @@ class $modify(GauntletSelectLayer) {
                         sprite->setScale(1.225f);
                         sprite->setZOrder(0);
                         node->addChild(sprite);
+
+                        // Particle
+                        /*CCParticleSystem* particle = createParticles(20, ccc3(255, 255, 35), ccc3(0, 132, 0), "2", "-1", "1.21", "0.30", "116", "0", "20", "20", "0", "0", "0", "0", "8", "8", "1", "0", "0", "0", "0", "1", "0", "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "particle_118_001.png");
+                        node->addChild(particle);
+                        particle->runAction(cocos2d::CCAction::create());*/
                     } else if (gauntletName == "Portal") {
                         CCSprite* sprite = CCSprite::create(Mod::get()->expandSpriteName("portal_gauntlet.png"));
                         sprite->setPosition(bg->getPosition());
