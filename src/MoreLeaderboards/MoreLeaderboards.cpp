@@ -97,6 +97,19 @@ bool MoreLeaderboards::init(std::string type) {
     background->setZOrder(-1);
     this->addChild(background);
 
+    // Change region
+    /*auto menu = CCMenu::create();
+
+    auto regionSpr = CCSprite::createWithSpriteFrameName("GJ_plusBtn_001.png");
+    regionSpr->setScale(.8f);
+    auto regionBtn = CCMenuItemSpriteExtra::create(
+        regionSpr,
+        this,
+        menu_selector(MoreLeaderboards::onMoreLeaderboards)
+    );
+    regionBtn->setPosition(239, 20);
+    menu->addChild(regionBtn);*/
+
     // Corners
     CCSprite* corner_left = CCSprite::createWithSpriteFrameName("GJ_sideArt_001.png");
     CCSprite* corner_right = CCSprite::createWithSpriteFrameName("GJ_sideArt_001.png");

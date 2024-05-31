@@ -23,6 +23,7 @@
             "resources/Screenshot_1.png",
             "resources/tab-gradient.png",
             "resources/tab-gradient-mask.png",
+            "resources/earth_btn.png",
             "resources/difficulty_01_mythicIcon.png",
             "resources/difficulty_02_mythicIcon.png",
             "resources/difficulty_03_mythicIcon.png",
@@ -48,7 +49,8 @@
             "resources/fantasy_gauntlet.png",
             "resources/portal_gauntlet.png",
             "resources/demon_gauntlet.png",
-            "resources/castle_gauntlet.png"
+            "resources/castle_gauntlet.png",
+            "resources/galaxy_gauntlet.png"
         ]
     },
     "settings": {

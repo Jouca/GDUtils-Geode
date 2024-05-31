@@ -83,6 +83,12 @@ class $modify(GauntletSelectLayer) {
                         sprite->setScale(1.275f);
                         sprite->setZOrder(0);
                         node->addChild(sprite);
+                    } else if (gauntletName == "Galaxy") {
+                        CCSprite* sprite = CCSprite::create(Mod::get()->expandSpriteName("galaxy_gauntlet.png"));
+                        sprite->setPosition(bg->getPosition());
+                        sprite->setScale(1.695f);
+                        sprite->setZOrder(0);
+                        node->addChild(sprite);
                     } else {
                         bg->setVisible(true);
                         label->setVisible(true);
