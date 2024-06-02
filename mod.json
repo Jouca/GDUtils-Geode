@@ -50,7 +50,8 @@
             "resources/portal_gauntlet.png",
             "resources/demon_gauntlet.png",
             "resources/castle_gauntlet.png",
-            "resources/galaxy_gauntlet.png"
+            "resources/galaxy_gauntlet.png",
+            "resources/universe_gauntlet.png"
         ]
     },
     "settings": {
