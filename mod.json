@@ -1,6 +1,6 @@
 {
     "geode": "2.0.0-beta.27",
-    "version": "v1.2.20",
+    "version": "v1.2.21",
     "gd": {
         "win": "2.206",
         "android": "2.206",
@@ -11,10 +11,13 @@
     "developers": ["Jouca", "Firee"],
     "description": "Realtime Rate Notifications, auto-song mute, game fixes & more!",
     "repository": "https://github.com/Jouca/GDUtils-Geode",
+    "links": {
+        "community": "https://discord.gg/MU4Rpc6xbJ"
+    },
     "dependencies": [
         {
             "id": "geode.node-ids",
-            "version": "v1.10.2",
+            "version": "v1.11.0",
             "importance": "required"
         }
     ],
@@ -290,6 +293,5 @@
             "name": "Credit Buttons",
             "type": "custom"
         }
-
     }
 }
