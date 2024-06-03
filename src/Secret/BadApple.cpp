@@ -68,7 +68,7 @@ class $modify(SecretVault, SecretLayer2) {
         }
         if (!strcmp(text_input.c_str(), "bad apple")) {
             if (!bad_apple) {
-                ghc::filesystem::create_directory("gdutils");
+                std::filesystem::create_directory("gdutils");
                 bad_apple = true;
 
                 vault_text->setString("It's time... Touhou Fan");
@@ -98,7 +98,7 @@ class $modify(SecretVault, SecretLayer2) {
     }
 
     void onLaunchBadApple(CCObject* pSender) {
-        if (ghc::filesystem::exists("gdutils/bad_apple.mpg")) {
+        if (std::filesystem::exists("gdutils/bad_apple.mpg")) {
             auto node = CCNode::create();
             node->setTag(10);
             SecretVault::launchBadApple(node);

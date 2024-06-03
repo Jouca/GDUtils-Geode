@@ -51,7 +51,7 @@ const char* APP_FRAGMENT_SHADER_YCRCB = APP_SHADER_SOURCE(
 );
 
 namespace videoplayer {
-    bool VideoPlayer::init(ghc::filesystem::path const& path, bool loop) {
+    bool VideoPlayer::init(std::filesystem::path const& path, bool loop) {
         if (!CCNode::init()) return false;
 
         // GENERAL
@@ -246,7 +246,7 @@ namespace videoplayer {
         return FMOD_OK;
     }
 
-    VideoPlayer* VideoPlayer::create(ghc::filesystem::path const& path, bool loop) {
+    VideoPlayer* VideoPlayer::create(std::filesystem::path const& path, bool loop) {
         VideoPlayer* ret = new VideoPlayer;
         if (ret && ret->init(path, loop)) {
             ret->autorelease();

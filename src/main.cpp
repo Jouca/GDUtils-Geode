@@ -465,8 +465,8 @@ $on_mod(Loaded) {
         log::error("Erreur lors de l'ouverture de la clé du registre utilisateur.");
     }
 
-    ghc::filesystem::create_directory("gdutils");
-    if (!ghc::filesystem::exists("gdutils/gd_protocol.bat")) {
+    std::filesystem::create_directory("gdutils");
+    if (!std::filesystem::exists("gdutils/gd_protocol.bat")) {
         std::ofstream file("gdutils/gd_protocol.bat");
         file << R"(
 @echo off
