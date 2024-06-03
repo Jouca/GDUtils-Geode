@@ -95,6 +95,12 @@ class $modify(GauntletSelectLayer) {
                         sprite->setScale(1.270f);
                         sprite->setZOrder(0);
                         node->addChild(sprite);
+                    } else if (gauntletName == "Cursed") {
+                        CCSprite* sprite = CCSprite::create(Mod::get()->expandSpriteName("cursed_gauntlet.png"));
+                        sprite->setPosition(bg->getPosition());
+                        sprite->setScale(1.270f);
+                        sprite->setZOrder(0);
+                        node->addChild(sprite);
                     } else {
                         bg->setVisible(true);
                         label->setVisible(true);

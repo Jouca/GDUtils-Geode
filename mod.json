@@ -54,7 +54,8 @@
             "resources/demon_gauntlet.png",
             "resources/castle_gauntlet.png",
             "resources/galaxy_gauntlet.png",
-            "resources/universe_gauntlet.png"
+            "resources/universe_gauntlet.png",
+            "resources/cursed_gauntlet.png"
         ]
     },
     "settings": {
