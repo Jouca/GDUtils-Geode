@@ -7,7 +7,7 @@
 #include <Geode/modify/CCSprite.hpp>
 #include <Geode/modify/CCScale9Sprite.hpp>
 #include <Geode/loader/Log.hpp>
-#include <Geode/utils/web.hpp>
+#include <Geode/utils/web2.hpp>
 #include "includes.h"
 #include "Settings/CustomSettings.hpp"
 #include "Notifications/EventsPush.h"
@@ -23,6 +23,8 @@
 #include <string>
 #include <sstream>
 #include <codecvt>
+
+static std::unordered_map<std::string, web::WebTask> RUNNING_REQUESTS {};
 
 int reconnectionDelay = 1000;
 int reconnectionDelayMax = 5000;
@@ -215,7 +217,58 @@ class $modify(CCScheduler) { // GD Protocol part
                     std::string const& url = "https://www.boomlings.com/database/getGJLevels21.php";
                     std::string const& fields = "secret=Wmfd2893gb7&type=0&str=" + levelName;
 
-                    std::cout << fields << std::endl;
+                    geode::utils::web::WebRequest request = web::WebRequest();
+                    RUNNING_REQUESTS.emplace(
+                        "@loaderLevelProtocolURL",
+                        request.bodyString(fields).post(url).map(
+                            [](web::WebResponse* response) {
+                                if (response->ok()) {
+                                    if (response->data().empty()) {
+                                        FLAlertLayer::create(nullptr,
+                                            "Error",
+                                            "An server error happened.",
+                                            "OK",
+                                            nullptr,
+                                            180.0F
+                                        )->show();
+                                    } else {
+                                        auto data = response->string().value();
+                                        if (data != "-1") {
+                                            auto scene = CCScene::create();
+
+                                            GJGameLevel* gjgl = EventsPush::convertLevelToJSON(data);
+
+                                            auto layer = LevelInfoLayer::create(gjgl, false);
+                                            layer->downloadLevel();
+                                            scene->addChild(layer);
+                                            CCDirector::sharedDirector()->pushScene(cocos2d::CCTransitionFade::create(0.5f, scene));
+                                        } else {
+                                            FLAlertLayer::create(nullptr,
+                                                "Error",
+                                                "Level not found.",
+                                                "OK",
+                                                nullptr,
+                                                180.0F
+                                            )->show();
+                                        }
+                                    }
+                                } else {
+                                    FLAlertLayer::create(nullptr,
+                                        "Error",
+                                        "An server error happened.",
+                                        "OK",
+                                        nullptr,
+                                        180.0F
+                                    )->show();
+                                }
+
+                                RUNNING_REQUESTS.erase("@loaderLevelProtocolURL");
+                                return *response;
+                            }
+                        )
+                    );
+
+                    /*
                     web::AsyncWebRequest()
                         .bodyRaw(fields)
                         .postRequest()
@@ -247,7 +300,7 @@ class $modify(CCScheduler) { // GD Protocol part
                             nullptr,
                             350.0F
                         )->show();
-                    });
+                    });*/
                 }
             }
         } catch (const std::exception& e) {}

@@ -3,6 +3,8 @@
 
 static StatsListType g_tab = StatsListType::Diamonds;
 
+static std::unordered_map<std::string, web::WebTask> RUNNING_REQUESTS {};
+
 std::vector<std::string> MoreLeaderboards::getWords(std::string s, std::string delim) {
     std::vector<std::string> res;
     std::string token = "";
@@ -98,17 +100,19 @@ bool MoreLeaderboards::init(std::string type) {
     this->addChild(background);
 
     // Change region
-    /*auto menu = CCMenu::create();
+    auto menu_region = CCMenu::create();
 
-    auto regionSpr = CCSprite::createWithSpriteFrameName("GJ_plusBtn_001.png");
+    auto regionSpr = CCSprite::create(Mod::get()->expandSpriteName("earth_btn.png"));
     regionSpr->setScale(.8f);
     auto regionBtn = CCMenuItemSpriteExtra::create(
         regionSpr,
         this,
         menu_selector(MoreLeaderboards::onMoreLeaderboards)
     );
-    regionBtn->setPosition(239, 20);
-    menu->addChild(regionBtn);*/
+    regionBtn->setPosition(239, 0);
+    menu_region->addChild(regionBtn);
+
+    this->addChild(menu_region);
 
     // Corners
     CCSprite* corner_left = CCSprite::createWithSpriteFrameName("GJ_sideArt_001.png");
@@ -248,7 +252,32 @@ void MoreLeaderboards::startLoadingMods() {
     loading_circle->setParentLayer(this);
     loading_circle->show();
 
-    web::AsyncWebRequest()
+    const geode::utils::MiniFunction<void(std::string const&)> then = [this](std::string const& data) {
+        fadeLoadingCircle();
+        handle_request_mods(data);
+    };
+    const geode::utils::MiniFunction<void(std::string const&)> expect = [this](std::string const& error) {
+        fadeLoadingCircle();
+    };
+
+    geode::utils::web::WebRequest request = web::WebRequest();
+    RUNNING_REQUESTS.emplace(
+        "@loaderModListCheck",
+        request.get("https://clarifygdps.com/gdutils/modslist.php").map(
+            [expect = std::move(expect), then = std::move(then)](web::WebResponse* response) {
+                if (response->ok()) {
+                    then(response->string().value());
+                } else {
+                    expect("An error occured while sending a request on our server. Please try again later.");
+                }
+
+                RUNNING_REQUESTS.erase("@loaderModListCheck");
+                return *response;
+            }
+        )
+    );
+
+    /*web::AsyncWebRequest()
     .fetch("https://clarifygdps.com/gdutils/modslist.php")
     .text()
     .then([this](std::string const& data) {
@@ -258,7 +287,7 @@ void MoreLeaderboards::startLoadingMods() {
     })
     .expect([this](std::string const& error) {
         fadeLoadingCircle();
-    });
+    });*/
 };
 
 void MoreLeaderboards::loadPageMods() {
@@ -293,7 +322,86 @@ void MoreLeaderboards::startLoadingMore() {
     }
 
     this->retain();
-    web::AsyncWebRequest()
+
+    geode::utils::web::WebRequest request = web::WebRequest();
+    const geode::utils::MiniFunction<void(std::string const&)> then = [this](std::string const& data) {
+        loading = false;
+        auto scene = CCDirector::sharedDirector()->getRunningScene();
+        auto layer = scene->getChildren()->objectAtIndex(0);
+        if (layer == nullptr) return this->release();
+        if (misc::getNodeName(layer) != "MoreLeaderboards") return this->release(); // prevent le crash, even though the layer shouldve already been destructed
+        if (data == "-1" || data.length() < 2) {
+            fadeLoadingCircle();
+            geode::createQuickPopup(
+                "Error",
+                "An error occured while sending a request on <cy>our server</c>. Please try again later.",
+                "OK", nullptr,
+                [this](auto, bool btn2) {
+                    if (!btn2) {
+                        g_tab = StatsListType::Diamonds;
+                        keyBackClicked();
+                    }
+                }
+            );
+            this->release();
+            return;
+        }
+        fadeLoadingCircle();
+
+        handle_request_more(data);
+        loading = false;
+
+        m_diamondsTabBtn->setEnabled(true);
+        m_usercoinsTabBtn->setEnabled(true);
+        m_demonsTabBtn->setEnabled(true);
+        m_moonsTabBtn->setEnabled(true);
+        m_creatorsTabBtn->setEnabled(true);
+        this->release();
+    };
+    const geode::utils::MiniFunction<void(std::string const&)> expect = [this](std::string const& error) {
+        loading = false;
+        auto scene = CCDirector::sharedDirector()->getRunningScene();
+        auto layer = scene->getChildren()->objectAtIndex(0);
+        if (layer == nullptr) return this->release();
+        if (misc::getNodeName(layer) != "MoreLeaderboards") return this->release();
+        geode::createQuickPopup(
+            "Error",
+            "An error occured while sending a request on <cy>our server</c>. Please try again later.",
+            "OK", nullptr,
+            [this](auto, bool btn2) {
+                if (!btn2) {
+                    g_tab = StatsListType::Diamonds;
+                    keyBackClicked();
+                }
+            }
+        );
+        fadeLoadingCircle();
+        loading = false;
+        m_diamondsTabBtn->setEnabled(true);
+        m_usercoinsTabBtn->setEnabled(true);
+        m_demonsTabBtn->setEnabled(true);
+        m_moonsTabBtn->setEnabled(true);
+        m_creatorsTabBtn->setEnabled(true);
+        this->release();
+    };
+
+    RUNNING_REQUESTS.emplace(
+        "@loaderMoreLeaderboardCheck",
+        request.bodyString(fmt::format("type={}", type)).post("https://clarifygdps.com/gdutils/moreleaderboards.php").map(
+            [expect = std::move(expect), then = std::move(then)](web::WebResponse* response) {
+                if (response->ok()) {
+                    then(response->string().value());
+                } else {
+                    expect("An error occured while sending a request on our server. Please try again later.");
+                }
+
+                RUNNING_REQUESTS.erase("@loaderMoreLeaderboardCheck");
+                return *response;
+            }
+        )
+    );
+
+    /*web::AsyncWebRequest()
     .postRequest()
     .bodyRaw(fmt::format("type={}", type))
     .fetch("https://clarifygdps.com/gdutils/moreleaderboards.php")
@@ -357,7 +465,7 @@ void MoreLeaderboards::startLoadingMore() {
         m_moonsTabBtn->setEnabled(true);
         m_creatorsTabBtn->setEnabled(true);
         this->release();
-    });
+    });*/
 };
 
 void MoreLeaderboards::handle_request_more(std::string const& data) {

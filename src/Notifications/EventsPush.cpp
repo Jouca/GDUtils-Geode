@@ -2,7 +2,9 @@
 #include "../Settings/CustomSettings.hpp"
 #include "Geode/utils/general.hpp"
 #include <queue>
-#include <Geode/utils/web.hpp>
+#include <Geode/utils/web2.hpp>
+
+static std::unordered_map<std::string, web::WebTask> RUNNING_REQUESTS {};
 
 std::queue<sio::message::ptr> eventQueue;
 bool processingEvents = false;
@@ -279,9 +281,51 @@ void EventsPush::onClickBtn(CCObject* ret) {
         #else // mac os 
         int level_id = events_layer->levelId;
         #endif
-        //std::string const& url = "https://clarifygdps.com/getGJLevels21.php";
         std::string const& fields = "secret=Wmfd2893gb7&gameVersion=22&type=0&binaryVersion=35&gdw=0&diff=-&len=-&count=1&str=" + std::to_string(level_id);
-        web::AsyncWebRequest()
+
+        geode::utils::web::WebRequest request = web::WebRequest();
+        RUNNING_REQUESTS.emplace(
+            "@loaderEventRateNotification",
+            request.bodyString(fields).post(url).map(
+                [](web::WebResponse* response) {
+                    if (response->ok()) {
+                        if (response->data().empty()) {
+                            FLAlertLayer::create(nullptr,
+                                "Error",
+                                "An server error happened.",
+                                "OK",
+                                nullptr,
+                                180.0F
+                            )->show();
+                        } else {
+                            auto data_result = response->string().value();
+                            if (data_result != "-1") {
+                                auto scene = CCScene::create();
+                                auto layer = LevelInfoLayer::create(EventsPush::convertLevelToJSON(data_result), false);
+                                layer->downloadLevel();
+                                scene->addChild(layer);
+                                CCDirector::sharedDirector()->pushScene(cocos2d::CCTransitionFade::create(0.5f, scene));
+                            } else {
+                                log::info("Level not found. (-1)");
+                            }
+                        }
+                    } else {
+                        FLAlertLayer::create(nullptr,
+                            "Error",
+                            "An server error happened.",
+                            "OK",
+                            nullptr,
+                            180.0F
+                        )->show();
+                    }
+
+                    RUNNING_REQUESTS.erase("@loaderEventRateNotification");
+                    return *response;
+                }
+            )
+        );
+
+        /*web::AsyncWebRequest()
             .bodyRaw(fields)
             .postRequest()
             .fetch(url).text()
@@ -297,7 +341,7 @@ void EventsPush::onClickBtn(CCObject* ret) {
                 }
         }).expect([](std::string const& error) {
             log::error("Error occured while doing a web request: {}", error);
-        });
+        });*/
     } else { // copy to clipboard
         #ifndef GEODE_IS_MACOS
         clipboard::write(std::to_string(events_layer->level->m_levelID));
