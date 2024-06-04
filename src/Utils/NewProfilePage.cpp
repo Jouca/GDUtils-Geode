@@ -142,13 +142,15 @@ You found a <co>GDUtils developer</c>! :O
 class $modify(ProfilePage) {
     void loadPageFromUserInfo(GJUserScore* a2) {
         auto layer = m_mainLayer;
-        CCMenu* username_menu = typeinfo_cast<CCMenu*>(layer->getChildByIDRecursive("username-menu"));
-        CCLabelBMFont* label = typeinfo_cast<CCLabelBMFont*>(layer->getChildByIDRecursive("username-label"));
         CCMenuItemSpriteExtra* badgeBtn = nullptr;
+        CCMenuItemSpriteExtra* badgeGDUtilBtn = nullptr;
 
         bool modbadge_bool = false;
 
         ProfilePage::loadPageFromUserInfo(a2);
+
+        CCMenu* username_menu = typeinfo_cast<CCMenu*>(layer->getChildByIDRecursive("username-menu"));
+        CCLabelBMFont* label = typeinfo_cast<CCLabelBMFont*>(layer->getChildByIDRecursive("username-label"));
 
         // Keep 7976112 for contributors soon
 
@@ -173,10 +175,10 @@ class $modify(ProfilePage) {
 
             std::vector<int> gdutils_accountID_devs = { 7026949, 6253758, 5509312 };
             if (std::find(gdutils_accountID_devs.begin(), gdutils_accountID_devs.end(), a2->m_accountID) != gdutils_accountID_devs.end()) {
-                if (label != nullptr && username_menu != nullptr && !this->getChildByIDRecursive("gdutils-badge"_spr)) {
+                if (label != nullptr) {
                     auto badgeGDUtil = CCSprite::create(Mod::get()->expandSpriteName("gdutils_badge.png"));
                     badgeGDUtil->setScale(.3f);
-                    auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
+                    badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
                         badgeGDUtil,
                         this,
                         menu_selector(NewProfilePage::onGDUtilsBadgePressed)
@@ -191,10 +193,8 @@ class $modify(ProfilePage) {
                     username_menu->addChild(badgeGDUtilBtn);
                 }
             }
+
+            if (username_menu != nullptr) username_menu->updateLayout();
         }
-
-        username_menu->updateLayout();
-
-        NodeIDs::provideFor(this);
     }
 };
