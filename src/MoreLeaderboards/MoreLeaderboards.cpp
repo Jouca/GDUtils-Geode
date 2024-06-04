@@ -48,6 +48,7 @@ CCDictionary* MoreLeaderboards::responseToDict(const std::string& response){
             } else if (keyID == "1") {
                 username = currentKey;
             }
+            dict->setObject(CCString::create(currentKey.c_str()),keyID);
         }
         i++;
     }
@@ -388,72 +389,6 @@ void MoreLeaderboards::startLoadingMore() {
             }
         )
     );
-
-    /*web::AsyncWebRequest()
-    .postRequest()
-    .bodyRaw(fmt::format("type={}", type))
-    .fetch("https://clarifygdps.com/gdutils/moreleaderboards.php")
-    .text()
-    .then([this, type](std::string const& data) {
-        loading = false;
-        auto scene = CCDirector::sharedDirector()->getRunningScene();
-        auto layer = scene->getChildren()->objectAtIndex(0);
-        if (layer == nullptr) return this->release();
-        if (misc::getNodeName(layer) != "MoreLeaderboards") return this->release(); // prevent le crash, even though the layer shouldve already been destructed
-        if (data == "-1" || data.length() < 2) {
-            fadeLoadingCircle();
-            geode::createQuickPopup(
-                "Error",
-                "An error occured while sending a request on <cy>our server</c>. Please try again later.",
-                "OK", nullptr,
-                [this](auto, bool btn2) {
-                    if (!btn2) {
-                        g_tab = StatsListType::Diamonds;
-                        keyBackClicked();
-                    }
-                }
-            );
-            this->release();
-            return;
-        }
-        fadeLoadingCircle();
-
-        handle_request_more(data);
-        loading = false;
-
-        m_diamondsTabBtn->setEnabled(true);
-        m_usercoinsTabBtn->setEnabled(true);
-        m_demonsTabBtn->setEnabled(true);
-        m_moonsTabBtn->setEnabled(true);
-        m_creatorsTabBtn->setEnabled(true);
-        this->release();
-    })
-    .expect([this, type](std::string const& error) {
-        loading = false;
-        auto scene = CCDirector::sharedDirector()->getRunningScene();
-        auto layer = scene->getChildren()->objectAtIndex(0);
-        if (layer == nullptr) return this->release();
-        if (misc::getNodeName(layer) != "MoreLeaderboards") return this->release();
-        geode::createQuickPopup(
-            "Error",
-            "An error occured while sending a request on <cy>our server</c>. Please try again later.",
-            "OK", nullptr,
-            [this](auto, bool btn2) {
-                if (!btn2) {
-                    g_tab = StatsListType::Diamonds;
-                    keyBackClicked();
-                }
-            }
-        );
-        fadeLoadingCircle();
-        loading = false;
-        m_diamondsTabBtn->setEnabled(true);
-        m_usercoinsTabBtn->setEnabled(true);
-        m_demonsTabBtn->setEnabled(true);
-        m_moonsTabBtn->setEnabled(true);
-        m_creatorsTabBtn->setEnabled(true);
-        this->release();
-    });*/
 };
 
 void MoreLeaderboards::handle_request_more(std::string const& data) {
