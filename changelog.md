@@ -1,3 +1,7 @@
+# v1.2.21
+    - Port to Geometry Dash 2.206
+    - Added previews for locked icons with colors
+    - Thumbnails for levels URLs when sharing it on Discord
 # v1.2.20
     - Added iOS support (Only BG and notifications currently work)
 # v1.2.19 
