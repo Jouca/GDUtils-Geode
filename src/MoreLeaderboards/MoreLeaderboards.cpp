@@ -73,6 +73,19 @@ void MoreLeaderboards::onModsList(CCObject* pSender) {
     CCDirector::sharedDirector()->pushScene(transitionFade);
 }
 
+void MoreLeaderboards::onRegion(CCObject* pSender) {
+    FLAlertLayer::create(
+        nullptr,
+        "Coming soon!",
+        R"text(
+Filter by region is coming soon! Stay tuned for updates!
+        )text",
+        "OK",
+        nullptr,
+        270.0f
+    )->show();
+}
+
 MoreLeaderboards* MoreLeaderboards::create(std::string type) {
     auto pRet = new MoreLeaderboards();
     if (pRet && pRet->init(type)) {
@@ -125,7 +138,7 @@ bool MoreLeaderboards::init(std::string type) {
         auto regionBtn = CCMenuItemSpriteExtra::create(
             regionSpr,
             this,
-            menu_selector(MoreLeaderboards::onMoreLeaderboards)
+            menu_selector(MoreLeaderboards::onRegion)
         );
         regionBtn->setPosition(239, 0);
         menu_region->addChild(regionBtn);

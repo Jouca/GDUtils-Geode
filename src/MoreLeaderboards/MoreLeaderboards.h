@@ -48,6 +48,7 @@ class MoreLeaderboards : public CCLayer {
     public:
         void onMoreLeaderboards(CCObject*);
         void onModsList(CCObject*);
+        void onRegion(CCObject*);
 
         void onTab(CCObject* pSender);
 
