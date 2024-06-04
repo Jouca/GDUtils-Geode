@@ -710,8 +710,8 @@ bool EventsPush::init(sio::message::ptr const& data) {
         nullptr
     ));
 
-    /*if (Mod::get()->getSettingValue<bool>("sfx") && type != 3 && type != 4) FMODAudioEngine::sharedEngine()->playEffect("crystal01.ogg");
-    if (Mod::get()->getSettingValue<bool>("sfx") && (type == 3 || type == 4)) FMODAudioEngine::sharedEngine()->playEffect("reward01.ogg");*/
+    if (Mod::get()->getSettingValue<bool>("sfx") && type != 3 && type != 4) FMODAudioEngine::sharedEngine()->playEffect("crystal01.ogg");
+    if (Mod::get()->getSettingValue<bool>("sfx") && (type == 3 || type == 4)) FMODAudioEngine::sharedEngine()->playEffect("reward01.ogg");
 
     return true;
 }
