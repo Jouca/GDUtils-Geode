@@ -99,21 +99,6 @@ bool MoreLeaderboards::init(std::string type) {
     background->setZOrder(-1);
     this->addChild(background);
 
-    // Change region
-    auto menu_region = CCMenu::create();
-
-    auto regionSpr = CCSprite::create(Mod::get()->expandSpriteName("earth_btn.png"));
-    regionSpr->setScale(.8f);
-    auto regionBtn = CCMenuItemSpriteExtra::create(
-        regionSpr,
-        this,
-        menu_selector(MoreLeaderboards::onMoreLeaderboards)
-    );
-    regionBtn->setPosition(239, 0);
-    menu_region->addChild(regionBtn);
-
-    this->addChild(menu_region);
-
     // Corners
     CCSprite* corner_left = CCSprite::createWithSpriteFrameName("GJ_sideArt_001.png");
     CCSprite* corner_right = CCSprite::createWithSpriteFrameName("GJ_sideArt_001.png");
@@ -131,6 +116,21 @@ bool MoreLeaderboards::init(std::string type) {
     this->addChild(menu);
 
     if (type == "more") {
+        // Change region
+        auto menu_region = CCMenu::create();
+
+        auto regionSpr = CCSprite::create(Mod::get()->expandSpriteName("earth_btn.png"));
+        regionSpr->setScale(.8f);
+        auto regionBtn = CCMenuItemSpriteExtra::create(
+            regionSpr,
+            this,
+            menu_selector(MoreLeaderboards::onMoreLeaderboards)
+        );
+        regionBtn->setPosition(239, 0);
+        menu_region->addChild(regionBtn);
+
+        this->addChild(menu_region);
+
         // create menus
         m_menu = CCMenu::create();
 
@@ -276,18 +276,6 @@ void MoreLeaderboards::startLoadingMods() {
             }
         )
     );
-
-    /*web::AsyncWebRequest()
-    .fetch("https://clarifygdps.com/gdutils/modslist.php")
-    .text()
-    .then([this](std::string const& data) {
-        fadeLoadingCircle();
-
-        handle_request_mods(data);
-    })
-    .expect([this](std::string const& error) {
-        fadeLoadingCircle();
-    });*/
 };
 
 void MoreLeaderboards::loadPageMods() {
