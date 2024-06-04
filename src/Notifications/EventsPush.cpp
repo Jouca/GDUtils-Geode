@@ -471,6 +471,7 @@ bool EventsPush::init(sio::message::ptr const& data) {
             diffFace = cocos2d::CCSprite::createWithSpriteFrameName(getDemonDifficultyIcon(starsum));
             mythic = GJDifficultySprite::create(static_cast<int>(getDemonDifficulty(starsum)), static_cast<GJDifficultyName>(0));
         }
+        
         diffFace->setPosition({26.f, 43.f});
         diffFace->setScale(.8F);
         CCSprite* star = cocos2d::CCSprite::createWithSpriteFrameName("star_small01_001.png");
@@ -709,8 +710,8 @@ bool EventsPush::init(sio::message::ptr const& data) {
         nullptr
     ));
 
-    if (Mod::get()->getSettingValue<bool>("sfx") && type != 3 && type != 4) FMODAudioEngine::sharedEngine()->playEffect("crystal01.ogg");
-    if (Mod::get()->getSettingValue<bool>("sfx") && (type == 3 || type == 4)) FMODAudioEngine::sharedEngine()->playEffect("reward01.ogg");
+    /*if (Mod::get()->getSettingValue<bool>("sfx") && type != 3 && type != 4) FMODAudioEngine::sharedEngine()->playEffect("crystal01.ogg");
+    if (Mod::get()->getSettingValue<bool>("sfx") && (type == 3 || type == 4)) FMODAudioEngine::sharedEngine()->playEffect("reward01.ogg");*/
 
     return true;
 }

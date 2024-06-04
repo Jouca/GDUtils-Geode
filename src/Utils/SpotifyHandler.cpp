@@ -256,7 +256,6 @@ class $modify(EditorUI) {
     void onPlaytest(CCObject* sender) {
         EditorUI::onPlaytest(sender);
         if (!Mod::get()->getSettingValue<bool>("inEditorSpotify")) return;
-        auto gm = FMODAudioEngine::sharedEngine();
         //if (gm->m_backgroundMusicVolume > 0.0f) {
         if (1 > 0.0F) { // temp until someone adds fields
             toggleSpotifyMute();
@@ -274,7 +273,6 @@ class $modify(EditorUI) {
         EditorUI::onPlayback(sender);
         if (!Mod::get()->getSettingValue<bool>("inEditorSpotify")) return;
 
-        auto gm = FMODAudioEngine::sharedEngine();
         //if (gm->m_backgroundMusicVolume > 0.0f) {
         if (1 > 0.0F) { // temp until someone adds fields
             toggleSpotifyMute();

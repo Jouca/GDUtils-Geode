@@ -117,7 +117,7 @@ namespace videoplayer {
     };
 
     void VideoPlayer::initAudio() {
-        FMODAudioEngine* engine = FMODAudioEngine::sharedEngine();
+        /*FMODAudioEngine* engine = FMODAudioEngine::sharedEngine();
 
         int sampleRate = plm_get_samplerate(m_stream);
 
@@ -142,7 +142,7 @@ namespace videoplayer {
         m_channel->setVolume(m_volume);
         
         m_channel->setUserData(this);
-        if (m_loop) m_channel->setCallback(&VideoPlayer::audioCallback);
+        if (m_loop) m_channel->setCallback(&VideoPlayer::audioCallback);*/
     }
 
     FMOD_RESULT F_CALLBACK videoplayer::VideoPlayer::audioCallback(FMOD_CHANNELCONTROL *chanControl, FMOD_CHANNELCONTROL_TYPE controlType, FMOD_CHANNELCONTROL_CALLBACK_TYPE callbackType, void *commandData1, void *commandData2) {
