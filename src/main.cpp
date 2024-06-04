@@ -214,10 +214,14 @@ class $modify(CCScheduler) { // GD Protocol part
                         break;
                     }
                     
-                    std::string const& url = "https://www.boomlings.com/database/getGJLevels21.php";
-                    std::string const& fields = "secret=Wmfd2893gb7&type=0&str=" + levelName;
+                    std::string url = "https://www.boomlings.com/database/getGJLevels21.php";
+                    std::string fields = fmt::format("secret=Wmfd2893gb7&type=0&str={}", levelName);
+
+                    log::debug("Fetching level: {}|", levelName);
 
                     geode::utils::web::WebRequest request = web::WebRequest();
+                    request.userAgent("");
+                    request.header("Content-Type", "application/x-www-form-urlencoded");
                     RUNNING_REQUESTS.emplace(
                         "@loaderLevelProtocolURL",
                         request.bodyString(fields).post(url).map(
@@ -233,6 +237,7 @@ class $modify(CCScheduler) { // GD Protocol part
                                         )->show();
                                     } else {
                                         auto data = response->string().value();
+                                        log::debug("Data: {}", data);
                                         if (data != "-1") {
                                             auto scene = CCScene::create();
 
