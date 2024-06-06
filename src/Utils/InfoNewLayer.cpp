@@ -30,7 +30,7 @@ class $modify(InfoLayer) {
             menu_selector(InfoNewLayer::onCopyLevelURL)
         );
         copyBtn->setUserObject(cocos2d::CCString::create(gd::string(levelID)));
-        copyBtn->setPosition(14, -11);
+        copyBtn->setPosition(14, -55);
         menu->addChild(copyBtn);
         
         return true;
