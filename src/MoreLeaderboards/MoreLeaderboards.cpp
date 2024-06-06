@@ -318,13 +318,13 @@ void MoreLeaderboards::startLoadingMore() {
     if (g_tab == StatsListType::Diamonds) {
         type = "diamonds";
     } else if (g_tab == StatsListType::UserCoins) {
-        type = "coins";
+        type = "ucoins";
     } else if (g_tab == StatsListType::Demons) {
         type = "demons";
     } else if (g_tab == StatsListType::Moons) {
         type = "moons";
     } else if (g_tab == StatsListType::Creators) {
-        type = "creators";
+        type = "cp";
     }
 
     this->retain();
@@ -357,11 +357,6 @@ void MoreLeaderboards::startLoadingMore() {
         handle_request_more(data);
         loading = false;
 
-        m_diamondsTabBtn->setEnabled(true);
-        m_usercoinsTabBtn->setEnabled(true);
-        m_demonsTabBtn->setEnabled(true);
-        m_moonsTabBtn->setEnabled(true);
-        m_creatorsTabBtn->setEnabled(true);
         this->release();
     };
     const geode::utils::MiniFunction<void(std::string const&)> expect = [this](std::string const& error) {
@@ -383,11 +378,6 @@ void MoreLeaderboards::startLoadingMore() {
         );
         fadeLoadingCircle();
         loading = false;
-        m_diamondsTabBtn->setEnabled(true);
-        m_usercoinsTabBtn->setEnabled(true);
-        m_demonsTabBtn->setEnabled(true);
-        m_moonsTabBtn->setEnabled(true);
-        m_creatorsTabBtn->setEnabled(true);
         this->release();
     };
 
@@ -446,12 +436,6 @@ void MoreLeaderboards::onTab(CCObject* pSender) {
     if (loading) return;
 
     loading = true;
-
-    m_diamondsTabBtn->setEnabled(false);
-    m_usercoinsTabBtn->setEnabled(false);
-    m_demonsTabBtn->setEnabled(false);
-    m_moonsTabBtn->setEnabled(false);
-    m_creatorsTabBtn->setEnabled(false);
 
     if (displayedData) {
         displayedData->release();
