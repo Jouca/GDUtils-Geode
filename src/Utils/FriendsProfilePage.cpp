@@ -102,6 +102,7 @@ class $modify(FriendPage, FriendsProfilePage) {
         auto sceneChildren = scene->getChildren();
         auto customList = getCustomList(sceneChildren);
 
+        if (customList == nullptr) return;
         customList->scrollLayer(200);
     }
     void onUp(CCObject*) {
@@ -109,6 +110,8 @@ class $modify(FriendPage, FriendsProfilePage) {
         auto scene = CCDirector::sharedDirector()->getRunningScene();
         auto sceneChildren = scene->getChildren();
         auto customList = getCustomList(sceneChildren);
+
+        if (customList == nullptr) return;
         customList->scrollLayer(-200);
     }
     void onSearch(CCObject*) {
@@ -166,6 +169,9 @@ class $modify(FriendPage, FriendsProfilePage) {
         auto scene = CCDirector::sharedDirector()->getRunningScene();
         auto sceneChildren = scene->getChildren();
         auto customList = getCustomList(sceneChildren);
+
+        if (customList == nullptr) return;
+
         CCContentLayer* contentLayer = static_cast<CCContentLayer*>(
             customList->getChildren()->objectAtIndex(0)
         );
