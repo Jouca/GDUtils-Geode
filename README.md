@@ -1,4 +1,4 @@
-# GDUtils Geode Port
+# GDUtils
 **By [Jouca](https://github.com/Jouca) and [Firee](https://github.com/FireMario211)**
 A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute, game fixes & more!
 ![Mod Example](resources/Screenshot_1.png)
