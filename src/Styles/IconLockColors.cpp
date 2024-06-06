@@ -86,7 +86,7 @@ class IconLockColors {
                         child,
                         menu_selector(IconLockColors::onP1)
                     );
-                    p1Btn->setPosition(73, 0);
+                    p1Btn->setPosition(73, 183);
                     child->m_buttonMenu->addChild(p1Btn);
 
                     auto p2Spr = CCSprite::createWithSpriteFrameName("GJ_checkOff_001.png");
@@ -100,7 +100,7 @@ class IconLockColors {
                         child,
                         menu_selector(IconLockColors::onP2)
                     );
-                    p2Btn->setPosition(101, 0);
+                    p2Btn->setPosition(101, 183);
                     child->m_buttonMenu->addChild(p2Btn);
 
                     auto glowSpr = CCSprite::createWithSpriteFrameName("GJ_checkOff_001.png");
@@ -114,7 +114,7 @@ class IconLockColors {
                         child,
                         menu_selector(IconLockColors::onGlow)
                     );
-                    glowBtn->setPosition(129, 0);
+                    glowBtn->setPosition(129, 183);
                     child->m_buttonMenu->addChild(glowBtn);
                 }
             }
