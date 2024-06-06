@@ -1,5 +1,6 @@
 #include "MoreLeaderboards.h"
 #include <Geode/modify/LeaderboardsLayer.hpp>
+#include <Geode/ui/GeodeUI.hpp>
 
 static StatsListType g_tab = StatsListType::Diamonds;
 
@@ -74,16 +75,19 @@ void MoreLeaderboards::onModsList(CCObject* pSender) {
 }
 
 void MoreLeaderboards::onRegion(CCObject* pSender) {
-    FLAlertLayer::create(
-        nullptr,
+    geode::createQuickPopup(
         "Coming soon!",
         R"text(
-Filter by region is coming soon! Stay tuned for updates!
+<cy>Filter by country</c> leaderboards is coming soon on GDUtils!
+Stay tuned for updates via our <cj>Discord server</c> on the page of the mod in the <cy>Geode Index</c>!
         )text",
-        "OK",
-        nullptr,
-        270.0f
-    )->show();
+        "OK", "Mod page",
+        [](auto, bool btn2) {
+            if (btn2) {
+                openIndexPopup(Mod::get());
+            }
+        }
+    );
 }
 
 MoreLeaderboards* MoreLeaderboards::create(std::string type) {

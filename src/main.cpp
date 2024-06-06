@@ -12,7 +12,6 @@
 #include "Settings/CustomSettings.hpp"
 #include "Notifications/EventsPush.h"
 #include "ProcessLambdas.h"
-#include "Discord.h"
 #include <fmt/format.h>
 #include <chrono>
 #include <thread>
@@ -148,7 +147,6 @@ class $modify(CCScheduler) { // used to be GameManager
         if (layerName == "cocos2d::CCLayerColor") return;
         if (layerName == "LoadingLayer") return;
         if (currentLayer != layerName) {
-            //Discord::update(layerName.c_str()); for next update ;)
             currentLayer = layerName;
             EventsPush::stopNow(scene);
             bool everywhereElse = Mod::get()->getSettingValue<bool>("everywhereElse");
@@ -216,8 +214,6 @@ class $modify(CCScheduler) { // GD Protocol part
                     
                     std::string url = "https://www.boomlings.com/database/getGJLevels21.php";
                     std::string fields = fmt::format("secret=Wmfd2893gb7&type=0&str={}", levelName);
-
-                    log::debug("Fetching level: {}|", levelName);
 
                     geode::utils::web::WebRequest request = web::WebRequest();
                     request.userAgent("");
