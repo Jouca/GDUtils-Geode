@@ -44,9 +44,11 @@ void BadApple::keyBackClicked() {
 
 // touhou time
 //#ifdef GEODE_IS_WINDOWS
-#include "BadApple.h"
 std::string text_input = "";
+#include "BadApple.h"
 bool bad_apple = false;
+#include "COTE.h"
+bool cote = false;
 
 #include <Geode/modify/SecretLayer2.hpp>
 
@@ -54,6 +56,7 @@ class $modify(SecretVault, SecretLayer2) {
     bool init() {
         if (!SecretLayer2::init()) return false;
         bad_apple = false;
+        cote = false;
         return true;
     }
     void onSubmit(CCObject* obj) {
@@ -87,7 +90,31 @@ class $modify(SecretVault, SecretLayer2) {
                 this->addChild(badappleLabel);
             }
         }
+
+        if (!strcmp(text_input.c_str(), "honami best girl")) {
+            if (!cote) {
+                std::filesystem::create_directory("gdutils");
+                cote = true;
+
+                vault_text->setString("Well, you have good taste.");
+                vault_text->setColor({ 245, 143, 221 });
+                auto COTESpr = CCSprite::createWithSpriteFrameName("GJ_musicOnBtn_001.png");
+                auto COTEBtn = CCMenuItemSpriteExtra::create(
+                    COTESpr,
+                    this,
+                    menu_selector(SecretVault::onLaunchCOTE)
+                );
+                COTEBtn->setPosition(17, -89);
+                menu->addChild(COTEBtn);
+
+                auto COTELabel = CCLabelBMFont::create("Classroom of the Elite", "bigFont.fnt");
+                COTELabel->setScale(.2f);
+                COTELabel->setPosition(44, 237);
+                this->addChild(COTELabel);
+            }
+        }
     }
+
     void launchBadApple(CCObject* pSender) {
         //GameSoundManager::sharedManager()->stopBackgroundMusic();
         auto scene = cocos2d::CCScene::create();
@@ -103,9 +130,30 @@ class $modify(SecretVault, SecretLayer2) {
             SecretVault::launchBadApple(node);
         } else {
             log::info("wait for bad apple");
-#ifdef GEODE_IS_WINDOWS
+        #ifdef GEODE_IS_WINDOWS
             DownloadManager::create("https://clarifygdps.com/videos/bad_apple.mpg", "gdutils/bad_apple.mpg", menu_selector(SecretVault::launchBadApple))->show();
-#endif
+        #endif
+        }
+    }
+
+    void launchCOTE(CCObject* pSender) {
+        //GameSoundManager::sharedManager()->stopBackgroundMusic();
+        auto scene = cocos2d::CCScene::create();
+        auto layer = COTE::create();
+        scene->addChild(layer);
+        CCDirector::sharedDirector()->pushScene(scene); // cocos2d::CCTransitionFade::create(0.5f, scene)
+    }
+
+    void onLaunchCOTE(CCObject* pSender) {
+        if (std::filesystem::exists("gdutils/cote.mpg")) {
+            auto node = CCNode::create();
+            node->setTag(10);
+            SecretVault::launchCOTE(node);
+        } else {
+            log::info("wait for cote");
+        #ifdef GEODE_IS_WINDOWS
+            DownloadManager::create("https://clarifygdps.com/videos/cote.mpg", "gdutils/cote.mpg", menu_selector(SecretVault::launchCOTE))->show();
+        #endif
         }
     }
 
