@@ -20,6 +20,12 @@ class MoreLeaderboards : public CCLayer {
     GJListLayer* listLayer = nullptr;
     cocos2d::CCArray* displayedData = nullptr;
     LoadingCircle* loading_circle = nullptr;
+
+    CCLabelBMFont* page_label = nullptr;
+    CCMenuItemSpriteExtra* page_left = nullptr;
+    CCMenuItemSpriteExtra* page_right = nullptr;
+    CCSprite* trophy = nullptr;
+
     CCString* datas = nullptr;
 
     bool loading = false;
@@ -45,12 +51,17 @@ class MoreLeaderboards : public CCLayer {
         void loadPageMods();
         void startLoadingMore();
         void loadPageMore();
+        void loadPageStats();
+
+        void resetInfos();
     public:
         void onMoreLeaderboards(CCObject*);
         void onModsList(CCObject*);
         void onRegion(CCObject*);
 
         void onTab(CCObject* pSender);
+        void onPageLeft(CCObject* pSender);
+        void onPageRight(CCObject* pSender);
 
         static MoreLeaderboards* create(std::string type);
         void fadeLoadingCircle();

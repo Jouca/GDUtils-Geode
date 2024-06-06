@@ -3,7 +3,10 @@
 #include <Geode/ui/GeodeUI.hpp>
 
 static StatsListType g_tab = StatsListType::Diamonds;
-
+static int page = 0;
+static int start_count = 0;
+static int end_count = 0;
+static int total_count = 0;
 static std::unordered_map<std::string, web::WebTask> RUNNING_REQUESTS {};
 
 std::vector<std::string> MoreLeaderboards::getWords(std::string s, std::string delim) {
@@ -144,7 +147,7 @@ bool MoreLeaderboards::init(std::string type) {
             this,
             menu_selector(MoreLeaderboards::onRegion)
         );
-        regionBtn->setPosition(239, 0);
+        regionBtn->setPosition(239, -70);
         menu_region->addChild(regionBtn);
 
         this->addChild(menu_region);
@@ -383,7 +386,7 @@ void MoreLeaderboards::startLoadingMore() {
 
     RUNNING_REQUESTS.emplace(
         "@loaderMoreLeaderboardCheck",
-        request.bodyString(fmt::format("type={}", type)).post("https://clarifygdps.com/gdutils/moreleaderboards.php").map(
+        request.bodyString(fmt::format("type={}&page={}", type, page)).post("https://clarifygdps.com/gdutils/moreleaderboards.php").map(
             [expect = std::move(expect), then = std::move(then)](web::WebResponse* response) {
                 if (response->ok()) {
                     then(response->string().value());
@@ -403,8 +406,11 @@ void MoreLeaderboards::handle_request_more(std::string const& data) {
 
     if (data != "-1") {
         displayedData = CCArray::create();
-        
-        std::vector<std::string> users = getWords(data, "|");
+
+        std::vector<std::string> dataString = getWords(data, "#");
+
+        std::vector<std::string> users = getWords(dataString[0], "|");
+        std::vector<std::string> data_page = getWords(dataString[1], "|");
 
         while (users.size() > 0) {
             std::string user = users[0];
@@ -415,9 +421,26 @@ void MoreLeaderboards::handle_request_more(std::string const& data) {
             displayedData->addObject(score);
             users.erase(users.begin());
         };
+
+        int id = 0;
+        while (data_page.size() > 0) {
+            std::string page = data_page[0];
+
+            if (id == 0) {
+                start_count = std::stoi(page);
+            } else if (id == 1) {
+                end_count = std::stoi(page);
+            } else if (id == 2) {
+                total_count = std::stoi(page);
+            }
+
+            id++;
+            data_page.erase(data_page.begin());
+        }
     }
 
     loadPageMore();
+    loadPageStats();
 }
 
 void MoreLeaderboards::loadPageMore() {
@@ -430,6 +453,115 @@ void MoreLeaderboards::loadPageMore() {
     listLayer->setPosition(winSize / 2 - listLayer->getScaledContentSize() / 2 - CCPoint(0,5));
 
     addChild(listLayer);
+}
+
+void MoreLeaderboards::loadPageStats() {
+    if (page_label != nullptr) page_label->removeFromParentAndCleanup(true);
+
+    CCMenu* menu_label = CCMenu::create();
+    menu_label->setLayout(
+        RowLayout::create()
+        ->setAxisAlignment(AxisAlignment::Center)
+        ->setGap(10.f)
+    );
+    menu_label->setPosition({ 285.f, 12.f });
+    menu_label->setContentSize({ 300.f, 7.f });
+
+    auto winSize = CCDirector::sharedDirector()->getWinSize();
+    std::string fmt = fmt::format("Top {} - {} of {}", start_count, end_count, total_count);
+    page_label = CCLabelBMFont::create(fmt.c_str(), "goldFont.fnt");
+    page_label->setZOrder(40);
+    page_label->setScale(.4f);
+    menu_label->addChild(page_label);
+
+    trophy = CCSprite::createWithSpriteFrameName("rankIcon_top10_001.png");
+    trophy->setScale(.3f);
+    trophy->setPosition(CCPoint { -5.f, 0.f } - page_label->getScaledContentSize().width);
+    menu_label->addChild(trophy);
+
+    addChild(menu_label);
+    menu_label->updateLayout();
+
+    CCMenu* menu = CCMenu::create();
+
+    if (page_left != nullptr) page_left->removeFromParentAndCleanup(true);
+    if (page_right != nullptr) page_right->removeFromParentAndCleanup(true);
+
+    if (page > 0) {
+        page_left = CCMenuItemSpriteExtra::create(
+            CCSprite::createWithSpriteFrameName("GJ_arrow_02_001.png"),
+            this,
+            menu_selector(MoreLeaderboards::onPageLeft)
+        );
+        page_left->setPosition(-220, 0);
+        menu->addChild(page_left);
+    }
+
+    if (end_count < total_count) {
+        auto sprite = CCSprite::createWithSpriteFrameName("GJ_arrow_02_001.png");
+        sprite->setFlipX(true);
+        page_right = CCMenuItemSpriteExtra::create(
+            sprite,
+            this,
+            menu_selector(MoreLeaderboards::onPageRight)
+        );
+        page_right->setPosition(220, 0);
+        menu->addChild(page_right);
+    }
+
+    addChild(menu);
+}
+
+void MoreLeaderboards::onPageLeft(CCObject* pSender) {
+    if (loading) return;
+
+    loading = true;
+
+    if (displayedData) {
+        displayedData->release();
+        displayedData = cocos2d::CCArray::create();
+        displayedData->retain();
+    }
+
+    page--;
+    resetInfos();
+    
+    if (loading) {
+        startLoadingMore();
+        loadPageMore();
+    }
+}
+
+void MoreLeaderboards::onPageRight(CCObject* pSender) {
+    if (loading) return;
+
+    loading = true;
+
+    if (displayedData) {
+        displayedData->release();
+        displayedData = cocos2d::CCArray::create();
+        displayedData->retain();
+    }
+
+    page++;
+    resetInfos();
+    
+    if (loading) {
+        startLoadingMore();
+        loadPageMore();
+    }
+}
+
+void MoreLeaderboards::resetInfos() {
+    if (page_label != nullptr) page_label->removeFromParentAndCleanup(true);
+    if (page_left != nullptr) page_left->removeFromParentAndCleanup(true);
+    if (page_right != nullptr) page_right->removeFromParentAndCleanup(true);
+    if (trophy != nullptr) trophy->removeFromParentAndCleanup(true);
+
+    page_label = nullptr;
+    page_left = nullptr;
+    page_right = nullptr;
+    trophy = nullptr;
 }
 
 void MoreLeaderboards::onTab(CCObject* pSender) {
@@ -446,6 +578,10 @@ void MoreLeaderboards::onTab(CCObject* pSender) {
     if (pSender) {
         g_tab = static_cast<StatsListType>(pSender->getTag());
     }
+
+    resetInfos();
+
+    page = 0;
 
     auto toggleTab = [this](CCMenuItemToggler* member) -> void {
         auto isSelected = member->getTag() == static_cast<int>(g_tab);
