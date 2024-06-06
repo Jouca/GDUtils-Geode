@@ -1,7 +1,7 @@
 #include "MoreLeaderboardsCell.h"
 #include <Geode/utils/web.hpp>
 
-void MoreLeaderboardsCell::loadFromDict(cocos2d::CCDictionary* content) // 
+void MoreLeaderboardsCell::loadFromDict(cocos2d::CCDictionary* content)
 {
     auto winSize = CCDirector::sharedDirector()->getWinSize();
     auto name = content->valueForKey("modstring")->getCString();

@@ -521,13 +521,11 @@ public:
     InputNode* defaultApp_input = InputNode::create(180.0F, "Application", "bigFont.fnt", "", 1);
     void commit() override {
         static_cast<SettingAppValue*>(m_value)->setApp(m_currentApp);
-        //if (m_resetBtn) m_resetBtn->setVisible(this->hasNonDefaultValue());
         this->dispatchCommitted();
     }
     // Geode calls this to query if the setting value has been changed, 
     // and those changes haven't been committed
     bool hasUncommittedChanges() override {
-        //if (m_resetBtn) m_resetBtn->setVisible(this->hasNonDefaultValue());
         return m_currentApp != static_cast<SettingAppValue*>(m_value)->getApp();
     }
 
@@ -541,7 +539,6 @@ public:
     void resetToDefault() override {
         m_currentApp = DEFAULT_APP;
         static_cast<SettingAppValue*>(m_value)->setApp(m_currentApp);
-        //if (m_resetBtn) m_resetBtn->setVisible(false);
         defaultApp_input->setString(DEFAULT_APP);
     }
     static SettingAppNode* create(SettingAppValue* value, float width) {

@@ -124,7 +124,6 @@ void start_socket_func() {
 std::string currentLayer = "";
 void processEvent(CCScene* self) {
     if (!dataQueue.empty()) {
-        log::debug("process event");
         auto data = dataQueue.front();
         dataQueue.pop();
         EventsPush::pushRateLevel(self, data);
@@ -233,7 +232,6 @@ class $modify(CCScheduler) { // GD Protocol part
                                         )->show();
                                     } else {
                                         auto data = response->string().value();
-                                        log::debug("Data: {}", data);
                                         if (data != "-1") {
                                             auto scene = CCScene::create();
 
@@ -268,67 +266,12 @@ class $modify(CCScheduler) { // GD Protocol part
                             }
                         )
                     );
-
-                    /*
-                    web::AsyncWebRequest()
-                        .bodyRaw(fields)
-                        .postRequest()
-                        .fetch(url).text()
-                        .then([&](std::string & response) {
-                            if (response != "-1") {
-                                auto scene = CCScene::create();
-
-                                GJGameLevel* gjgl = EventsPush::convertLevelToJSON(response);
-
-                                auto layer = LevelInfoLayer::create(gjgl, false);
-                                layer->downloadLevel();
-                                scene->addChild(layer);
-                                CCDirector::sharedDirector()->pushScene(cocos2d::CCTransitionFade::create(0.5f, scene));
-                            } else {
-                                FLAlertLayer::create(nullptr,
-                                    "Error",
-                                    "Level not found.",
-                                    "OK",
-                                    nullptr,
-                                    180.0F
-                                )->show();
-                            }
-                    }).expect([](std::string const& error) {
-                        FLAlertLayer::create(nullptr,
-                            "Error",
-                            "An error happened when trying to fetch the level.",
-                            "OK",
-                            nullptr,
-                            350.0F
-                        )->show();
-                    });*/
                 }
             }
         } catch (const std::exception& e) {}
     }
 };
 #endif
-
-// GDUtils online menu
-/*class $modify(CreatorLayer) {
-    bool init() {
-        if (!CreatorLayer::init()) return false;
-
-        auto menu = CCMenu::create();
-        auto spr = CCSprite::create(Mod::get()->expandSpriteName("gdutils_badge.png"));
-        spr->setScale(.65f);
-        auto sprBtn = CCMenuItemSpriteExtra::create(
-            spr,
-            this,
-            nullptr
-        );
-        sprBtn->setPosition(262, -47);
-        menu->addChild(sprBtn);
-        this->addChild(menu);
-        
-        return true;
-    }
-};*/
 
 // Backgrounds
 class $modify(CCSprite) {
@@ -355,10 +298,6 @@ class $modify(CCSprite) {
 
 // Child background
 class $modify(CCScale9Sprite) {
-    /*
-    cocos2d::extension::CCScale9Sprite::create
-          ("square02b_001.png",(CCRect)(CCSize *)&local_44);
-    */
     static cocos2d::extension::CCScale9Sprite* create(char const* name, CCRect rect) {
         auto ret = cocos2d::extension::CCScale9Sprite::create(name, rect);
         if (ret == nullptr) return ret;
@@ -466,7 +405,6 @@ $on_mod(Loaded) {
     #else
     Mod::get()->addCustomSetting<SettingAppValue>("spotifyApp", "Spotify.app");
     #endif
-    //Mod::get()->addCustomSetting<class T>(const std::string &key, "Spotify.exe");
     Mod::get()->addCustomSetting<SettingCreditsValue>("credit-buttons", "none");
 
     #ifdef GEODE_IS_WINDOWS

@@ -56,26 +56,6 @@ void CreditsBetaMenu::setup() {
     setTouchEnabled(true);
     setKeypadEnabled(true);
 }
-/*
-void RedirectLink::goToURL(CCObject* ret) {
-    auto node = dynamic_cast<RedirectLink*>(ret);
-    if (node != nullptr) {
-        std::cout << node->redirectURI << std::endl;
-    }
-}
-
-RedirectLink* RedirectLink::createWithLink(std::string url, cocos2d::CCNode *sprite, cocos2d::CCObject *target) {
-    auto pRet = new RedirectLink(sprite, target, menu_selector(RedirectLink::goToURL));
-    if (pRet) {
-        pRet->redirectURI = url;
-        pRet->autorelease();
-        return pRet;
-    } else {
-        CC_SAFE_DELETE(pRet);
-        return nullptr;
-    }
-}
-*/
 
 void CreditsBetaMenu::goToURL(CCObject* ret) {
     auto node = reinterpret_cast<CCMenuItemSpriteExtra*>(ret);

@@ -8,11 +8,9 @@
 // ------
 // 204 = MAX
 // 0 = MIN
-bool ProgressBar::init() { // on purpose im not even providing any params because why would we!?
-    //progressBar->setPosition({0, 200});
+bool ProgressBar::init() { // on purpose im not even providing any params because why would we!?;
     progressBar->setPosition({3, 8});
     progressBar->setAnchorPoint({ 0, 0.5 });
-    //progressBar->setTextureRect(CCRect(0, 0, 200, 8));
     progressBar->setTextureRect(CCRect(0, 0, 204, 8));
     ccTexParams params = { GL_LINEAR, GL_LINEAR, GL_REPEAT, GL_REPEAT }; // tf is this nonsense mat
     progressBar->getTexture()->setTexParameters(&params);
@@ -42,21 +40,17 @@ ProgressBar* ProgressBar::create() {
 // ------
 // credits https://stackoverflow.com/a/1639047
 int DownloadManager::progress_func(void*, double totalDownload, double downloadAmount, double TotalToUpload, double NowUploaded) {
-    //std::cout << "progress_func(" << totalDownload << ", " << downloadAmount << ")" << std::endl;
     if (totalDownload <= 0.0) return 0;
     float amountDownloaded = round((downloadAmount / totalDownload) * 100);
     auto scene = CCDirector::sharedDirector()->getRunningScene();
     auto layer = reinterpret_cast<ProgressBar*>(reinterpret_cast<CCLayer*>(reinterpret_cast<CCLayer*>(scene->getChildByTag(6942084))->getChildren()->objectAtIndex(0))->getChildByTag(4592));
     if (layer != nullptr) {
-        //std::cout << "Update progress " << amountDownloaded << "%" << std::endl;
         layer->setProgress(amountDownloaded);
     }
     return 0;
 }
 
 void DownloadManager::setup() {
-    log::debug("DownloadManager::setup()");
-    //log::debug(m_sUrl);
     auto winSize = cocos2d::CCDirector::sharedDirector()->getWinSize();
     loading_circle->setParentLayer(this);
     loading_circle->setScale(0.675f);
@@ -88,7 +82,6 @@ void DownloadManager::setup() {
         .fetch(this->m_sUrl)
         .into(this->m_sDestination)
         .then([this](auto) {
-            log::debug("dumpToFile");
             ProcessLambdas::callMenuHandler(this, this->m_pSelector);
             this->onClose(CCNode::create());
         })

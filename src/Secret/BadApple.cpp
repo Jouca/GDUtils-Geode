@@ -26,7 +26,6 @@ bool BadApple::init() {
     player->setPosition(size.width / 2, size.height / 2);
     player->setContentSize({ size.width - 40, size.height - 40 });
     player->setZOrder(-1);
-    //reinterpret_cast<CCNode*>(layer->getChildren()->objectAtIndex(0))->setVisible(false);
     this->addChild(player);
     #endif
     setKeypadEnabled(true);

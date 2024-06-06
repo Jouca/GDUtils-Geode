@@ -281,7 +281,7 @@ void EventsPush::onClickBtn(CCObject* ret) {
         #else // mac os 
         int level_id = events_layer->levelId;
         #endif
-        std::string const& fields = "secret=Wmfd2893gb7&gameVersion=22&type=0&binaryVersion=35&gdw=0&diff=-&len=-&count=1&str=" + std::to_string(level_id);
+        std::string const& fields = "secret=Wmfd2893gb7&type=0&str=" + std::to_string(level_id);
 
         geode::utils::web::WebRequest request = web::WebRequest();
         RUNNING_REQUESTS.emplace(
@@ -324,31 +324,12 @@ void EventsPush::onClickBtn(CCObject* ret) {
                 }
             )
         );
-
-        /*web::AsyncWebRequest()
-            .bodyRaw(fields)
-            .postRequest()
-            .fetch(url).text()
-            .then([&](std::string & response) {
-                if (response != "-1") {
-                    auto scene = CCScene::create();
-                    auto layer = LevelInfoLayer::create(EventsPush::convertLevelToJSON(response), false);
-                    layer->downloadLevel();
-                    scene->addChild(layer);
-                    CCDirector::sharedDirector()->pushScene(cocos2d::CCTransitionFade::create(0.5f, scene));
-                } else {
-                    log::info("Level not found. (-1)");
-                }
-        }).expect([](std::string const& error) {
-            log::error("Error occured while doing a web request: {}", error);
-        });*/
     } else { // copy to clipboard
         #ifndef GEODE_IS_MACOS
         clipboard::write(std::to_string(events_layer->level->m_levelID));
         #else
         clipboard::write(std::to_string(events_layer->levelId));
         #endif
-        log::info("Copied ID to clipboard!");
     }
 }
 bool EventsPush::init(sio::message::ptr const& data) {
@@ -436,10 +417,8 @@ bool EventsPush::init(sio::message::ptr const& data) {
         return true;
     }
 
-    log::debug("EventsPush::init");
     auto director = CCDirector::sharedDirector();
     auto winSize = director->getWinSize();
-    //auto label = CCSprite::createWithSpriteFrameName("GJ_checkOn_001.png");
     auto bg = cocos2d::extension::CCScale9Sprite::create(sprite_name.c_str(), { .0f, .0f, 80.0f, 80.0f, });
     auto bg_click_spr = cocos2d::extension::CCScale9Sprite::create(sprite_name.c_str(), { .0f, .0f, 80.0f, 80.0f, });
     float lrScale = (float)Mod::get()->getSettingValue<double>("size");
@@ -457,7 +436,6 @@ bool EventsPush::init(sio::message::ptr const& data) {
     menu->setPosition({ bg->getContentSize().width / 2, bg->getContentSize().height / 2 });
     bg->addChild(menu);
     this->addChild(bg);
-    //this->addChild(bg);
 
     auto node = CCNode::create();
 
@@ -693,10 +671,7 @@ bool EventsPush::init(sio::message::ptr const& data) {
             moveX = (bg->getContentSize().width) * lrScale;
             break;
         case 4: // bottom right
-            ///bg->setPosition((winSize.width + (bg->getContentSize().width)) * lrScale, (bg->getContentSize().height / 2) * lrScale);
             bg->setPosition({ winSize.width + ((bg->getContentSize().width / 2) * lrScale), (bg->getContentSize().height / 2) * lrScale});
-            //bg->setPosition((bg->getContentSize().width) * lrScale, (bg->getContentSize().height / 2) * lrScale);
-            //moveX = -(bg->getContentSize().width * lrScale);
             moveX = -((bg->getContentSize().width) * lrScale);
             break;
     }
@@ -721,7 +696,6 @@ void EventsPush::stopNow(CCScene* scene) {
 }
 
 void EventsPush::pushRateLevel(CCScene* self, sio::message::ptr const& data) {
-    log::info("pushing rate level");
     // Enqueue the event
     eventQueue.push(data);
     
@@ -729,8 +703,6 @@ void EventsPush::pushRateLevel(CCScene* self, sio::message::ptr const& data) {
     if (!processingEvents) {
         EventsPush::processNextEvent(self);
     }
-    //auto layer = EventsPush::create(data);
-    //self->addChild(layer);
 }
 
 void EventsPush::processNextEvent(CCScene* self) {

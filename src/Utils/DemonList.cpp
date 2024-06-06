@@ -63,7 +63,6 @@ class $modify(LevelInfoLayer) {
         auto director = CCDirector::sharedDirector();
         auto winSize = director->getWinSize();
         auto demonSpr = CCSprite::createWithSpriteFrameName("diffIcon_06_btn_001.png");
-        //auto demonSpr = CCSprite::createWithSpriteFrameName("difficulty_06_btn_001.png");
         demonSpr->setPosition({(winSize.width / 2) - 85, (winSize.height / 2) + 18});
         demonSpr->setScale(0.5F);
         auto positionLabel = CCLabelBMFont::create("N/A", "bigFont.fnt");
@@ -98,7 +97,6 @@ class $modify(LevelInfoLayer) {
             }
             loading_circle->setParentLayer(this);
             loading_circle->show();
-            log::info("Sending a request to pointercrate...");
             web::AsyncWebRequest()
                 .fetch(fmt::format("https://pointercrate.com/api/v2/demons/listed/?name={}", url_encode(level->m_levelName).c_str()))
                 .json()
@@ -107,8 +105,6 @@ class $modify(LevelInfoLayer) {
                         loading_circle->fadeAndRemove();
                     }
                     auto scene = CCDirector::sharedDirector()->getRunningScene();
-                    //auto layer = misc::findNode("LevelInfoLayer");
-                    //if (layer == nullptr) return;
                     if (json.dump() == "[]") { //idk how to check size, doing .count crashes
                         log::info("Level not found in pointercrate.");
                         this->release();

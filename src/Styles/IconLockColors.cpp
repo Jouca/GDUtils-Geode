@@ -26,8 +26,6 @@ class IconLockColors {
             SimplePlayer* player = this->getPlayer(CCDirector::sharedDirector()->getRunningScene());
             GameManager* gm = GameManager::sharedState();
 
-            log::info("Glow: {}", player->m_hasGlowOutline);
-
             if (!player->m_hasGlowOutline) {
                 if (player->m_firstLayer->getColor() == gm->colorForIdx(gm->getPlayerColor2())) {
                     player->setGlowOutline(gm->colorForIdx(gm->getPlayerColor()));

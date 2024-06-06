@@ -152,12 +152,9 @@ void toggleSpotifyMute(bool automatic = false, bool muted = false) {
     } else {
         log::info("Unmuting Spotify...");
     }
-    //std::wstring targetExeName = L"Spotify.exe";
     std::wstring targetExeName = StringToWstring(Mod::get()->getSettingValue<SettingAppStruct>("spotifyApp").m_application);
-    log::info("Mute Application {}", Mod::get()->getSettingValue<SettingAppStruct>("spotifyApp").m_application);
     DWORD processId = GetProcessIdByName(targetExeName);
     if (processId) {
-        log::debug("Spotify process found (PID: {}", std::to_string(processId) + ").");
         MuteAudioSessionByProcessId(processId, is_muted);
     }
 }
@@ -195,7 +192,6 @@ void MuteApplication() {
     if (dotAppPos != std::string::npos) {
         targetName.erase(dotAppPos, 4); // Remove the ".app" extension
     }
-    log::info("Mute Application " + targetName);
     // chat jippity, applescript is amazing, i wish i could do this on windows instead of having to do all of this IMM device stuff
     std::string checkCommand = "osascript -e 'tell application \"System Events\" to (name of processes) contains \"" + targetName + "\"'";
     if (isApplicationRunning(targetName)) { // will show a popup, also listen i am not responsible if some malicious user does stuff here regarding applescript. please consider disabling all spotify options if you dont want to be vulnerable, then again this would only happen if the attacker were to modify the .json file, which wouldnt they inject their own dylib file anyways? tldr; you are responsible if you install malware onto your mac system ok
