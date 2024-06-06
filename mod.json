@@ -21,6 +21,11 @@
             "importance": "required"
         }
     ],
+    "tags": [
+        "online",
+        "enhancement",
+        "utility"
+    ],
     "resources": {
         "sprites": [
             "resources/Screenshot_1.png",
