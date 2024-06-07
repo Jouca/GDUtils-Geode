@@ -1,4 +1,4 @@
-# v1.2.21
+# v1.3.0
     - Port to Geometry Dash 2.206
     
     - Increased leaderboards top to INFINITE

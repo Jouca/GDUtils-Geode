@@ -3,7 +3,7 @@
 #include <Geode/Geode.hpp>
 #include "../Utils/ParticleManager.hpp"
 
-class $modify(GauntletSelectLayer) {
+/*class $modify(GauntletSelectLayer) {
     void setupGauntlets() {
         GauntletSelectLayer::setupGauntlets();
 
@@ -62,9 +62,11 @@ class $modify(GauntletSelectLayer) {
                         node->addChild(sprite);
 
                         // Particle
-                        /*CCParticleSystem* particle = createParticles(20, ccc3(255, 255, 35), ccc3(0, 132, 0), "2", "-1", "1.21", "0.30", "116", "0", "20", "20", "0", "0", "0", "0", "8", "8", "1", "0", "0", "0", "0", "1", "0", "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "particle_118_001.png");
+                        CCParticleSystemQuad* particle = particleFromString("30a-1a2.2a0.48a11a90a180a29a0a11a0a0a0a0a0a0a0a5a1a0a0a0.0745098a0a0a0a0.611765a0a1a0a2a1a0a0a0a0a0.937255a0a1a0a1a0a0.54a0a0.57a0a56a0a11a0a-25a17a1a2a1a0a0a1a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
                         node->addChild(particle);
-                        particle->runAction(cocos2d::CCAction::create());*/
+                        particle->setPosition(bg->getPosition());
+                        particle->setScale(1.0f);
+                        particle->setZOrder(100);
                     } else if (gauntletName == "Portal") {
                         CCSprite* sprite = CCSprite::create(Mod::get()->expandSpriteName("portal_gauntlet.png"));
                         sprite->setPosition(bg->getPosition());
@@ -114,4 +116,4 @@ class $modify(GauntletSelectLayer) {
             }
         }
     }
-};
+};*/
