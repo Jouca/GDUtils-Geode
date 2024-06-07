@@ -7,7 +7,7 @@
 #include <Geode/modify/CCSprite.hpp>
 #include <Geode/modify/CCScale9Sprite.hpp>
 #include <Geode/loader/Log.hpp>
-#include <Geode/utils/web2.hpp>
+#include <Geode/utils/web.hpp>
 #include "includes.h"
 #include "Settings/CustomSettings.hpp"
 #include "Notifications/EventsPush.h"

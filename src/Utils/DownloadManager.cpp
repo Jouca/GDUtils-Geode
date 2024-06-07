@@ -5,6 +5,8 @@
 #include <Geode/utils/web.hpp>
 #include <Geode/utils/file.hpp>
 
+static std::unordered_map<std::string, web::WebTask> RUNNING_REQUESTS {};
+
 // ------
 // 204 = MAX
 // 0 = MIN
@@ -77,7 +79,36 @@ void DownloadManager::setup() {
 
     // def not copied from geode hahahaha
 
-    web::AsyncWebRequest()
+    const geode::utils::MiniFunction<void(geode::ByteVector const&)> then = [this](geode::ByteVector const& data) {
+        // Save the file
+        geode::utils::file::writeBinary(this->m_sDestination, data);
+
+        ProcessLambdas::callMenuHandler(this, this->m_pSelector);
+        this->onClose(CCNode::create());
+    };
+    const geode::utils::MiniFunction<void(int const&)> expect = [this](int const& error) {
+        FLAlertLayer::create(nullptr, "Error!", "An error occured while trying to send a request to the servers. Check <cy>logs</c> for more information.", "OK", nullptr, 200.0F)->show();
+        log::error("Error downloading: {}", error);
+    };
+
+    geode::utils::web::WebRequest request = web::WebRequest();
+    RUNNING_REQUESTS.emplace(
+        "@loaderDownloadManagerGDUtils",
+        request.get(this->m_sUrl).map(
+            [expect = std::move(expect), then = std::move(then)](web::WebResponse* response) {
+                if (response->ok()) {
+                    then(response->data());
+                } else {
+                    expect(response->code());
+                }
+
+                RUNNING_REQUESTS.erase("@loaderDownloadManagerGDUtils");
+                return *response;
+            }
+        )
+    );
+
+    /*web::AsyncWebRequest()
         .join("bad-apple")
         .fetch(this->m_sUrl)
         .into(this->m_sDestination)
@@ -91,7 +122,7 @@ void DownloadManager::setup() {
         })
         .progress([](auto&, double now, double total) {
             progress_func(NULL, total, now, 0.0, 0.0);
-        });
+        });*/
 }
 
 DownloadManager* DownloadManager::create(const char* url, const char* destination, cocos2d::SEL_MenuHandler selector) {

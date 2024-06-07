@@ -2,7 +2,7 @@
 #include "../Settings/CustomSettings.hpp"
 #include "Geode/utils/general.hpp"
 #include <queue>
-#include <Geode/utils/web2.hpp>
+#include <Geode/utils/web.hpp>
 
 static std::unordered_map<std::string, web::WebTask> RUNNING_REQUESTS {};
 

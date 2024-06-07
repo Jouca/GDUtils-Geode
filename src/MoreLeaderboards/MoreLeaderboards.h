@@ -1,6 +1,6 @@
 #pragma once
 #include "../includes.h"
-#include <Geode/utils/web2.hpp>
+#include <Geode/utils/web.hpp>
 #include "MoreLeaderboardsListView.h"
 
 #include <iostream>

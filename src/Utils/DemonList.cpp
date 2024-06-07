@@ -6,6 +6,7 @@
 
 // demon list
 std::unordered_map<int, int> demonListCache; // Will clear after game exit, or if user deletes level
+static std::unordered_map<std::string, web::WebTask> RUNNING_REQUESTS {};
 
 // love url encoded characters :D
 // also for some reason this is required on mac because Geode's web requests doesnt automatically append this for some reason.
@@ -97,43 +98,61 @@ class $modify(LevelInfoLayer) {
             }
             loading_circle->setParentLayer(this);
             loading_circle->show();
-            web::AsyncWebRequest()
-                .fetch(fmt::format("https://pointercrate.com/api/v2/demons/listed/?name={}", url_encode(level->m_levelName).c_str()))
-                .json()
-                .then([this, level, levelID, loading_circle, positionLabel, demonSpr, winSize](matjson::Value const& json) {
-                    if (loading_circle != nullptr) {
-                        loading_circle->fadeAndRemove();
-                    }
-                    auto scene = CCDirector::sharedDirector()->getRunningScene();
-                    if (json.dump() == "[]") { //idk how to check size, doing .count crashes
-                        log::info("Level not found in pointercrate.");
-                        this->release();
-                    } else {
-                        auto info = json.get<matjson::Value>(0);
-                        auto position = info.get<int>("position");
-                        positionLabel->setString(fmt::format("#{}", position).c_str());
-                        positionLabel->setScale(getScaleBasedPos(position));
-                        positionLabel->setVisible(true);
-                        demonSpr->setVisible(true);
-                        set(levelID, position);
-                        log::info("Level found in Pointercrate! {} at #{}", level->m_levelName.c_str(), position);
-                        this->release();
-                    }
-                })
-                .expect([this, loading_circle](std::string const& error) {
-                    if (loading_circle != nullptr) {
-                        loading_circle->fadeAndRemove();
-                    }
-                    log::error("Error while sending a request to Pointercrate: {}", error);
-                    FLAlertLayer::create(nullptr,
-                        "Error",
-                        "Failed to make a request to <cy>Pointercrate</c>. Please either <cg>try again later</c>, look at the error logs to see what might have happened, or report this to the developers.",
-                        "OK",
-                        nullptr,
-                        350.0F
-                    )->show();
+
+            const geode::utils::MiniFunction<void(Result<matjson::Value>)> then = [this, level, levelID, loading_circle, positionLabel, demonSpr, winSize](Result<matjson::Value> const& result_json) {
+                matjson::Value json = result_json.value();
+
+                if (loading_circle != nullptr) {
+                    loading_circle->fadeAndRemove();
+                }
+                auto scene = CCDirector::sharedDirector()->getRunningScene();
+                if (json.dump() == "[]") { //idk how to check size, doing .count crashes
+                    log::info("Level not found in pointercrate.");
                     this->release();
-                });
+                } else {
+                    auto info = json.get<matjson::Value>(0);
+                    auto position = info.get<int>("position");
+                    positionLabel->setString(fmt::format("#{}", position).c_str());
+                    positionLabel->setScale(getScaleBasedPos(position));
+                    positionLabel->setVisible(true);
+                    demonSpr->setVisible(true);
+                    set(levelID, position);
+                    log::info("Level found in Pointercrate! {} at #{}", level->m_levelName.c_str(), position);
+                    this->release();
+                }
+            };
+            const geode::utils::MiniFunction<void(std::string const&)> expect = [this, loading_circle](std::string const& error) {
+                if (loading_circle != nullptr) {
+                    loading_circle->fadeAndRemove();
+                }
+                log::error("Error while sending a request to Pointercrate: {}", error);
+                FLAlertLayer::create(nullptr,
+                    "Error",
+                    "Failed to make a request to <cy>Pointercrate</c>. Please either <cg>try again later</c>, look at the error logs to see what might have happened, or report this to the developers.",
+                    "OK",
+                    nullptr,
+                    350.0F
+                )->show();
+                this->release();
+            };
+
+            geode::utils::web::WebRequest request = web::WebRequest();
+
+            RUNNING_REQUESTS.emplace(
+                "@loaderDemonListLevelInfo",
+                request.get(fmt::format("https://pointercrate.com/api/v2/demons/listed/?name={}", url_encode(level->m_levelName).c_str())).map(
+                    [expect = std::move(expect), then = std::move(then)](web::WebResponse* response) {
+                        if (response->ok()) {
+                            then(response->json());
+                        } else {
+                            expect("Request failed");
+                        }
+
+                        RUNNING_REQUESTS.erase("@loaderDemonListLevelInfo");
+                        return *response;
+                    }
+                )
+            );
         }
         
         return true;
