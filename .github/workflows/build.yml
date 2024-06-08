@@ -42,7 +42,6 @@ jobs:
           sdk: nightly
           cli: 'v3.0.0-beta.1'
           combine: true
-          export-pdb: true
           target: ${{ matrix.config.target }}
 
   package:
