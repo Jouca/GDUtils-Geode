@@ -39,8 +39,8 @@ jobs:
         #uses: geode-sdk/build-geode-mod@main
         uses: geode-sdk/build-geode-mod@main
         with:
-          sdk: nightly
-          cli: 'v3.0.0-beta.1'
+          sdk: 'nightly'
+          #cli: 'v3.0.0-beta.1'
           combine: true
           target: ${{ matrix.config.target }}
 
@@ -49,8 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: ['build']
     steps:
-      #- uses: geode-sdk/build-geode-mod@combine
-      - uses: geode-sdk/build-geode-mod/combine@main
+      - uses: geode-sdk/build-geode-mod@combine
         id: build
 
       - uses: actions/upload-artifact@v3
