@@ -456,6 +456,9 @@ void MoreLeaderboards::loadPageMore() {
 }
 
 void MoreLeaderboards::loadPageStats() {
+    auto scene = CCDirector::sharedDirector()->getRunningScene();
+    auto winSize = CCDirector::sharedDirector()->getWinSize();
+
     if (page_label != nullptr) page_label->removeFromParentAndCleanup(true);
 
     CCMenu* menu_label = CCMenu::create();
@@ -464,10 +467,9 @@ void MoreLeaderboards::loadPageStats() {
         ->setAxisAlignment(AxisAlignment::Center)
         ->setGap(10.f)
     );
-    menu_label->setPosition({ 285.f, 12.f });
+    menu_label->setPosition({ winSize.width / 2, 12.f });
     menu_label->setContentSize({ 300.f, 7.f });
 
-    auto winSize = CCDirector::sharedDirector()->getWinSize();
     std::string fmt = fmt::format("Top {} - {} of {}", start_count, end_count, total_count);
     page_label = CCLabelBMFont::create(fmt.c_str(), "goldFont.fnt");
     page_label->setZOrder(40);
