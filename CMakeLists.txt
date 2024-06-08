@@ -5,17 +5,17 @@ set(GEODE_COMP_GD_VERSION 22060)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-#if(NOT DEFINED GEODE_TARGET_PLATFORM)
-#    set(GEODE_TARGET_PLATFORM "Win32")
-#endif()
-#if (${GEODE_TARGET_PLATFORM} STREQUAL "iOS" OR IOS)
-#    set(CMAKE_OSX_ARCHITECTURES "arm64")
-#else()
+if(NOT DEFINED GEODE_TARGET_PLATFORM)
+    set(GEODE_TARGET_PLATFORM "Win32")
+endif()
+if (${GEODE_TARGET_PLATFORM} STREQUAL "iOS" OR IOS)
+    set(CMAKE_OSX_ARCHITECTURES "arm64")
+else()
     set(CMAKE_OSX_ARCHITECTURES "x86_64")
-#endif()
+endif()
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
-if (WIN32 AND NOT DEFINED GEODE_TARGET_PLATFORM)
+if (WIN32)
     set(GEODE_COMPILER "clang-cl")
     set(GEODE_CCACHE_VARIANT "sccache")
     set(GEODE_TRIPLE "i686-unknown-windows-msvc")
@@ -46,7 +46,6 @@ target_include_directories(${PROJECT_NAME} PRIVATE
   libs/pl_mpeg/
   libs/glew/
   libs/socket.io-client-cpp/src
-  libs/discord-rpc/include
 )
 
 if (NOT DEFINED ENV{GEODE_SDK})
@@ -58,7 +57,7 @@ endif()
 add_subdirectory($ENV{GEODE_SDK} ${CMAKE_CURRENT_BINARY_DIR}/geode)
 
 add_subdirectory(libs/socket.io-client-cpp)
-if (APPLE AND NOT (${GEODE_TARGET_PLATFORM} STREQUAL "iOS" OR IOS))
+if (APPLE) # AND NOT (${GEODE_TARGET_PLATFORM} STREQUAL "iOS" OR IOS)
   target_link_libraries(${PROJECT_NAME} sioclient "-framework OpenGL")
   #${CMAKE_CURRENT_SOURCE_DIR}/libs/link-libs/discord-rpc/libdiscord-rpc.a
 else()
