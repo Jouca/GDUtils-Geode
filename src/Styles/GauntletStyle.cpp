@@ -125,6 +125,18 @@ class $modify(GauntletSelectLayer) {
                         sprite->setScale(1.270f);
                         sprite->setZOrder(0);
                         node->addChild(sprite);
+                    } else if (gauntletName == "NCS I") {
+                        CCSprite* sprite = CCSprite::create(Mod::get()->expandSpriteName("ncs_gauntlet_1.png"));
+                        sprite->setPosition(bg->getPosition());
+                        sprite->setScale(1.270f);
+                        sprite->setZOrder(0);
+                        node->addChild(sprite);
+                    } else if (gauntletName == "NCS II") {
+                        CCSprite* sprite = CCSprite::create(Mod::get()->expandSpriteName("ncs_gauntlet_2.png"));
+                        sprite->setPosition(bg->getPosition());
+                        sprite->setScale(1.270f);
+                        sprite->setZOrder(0);
+                        node->addChild(sprite);
                     } else {
                         bg->setVisible(true);
                         label->setVisible(true);
