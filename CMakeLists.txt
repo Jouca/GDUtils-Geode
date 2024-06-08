@@ -16,7 +16,6 @@ endif()
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
 if (${GEODE_TARGET_PLATFORM} STREQUAL "Win32")
-    set(CMAKE_GENERATOR_PLATFORM "x64")
     set(GEODE_COMPILER "clang-cl")
     set(GEODE_CCACHE_VARIANT "sccache")
     set(GEODE_TRIPLE "x86_64-unknown-windows-msvc")
