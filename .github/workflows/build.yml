@@ -32,16 +32,17 @@ jobs:
     runs-on: ${{ matrix.config.os }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: 'recursive'
           
       - name: Build the mod
         #uses: geode-sdk/build-geode-mod@main
-        uses: RoootTheFox/build-geode-mod@main
+        uses: geode-sdk/build-geode-mod@main
         with:
           sdk: nightly
           combine: true
+          export-pdb: true
           target: ${{ matrix.config.target }}
 
   package:
@@ -50,10 +51,10 @@ jobs:
     needs: ['build']
     steps:
       #- uses: geode-sdk/build-geode-mod@combine
-      - uses: RoootTheFox/build-geode-mod/combine@main
+      - uses: geode-sdk/build-geode-mod/combine@main
         id: build
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: GDUtils Build Output
           path: ${{ steps.build.outputs.build-output }}
