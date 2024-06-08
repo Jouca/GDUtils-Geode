@@ -9,8 +9,6 @@ class $modify(GauntletSelectLayer) {
 
         auto list = this->getChildByIDRecursive("gauntlets-list");
 
-        log::info("Gauntlet list: {}", list);
-
         if (list) {
             CCArray* pages = typeinfo_cast<CCArray*>(list->getChildByID("gauntlet-pages")->getChildren());
 
