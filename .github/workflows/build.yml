@@ -40,7 +40,7 @@ jobs:
         #uses: geode-sdk/build-geode-mod@main
         uses: RoootTheFox/build-geode-mod@main
         with:
-          #sdk: nightly
+          sdk: nightly
           combine: true
           target: ${{ matrix.config.target }}
 

@@ -11,7 +11,7 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-cmake --build build-armv8 --config Debug
+cmake --build build-armv8 --config RelWithDebInfo
 
 if %errorlevel% neq 0 (
     echo Build failed
