@@ -41,6 +41,7 @@ file(GLOB SOURCES
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
 
 target_include_directories(${PROJECT_NAME} PRIVATE
+  libs/socket.io-client-cpp
   libs/filesystem
   libs/pl_mpeg/
   libs/glew/
