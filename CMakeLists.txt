@@ -56,7 +56,8 @@ endif()
 
 add_subdirectory($ENV{GEODE_SDK} ${CMAKE_CURRENT_BINARY_DIR}/geode)
 
-add_subdirectory(libs/socket.io-client-cpp)
+add_subdirectory(libs/socket.io-client-cpp EXCLUDE_FROM_ALL)
+add_dependencies(${PROJECT_NAME} sioclient)
 if (APPLE) # AND NOT (${GEODE_TARGET_PLATFORM} STREQUAL "iOS" OR IOS)
   target_link_libraries(${PROJECT_NAME} sioclient "-framework OpenGL")
   #${CMAKE_CURRENT_SOURCE_DIR}/libs/link-libs/discord-rpc/libdiscord-rpc.a
