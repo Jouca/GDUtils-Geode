@@ -61,7 +61,11 @@ if (APPLE) # AND NOT (${GEODE_TARGET_PLATFORM} STREQUAL "iOS" OR IOS)
   target_link_libraries(${PROJECT_NAME} sioclient "-framework OpenGL")
   #${CMAKE_CURRENT_SOURCE_DIR}/libs/link-libs/discord-rpc/libdiscord-rpc.a
 else()
+  if (WIN32)
+  target_link_libraries(${PROJECT_NAME} ${CMAKE_BINARY_DIR}/libs/socket.io-client-cpp/sioclient.lib)
+  else()
   target_link_libraries(${PROJECT_NAME} sioclient)
+  endif()
   #${CMAKE_CURRENT_SOURCE_DIR}/libs/link-libs/discord-rpc/discord-rpc.lib
 endif()
 if (CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux" AND WIN32)
