@@ -19,6 +19,11 @@ if (${GEODE_TARGET_PLATFORM} STREQUAL "Win32")
     set(GEODE_COMPILER "clang-cl")
     set(GEODE_CCACHE_VARIANT "sccache")
     #set(GEODE_TRIPLE "x86_64-unknown-windows-msvc")
+    if(WIN32) # force it!
+      set(CMAKE_SYSTEM_PROCESSOR x86_64)
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m64")
+      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64")
+    endif()
 endif()
 
 set(PROJECT_NAME GDUtils)
@@ -61,16 +66,16 @@ add_dependencies(${PROJECT_NAME} sioclient)
 if (APPLE) # AND NOT (${GEODE_TARGET_PLATFORM} STREQUAL "iOS" OR IOS)
   target_link_libraries(${PROJECT_NAME} sioclient "-framework OpenGL")
   #${CMAKE_CURRENT_SOURCE_DIR}/libs/link-libs/discord-rpc/libdiscord-rpc.a
-elseif(NOT ${GEODE_TARGET_PLATFORM} STREQUAL "Win32")
+else()
   target_link_libraries(${PROJECT_NAME} sioclient)
   #${CMAKE_CURRENT_SOURCE_DIR}/libs/link-libs/discord-rpc/discord-rpc.lib
 endif()
 if (CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux" AND WIN32)
   message("compiling on linux!!")
   # why it requires advapi32 is beyond me
-  target_link_libraries(${PROJECT_NAME} opengl32 ws2_32 crypt32 wldap32 normaliz advapi32 comdlg32 sioclient)
+  target_link_libraries(${PROJECT_NAME} opengl32 ws2_32 crypt32 wldap32 normaliz advapi32 comdlg32)
 elseif(${GEODE_TARGET_PLATFORM} STREQUAL "Win32")
-  target_link_libraries(${PROJECT_NAME} opengl32 ws2_32 Crypt32 Wldap32 Normaliz sioclient)
+  target_link_libraries(${PROJECT_NAME} opengl32 ws2_32 Crypt32 Wldap32 Normaliz)
 endif()
 
 # Set up dependencies, resources, link Geode
