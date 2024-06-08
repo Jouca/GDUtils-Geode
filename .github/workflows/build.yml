@@ -13,7 +13,6 @@ jobs:
         config:
         - name: Windows
           os: windows-latest
-          target: Win64
         # will uncomment mac only when it releases
         #- name: macOS
         #  os: macos-latest
