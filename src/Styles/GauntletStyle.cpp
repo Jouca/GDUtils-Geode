@@ -3,7 +3,7 @@
 #include <Geode/Geode.hpp>
 #include "../Utils/ParticleManager.hpp"
 
-/*class $modify(GauntletSelectLayer) {
+class $modify(GauntletSelectLayer) {
     void setupGauntlets() {
         GauntletSelectLayer::setupGauntlets();
 
@@ -60,13 +60,6 @@
                         sprite->setScale(1.225f);
                         sprite->setZOrder(0);
                         node->addChild(sprite);
-
-                        // Particle
-                        CCParticleSystemQuad* particle = particleFromString("30a-1a2.2a0.48a11a90a180a29a0a11a0a0a0a0a0a0a0a5a1a0a0a0.0745098a0a0a0a0.611765a0a1a0a2a1a0a0a0a0a0.937255a0a1a0a1a0a0.54a0a0.57a0a56a0a11a0a-25a17a1a2a1a0a0a1a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
-                        node->addChild(particle);
-                        particle->setPosition(bg->getPosition());
-                        particle->setScale(1.0f);
-                        particle->setZOrder(100);
                     } else if (gauntletName == "Portal") {
                         CCSprite* sprite = CCSprite::create(Mod::get()->expandSpriteName("portal_gauntlet.png"));
                         sprite->setPosition(bg->getPosition());
@@ -79,6 +72,37 @@
                         sprite->setScale(1.275f);
                         sprite->setZOrder(0);
                         node->addChild(sprite);
+
+                        // Show gauntlets sprite again
+                        gauntlet->setVisible(true);
+                        gauntlet->setPosition({-1, 22});
+                        gauntlet->setScale(1.1f);
+                        gauntlet_shadow->setVisible(true);
+                        gauntlet_shadow->setPosition({-1, 22});
+                        gauntlet_shadow->setScale(1.1f);
+                        gauntlet_node->setZOrder(2);
+
+                        // Particle
+                        CCParticleSystemQuad* particle = GameToolbox::particleFromString("66a-1a3a0.3a20a90a27a11a0a37a38a0a0a0a0a0a0a5a1a0a0a0.694118a0a0.45098a0a0.054902a0a1a0a2a1a0a0a0.509804a0a0.172549a0a0a0a1a0a0.5a0a1a0a0a0a0a0a0a0a0a2a1a0a0a0a28a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
+                        node->addChild(particle);
+                        particle->setPosition(gauntlet->getPosition());
+                        particle->setZOrder(1);
+                        CCParticleSystemQuad* particle2 = GameToolbox::particleFromString("29a-1a3a0.3a8a90a27a11a0a37a38a0a0a0a0a0a0a50a1a0a0a0.0509804a0a0.0392157a0a0.0352941a0a1a0a50a1a0a0a0.0509804a0a0.0392157a0a0.0352941a0a1a0a0.5a0a1a0a0a0a0a0a0a0a0a2a1a0a0a0a46a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
+                        node->addChild(particle2);
+                        particle2->setPosition(gauntlet->getPosition());
+                        particle2->setZOrder(1);
+                        CCParticleSystemQuad* particle3 = GameToolbox::particleFromString("31a-1a1a0.3a23a90a90a29a0a11a0a0a0a0a0a0a0a33a1a89a149a0.454902a0a0.321569a0a0.152941a0a1a0a50a1a145a68a0.454902a0a0.321569a0a0.152941a0a1a0a0.5a0a0.5a0a0a0a0a0a0a0a1a2a1a0a0a0a192a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
+                        node->addChild(particle3);
+                        particle3->setPosition(gauntlet->getPosition());
+                        particle3->setZOrder(1);
+                        CCParticleSystemQuad* particle4 = GameToolbox::particleFromString("30a-1a2a0.3a13a90a8a21a0a8a0a0a45a0a0a0a0a40a1a89a149a0.396078a0a0.27451a0a0.14902a0a1a0a24a1a145a68a0.141176a0a0.0352941a0a0.0313726a0a1a0a0.5a0a0.5a0a0a0a0a0a0a0a0a2a1a0a0a0a46a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
+                        node->addChild(particle4);
+                        particle4->setPosition(gauntlet->getPosition());
+                        particle4->setZOrder(1);
+                        CCParticleSystemQuad* particle5 = GameToolbox::particleFromString("30a-1a1a0.3a13a90a8a21a0a0a0a0a45a0a0a0a0a21a1a89a149a0.894118a0a0.631373a0a0.345098a0a1a0a6a1a145a68a0.894118a0a0.631373a0a0.345098a0a1a0a0.5a0a0.5a0a0a0a0a0a0a0a0a2a1a0a0a0a183a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
+                        node->addChild(particle5);
+                        particle5->setPosition(gauntlet->getPosition());
+                        particle5->setZOrder(1);
                     } else if (gauntletName == "Castle") {
                         CCSprite* sprite = CCSprite::create(Mod::get()->expandSpriteName("castle_gauntlet.png"));
                         sprite->setPosition(bg->getPosition());
@@ -116,4 +140,4 @@
             }
         }
     }
-};*/
+};

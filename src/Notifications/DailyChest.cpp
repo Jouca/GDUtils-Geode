@@ -53,13 +53,17 @@ void DailyChest::rewardsStatusFinished(int p0) {
     }
 };
 
+void DailyChest::rewardsStatusFailed() {
+    log::error("Failed to get rewards");
+};
+
 // Daily chests notifications
 void dailyChestThread() {
     while (true) {
         auto dailyChest = new DailyChest();
         dailyChest->getRewards(0);
 
-        std::this_thread::sleep_for(std::chrono::minutes(10));
+        std::this_thread::sleep_for(std::chrono::minutes(20));
     }
 }
 class $modify(MenuLayer) {

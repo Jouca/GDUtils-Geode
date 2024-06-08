@@ -2,6 +2,8 @@
     - Port to Geometry Dash 2.206
     
     - Increased leaderboards top to INFINITE
+    - Daily chest notifications
+    - Epic Gauntlets redesign
     - Added previews for locked icons with colors
     - Thumbnails for levels URLs when sharing it on Discord
 # v1.2.20

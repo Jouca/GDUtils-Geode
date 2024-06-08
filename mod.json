@@ -1,11 +1,12 @@
 {
     "geode": "3.0.0-alpha.1",
-    "version": "v1.3.0-alpha.1",
+    "version": "v1.3.0-alpha.2",
     "gd": {
         "win": "2.206",
         "android": "2.206",
         "ios": "2.206"
     },
+    "platforms": ["android", "win", "mac"],
     "id": "gdutilsdevs.gdutils",
     "name": "GDUtils",
     "developers": ["Jouca", "Firee"],
@@ -17,7 +18,7 @@
     "dependencies": [
         {
             "id": "geode.node-ids",
-            "version": "v1.11.0",
+            "version": "v1.12.0-beta.2",
             "importance": "required"
         }
     ],
