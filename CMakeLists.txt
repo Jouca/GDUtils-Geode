@@ -5,17 +5,17 @@ set(GEODE_COMP_GD_VERSION 22060)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-if(NOT DEFINED GEODE_TARGET_PLATFORM)
-    set(GEODE_TARGET_PLATFORM "Win32")
-endif()
-if (${GEODE_TARGET_PLATFORM} STREQUAL "iOS" OR IOS)
-    set(CMAKE_OSX_ARCHITECTURES "arm64")
-else()
+#if(NOT DEFINED GEODE_TARGET_PLATFORM)
+#    set(GEODE_TARGET_PLATFORM "Win32")
+#endif()
+#if (${GEODE_TARGET_PLATFORM} STREQUAL "iOS" OR IOS)
+#    set(CMAKE_OSX_ARCHITECTURES "arm64")
+#else()
     set(CMAKE_OSX_ARCHITECTURES "x86_64")
-endif()
+#endif()
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
-if (WIN32)
+if (WIN32 AND NOT DEFINED GEODE_TARGET_PLATFORM)
     set(GEODE_COMPILER "clang-cl")
     set(GEODE_CCACHE_VARIANT "sccache")
     set(GEODE_TRIPLE "i686-unknown-windows-msvc")
@@ -28,7 +28,7 @@ project(${PROJECT_NAME} VERSION 1.0.0)
 # to recursively add all source files 
 # under src/ 
 file(GLOB SOURCES
-	src/*.cpp
+    src/*.cpp
     src/MoreLeaderboards/*.cpp
     src/Notifications/*.cpp
     src/Secret/*.cpp
