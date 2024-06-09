@@ -2,8 +2,7 @@
 #include <Geode/loader/SettingNode.hpp>
 #include "CreditsBetaMenu.h"
 #include "CreditsMenu.h"
-#include "../Notifications/EventsPush.h"
-#include "../includes.h"
+#include <Geode/ui/TextInput.hpp>
 using namespace geode::prelude;
 
 /*
@@ -518,7 +517,7 @@ protected:
         )->show();
     }
 public:
-    InputNode* defaultApp_input = InputNode::create(180.0F, "Application", "bigFont.fnt", "", 1);
+    TextInput* defaultApp_input = TextInput::create(180.0F, "Application", "bigFont.fnt");
     void commit() override {
         static_cast<SettingAppValue*>(m_value)->setApp(m_currentApp);
         this->dispatchCommitted();

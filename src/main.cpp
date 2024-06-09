@@ -6,6 +6,7 @@
 #include <Geode/modify/CreatorLayer.hpp>
 #include <Geode/modify/CCSprite.hpp>
 #include <Geode/modify/CCScale9Sprite.hpp>
+#include <Geode/modify/MenuLayer.hpp>
 #include <Geode/loader/Log.hpp>
 #include <Geode/utils/web.hpp>
 #include "includes.h"
@@ -18,9 +19,9 @@
 #include <queue>
 #include <unordered_map>
 #include <algorithm>
-#include <random>
 #include <string>
 #include <sstream>
+#include "Notifications/DailyChest.h"
 #include <codecvt>
 
 static std::unordered_map<std::string, web::WebTask> RUNNING_REQUESTS {};
@@ -36,6 +37,7 @@ bool event_fired = false;
 
 
 std::queue<sio::message::ptr> dataQueue;
+std::queue<int> chestQueue;
 
 sio::message::ptr event_data = nullptr;
 std::mutex lock;
@@ -78,7 +80,7 @@ namespace ConnectionHandler {
 bool setSocket(sio::socket::ptr sock) {
     current_socket = sock;
     log::info("listening for events");
-    current_socket->emit("geode-" + Mod::get()->getVersion().toString());
+    current_socket->emit(fmt::format("geode-{}", Mod::get()->getVersion()));
     current_socket->on("rate", sio::socket::event_listener_aux([&](std::string const& user, sio::message::ptr const& data, bool isAck, sio::message::list &ack_resp) {
         log::info("call rate event");
         event_fired = true;
@@ -89,6 +91,14 @@ bool setSocket(sio::socket::ptr sock) {
         log::info("Connect Event");
     }));
     return true;
+}
+
+// Daily chests notifications
+void dailyChestThread() {
+    while (true) {
+        chestQueue.push(1);
+        std::this_thread::sleep_for(std::chrono::minutes(20));
+    }
 }
 
 void start_socket_func() {
@@ -130,6 +140,15 @@ void processEvent(CCScene* self) {
     }
 }
 
+void processChestEvent(CCScene* self) {
+    if (!chestQueue.empty()) {
+        auto data = chestQueue.front();
+        chestQueue.pop();
+        auto dailyChest = new DailyChest();
+        dailyChest->getRewards(0);
+    }
+}
+
 class $modify(CCScheduler) { // used to be GameManager
     void update(float dt) {
         CCScheduler::update(dt);
@@ -148,6 +167,7 @@ class $modify(CCScheduler) { // used to be GameManager
         if (currentLayer != layerName) {
             currentLayer = layerName;
             EventsPush::stopNow(scene);
+            processChestEvent(scene);
             bool everywhereElse = Mod::get()->getSettingValue<bool>("everywhereElse");
             if ((layerName != "LevelEditorLayer" && layerName != "PlayLayer") && !everywhereElse) return;
             if ((layerName != "LevelEditorLayer" && layerName != "PlayLayer") && everywhereElse) {
@@ -374,6 +394,22 @@ class $modify(CCScale9Sprite) {
             });
         }
         return ret;
+    }
+};
+
+bool is_dailychest_ready = false;
+
+class $modify(MenuLayer) {
+    bool init() {
+        if (!MenuLayer::init()) return false;
+        
+        if (!is_dailychest_ready) {
+            std::thread hThread(dailyChestThread);
+            hThread.detach();
+            is_dailychest_ready = true;
+        }
+
+        return true;
     }
 };
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Geode/Geode.hpp>
+using namespace geode::prelude;
 
 class DailyChest : public CCNode, public GJRewardDelegate {
     public:

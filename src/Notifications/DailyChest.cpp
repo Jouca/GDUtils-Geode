@@ -1,10 +1,5 @@
-#include "../includes.h"
 #include "DailyChest.h"
 #include "EventsPush.h"
-#include <Geode/modify/MenuLayer.hpp>
-
-
-bool is_dailychest_ready = false;
 
 void DailyChest::getRewards(unsigned int type) {
     GameLevelManager* glm = GameLevelManager::sharedState();
@@ -55,27 +50,4 @@ void DailyChest::rewardsStatusFinished(int p0) {
 
 void DailyChest::rewardsStatusFailed() {
     log::error("Failed to get rewards");
-};
-
-// Daily chests notifications
-void dailyChestThread() {
-    while (true) {
-        auto dailyChest = new DailyChest();
-        dailyChest->getRewards(0);
-
-        std::this_thread::sleep_for(std::chrono::minutes(20));
-    }
-}
-class $modify(MenuLayer) {
-    bool init() {
-        if (!MenuLayer::init()) return false;
-        
-        if (!is_dailychest_ready) {
-            std::thread hThread(dailyChestThread);
-            hThread.detach();
-            is_dailychest_ready = true;
-        }
-
-        return true;
-    }
 };

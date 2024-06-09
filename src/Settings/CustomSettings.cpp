@@ -1,6 +1,8 @@
 #include "CustomSettings.hpp"
 #include <Geode/loader/Dirs.hpp>
 #include <filesystem>
+#include "../Notifications/EventsPush.h"
+#include "../includes.h"
 int cycleTypes = -1;
 
 SettingNode* SettingSectionValue::createNode(float width) {
