@@ -7,6 +7,8 @@ class $modify(GauntletSelectLayer) {
     void setupGauntlets() {
         GauntletSelectLayer::setupGauntlets();
 
+        if (!Mod::get()->getSettingValue<bool>("gauntletDesign")) return;
+
         auto list = this->getChildByIDRecursive("gauntlets-list");
 
         if (list) {

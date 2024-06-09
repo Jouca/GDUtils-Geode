@@ -1,6 +1,6 @@
 {
     "geode": "3.0.0-alpha.1",
-    "version": "v1.3.0-alpha.5",
+    "version": "v1.3.0-alpha.6",
     "gd": {
         "win": "2.206",
         "android": "2.206",
@@ -231,9 +231,21 @@
             "type": "bool",
             "default": true
         },
+        "levelsProtocolButton": {
+            "name": "Share level URL Button",
+            "description": "Whether or not to show the <cy>Share Level URL</c> button in the <cg>Level Info Menu</c>.",
+            "type": "bool",
+            "default": true
+        },
         "socketServer": {
             "name": "Notifications Server",
             "description": "Allows you to <cg>receive rate notifications.</c> (Recommended to keep enabled)\n\nRestart the game to apply changes.",
+            "type": "bool",
+            "default": true
+        },
+        "gauntletDesign": {
+            "name": "New gauntlets design",
+            "description": "Changes the design of the gauntlets in the main menu.",
             "type": "bool",
             "default": true
         },
