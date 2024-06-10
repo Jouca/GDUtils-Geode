@@ -3,6 +3,7 @@
 #include <Geode/ui/GeodeUI.hpp>
 
 static StatsListType g_tab = StatsListType::Diamonds;
+static int country_id = 0;
 static int page = 0;
 static int start_count = 0;
 static int end_count = 0;
@@ -78,6 +79,7 @@ void MoreLeaderboards::onModsList(CCObject* pSender) {
 }
 
 void MoreLeaderboards::onRegion(CCObject* pSender) {
+    //SelectRegion::scene();
     geode::createQuickPopup(
         "Coming soon!",
         R"text(
@@ -386,7 +388,7 @@ void MoreLeaderboards::startLoadingMore() {
 
     RUNNING_REQUESTS.emplace(
         "@loaderMoreLeaderboardCheck",
-        request.bodyString(fmt::format("type={}&page={}", type, page)).post("https://clarifygdps.com/gdutils/moreleaderboards.php").map(
+        request.bodyString(fmt::format("type={}&page={}&country={}", type, page, country_id)).post("https://clarifygdps.com/gdutils/moreleaderboards.php").map(
             [expect = std::move(expect), then = std::move(then)](web::WebResponse* response) {
                 if (response->ok()) {
                     then(response->string().value());

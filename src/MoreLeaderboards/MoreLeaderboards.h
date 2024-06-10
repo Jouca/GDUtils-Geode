@@ -2,6 +2,7 @@
 #include "../includes.h"
 #include <Geode/utils/web.hpp>
 #include "MoreLeaderboardsListView.h"
+#include "SelectRegion.h"
 
 #include <iostream>
 #include <vector>
@@ -27,6 +28,8 @@ class MoreLeaderboards : public CCLayer {
     CCSprite* trophy = nullptr;
 
     CCString* datas = nullptr;
+
+    SelectRegion* regionSelector = nullptr;
 
     bool loading = false;
 
