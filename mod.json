@@ -62,6 +62,8 @@
             "resources/galaxy_gauntlet.png",
             "resources/universe_gauntlet.png",
             "resources/cursed_gauntlet.png",
+            "resources/doom_gauntlet.png",
+            "resources/split_gauntlet.png",
             "resources/ncs_gauntlet_1.png",
             "resources/ncs_gauntlet_2.png"
         ]
