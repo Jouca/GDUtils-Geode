@@ -19,6 +19,7 @@ A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute,
 ### More Leaderboards
 * Thanks to [Updated Leaderboards](https://discord.gg/HpC5Xc3JMh), it's now possible for you to <cy>view leaderboards for users</c> with the most <cl>Moons</c>, <cj>Diamonds</c>, **User Coins**, <cr>Demons!</c> and **Creator Points**! You can also view your <cy>accurate leaderboard placement</c>.
 * Leaderboards are now <cp>INFINITE</c>! You can see the placement of <cy>every Geometry Dash players</c> (registered with [Updated Leaderboards](https://discord.gg/HpC5Xc3JMh)).
+* You can also see <cj>leaderboards by countries</c>!
 
 ### View Demon List Placement
 * Instead of having to go to [Pointercrate](https://pointercrate.com/) to view the demon placement of a level, you can now <cy>view the position</c> of an extreme demon!

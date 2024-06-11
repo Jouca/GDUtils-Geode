@@ -2,10 +2,12 @@
 #include "../includes.h"
 #include <Geode/utils/web.hpp>
 #include "SelectRegionCell.h"
+#include "../OldBorder.hpp"
 
 class SelectRegion : public Popup<> {
     std::vector<std::string> displayedData;
     LoadingCircle* loading_circle;
+    std::function<void(int)> selectedRegion;
 
     protected:
         bool setup() override;
@@ -13,12 +15,10 @@ class SelectRegion : public Popup<> {
         void loadPage();
 
         cocos2d::CCSize m_sScrLayerSize;
-        float m_fWidth = s_defWidth;
-        float m_fHeight = s_defHeight;
     public:
-        static constexpr const float s_defWidth = 400.0f;
-        static constexpr const float s_defHeight = 250.0f;
-        static void scene();
+        SelectRegion(const std::function<void(int)>& callback) : selectedRegion(callback) {}
+        
+        static void scene(const std::function<void(int)>& callback);
 
         static std::vector<std::string> getWords(std::string s, std::string delim);
 

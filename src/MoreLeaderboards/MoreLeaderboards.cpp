@@ -3,7 +3,6 @@
 #include <Geode/ui/GeodeUI.hpp>
 
 static StatsListType g_tab = StatsListType::Diamonds;
-static int country_id = 0;
 static int page = 0;
 static int start_count = 0;
 static int end_count = 0;
@@ -79,8 +78,28 @@ void MoreLeaderboards::onModsList(CCObject* pSender) {
 }
 
 void MoreLeaderboards::onRegion(CCObject* pSender) {
-    //SelectRegion::scene();
-    geode::createQuickPopup(
+    SelectRegion::scene([this](int id) {
+        country_id = id;
+        
+        if (loading) return;
+
+        loading = true;
+
+        if (displayedData) {
+            displayedData->release();
+            displayedData = cocos2d::CCArray::create();
+            displayedData->retain();
+        }
+
+        page = 0;
+        resetInfos();
+        
+        if (loading) {
+            startLoadingMore();
+            loadPageMore();
+        }
+    });
+    /*geode::createQuickPopup(
         "Coming soon!",
         R"text(
 <cy>Filter by country</c> leaderboards is coming soon on GDUtils!
@@ -92,7 +111,7 @@ Stay tuned for updates via our <cj>Discord server</c> on the page of the mod in 
                 openIndexPopup(Mod::get());
             }
         }
-    );
+    );*/
 }
 
 MoreLeaderboards* MoreLeaderboards::create(std::string type) {

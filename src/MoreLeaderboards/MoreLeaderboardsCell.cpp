@@ -123,10 +123,6 @@ void MoreLeaderboardsCell::loadFromDict(cocos2d::CCDictionary* content)
     this->m_backgroundLayer->setOpacity(255);
 };
 
-void MoreLeaderboardsCell::draw() {
-    reinterpret_cast<StatsCell*>(this)->StatsCell::draw();
-}
-
 MoreLeaderboardsCell::MoreLeaderboardsCell(const char* name, CCSize size) :
     GenericListCell(name, size) {}
 

@@ -30,6 +30,7 @@ class MoreLeaderboards : public CCLayer {
     CCString* datas = nullptr;
 
     SelectRegion* regionSelector = nullptr;
+    int country_id = 0;
 
     bool loading = false;
 

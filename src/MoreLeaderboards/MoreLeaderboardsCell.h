@@ -3,7 +3,6 @@
 #include <Geode/Bindings.hpp>
 
 class MoreLeaderboardsCell : public GenericListCell {
-    void draw() override;
 public:
     inline static CCDictionary* static_content;
     inline static CCString* static_data_other;

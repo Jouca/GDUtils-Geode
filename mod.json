@@ -1,6 +1,6 @@
 {
     "geode": "3.0.0-alpha.2",
-    "version": "v1.3.0-alpha.6",
+    "version": "v1.3.0-alpha.7",
     "gd": {
         "win": "2.206",
         "android": "2.206",
@@ -29,44 +29,11 @@
     ],
     "resources": {
         "sprites": [
-            "resources/Screenshot_1.png",
-            "resources/tab-gradient.png",
-            "resources/tab-gradient-mask.png",
-            "resources/earth_btn.png",
-            "resources/difficulty_01_mythicIcon.png",
-            "resources/difficulty_02_mythicIcon.png",
-            "resources/difficulty_03_mythicIcon.png",
-            "resources/difficulty_04_mythicIcon.png",
-            "resources/difficulty_05_mythicIcon.png",
-            "resources/difficulty_06_mythicIcon.png",
-            "resources/difficulty_07_mythicIcon.png",
-            "resources/difficulty_08_mythicIcon.png",
-            "resources/difficulty_09_mythicIcon.png",
-            "resources/difficulty_10_mythicIcon.png",
-            "resources/difficulty_01_legendaryIcon.png",
-            "resources/difficulty_02_legendaryIcon.png",
-            "resources/difficulty_03_legendaryIcon.png",
-            "resources/difficulty_04_legendaryIcon.png",
-            "resources/difficulty_05_legendaryIcon.png",
-            "resources/difficulty_06_legendaryIcon.png",
-            "resources/difficulty_07_legendaryIcon.png",
-            "resources/difficulty_08_legendaryIcon.png",
-            "resources/difficulty_09_legendaryIcon.png",
-            "resources/difficulty_10_legendaryIcon.png",
-            "resources/gdutils_badge.png",
-            "resources/world_gauntlet.png",
-            "resources/fantasy_gauntlet.png",
-            "resources/portal_gauntlet.png",
-            "resources/demon_gauntlet.png",
-            "resources/castle_gauntlet.png",
-            "resources/galaxy_gauntlet.png",
-            "resources/universe_gauntlet.png",
-            "resources/cursed_gauntlet.png",
-            "resources/doom_gauntlet.png",
-            "resources/split_gauntlet.png",
-            "resources/ncs_gauntlet_1.png",
-            "resources/ncs_gauntlet_2.png"
-        ]
+            "resources/*.png"
+        ],
+        "spritesheets": {
+            "countries": ["resources/countries/*.png"]
+        }
     },
     "settings": {
         "notification-section": {
