@@ -54,5 +54,6 @@ A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute,
 
 # Contributors
 * [sofabeddd](user:7976112)
+* [SMJS](user:7121414)
 
 **Thank you to RobTopGames for his trust on the mod.**
