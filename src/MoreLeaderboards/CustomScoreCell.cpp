@@ -1,5 +1,5 @@
 #include "../includes.h"
-#include <Geode/modify/GjScoreCell.hpp>
+#include <Geode/modify/GJScoreCell.hpp>
 #include <Geode/modify/Field.hpp>
 
 class $modify(CustomScoreCell, GJScoreCell) {
