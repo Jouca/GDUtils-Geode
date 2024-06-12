@@ -28,8 +28,8 @@ class MoreLeaderboards : public CCLayer {
     CCSprite* trophy = nullptr;
 
     CCString* datas = nullptr;
+    std::string data_region = "";
 
-    SelectRegion* regionSelector = nullptr;
     int country_id = 0;
 
     bool loading = false;
@@ -62,6 +62,8 @@ class MoreLeaderboards : public CCLayer {
         void onMoreLeaderboards(CCObject*);
         void onModsList(CCObject*);
         void onRegion(CCObject*);
+        void onInfo(CCObject*);
+        void onLBInfo(CCObject*);
 
         void onTab(CCObject* pSender);
         void onPageLeft(CCObject* pSender);

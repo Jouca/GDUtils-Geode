@@ -114,8 +114,40 @@ Stay tuned for updates via our <cj>Discord server</c> on the page of the mod in 
     );*/
 }
 
+void MoreLeaderboards::onInfo(CCObject* pSender) {
+    FLAlertLayer::create(
+        nullptr,
+        "More Leaderboards",
+        R"text(
+<cy>More Leaderboards</c> is a feature that allows you to view more leaderboards than the ones in the game.
+You can view leaderboards for <cj>Diamonds</c>, User Coins, <cr>Demons</c>, <cl>Moons</c>, and Creators Points of people that are registered on <cy>Updated Leaderboards</c> project.
+
+Thanks to <cj>ChiefWoof</c> & <co>the Helper team</c> for providing the data for this feature!
+        )text",
+        "OK",
+        nullptr,
+        400.0f
+    )->show();
+}
+
+void MoreLeaderboards::onLBInfo(CCObject* pSender) {
+    geode::createQuickPopup(
+        "Submit your user stats",
+        R"text(
+You can submit your <cy>user stats</c> to the <cj>Updated Leaderboards</c> team by joining their <cb>Discord server</c> and following the instructions right there.
+        )text",
+        "OK", "Discord Server",
+        [](auto, bool btn2) {
+            if (btn2) {
+                web::openLinkInBrowser("https://discord.gg/mZnDm886sR");
+            }
+        }
+    );
+}
+
 MoreLeaderboards* MoreLeaderboards::create(std::string type) {
     auto pRet = new MoreLeaderboards();
+    SelectRegionCell::country_id = 0;
     if (pRet && pRet->init(type)) {
         pRet->autorelease();
         return pRet;
@@ -168,8 +200,26 @@ bool MoreLeaderboards::init(std::string type) {
             this,
             menu_selector(MoreLeaderboards::onRegion)
         );
-        regionBtn->setPosition(239, -70);
+        regionBtn->setPosition(239, -52);
         menu_region->addChild(regionBtn);
+
+        auto infoSpr = cocos2d::CCSprite::createWithSpriteFrameName("GJ_infoIcon_001.png");
+        auto infoBtn = CCMenuItemSpriteExtra::create(
+            infoSpr,
+            this,
+            menu_selector(MoreLeaderboards::onInfo)
+        );
+        infoBtn->setPosition(-239, -120);
+        menu_region->addChild(infoBtn);
+
+        auto lbSpr = cocos2d::CCSprite::createWithSpriteFrameName("GJ_levelLeaderboardBtn_001.png");
+        auto lbBtn = CCMenuItemSpriteExtra::create(
+            lbSpr,
+            this,
+            menu_selector(MoreLeaderboards::onLBInfo)
+        );
+        lbBtn->setPosition(-239, -57);
+        menu_region->addChild(lbBtn);
 
         this->addChild(menu_region);
 
@@ -295,8 +345,8 @@ void MoreLeaderboards::startLoadingMods() {
     loading_circle->show();
 
     const geode::utils::MiniFunction<void(std::string const&)> then = [this](std::string const& data) {
-        fadeLoadingCircle();
         handle_request_mods(data);
+        fadeLoadingCircle();
     };
     const geode::utils::MiniFunction<void(std::string const&)> expect = [this](std::string const& error) {
         fadeLoadingCircle();
@@ -337,52 +387,10 @@ void MoreLeaderboards::startLoadingMore() {
     loading_circle->setParentLayer(this);
     loading_circle->show();
 
-    std::string type = "";
-
-    if (g_tab == StatsListType::Diamonds) {
-        type = "diamonds";
-    } else if (g_tab == StatsListType::UserCoins) {
-        type = "ucoins";
-    } else if (g_tab == StatsListType::Demons) {
-        type = "demons";
-    } else if (g_tab == StatsListType::Moons) {
-        type = "moons";
-    } else if (g_tab == StatsListType::Creators) {
-        type = "cp";
-    }
+    geode::utils::web::WebRequest request = web::WebRequest();
 
     this->retain();
 
-    geode::utils::web::WebRequest request = web::WebRequest();
-    const geode::utils::MiniFunction<void(std::string const&)> then = [this](std::string const& data) {
-        loading = false;
-        auto scene = CCDirector::sharedDirector()->getRunningScene();
-        auto layer = scene->getChildren()->objectAtIndex(0);
-        if (layer == nullptr) return this->release();
-        if (misc::getNodeName(layer) != "MoreLeaderboards") return this->release(); // prevent le crash, even though the layer shouldve already been destructed
-        if (data == "-1" || data.length() < 2) {
-            fadeLoadingCircle();
-            geode::createQuickPopup(
-                "Error",
-                "An error occured while sending a request on <cy>our server</c>. Please try again later.",
-                "OK", nullptr,
-                [this](auto, bool btn2) {
-                    if (!btn2) {
-                        g_tab = StatsListType::Diamonds;
-                        keyBackClicked();
-                    }
-                }
-            );
-            this->release();
-            return;
-        }
-        fadeLoadingCircle();
-
-        handle_request_more(data);
-        loading = false;
-
-        this->release();
-    };
     const geode::utils::MiniFunction<void(std::string const&)> expect = [this](std::string const& error) {
         loading = false;
         auto scene = CCDirector::sharedDirector()->getRunningScene();
@@ -405,9 +413,102 @@ void MoreLeaderboards::startLoadingMore() {
         this->release();
     };
 
-    RUNNING_REQUESTS.emplace(
-        "@loaderMoreLeaderboardCheck",
-        request.bodyString(fmt::format("type={}&page={}&country={}", type, page, country_id)).post("https://clarifygdps.com/gdutils/moreleaderboards.php").map(
+    const geode::utils::MiniFunction<void(std::string const&)> then = [this](std::string const& data) {
+        if (data != "-1") {
+            data_region = data;
+            SelectRegion::displayedData = MoreLeaderboards::getWords(data, "|");
+        }
+
+        std::string type = "";
+        geode::utils::web::WebRequest request = web::WebRequest();
+
+        if (g_tab == StatsListType::Diamonds) {
+            type = "diamonds";
+        } else if (g_tab == StatsListType::UserCoins) {
+            type = "ucoins";
+        } else if (g_tab == StatsListType::Demons) {
+            type = "demons";
+        } else if (g_tab == StatsListType::Moons) {
+            type = "moons";
+        } else if (g_tab == StatsListType::Creators) {
+            type = "cp";
+        }
+
+        const geode::utils::MiniFunction<void(std::string const&)> expect = [this](std::string const& error) {
+            loading = false;
+            auto scene = CCDirector::sharedDirector()->getRunningScene();
+            auto layer = scene->getChildren()->objectAtIndex(0);
+            if (layer == nullptr) return this->release();
+            if (misc::getNodeName(layer) != "MoreLeaderboards") return this->release();
+            geode::createQuickPopup(
+                "Error",
+                "An error occured while sending a request on <cy>our server</c>. Please try again later.",
+                "OK", nullptr,
+                [this](auto, bool btn2) {
+                    if (!btn2) {
+                        g_tab = StatsListType::Diamonds;
+                        keyBackClicked();
+                    }
+                }
+            );
+            fadeLoadingCircle();
+            loading = false;
+            this->release();
+        };
+
+        const geode::utils::MiniFunction<void(std::string const&)> then = [this](std::string const& data) {
+            loading = false;
+            auto scene = CCDirector::sharedDirector()->getRunningScene();
+            auto layer = scene->getChildren()->objectAtIndex(0);
+            if (layer == nullptr) return this->release();
+            if (misc::getNodeName(layer) != "MoreLeaderboards") return this->release(); // prevent le crash, even though the layer shouldve already been destructed
+            if (data == "-1" || data.length() < 2) {
+                fadeLoadingCircle();
+                geode::createQuickPopup(
+                    "Error",
+                    "An error occured while sending a request on <cy>our server</c>. Please try again later.",
+                    "OK", nullptr,
+                    [this](auto, bool btn2) {
+                        if (!btn2) {
+                            g_tab = StatsListType::Diamonds;
+                            keyBackClicked();
+                        }
+                    }
+                );
+                this->release();
+                return;
+            }
+
+            handle_request_more(data);
+            fadeLoadingCircle();
+            loading = false;
+
+            this->release();
+        };
+
+        RUNNING_REQUESTS.emplace(
+            "@loaderMoreLeaderboardCheck",
+            request.bodyString(fmt::format("type={}&page={}&country={}", type, page, country_id)).post("https://clarifygdps.com/gdutils/moreleaderboards.php").map(
+                [expect = std::move(expect), then = std::move(then)](web::WebResponse* response) {
+                    if (response->ok()) {
+                        then(response->string().value());
+                    } else {
+                        expect("An error occured while sending a request on our server. Please try again later.");
+                    }
+
+                    RUNNING_REQUESTS.erase("@loaderMoreLeaderboardCheck");
+                    return *response;
+                }
+            )
+        );
+    };
+
+    log::debug("Loading {}", SelectRegion::displayedData.empty());
+
+    if (data_region == "") {
+        RUNNING_REQUESTS.emplace(
+        "@loaderMoreLeaderboardRegionGet",
+        request.get("https://clarifygdps.com/gdutils/moreleaderboards_region.php").map(
             [expect = std::move(expect), then = std::move(then)](web::WebResponse* response) {
                 if (response->ok()) {
                     then(response->string().value());
@@ -415,11 +516,13 @@ void MoreLeaderboards::startLoadingMore() {
                     expect("An error occured while sending a request on our server. Please try again later.");
                 }
 
-                RUNNING_REQUESTS.erase("@loaderMoreLeaderboardCheck");
+                RUNNING_REQUESTS.erase("@loaderMoreLeaderboardRegionGet");
                 return *response;
             }
-        )
-    );
+        ));
+    } else {
+        then(data_region);
+    }
 };
 
 void MoreLeaderboards::handle_request_more(std::string const& data) {

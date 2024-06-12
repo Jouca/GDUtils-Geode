@@ -32,15 +32,7 @@ project(${PROJECT_NAME} VERSION 1.0.0)
 # Use GLOB_RECURSE instead of GLOB
 # to recursively add all source files 
 # under src/ 
-file(GLOB SOURCES
-    src/*.cpp
-    src/MoreLeaderboards/*.cpp
-    src/Notifications/*.cpp
-    src/Secret/*.cpp
-    src/Settings/*.cpp
-    src/Utils/*.cpp
-    src/Styles/*.cpp
-)
+file(GLOB_RECURSE SOURCES "src/*.cpp" "src/*.hpp")
 
 # Set up the mod binary
 add_library(${PROJECT_NAME} SHARED ${SOURCES})

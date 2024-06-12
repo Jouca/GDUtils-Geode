@@ -23,6 +23,8 @@ bool SelectRegionCell::init(std::string mod) {
                 std::transform(spriteName.begin(), spriteName.end(), spriteName.begin(), ::tolower);
                 if (auto flagSpr = CCSprite::createWithSpriteFrameName((""_spr+spriteName+".png").c_str())) {
                     flagSpr->setPosition({20, 15});
+                    flagSpr->setScaleY(30 / flagSpr->getContentHeight() * 0.50);
+                    flagSpr->setScaleX(std::min(1.0f, 40 / flagSpr->getContentWidth()));
                     addChild(flagSpr);
                 }
             } else {
