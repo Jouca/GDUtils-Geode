@@ -176,7 +176,7 @@ class $modify(ProfilePage) {
             std::vector<int> gdutils_accountID_devs = { 7026949, 6253758, 5509312 };
             if (std::find(gdutils_accountID_devs.begin(), gdutils_accountID_devs.end(), a2->m_accountID) != gdutils_accountID_devs.end()) {
                 if (label != nullptr && !layer->getChildByIDRecursive("gdutils-badge")) {
-                    auto badgeGDUtil = CCSprite::create(Mod::get()->expandSpriteName("gdutils_badge.png"));
+                    auto badgeGDUtil = CCSprite::create("gdutils_badge.png"_spr);
                     badgeGDUtil->setScale(.3f);
                     badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
                         badgeGDUtil,
