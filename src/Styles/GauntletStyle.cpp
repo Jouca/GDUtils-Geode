@@ -49,25 +49,25 @@ class $modify(GauntletSelectLayer) {
 
                     std::string gauntletName = label->getString();
                     if (gauntletName == "World") {
-                        CCSprite* sprite = CCSprite::create(Mod::get()->expandSpriteName("world_gauntlet.png"));
+                        CCSprite* sprite = CCSprite::create("world_gauntlet.png"_spr);
                         sprite->setPosition(bg->getPosition());
                         sprite->setScale(1.270f);
                         sprite->setZOrder(0);
                         node->addChild(sprite);
                     } else if (gauntletName == "Fantasy") {
-                        CCSprite* sprite = CCSprite::create(Mod::get()->expandSpriteName("fantasy_gauntlet.png"));
+                        CCSprite* sprite = CCSprite::create("fantasy_gauntlet.png"_spr);
                         sprite->setPosition(bg->getPosition());
                         sprite->setScale(1.225f);
                         sprite->setZOrder(0);
                         node->addChild(sprite);
                     } else if (gauntletName == "Portal") {
-                        CCSprite* sprite = CCSprite::create(Mod::get()->expandSpriteName("portal_gauntlet.png"));
+                        CCSprite* sprite = CCSprite::create("portal_gauntlet.png"_spr);
                         sprite->setPosition(bg->getPosition());
                         sprite->setScale(1.225f);
                         sprite->setZOrder(0);
                         node->addChild(sprite);
                     } else if (gauntletName == "Demon") {
-                        CCSprite* sprite = CCSprite::create(Mod::get()->expandSpriteName("demon_gauntlet.png"));
+                        CCSprite* sprite = CCSprite::create("demon_gauntlet.png"_spr);
                         sprite->setPosition(bg->getPosition());
                         sprite->setScale(1.275f);
                         sprite->setZOrder(0);
@@ -104,49 +104,49 @@ class $modify(GauntletSelectLayer) {
                         particle5->setPosition(gauntlet->getPosition());
                         particle5->setZOrder(1);
                     } else if (gauntletName == "Castle") {
-                        CCSprite* sprite = CCSprite::create(Mod::get()->expandSpriteName("castle_gauntlet.png"));
+                        CCSprite* sprite = CCSprite::create("castle_gauntlet.png"_spr);
                         sprite->setPosition(bg->getPosition());
                         sprite->setScale(1.275f);
                         sprite->setZOrder(0);
                         node->addChild(sprite);
                     } else if (gauntletName == "Galaxy") {
-                        CCSprite* sprite = CCSprite::create(Mod::get()->expandSpriteName("galaxy_gauntlet.png"));
+                        CCSprite* sprite = CCSprite::create("galaxy_gauntlet.png"_spr);
                         sprite->setPosition(bg->getPosition());
                         sprite->setScale(1.695f);
                         sprite->setZOrder(0);
                         node->addChild(sprite);
                     } else if (gauntletName == "Universe") {
-                        CCSprite* sprite = CCSprite::create(Mod::get()->expandSpriteName("universe_gauntlet.png"));
+                        CCSprite* sprite = CCSprite::create("universe_gauntlet.png"_spr);
                         sprite->setPosition(bg->getPosition());
                         sprite->setScale(1.270f);
                         sprite->setZOrder(0);
                         node->addChild(sprite);
                     } else if (gauntletName == "Cursed") {
-                        CCSprite* sprite = CCSprite::create(Mod::get()->expandSpriteName("cursed_gauntlet.png"));
+                        CCSprite* sprite = CCSprite::create("cursed_gauntlet.png"_spr);
                         sprite->setPosition(bg->getPosition());
                         sprite->setScale(1.270f);
                         sprite->setZOrder(0);
                         node->addChild(sprite);
                     } else if (gauntletName == "Doom") {
-                        CCSprite* sprite = CCSprite::create(Mod::get()->expandSpriteName("doom_gauntlet.png"));
+                        CCSprite* sprite = CCSprite::create("doom_gauntlet.png"_spr);
                         sprite->setPosition(bg->getPosition());
                         sprite->setScale(1.270f);
                         sprite->setZOrder(0);
                         node->addChild(sprite);
                     } else if (gauntletName == "Split") {
-                        CCSprite* sprite = CCSprite::create(Mod::get()->expandSpriteName("split_gauntlet.png"));
+                        CCSprite* sprite = CCSprite::create("split_gauntlet.png"_spr);
                         sprite->setPosition(bg->getPosition());
                         sprite->setScale(1.270f);
                         sprite->setZOrder(0);
                         node->addChild(sprite);
                     } else if (gauntletName == "NCS I") {
-                        CCSprite* sprite = CCSprite::create(Mod::get()->expandSpriteName("ncs_gauntlet_1.png"));
+                        CCSprite* sprite = CCSprite::create("ncs_gauntlet_1.png"_spr);
                         sprite->setPosition(bg->getPosition());
                         sprite->setScale(1.270f);
                         sprite->setZOrder(0);
                         node->addChild(sprite);
                     } else if (gauntletName == "NCS II") {
-                        CCSprite* sprite = CCSprite::create(Mod::get()->expandSpriteName("ncs_gauntlet_2.png"));
+                        CCSprite* sprite = CCSprite::create("ncs_gauntlet_2.png"_spr);
                         sprite->setPosition(bg->getPosition());
                         sprite->setScale(1.270f);
                         sprite->setZOrder(0);
