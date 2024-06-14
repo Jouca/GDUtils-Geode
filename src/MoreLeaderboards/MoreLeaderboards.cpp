@@ -596,7 +596,13 @@ void MoreLeaderboards::loadPageStats() {
     std::string fmt = fmt::format("Top {} - {} of {}", start_count, end_count, total_count);
     page_label = CCLabelBMFont::create(fmt.c_str(), "goldFont.fnt");
     page_label->setZOrder(40);
-    page_label->setScale(.4f);
+    page_label->setLayoutOptions(
+        AxisLayoutOptions::create()
+        ->setAutoScale(true)
+        ->setMinScale(0)
+        ->setMaxScale(0.7f)
+        ->setScalePriority(1)
+    );
     menu_label->addChild(page_label);
 
     trophy = CCSprite::createWithSpriteFrameName("rankIcon_top10_001.png");
