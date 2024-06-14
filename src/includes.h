@@ -10,6 +10,8 @@ using namespace geode::prelude;
 #include <synchapi.h>
 #endif
 
+#define OPT(expr) if (auto __opt__ = expr) __opt__
+
 class misc {
     public:
     // theres no including Geode Util class funcs so, https://github.com/geode-sdk/DevTools

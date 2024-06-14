@@ -19,8 +19,8 @@ class MoreLeaderboards : public CCLayer {
     MoreLeaderboardsListView* leaderboardView = nullptr;
     CustomListView* leaderboardViewScore = nullptr;
     GJListLayer* listLayer = nullptr;
-    cocos2d::CCArray* displayedData = nullptr;
     LoadingCircle* loading_circle = nullptr;
+    cocos2d::CCArray* displayedData;
 
     CCLabelBMFont* page_label = nullptr;
     CCMenuItemSpriteExtra* page_left = nullptr;
@@ -59,6 +59,8 @@ class MoreLeaderboards : public CCLayer {
 
         void resetInfos();
     public:
+        static std::string data_response_moreLB;
+
         void onMoreLeaderboards(CCObject*);
         void onModsList(CCObject*);
         void onRegion(CCObject*);

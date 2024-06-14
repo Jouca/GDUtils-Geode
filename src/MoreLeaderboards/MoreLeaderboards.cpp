@@ -7,6 +7,7 @@ static int page = 0;
 static int start_count = 0;
 static int end_count = 0;
 static int total_count = 0;
+std::string MoreLeaderboards::data_response_moreLB = "";
 static std::unordered_map<std::string, web::WebTask> RUNNING_REQUESTS {};
 
 std::vector<std::string> MoreLeaderboards::getWords(std::string s, std::string delim) {
@@ -503,8 +504,6 @@ void MoreLeaderboards::startLoadingMore() {
         );
     };
 
-    log::debug("Loading {}", SelectRegion::displayedData.empty());
-
     if (data_region == "") {
         RUNNING_REQUESTS.emplace(
         "@loaderMoreLeaderboardRegionGet",
@@ -529,10 +528,10 @@ void MoreLeaderboards::handle_request_more(std::string const& data) {
     if(!displayedData) { displayedData = CCArray::create(); displayedData->retain(); };
 
     if (data != "-1") {
+        data_response_moreLB = data;
+
         displayedData = CCArray::create();
-
         std::vector<std::string> dataString = getWords(data, "#");
-
         std::vector<std::string> users = getWords(dataString[0], "|");
         std::vector<std::string> data_page = getWords(dataString[1], "|");
 
