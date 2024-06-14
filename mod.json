@@ -20,11 +20,6 @@
             "id": "geode.node-ids",
             "version": ">=v1.12.0-beta.2",
             "importance": "required"
-        },
-        {
-            "id": "itzkiba.better_progression",
-            "version": ">=v1.2.0-alpha.2",
-            "importance": "suggested"
         }
     ],
     "tags": [
