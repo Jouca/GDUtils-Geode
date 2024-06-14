@@ -28,7 +28,7 @@ bool SelectRegionCell::init(std::string mod) {
                     addChild(flagSpr);
                 }
             } else {
-                auto earthSpr = CCSprite::createWithSpriteFrameName("earth_btn.png"_spr);
+                auto earthSpr = CCSprite::create("earth_btn.png"_spr);
                 earthSpr->setScale(.425f);
                 earthSpr->setPosition({ 20, 14 });
                 addChild(earthSpr);

@@ -504,17 +504,17 @@ bool EventsPush::init(sio::message::ptr const& data) {
                         if (starsum >= 10) {
                             std::string diffStr = std::to_string(static_cast<int>(getDifficulty(starsum)));
                             auto name = "difficulty_0" + diffStr + "_legendaryIcon.png";
-                            legendaryFace = CCSprite::create(Mod::get()->expandSpriteName(name.c_str()));
+                            legendaryFace = CCSprite::create((""_spr+name).c_str());
                         }
                     } else {
                         if (starsum < 6) {
                             std::string diffStr = std::to_string(static_cast<int>(getDemonDifficulty(starsum)));
                             auto name = "difficulty_0" + diffStr + "_legendaryIcon.png";
-                            legendaryFace = CCSprite::create(Mod::get()->expandSpriteName(name.c_str()));
+                            legendaryFace = CCSprite::create((""_spr+name).c_str());
                         } else {
                             std::string diffStr = std::to_string(static_cast<int>(getDemonDifficulty(starsum)));
                             auto name = "difficulty_" + diffStr + "_legendaryIcon.png";
-                            legendaryFace = CCSprite::create(Mod::get()->expandSpriteName(name.c_str()));
+                            legendaryFace = CCSprite::create((""_spr+name).c_str());
                         }
                     }
 
@@ -535,17 +535,17 @@ bool EventsPush::init(sio::message::ptr const& data) {
                         if (starsum >= 10) {
                             std::string diffStr = std::to_string(static_cast<int>(getDifficulty(starsum)));
                             auto name = "difficulty_0" + diffStr + "_mythicIcon.png";
-                            mythicFace = CCSprite::create(Mod::get()->expandSpriteName(name.c_str()));
+                            mythicFace = CCSprite::create((""_spr+name).c_str());
                         }
                     } else {
                         if (starsum < 6) {
                             std::string diffStr = std::to_string(static_cast<int>(getDemonDifficulty(starsum)));
                             auto name = "difficulty_0" + diffStr + "_mythicIcon.png";
-                            mythicFace = CCSprite::create(Mod::get()->expandSpriteName(name.c_str()));
+                            mythicFace = CCSprite::create((""_spr+name).c_str());
                         } else {
                             std::string diffStr = std::to_string(static_cast<int>(getDemonDifficulty(starsum)));
                             auto name = "difficulty_" + diffStr + "_mythicIcon.png";
-                            mythicFace = CCSprite::create(Mod::get()->expandSpriteName(name.c_str()));
+                            mythicFace = CCSprite::create((""_spr+name).c_str());
                         }
                     }
 

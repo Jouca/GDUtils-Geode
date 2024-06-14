@@ -194,7 +194,7 @@ bool MoreLeaderboards::init(std::string type) {
         // Change region
         auto menu_region = CCMenu::create();
 
-        auto regionSpr = CCSprite::createWithSpriteFrameName("earth_btn.png"_spr);;
+        auto regionSpr = CCSprite::create("earth_btn.png"_spr);;
         regionSpr->setScale(.8f);
         auto regionBtn = CCMenuItemSpriteExtra::create(
             regionSpr,
