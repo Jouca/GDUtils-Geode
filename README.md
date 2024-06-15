@@ -16,7 +16,7 @@ A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute,
 * You can also set when notifications **should appear** or **not appear**! This includes __being shown in levels__, __in the editor__, __etc__.
 
 ### More Leaderboards
-* Thanks to [Updated Leaderboards](https://discord.gg/HpC5Xc3JMh), it's now possible for you to view leaderboards for users with the most **Moons**, **Diamonds**, **User Coins**,**Demons!** and **Creator Points**! You can also view your accurate leaderboard placement.
+* Thanks to [Updated Leaderboards](https://discord.gg/HpC5Xc3JMh), it's now possible for you to view leaderboards for users with the most **Stars**, **Moons**, **Diamonds**, **User Coins**, **Demons!** and **Creator Points**! You can also view your accurate leaderboard placement.
 * Leaderboards are now **infinite**! You can see the placement of every Geometry Dash players (registered with [Updated Leaderboards](https://discord.gg/HpC5Xc3JMh)) with this one.
 * You can also see **leaderboards by countries**!
 
