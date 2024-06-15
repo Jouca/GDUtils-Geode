@@ -60,7 +60,7 @@ class $modify(CustomScoreCell, GJScoreCell) {
                     (SEL_MenuHandler)&CustomScoreCell::onViewProfile
                 );
                 playerNameBtn->setLayoutOptions(
-                    AxisLayoutOptions::create()->setAutoScale(true)->setMinScale(0)->setMaxScale(0.8f)->setScalePriority(1)
+                    AxisLayoutOptions::create()->setAutoScale(true)->setMinScale(0.5f)->setMaxScale(0.8f)->setScalePriority(1)
                 );
 
                 // Search for flag

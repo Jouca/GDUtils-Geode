@@ -8,6 +8,7 @@
 #include <vector>
 
 enum class StatsListType {
+    Stars,
     Diamonds,
     UserCoins,
     Demons,
@@ -35,6 +36,7 @@ class MoreLeaderboards : public CCLayer {
     bool loading = false;
 
     CCMenu* m_menu;
+    CCMenuItemToggler* m_starsTabBtn;
     CCMenuItemToggler* m_diamondsTabBtn;
     CCMenuItemToggler* m_usercoinsTabBtn;
     CCMenuItemToggler* m_demonsTabBtn;

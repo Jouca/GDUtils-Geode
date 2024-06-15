@@ -1,8 +1,9 @@
 #include "MoreLeaderboards.h"
+#include "Newtab.h"
 #include <Geode/modify/LeaderboardsLayer.hpp>
 #include <Geode/ui/GeodeUI.hpp>
 
-static StatsListType g_tab = StatsListType::Diamonds;
+static StatsListType g_tab = StatsListType::Stars;
 static int page = 0;
 static int start_count = 0;
 static int end_count = 0;
@@ -227,36 +228,49 @@ bool MoreLeaderboards::init(std::string type) {
         // create menus
         m_menu = CCMenu::create();
 
-        m_diamondsTabBtn = TabButton::create("Diamonds", this, menu_selector(MoreLeaderboards::onTab));
-        m_diamondsTabBtn->setPosition(-155.f, 132);
+        auto stars_sprite = CCSprite::createWithSpriteFrameName("star_small01_001.png");
+        m_starsTabBtn = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, stars_sprite, this, menu_selector(MoreLeaderboards::onTab));
+        m_starsTabBtn->setPosition(-140.f, 132);
+        m_starsTabBtn->setTag(static_cast<int>(StatsListType::Stars));
+        m_starsTabBtn->setZOrder(30);
+        m_starsTabBtn->setScale(0.8f);
+        m_menu->addChild(m_starsTabBtn);
+
+        auto diamond_sprite = CCSprite::createWithSpriteFrameName("diamond_small01_001.png");
+        m_diamondsTabBtn = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, diamond_sprite, this, menu_selector(MoreLeaderboards::onTab));
+        m_diamondsTabBtn->setPosition(-86.f, 132);
         m_diamondsTabBtn->setTag(static_cast<int>(StatsListType::Diamonds));
         m_diamondsTabBtn->setZOrder(30);
         m_diamondsTabBtn->setScale(0.8f);
         m_menu->addChild(m_diamondsTabBtn);
 
-        m_usercoinsTabBtn = TabButton::create("User Coins", this, menu_selector(MoreLeaderboards::onTab));
-        m_usercoinsTabBtn->setPosition(-77.f, 132);
+        auto usercoins_sprite = CCSprite::createWithSpriteFrameName("GJ_coinsIcon2_001.png");
+        m_usercoinsTabBtn = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, usercoins_sprite, this, menu_selector(MoreLeaderboards::onTab));
+        m_usercoinsTabBtn->setPosition(-30.f, 132);
         m_usercoinsTabBtn->setTag(static_cast<int>(StatsListType::UserCoins));
         m_usercoinsTabBtn->setZOrder(30);
         m_usercoinsTabBtn->setScale(0.8f);
         m_menu->addChild(m_usercoinsTabBtn);
 
-        m_demonsTabBtn = TabButton::create("Demons", this, menu_selector(MoreLeaderboards::onTab));
-        m_demonsTabBtn->setPosition(0.f, 132);
+        auto demons_sprite = CCSprite::createWithSpriteFrameName("GJ_demonIcon_001.png");
+        m_demonsTabBtn = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, demons_sprite, this, menu_selector(MoreLeaderboards::onTab));
+        m_demonsTabBtn->setPosition(26.f, 132);
         m_demonsTabBtn->setTag(static_cast<int>(StatsListType::Demons));
         m_demonsTabBtn->setZOrder(30);
         m_demonsTabBtn->setScale(0.8f);
         m_menu->addChild(m_demonsTabBtn);
 
-        m_moonsTabBtn = TabButton::create("Moons", this, menu_selector(MoreLeaderboards::onTab));
-        m_moonsTabBtn->setPosition(78.f, 132);
+        auto moons_sprite = CCSprite::createWithSpriteFrameName("GJ_bigMoon_001.png");
+        m_moonsTabBtn = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, moons_sprite, this, menu_selector(MoreLeaderboards::onTab));
+        m_moonsTabBtn->setPosition(82.f, 132);
         m_moonsTabBtn->setTag(static_cast<int>(StatsListType::Moons));
         m_moonsTabBtn->setZOrder(30);
         m_moonsTabBtn->setScale(0.8f);
         m_menu->addChild(m_moonsTabBtn);
 
-        m_creatorsTabBtn = TabButton::create("Creators", this, menu_selector(MoreLeaderboards::onTab));
-        m_creatorsTabBtn->setPosition(156.f, 132);
+        auto creators_sprite = CCSprite::createWithSpriteFrameName("GJ_hammerIcon_001.png");
+        m_creatorsTabBtn = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, creators_sprite, this, menu_selector(MoreLeaderboards::onTab));
+        m_creatorsTabBtn->setPosition(136.f, 132);
         m_creatorsTabBtn->setTag(static_cast<int>(StatsListType::Creators));
         m_creatorsTabBtn->setZOrder(30);
         m_creatorsTabBtn->setScale(0.8f);
@@ -433,6 +447,8 @@ void MoreLeaderboards::startLoadingMore() {
             type = "moons";
         } else if (g_tab == StatsListType::Creators) {
             type = "cp";
+        } else if (g_tab == StatsListType::Stars) {
+            type = "stars";
         }
 
         const geode::utils::MiniFunction<void(std::string const&)> expect = [this](std::string const& error) {
@@ -489,7 +505,7 @@ void MoreLeaderboards::startLoadingMore() {
 
         RUNNING_REQUESTS.emplace(
             "@loaderMoreLeaderboardCheck",
-            request.bodyString(fmt::format("type={}&page={}&country={}", type, page, country_id)).post("https://clarifygdps.com/gdutils/moreleaderboards.php").map(
+            request.param("type", type).param("page", page).param("country", country_id).get("https://clarifygdps.com/gdutils/moreleaderboards.php").map(
                 [expect = std::move(expect), then = std::move(then)](web::WebResponse* response) {
                     if (response->ok()) {
                         then(response->string().value());
@@ -728,6 +744,7 @@ void MoreLeaderboards::onTab(CCObject* pSender) {
             m_tabsGradientStencil->setPosition(member->m_onButton->convertToWorldSpace({0.f, 0.f}));
     };
 
+    toggleTab(m_starsTabBtn);
     toggleTab(m_diamondsTabBtn);
     toggleTab(m_usercoinsTabBtn);
     toggleTab(m_demonsTabBtn);
