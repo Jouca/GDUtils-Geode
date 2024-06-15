@@ -14,8 +14,8 @@ jobs:
         - name: Windows
           os: windows-latest
         # will uncomment mac only when it releases
-        #- name: macOS
-        #  os: macos-latest
+        - name: macOS
+          os: macos-latest
         - name: Android32
           os: ubuntu-latest
           target: Android32
