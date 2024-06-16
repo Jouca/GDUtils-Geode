@@ -70,52 +70,54 @@ class IconLockColors {
 
                     SimplePlayer* player = getPlayer(CCDirector::sharedDirector()->getRunningScene());
                     GameManager* gm = GameManager::sharedState();
-                    player->setColor(gm->colorForIdx(gm->getPlayerColor()));
-                    player->setSecondColor(gm->colorForIdx(gm->getPlayerColor2()));
-                    player->m_glowColor = gm->colorForIdx(gm->getPlayerColor());
+                    if (player) {
+                        player->setColor(gm->colorForIdx(gm->getPlayerColor()));
+                        player->setSecondColor(gm->colorForIdx(gm->getPlayerColor2()));
+                        player->m_glowColor = gm->colorForIdx(gm->getPlayerColor());
 
-                    // Creating buttons
-                    auto p1Spr = CCSprite::createWithSpriteFrameName("GJ_checkOff_001.png");
-                    auto p1txt = CCLabelBMFont::create("P1", "bigFont.fnt");
-                    p1txt->setScale(.525f);
-                    p1txt->setPosition(15, 17);
-                    p1Spr->addChild(p1txt);
-                    p1Spr->setScale(.8f);
-                    auto p1Btn = CCMenuItemSpriteExtra::create(
-                        p1Spr,
-                        child,
-                        menu_selector(IconLockColors::onP1)
-                    );
-                    p1Btn->setPosition(73, 183);
-                    child->m_buttonMenu->addChild(p1Btn);
+                        // Creating buttons
+                        auto p1Spr = CCSprite::createWithSpriteFrameName("GJ_checkOff_001.png");
+                        auto p1txt = CCLabelBMFont::create("P1", "bigFont.fnt");
+                        p1txt->setScale(.525f);
+                        p1txt->setPosition(15, 17);
+                        p1Spr->addChild(p1txt);
+                        p1Spr->setScale(.8f);
+                        auto p1Btn = CCMenuItemSpriteExtra::create(
+                            p1Spr,
+                            child,
+                            menu_selector(IconLockColors::onP1)
+                        );
+                        p1Btn->setPosition(73, 183);
+                        child->m_buttonMenu->addChild(p1Btn);
 
-                    auto p2Spr = CCSprite::createWithSpriteFrameName("GJ_checkOff_001.png");
-                    auto p2txt = CCLabelBMFont::create("P2", "bigFont.fnt");
-                    p2txt->setScale(.525f);
-                    p2txt->setPosition(15, 17);
-                    p2Spr->addChild(p2txt);
-                    p2Spr->setScale(.8f);
-                    auto p2Btn = CCMenuItemSpriteExtra::create(
-                        p2Spr,
-                        child,
-                        menu_selector(IconLockColors::onP2)
-                    );
-                    p2Btn->setPosition(101, 183);
-                    child->m_buttonMenu->addChild(p2Btn);
+                        auto p2Spr = CCSprite::createWithSpriteFrameName("GJ_checkOff_001.png");
+                        auto p2txt = CCLabelBMFont::create("P2", "bigFont.fnt");
+                        p2txt->setScale(.525f);
+                        p2txt->setPosition(15, 17);
+                        p2Spr->addChild(p2txt);
+                        p2Spr->setScale(.8f);
+                        auto p2Btn = CCMenuItemSpriteExtra::create(
+                            p2Spr,
+                            child,
+                            menu_selector(IconLockColors::onP2)
+                        );
+                        p2Btn->setPosition(101, 183);
+                        child->m_buttonMenu->addChild(p2Btn);
 
-                    auto glowSpr = CCSprite::createWithSpriteFrameName("GJ_checkOff_001.png");
-                    auto glowtxt = CCLabelBMFont::create("G", "bigFont.fnt");
-                    glowtxt->setScale(.525f);
-                    glowtxt->setPosition(15, 17);
-                    glowSpr->addChild(glowtxt);
-                    glowSpr->setScale(.8f);
-                    auto glowBtn = CCMenuItemSpriteExtra::create(
-                        glowSpr,
-                        child,
-                        menu_selector(IconLockColors::onGlow)
-                    );
-                    glowBtn->setPosition(129, 183);
-                    child->m_buttonMenu->addChild(glowBtn);
+                        auto glowSpr = CCSprite::createWithSpriteFrameName("GJ_checkOff_001.png");
+                        auto glowtxt = CCLabelBMFont::create("G", "bigFont.fnt");
+                        glowtxt->setScale(.525f);
+                        glowtxt->setPosition(15, 17);
+                        glowSpr->addChild(glowtxt);
+                        glowSpr->setScale(.8f);
+                        auto glowBtn = CCMenuItemSpriteExtra::create(
+                            glowSpr,
+                            child,
+                            menu_selector(IconLockColors::onGlow)
+                        );
+                        glowBtn->setPosition(129, 183);
+                        child->m_buttonMenu->addChild(glowBtn);
+                    }
                 }
             }
         }
