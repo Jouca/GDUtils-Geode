@@ -439,8 +439,11 @@ bool EventsPush::init(sio::message::ptr const& data) {
     // 0 / 0 = bottom left
     // screen width / screen height = top right
     // screen width divided by 2 / screen height divided by 2 = middle
-    auto bg_btn = CCMenuItemSpriteExtra::create(bg_click_spr, this, menu_selector(EventsPush::onClickBtn));
-    menu->addChild(bg_btn);
+
+    // TODO : click to notifications to be redirected to specific content
+    /*auto bg_btn = CCMenuItemSpriteExtra::create(bg_click_spr, this, menu_selector(EventsPush::onClickBtn));
+    menu->addChild(bg_btn);*/
+    
     menu->setPosition({ bg->getContentSize().width / 2, bg->getContentSize().height / 2 });
     bg->addChild(menu);
     this->addChild(bg);
