@@ -64,6 +64,8 @@ void EventsPush::destroySelf() {
 // stole from GDR mod lol 
 GJDifficulty getDifficulty(int stars) {
     switch(stars){
+        case 0:
+            return GJDifficulty::NA;
         case 10:
             return GJDifficulty::Easy;
         case 20:
@@ -77,7 +79,7 @@ GJDifficulty getDifficulty(int stars) {
         case 60:
             return GJDifficulty::Auto;
         default:
-            return GJDifficulty::Auto;
+            return GJDifficulty::NA;
     }
 }
 
@@ -377,6 +379,7 @@ bool EventsPush::init(sio::message::ptr const& data) {
     bool weekly = Mod::get()->getSettingValue<bool>("weekly");
     bool smallChest = Mod::get()->getSettingValue<bool>("smallChest");
     bool largeChest = Mod::get()->getSettingValue<bool>("largeChest");
+    bool list = Mod::get()->getSettingValue<bool>("newListRate");
     switch (type) {
         case 0: // Rate
             eventType = EventType::Rate;
@@ -393,6 +396,9 @@ bool EventsPush::init(sio::message::ptr const& data) {
         case 4: // Large chest
             eventType = EventType::largeChest;
             break;
+        case 5: // List
+            eventType = EventType::List;
+            break;
     }
     if (type == 0 && !newRate) {
         EventsPush::eventCompletedCallback(scene);
@@ -406,13 +412,15 @@ bool EventsPush::init(sio::message::ptr const& data) {
         EventsPush::eventCompletedCallback(scene);
         return true;
     }
-
     if (type == 3 && !smallChest) {
         EventsPush::eventCompletedCallback(scene);
         return true;
     }
-
     if (type == 4 && !largeChest) {
+        EventsPush::eventCompletedCallback(scene);
+        return true;
+    }
+    if (type == 5 && !list) {
         EventsPush::eventCompletedCallback(scene);
         return true;
     }
@@ -452,7 +460,6 @@ bool EventsPush::init(sio::message::ptr const& data) {
         
         diffFace->setPosition({26.f, 43.f});
         diffFace->setScale(.8F);
-        CCSprite* star = cocos2d::CCSprite::createWithSpriteFrameName("star_small01_001.png");
         CCSprite* moon = cocos2d::CCSprite::createWithSpriteFrameName("moon_small01_001.png");
         CCSprite* featured = cocos2d::CCSprite::createWithSpriteFrameName("GJ_featuredCoin_001.png");
         CCSprite* epic = cocos2d::CCSprite::createWithSpriteFrameName("GJ_epicCoin_001.png");
@@ -465,6 +472,12 @@ bool EventsPush::init(sio::message::ptr const& data) {
         starcount->setAnchorPoint({1, 0.5});
         starcount->setScale(0.35f);
         bg->addChild(starcount);
+        CCSprite* star;
+        if (type == 5) {
+            star = cocos2d::CCSprite::createWithSpriteFrameName("diamond_small01_001.png");
+        } else {
+            star = cocos2d::CCSprite::createWithSpriteFrameName("star_small01_001.png");
+        }
         star->setPosition({31, 18});
         star->setScale(.775F);
         moon->setPosition({31, 18});
@@ -641,6 +654,10 @@ bool EventsPush::init(sio::message::ptr const& data) {
         chest->setPosition({ 45, -3 });
         node->addChild(chest);
 
+    } else if (type == 5) {
+        auto list = cocos2d::CCSprite::createWithSpriteFrameName("GJ_listAddBtn_001.png");
+        list->setPosition({ 139, -8 });
+        node->addChild(list);
     }
 
     node->setAnchorPoint({ 0.5, 0.5 });

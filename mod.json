@@ -67,8 +67,14 @@
             "default": true
         },
         "newRate": {
-            "name": "New Rate",
+            "name": "New Rates",
             "description": "Whether or not to notify about new <cy>Rated Levels</c>",
+            "type": "bool",
+            "default": true
+        },
+        "newListRate": {
+            "name": "New List rates",
+            "description": "Whether or not to notify about new <cy>Rated List</c>.",
             "type": "bool",
             "default": true
         },

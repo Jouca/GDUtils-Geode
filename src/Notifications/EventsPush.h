@@ -9,6 +9,7 @@ enum EventType {
     Weekly,
     smallChest,
     largeChest,
+    List,
     NA
 };
 

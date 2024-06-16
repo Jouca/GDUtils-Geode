@@ -10,7 +10,7 @@ A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute,
 ## Features
 
 ### Realtime Notifications
-* This includes any new levels being **rated**, new **daily levels**, new **weekly levels!** and **new daily chests!**
+* This includes any new levels and lists being **rated**, new **daily levels**, new **weekly levels!** and **new daily chests!**
 * This also includes the new difficulty faces, and the new **Legendary** and **Mythic** rating.
 * Notifications are **highly customizable**, you can set the __position__, __size__, and __how long they can stay on screen!__
 * You can also set when notifications **should appear** or **not appear**! This includes __being shown in levels__, __in the editor__, __etc__.

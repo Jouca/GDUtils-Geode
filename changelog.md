@@ -1,5 +1,7 @@
 # v1.3.0
     - Port to Geometry Dash 2.206
+
+    - Added list rate notifications
     - Increased leaderboards top to INFINITE
     - Select leaderboards by countries
     - Daily chest notifications

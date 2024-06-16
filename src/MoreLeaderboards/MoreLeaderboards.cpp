@@ -236,13 +236,13 @@ bool MoreLeaderboards::init(std::string type) {
         m_starsTabBtn->setScale(0.8f);
         m_menu->addChild(m_starsTabBtn);
 
-        auto diamond_sprite = CCSprite::createWithSpriteFrameName("diamond_small01_001.png");
-        m_diamondsTabBtn = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, diamond_sprite, this, menu_selector(MoreLeaderboards::onTab));
-        m_diamondsTabBtn->setPosition(-86.f, 132);
-        m_diamondsTabBtn->setTag(static_cast<int>(StatsListType::Diamonds));
-        m_diamondsTabBtn->setZOrder(30);
-        m_diamondsTabBtn->setScale(0.8f);
-        m_menu->addChild(m_diamondsTabBtn);
+        auto moons_sprite = CCSprite::createWithSpriteFrameName("GJ_bigMoon_001.png");
+        m_moonsTabBtn = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, moons_sprite, this, menu_selector(MoreLeaderboards::onTab));
+        m_moonsTabBtn->setPosition(-86.f, 132);
+        m_moonsTabBtn->setTag(static_cast<int>(StatsListType::Moons));
+        m_moonsTabBtn->setZOrder(30);
+        m_moonsTabBtn->setScale(0.8f);
+        m_menu->addChild(m_moonsTabBtn);
 
         auto usercoins_sprite = CCSprite::createWithSpriteFrameName("GJ_coinsIcon2_001.png");
         m_usercoinsTabBtn = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, usercoins_sprite, this, menu_selector(MoreLeaderboards::onTab));
@@ -260,13 +260,13 @@ bool MoreLeaderboards::init(std::string type) {
         m_demonsTabBtn->setScale(0.8f);
         m_menu->addChild(m_demonsTabBtn);
 
-        auto moons_sprite = CCSprite::createWithSpriteFrameName("GJ_bigMoon_001.png");
-        m_moonsTabBtn = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, moons_sprite, this, menu_selector(MoreLeaderboards::onTab));
-        m_moonsTabBtn->setPosition(82.f, 132);
-        m_moonsTabBtn->setTag(static_cast<int>(StatsListType::Moons));
-        m_moonsTabBtn->setZOrder(30);
-        m_moonsTabBtn->setScale(0.8f);
-        m_menu->addChild(m_moonsTabBtn);
+        auto diamond_sprite = CCSprite::createWithSpriteFrameName("diamond_small01_001.png");
+        m_diamondsTabBtn = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, diamond_sprite, this, menu_selector(MoreLeaderboards::onTab));
+        m_diamondsTabBtn->setPosition(82.f, 132);
+        m_diamondsTabBtn->setTag(static_cast<int>(StatsListType::Diamonds));
+        m_diamondsTabBtn->setZOrder(30);
+        m_diamondsTabBtn->setScale(0.8f);
+        m_menu->addChild(m_diamondsTabBtn);
 
         auto creators_sprite = CCSprite::createWithSpriteFrameName("GJ_hammerIcon_001.png");
         m_creatorsTabBtn = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, creators_sprite, this, menu_selector(MoreLeaderboards::onTab));
