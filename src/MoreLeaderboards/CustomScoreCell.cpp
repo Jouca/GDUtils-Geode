@@ -7,8 +7,13 @@
 
 
 class $modify(CustomScoreCell, GJScoreCell) {
+    GJUserScore* score_registered = nullptr;
+
     void loadFromScore(GJUserScore* score) {
         GJScoreCell::loadFromScore(score);
+
+        if (score_registered) return;
+        score_registered = score;
 
         auto scene = CCDirector::sharedDirector()->getRunningScene();
         auto layer = scene->getChildren()->objectAtIndex(0);
