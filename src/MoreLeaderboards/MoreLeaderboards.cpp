@@ -328,6 +328,7 @@ void MoreLeaderboards::backButton(cocos2d::CCObject*) {
 };
 
 void MoreLeaderboards::keyBackClicked() {
+    MoreLeaderboards::data_response_moreLB = "";
     backButton(CCNode::create());
 }
 
