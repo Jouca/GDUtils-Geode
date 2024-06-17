@@ -1,65 +1,126 @@
-# v1.3.0
-    - Port to Geometry Dash 2.206
+# Changelog
+## <cj>v1.3.0-alpha.14</c> <cb>(2024-06-17)</c>
+* <cy>Fixed</c> country flags not showing everytime
+* <cy>Fixed</c> loading circle superposition when loading More Leaderboards & Moderators List TOO FAST <cl>(speedy guy...)</c>
+* <cy>Updated</c> content for changelog, about & README
 
-    - Added list rate notifications
-    - Increased leaderboards top to INFINITE
-    - Select leaderboards by countries
-    - Daily chest notifications
-    - Epic Gauntlets redesign
-    - Added previews for locked icons with colors
-    - Thumbnails for levels URLs when sharing it on Discord
-# v1.2.20
-    - Added iOS support (Only BG and notifications currently work)
-# v1.2.19 
-    - Fix performance issues with the bg color (Thanks camila!)
-# v1.2.18
-    - Added opacity scale for your child backgrounds
-    - Fixed bug that all backgrounds colours were changed (even without activating the feature)
-    - Fixed "The Shop" when entering on it
-# v1.2.17
-    - Added GDUtils Discord support server for assistance or informations about next updates
-    - Added custom backgrounds & transparency
-    - Gave the button badges Node IDs
-    - Fixed bug that duplicates the button badges upon profile reload
-    - Fixed mod list that was "noclipping" outside of the list
-# v1.2.15
-    - Added settings for level sharing protocol & receiving all notifications from the server
-# v1.2.14
-    - Fixed compatibility with Gradient Pages mod
-# v1.2.12
-    - Added creators leaderboard
-    - Fixed level URL sharing button that was having conflicts with the left page button for levels comments
-# v1.2.1
-    - Added Android support
-# v1.2.0
-    - 2.2 support (2.204)
+## <cj>v1.3.0-alpha.13</c> <cb>(2024-06-17)</c>
+* <cg>Added</c> Monster gauntlet new design
+* <cy>Fixed</c> crashes when returning to profile when viewing for lists/levels
 
-    - Added level URL sharing feature and button for copying level URL on level info
-    - Added moons leaderboard
-    - Added leaderboard moderators in Moderator List
-    - Added moderator info when clicking their badge
-    - Updated notifications with legendary/mythic rate
-    - Added custom faces for legendary/mythic rating in notifications
-# v1.1.3 
-    - Fixed crash with Demon List if you have No Transition and instantly exit
-    - Fixed more leaderboards from crashing with exiting quickly
-# v1.1.2
-    - Stopped more leaderboards from crashing in case if GDBrowser is down, or the user has no internet.
-# v1.1.1
-    - Added new settings! (Toggling friend searching & Toggling Demon List)
-    - Allowed use of partially searching usernames. (Like "fi" instead of "Fire")
-    - Fixed Pointercrate issue on levels with spaces (Mac Only)
-    - Fixed issue with friend list searching not working
-# v1.1.0
-    - More Leaderboards added (Diamonds, User Coins, Demons)
-    - Added Moderator List
-    - Added Demon List Placement when going to levels
-    - Fixed Mac Crash issues (Thanks to SharKing09 for testing)
-    - Support for older versions of mac
-    - Fixed Searching Users on Friends list crashing
-# v1.0.2 
-    - Added Mac Support
-# v1.0.1
-    - Fix about.md
-# v1.0.0
-    - Geode public release
+## <cj>v1.3.0-alpha.12</c> <cb>(2024-06-16)</c>
+* <cg>Added</c> list rate notifications
+* <cy>Fixed</c> crashes with cosmetics
+* <cy>Fixed</c> notifications clicking during in-game situations
+
+## <cj>v1.3.0-alpha.11</c> <cb>(2024-06-15)</c>
+* <cy>Fixed</c> flags sprites to be more sweet
+* <cy>Changed</c> sprites for new TAB buttons for More Leaderboards
+* <cy>Changed</c> More Leaderboards HTTP POST requests to GET (increase performance!)
+
+## <cj>v1.3.0-alpha.10</c> <cb>(2024-06-14)</c>
+* <cy>Changed</c> sprites for new TAB buttons for More Leaderboards (in preparation)
+
+## <cj>v1.3.0-alpha.9</c> <cb>(2024-06-14)</c>
+* <cg>Added</c> flags on usernames in More Leaderboards
+* <cy>Fixed</c> NodeIDs stuffs with More Leaderboards
+
+## <cj>v1.3.0-alpha.8</c> <cb>(2024-06-12)</c>
+* <cy>Adapted</c> regions HTTP requests to make it only one
+
+## <cj>v1.3.0-alpha.7</c> <cb>(2024-06-11)</c>
+* <cg>Added</c> selection for leaderboards by countries
+
+## <cj>v1.3.0-alpha.6</c> <cb>(2024-06-10)</c>
+* <cg>Added</c> Doom & Split gauntlets new design
+* <cg>Added</c> UI settings for gauntlets & share URL button
+* <cy>Fixed</c> bug making in double the GDUtils badge for developers
+
+## <cj>v1.3.0-alpha.5</c> <cb>(2024-06-09)</c>
+* <cg>Added</c> NCS gauntlets new design
+* <cy>Fixed</c> some crashes with daily chest notifications
+
+## <cj>v1.3.0-alpha.4</c> <cb>(2024-06-08)</c>
+* <cy>Fixed</c> some informations with changelog, about & README
+
+## <cj>v1.3.0-alpha.3</c> <cb>(2024-06-08)</c>
+* <cy>Fixed</c> some internal crashes
+
+## <cj>v1.3.0-alpha.2</c> <cb>(2024-06-08)</c>
+* <cg>Added</c> daily chest notifications
+* <cg>Added</c> previews for locked icons with colors
+* <cg>Added</c> some epic gauntlet redesigns
+* <cy>Fixed</c> some dependencies
+
+## <cj>v1.3.0-alpha.1</c> <cb>(2024-06-07)</c>
+* <co>Preparing support for GD 2.206</c>
+
+## <cj>v1.2.20</c> <cb>(2024-05-03)</c>
+* <cg>Added</c> iOS support (Only BG and notifications currently work)
+
+## <cj>v1.2.19</c> <cb>(2024-04-10)</c>
+* <cy>Fixed</c> performance issues with the bg color (Thanks camila!)
+
+## <cj>v1.2.18</c> <cb>(2024-04-09)</c>
+* <cg>Added</c> opacity scale for your child backgrounds
+* <cy>Fixed</c> bug that all backgrounds colours were changed (even without activating the feature)
+* <cy>Fixed</c> "The Shop" when entering on it
+
+## <cj>v1.2.17</c> <cb>(2024-04-09)</c>
+* <cg>Added</c> GDUtils Discord support server for assistance or informations about next updates
+* <cg>Added</c> custom backgrounds & transparency
+* <cg>Added</c> NodeIDs support
+* <cy>Fixed</c> bug that duplicates the button badges upon profile reload
+* <cy>Fixed</c> mod list that was "noclipping" outside of the list
+
+## <cj>v1.2.15</c> <cb>(2024-02-12)</c>
+* <cg>Added</c> settings for level sharing protocol & receiving all notifications from the server
+
+## <cj>v1.2.14</c> <cb>(2024-01-30)</c>
+* <cy>Fixed</c> compatibility with Gradient Pages mod
+
+## <cj>v1.2.12</c> <cb>(2024-01-21)</c>
+* <cg>Added</c> creators leaderboard
+* <cy>Fixed</c> level URL sharing button that was having conflicts with the left page button for levels comments
+
+## <cj>v1.2.1</c> <cb>(2024-01-20)</c>
+* <cg>Added</c> Android support
+
+## <cj>v1.2.0</c> <cb>(2024-01-20)</c>
+* <cp>2.2 support (2.204)</c>
+* <cg>Added</c> level URL sharing feature and button for copying level URL on level info
+* <cg>Added</c> moons leaderboard
+* <cg>Added</c> leaderboard moderators in Moderator List
+* <cg>Added</c> moderator info when clicking their badge
+* <cg>Added</c> notifications with legendary/mythic rate
+* <cg>Added</c> custom faces for legendary/mythic rating in notifications
+
+## <cj>v1.1.3</c> <cb>(2023-11-20)</c>
+* <cy>Fixed</c> crash with Demon List if you have No Transition and instantly exit
+* <cy>Fixed</c> more leaderboards from crashing with exiting quickly
+
+## <cj>v1.1.2</c> <cb>(2023-11-20)</c>
+* <cy>Fixed</c> crashes on More Leaderboards in case if GDBrowser is down, or the user has no internet.
+
+## <cj>v1.1.1</c> <cb>(2023-11-08)</c>
+* <cg>Added</c> new settings! (Toggling friend searching & Toggling Demon List)
+* <cg>Added</c> possibility to use of partially searching usernames. (Like "fi" instead of "Fire")
+* <cy>Fixed</c> Pointercrate issue on levels with spaces (Mac Only)
+* <cy>Fixed</c> issue with friend list searching not working
+
+## <cj>v1.1.0</c> <cb>(2023-11-07)</c>
+* <cp>Support for older versions of mac</c>
+* <cg>Added</c> More Leaderboards (Diamonds, User Coins, Demons)
+* <cg>Added</c> Moderator List
+* <cg>Added</c> Demon List Placement when going to levels
+* <cy>Fixed</c> Mac Crash issues (Thanks to SharKing09 for testing)
+* <cy>Fixed</c> Searching Users on Friends list crashing
+
+## <cj>v1.0.2</c> <cb>(2023-10-01)</c>
+* <cg>Added</c> Mac Support
+
+## <cj>v1.0.1</c> <cb>(2023-09-23)</c>
+* <cy>Fixed</c> about.md
+
+## <cj>v1.0.0</c> <cb>(2023-09-23)</c>
+* <cp>Geode public release</c>

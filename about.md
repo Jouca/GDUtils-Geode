@@ -2,13 +2,12 @@
 **by [Jouca](user:7026949) and [Firee](user:6253758)**
 A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute, game fixes & more!
 
-![Mod Example](gdutilsdevs.gdutils/Screenshot_1.png)
+![Mod Example](gdutilsdevs.gdutils/Screenshot_1.png&scale:0.8)
 
 # Need help?
 * You can join our [Discord server](https://discord.gg/MU4Rpc6xbJ) for **any assistance** or about **next updates**, **sneak peeks** & **more**!
 
-
-## Features
+# Features
 
 ### Realtime Notifications
 * This includes any <cy>new levels and lists being rated</c>, new <co>daily levels</c>, new <cb>weekly levels!</c> and <cy>new daily chests!</c>
@@ -47,10 +46,12 @@ A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute,
 * You can <cy>view a description</c> of either the <cy>Moderator</c>, <cp>Elder Moderator</c>, or other badges users have by <cy>clicking on the badge itself</c> on the profile!
 
 # Credits
-* [Jouca](https://twitter.com/JoucaJouca)
+* [Jouca](https://x.com/JoucaJouca)
 * [Firee](https://youtube.com/@gdfiree)
+* [nekitdev](https://x.com/nekitdev)
 * [Maverick](https://www.youtube.com/channel/UCoFBsXJ-6o6l6ZYP-k6DE_g)
-* [nekitdev](https://twitter.com/nekitdev)
+* [Zidnes](https://x.com/SZidnes)
+* [GammaReXx](user:3913739)
 
 # Contributors
 * [sofabeddd](user:7976112)

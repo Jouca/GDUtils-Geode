@@ -6,8 +6,7 @@ A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute,
 ## Need help?
 * You can join our [Discord server](https://discord.gg/MU4Rpc6xbJ) for **any assistance** or about **next updates**, **sneak peeks** & **more**!
 
-
-## Features
+# Features
 
 ### Realtime Notifications
 * This includes any new levels and lists being **rated**, new **daily levels**, new **weekly levels!** and **new daily chests!**
@@ -53,8 +52,9 @@ A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute,
 ## Credits
 * [Jouca](https://twitter.com/JoucaJouca)
 * [Firee](https://youtube.com/@gdfiree)
-* [Maverick](https://www.youtube.com/channel/UCoFBsXJ-6o6l6ZYP-k6DE_g)
 * [nekitdev](https://twitter.com/nekitdev)
+* [Maverick](https://www.youtube.com/channel/UCoFBsXJ-6o6l6ZYP-k6DE_g)
+* [Zidnes](https://x.com/SZidnes)
 
 **Thank you to RobTopGames for his trust on the mod.**
 
