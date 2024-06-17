@@ -87,6 +87,11 @@ void MoreLeaderboards::onRegion(CCObject* pSender) {
 
         loading = true;
 
+        loading_circle = LoadingCircle::create();
+        loading_circle->setZOrder(25);
+        loading_circle->setParentLayer(this);
+        loading_circle->show();
+
         if (displayedData) {
             displayedData->release();
             displayedData = cocos2d::CCArray::create();
@@ -315,6 +320,11 @@ bool MoreLeaderboards::init(std::string type) {
         // select first tab
         this->onTab(nullptr);
     } else if (type == "mods") {
+        loading_circle = LoadingCircle::create();
+        loading_circle->setZOrder(25);
+        loading_circle->setParentLayer(this);
+        loading_circle->show();
+        
         startLoadingMods();
         loadPageMods();
     }
@@ -356,10 +366,6 @@ void MoreLeaderboards::handle_request_mods(std::string const& data) {
 }
 
 void MoreLeaderboards::startLoadingMods() {
-    loading_circle = LoadingCircle::create();
-    loading_circle->setParentLayer(this);
-    loading_circle->show();
-
     const geode::utils::MiniFunction<void(std::string const&)> then = [this](std::string const& data) {
         handle_request_mods(data);
         fadeLoadingCircle();
@@ -399,10 +405,6 @@ void MoreLeaderboards::loadPageMods() {
 }
 
 void MoreLeaderboards::startLoadingMore() {
-    loading_circle = LoadingCircle::create();
-    loading_circle->setParentLayer(this);
-    loading_circle->show();
-
     geode::utils::web::WebRequest request = web::WebRequest();
 
     this->retain();
@@ -665,6 +667,11 @@ void MoreLeaderboards::onPageLeft(CCObject* pSender) {
 
     loading = true;
 
+    loading_circle = LoadingCircle::create();
+    loading_circle->setParentLayer(this);
+    loading_circle->setZOrder(25);
+    loading_circle->show();
+
     if (displayedData) {
         displayedData->release();
         displayedData = cocos2d::CCArray::create();
@@ -684,6 +691,11 @@ void MoreLeaderboards::onPageRight(CCObject* pSender) {
     if (loading) return;
 
     loading = true;
+
+    loading_circle = LoadingCircle::create();
+    loading_circle->setZOrder(25);
+    loading_circle->setParentLayer(this);
+    loading_circle->show();
 
     if (displayedData) {
         displayedData->release();
@@ -716,6 +728,11 @@ void MoreLeaderboards::onTab(CCObject* pSender) {
     if (loading) return;
 
     loading = true;
+
+    loading_circle = LoadingCircle::create();
+    loading_circle->setZOrder(25);
+    loading_circle->setParentLayer(this);
+    loading_circle->show();
 
     if (displayedData) {
         displayedData->release();
