@@ -13,7 +13,17 @@ enum class StatsListType {
     UserCoins,
     Demons,
     Moons,
-    Creators
+    Creators,
+    classicDemonsEasy,
+    classicDemonsMedium,
+    classicDemonsHard,
+    classicDemonsInsane,
+    classicDemonsExtreme,
+    platformerDemonsEasy,
+    platformerDemonsMedium,
+    platformerDemonsHard,
+    platformerDemonsInsane,
+    platformerDemonsExtreme
 };
 
 class MoreLeaderboards : public CCLayer {
