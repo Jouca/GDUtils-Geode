@@ -421,6 +421,8 @@ void MoreLeaderboards::startLoadingMore() {
             type = "platformerDemonsInsane";
         } else if (g_tab == StatsListType::platformerDemonsExtreme) {
             type = "platformerDemonsExtreme";
+        } else if (g_tab == StatsListType::BetterProgression) {
+            type = "betterProgression";
         }
 
         const geode::utils::MiniFunction<void(std::string const&)> expect = [this](std::string const& error) {
@@ -715,6 +717,8 @@ void MoreLeaderboards::changeTabPage() {
     platformer_sprite->setPositionX(30);
     platformer_sprite->setScale(1.2f);
 
+    auto better_progression = CCSprite::create("better_progression.png"_spr);
+
     auto easydemon_sprite_classic = CCSprite::createWithSpriteFrameName("diffIcon_07_btn_001.png");
     easydemon_sprite_classic->addChild(classic_sprite);
     auto mediumdemon_sprite_classic = CCSprite::createWithSpriteFrameName("diffIcon_08_btn_001.png");
@@ -787,12 +791,12 @@ void MoreLeaderboards::changeTabPage() {
         case 1:
             g_tab = StatsListType::classicDemonsEasy;
 
-            m_tab2 = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, CCSprite::create(), this, menu_selector(MoreLeaderboards::onTab));
-            m_tab2->setPosition(-140.f, 132);
-            m_tab2->setTag(static_cast<int>(StatsListType::classicDemonsEasy));
-            m_tab2->setZOrder(30);
-            m_tab2->setScale(0.8f);
-            m_menu->addChild(m_tab2);
+            m_tab1 = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, better_progression, this, menu_selector(MoreLeaderboards::onTab));
+            m_tab1->setPosition(-140.f, 132);
+            m_tab1->setTag(static_cast<int>(StatsListType::BetterProgression));
+            m_tab1->setZOrder(30);
+            m_tab1->setScale(0.8f);
+            m_menu->addChild(m_tab1);
 
             m_tab2 = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, easydemon_sprite_classic, this, menu_selector(MoreLeaderboards::onTab));
             m_tab2->setPosition(-86.f, 132);
