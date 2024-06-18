@@ -1,4 +1,7 @@
 # Changelog
+## <cj>v1.3.0-alpha.15</c> <cb>(2024-06-18)</c>
+* <cg>Added</c> user progression when receiving a list rate notification
+
 ## <cj>v1.3.0-alpha.14</c> <cb>(2024-06-17)</c>
 * <cy>Fixed</c> country flags not showing everytime
 * <cy>Fixed</c> loading circle superposition when loading More Leaderboards & Moderators List TOO FAST <cl>(speedy guy...)</c>

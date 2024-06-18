@@ -6,6 +6,28 @@
 
 static std::unordered_map<std::string, web::WebTask> RUNNING_REQUESTS {};
 
+std::vector<std::string> EventsPush::getWords(std::string s, std::string delim) {
+    std::vector<std::string> res;
+    std::string token = "";
+    for (int i = 0; i < s.size(); i++) {
+        bool flag = true;
+        for (int j = 0; j < delim.size(); j++) {
+            if (s[i + j] != delim[j]) flag = false;
+        }
+        if (flag) {
+            if (token.size() > 0) {
+                res.push_back(token);
+                token = "";
+                i += delim.size() - 1;
+            }
+        } else {
+            token += s[i];
+        }
+    }
+    res.push_back(token);
+    return res;
+}
+
 std::queue<sio::message::ptr> eventQueue;
 bool processingEvents = false;
 int zOrder = 200;
@@ -606,6 +628,97 @@ bool EventsPush::init(sio::message::ptr const& data) {
             node->addChild(verifiedCoinSpr1);
             node->addChild(verifiedCoinSpr2);
         }
+
+        // Progress Bar for lists
+        if (type == 5) {
+            auto barSpriteBack = CCSprite::create("GJ_progressBar_001.png");
+            barSpriteBack->setScaleX(0.38f);
+            barSpriteBack->setScaleY(0.45f);
+            barSpriteBack->setPosition({ 38, 3 });
+            barSpriteBack->setPositionY(3 - 19.f);
+            barSpriteBack->setPositionX(38);
+            barSpriteBack->setColor({0, 0, 0});
+            barSpriteBack->setOpacity(100);
+            barSpriteBack->setZOrder(10);
+            barSpriteBack->setID("progress-bar-list"_spr);
+            node->addChild(barSpriteBack);
+
+            auto barSpriteTop = CCSprite::create("GJ_progressBar_001.png");
+            //barSpriteTop->setScaleX(0.6f);
+            barSpriteTop->setScaleY(0.4f);
+            barSpriteTop->setPosition({ 2, 10 });
+            barSpriteTop->setAnchorPoint({0, 0.5});
+            barSpriteTop->setColor({ 255, 84, 50 });
+            barSpriteTop->setOpacity(255);
+            barSpriteTop->setZOrder(11);
+
+            CCPoint rectangle[4] = {
+                CCPoint(0, 0),
+                CCPoint(0, 20),
+                CCPoint(barSpriteBack->getScaledContentSize().width * -2.5f, 20),
+                CCPoint(barSpriteBack->getScaledContentSize().width * -2.5f, 0)
+            };
+
+            auto clippingNode = CCClippingNode::create();
+            auto barMask = CCDrawNode::create();
+            barMask->drawPolygon(rectangle, 4, ccc4FFromccc3B({0, 0, 0}), 0, ccc4FFromccc3B({0, 0, 0}));
+            clippingNode->setStencil(barMask);
+            clippingNode->addChild(barSpriteTop);
+            clippingNode->setPositionX(330);
+            barSpriteBack->addChild(clippingNode);
+            barSpriteTop->setPositionX(-666);
+
+            // Get datas for levels
+            std::string levels_list = dataMap["levels_list"]->get_string();
+            int maxToCompleteList = dataMap["maxToCompleteList"]->get_int();
+
+            std::vector<std::string> levels = split_str(levels_list, ',');
+
+            // Get client data for levels
+            GameLevelManager* gameLevelManager = GameLevelManager::sharedState();
+            CCArray* levelsData = gameLevelManager->getCompletedLevels(false);
+
+            int completedLevels = 0;
+            int nbLevels = 0;
+
+            while (levels.size() > 0) {
+                std::string id = levels[0];
+                nbLevels++;
+
+                for (int i = 0; i < levelsData->count(); i++) {
+                    auto level = static_cast<GJGameLevel*>(levelsData->objectAtIndex(i));
+                    if (std::to_string(level->m_levelID) == id) {
+                        if (level->m_normalPercent == 100) completedLevels++;
+                    }
+                }
+
+                levels.erase(levels.begin());
+            }
+
+            // min -666 | max -337
+            // Calculate position for Progress Bar (between these values based on percentage)
+            float percentage = (float)completedLevels / (float)nbLevels;
+            auto moveAction = CCEaseSineOut::create(CCMoveBy::create(0.f, { (percentage * 337), 0 }));
+            barSpriteTop->runAction(moveAction);
+
+            // Add text for Progress Bar
+            auto progressText = cocos2d::CCLabelBMFont::create((std::to_string(completedLevels) + "/" + std::to_string(nbLevels)).c_str(), "bigFont.fnt");
+            progressText->setPosition({ 38, -15 });
+            progressText->setScale(0.35f);
+            progressText->setZOrder(13);
+            node->addChild(progressText);
+
+            if (completedLevels == maxToCompleteList) {
+                barSpriteTop->setColor({ 100, 255, 255 });
+                starcount->setColor({ 100, 255, 255 });
+
+                auto listCompleted = cocos2d::CCSprite::createWithSpriteFrameName("GJ_completesIcon_001.png");
+                listCompleted->setPosition({ 94, -15 });
+                listCompleted->setScale(0.55f);
+                listCompleted->setZOrder(13);
+                node->addChild(listCompleted);
+            }
+        }
     }
     
     auto title = cocos2d::CCLabelBMFont::create(label_title.c_str(), "goldFont.fnt");
@@ -613,6 +726,8 @@ bool EventsPush::init(sio::message::ptr const& data) {
         title->setPosition({ -65, 26 });
     } else if (type == 4) {
         title->setPosition({ -54, 26 });
+    } else if (type == 5) {
+        title->setPosition({ -27, 27 });
     } else {
         title->setPosition({ -27, 23 });
     }
@@ -621,19 +736,26 @@ bool EventsPush::init(sio::message::ptr const& data) {
     node->addChild(title);
 
     auto level_title = cocos2d::CCLabelBMFont::create(level_name_label.c_str(), "bigFont.fnt");
-    level_title->setPosition({ -27, 3 });
+    if (type == 5) {
+        level_title->setPosition({ -27, 11 });
+    } else {
+        level_title->setPosition({ -27, 3 });
+    }
     level_title->setScale(.46F);
     
     level_title->setAnchorPoint({ 0, 0.5 });
 
     auto level_by = cocos2d::CCLabelBMFont::create(level_by_label.c_str(), "goldFont.fnt");
-    level_by->setPosition({-27, -11 });
+    if (type == 5) {
+        level_by->setPosition({ -27, -2 });
+    } else {
+        level_by->setPosition({ -27, -11 });
+    }
     level_by->setScale(.46F);
     level_by->limitLabelWidth(120, 0.46f, 0.1f);
     level_by->setAnchorPoint({ 0, 0.5 });
     node->addChild(level_by);
     level_title->limitLabelWidth(120, 0.46f, 0.1f);
-
     node->addChild(level_title);
 
     if (type > 0 && type < 3) {
