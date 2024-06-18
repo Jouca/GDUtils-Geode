@@ -697,8 +697,9 @@ bool EventsPush::init(sio::message::ptr const& data) {
             // Calculate position for Progress Bar (between these values based on percentage)
             float percentage;
             CCLabelBMFont* progressText;
-            if (completedLevels == maxToCompleteList) {
-                float percentage = (float)completedLevels / (float)nbLevels;
+
+            if (completedLevels >= maxToCompleteList) {
+                percentage = (float)completedLevels / (float)nbLevels;
                 progressText = CCLabelBMFont::create((std::to_string(completedLevels) + "/" + std::to_string(nbLevels)).c_str(), "bigFont.fnt");
                 barSpriteTop->setColor({ 100, 255, 255 });
                 starcount->setColor({ 100, 255, 255 });
@@ -710,7 +711,7 @@ bool EventsPush::init(sio::message::ptr const& data) {
                 node->addChild(listCompleted);
             } else {
                 percentage = (float)completedLevels / (float)maxToCompleteList;
-                progressText = CCLabelBMFont::create((std::to_string(completedLevels) + "/" + std::to_string(nbLevels)).c_str(), "bigFont.fnt");
+                progressText = CCLabelBMFont::create((std::to_string(completedLevels) + "/" + std::to_string(maxToCompleteList)).c_str(), "bigFont.fnt");
                 barSpriteTop->setColor({ 255, 84, 50 });
 
                 auto listUncompleted = CCSprite::createWithSpriteFrameName("diamond_small01_001.png");
