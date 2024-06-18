@@ -644,11 +644,9 @@ bool EventsPush::init(sio::message::ptr const& data) {
             node->addChild(barSpriteBack);
 
             auto barSpriteTop = CCSprite::create("GJ_progressBar_001.png");
-            //barSpriteTop->setScaleX(0.6f);
             barSpriteTop->setScaleY(0.4f);
             barSpriteTop->setPosition({ 2, 10 });
             barSpriteTop->setAnchorPoint({0, 0.5});
-            barSpriteTop->setColor({ 255, 84, 50 });
             barSpriteTop->setOpacity(255);
             barSpriteTop->setZOrder(11);
 
@@ -697,27 +695,39 @@ bool EventsPush::init(sio::message::ptr const& data) {
 
             // min -666 | max -337
             // Calculate position for Progress Bar (between these values based on percentage)
-            float percentage = (float)completedLevels / (float)nbLevels;
-            auto moveAction = CCEaseSineOut::create(CCMoveBy::create(0.f, { (percentage * 337), 0 }));
-            barSpriteTop->runAction(moveAction);
-
-            // Add text for Progress Bar
-            auto progressText = cocos2d::CCLabelBMFont::create((std::to_string(completedLevels) + "/" + std::to_string(nbLevels)).c_str(), "bigFont.fnt");
-            progressText->setPosition({ 38, -15 });
-            progressText->setScale(0.35f);
-            progressText->setZOrder(13);
-            node->addChild(progressText);
-
+            float percentage;
+            CCLabelBMFont* progressText;
             if (completedLevels == maxToCompleteList) {
+                float percentage = (float)completedLevels / (float)nbLevels;
+                progressText = CCLabelBMFont::create((std::to_string(completedLevels) + "/" + std::to_string(nbLevels)).c_str(), "bigFont.fnt");
                 barSpriteTop->setColor({ 100, 255, 255 });
                 starcount->setColor({ 100, 255, 255 });
 
-                auto listCompleted = cocos2d::CCSprite::createWithSpriteFrameName("GJ_completesIcon_001.png");
+                auto listCompleted = CCSprite::createWithSpriteFrameName("GJ_completesIcon_001.png");
                 listCompleted->setPosition({ 94, -15 });
                 listCompleted->setScale(0.55f);
                 listCompleted->setZOrder(13);
                 node->addChild(listCompleted);
+            } else {
+                percentage = (float)completedLevels / (float)maxToCompleteList;
+                progressText = CCLabelBMFont::create((std::to_string(completedLevels) + "/" + std::to_string(nbLevels)).c_str(), "bigFont.fnt");
+                barSpriteTop->setColor({ 255, 84, 50 });
+
+                auto listUncompleted = CCSprite::createWithSpriteFrameName("diamond_small01_001.png");
+                listUncompleted->setPosition({ 94, -15 });
+                listUncompleted->setScale(0.55f);
+                listUncompleted->setZOrder(13);
+                node->addChild(listUncompleted);
             }
+            
+            auto moveAction = CCEaseSineOut::create(CCMoveBy::create(0.f, { (percentage * 337), 0 }));
+            barSpriteTop->runAction(moveAction);
+
+            // Add text for Progress Bar
+            progressText->setPosition({ 38, -15 });
+            progressText->setScale(0.35f);
+            progressText->setZOrder(13);
+            node->addChild(progressText);
         }
     }
     
