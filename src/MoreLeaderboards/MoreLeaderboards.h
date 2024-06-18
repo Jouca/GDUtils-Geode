@@ -36,6 +36,8 @@ class MoreLeaderboards : public CCLayer {
     CCLabelBMFont* page_label = nullptr;
     CCMenuItemSpriteExtra* page_left = nullptr;
     CCMenuItemSpriteExtra* page_right = nullptr;
+    CCMenuItemSpriteExtra* tab_page_left = nullptr;
+    CCMenuItemSpriteExtra* tab_page_right = nullptr;
     CCSprite* trophy = nullptr;
 
     CCString* datas = nullptr;
@@ -46,12 +48,14 @@ class MoreLeaderboards : public CCLayer {
     bool loading = false;
 
     CCMenu* m_menu;
-    CCMenuItemToggler* m_starsTabBtn;
-    CCMenuItemToggler* m_diamondsTabBtn;
-    CCMenuItemToggler* m_usercoinsTabBtn;
-    CCMenuItemToggler* m_demonsTabBtn;
-    CCMenuItemToggler* m_moonsTabBtn;
-    CCMenuItemToggler* m_creatorsTabBtn;
+    CCMenuItemToggler* m_tab1;
+    CCMenuItemToggler* m_tab2;
+    CCMenuItemToggler* m_tab3;
+    CCMenuItemToggler* m_tab4;
+    CCMenuItemToggler* m_tab5;
+    CCMenuItemToggler* m_tab6;
+    int tab_page = 0;
+
     #ifndef GEODE_IS_IOS
     CCClippingNode* m_tabsGradientNode = nullptr;
     #else
@@ -82,6 +86,11 @@ class MoreLeaderboards : public CCLayer {
         void onTab(CCObject* pSender);
         void onPageLeft(CCObject* pSender);
         void onPageRight(CCObject* pSender);
+
+        void loadTabPageButtons();
+        void onTabPageLeft(CCObject* pSender);
+        void onTabPageRight(CCObject* pSender);
+        void changeTabPage();
 
         static MoreLeaderboards* create(std::string type);
         void fadeLoadingCircle();

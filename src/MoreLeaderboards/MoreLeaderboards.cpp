@@ -230,56 +230,7 @@ bool MoreLeaderboards::init(std::string type) {
 
         this->addChild(menu_region);
 
-        // create menus
-        m_menu = CCMenu::create();
-
-        auto stars_sprite = CCSprite::createWithSpriteFrameName("star_small01_001.png");
-        m_starsTabBtn = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, stars_sprite, this, menu_selector(MoreLeaderboards::onTab));
-        m_starsTabBtn->setPosition(-140.f, 132);
-        m_starsTabBtn->setTag(static_cast<int>(StatsListType::Stars));
-        m_starsTabBtn->setZOrder(30);
-        m_starsTabBtn->setScale(0.8f);
-        m_menu->addChild(m_starsTabBtn);
-
-        auto moons_sprite = CCSprite::createWithSpriteFrameName("GJ_bigMoon_001.png");
-        m_moonsTabBtn = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, moons_sprite, this, menu_selector(MoreLeaderboards::onTab));
-        m_moonsTabBtn->setPosition(-86.f, 132);
-        m_moonsTabBtn->setTag(static_cast<int>(StatsListType::Moons));
-        m_moonsTabBtn->setZOrder(30);
-        m_moonsTabBtn->setScale(0.8f);
-        m_menu->addChild(m_moonsTabBtn);
-
-        auto usercoins_sprite = CCSprite::createWithSpriteFrameName("GJ_coinsIcon2_001.png");
-        m_usercoinsTabBtn = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, usercoins_sprite, this, menu_selector(MoreLeaderboards::onTab));
-        m_usercoinsTabBtn->setPosition(-30.f, 132);
-        m_usercoinsTabBtn->setTag(static_cast<int>(StatsListType::UserCoins));
-        m_usercoinsTabBtn->setZOrder(30);
-        m_usercoinsTabBtn->setScale(0.8f);
-        m_menu->addChild(m_usercoinsTabBtn);
-
-        auto demons_sprite = CCSprite::createWithSpriteFrameName("GJ_demonIcon_001.png");
-        m_demonsTabBtn = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, demons_sprite, this, menu_selector(MoreLeaderboards::onTab));
-        m_demonsTabBtn->setPosition(26.f, 132);
-        m_demonsTabBtn->setTag(static_cast<int>(StatsListType::Demons));
-        m_demonsTabBtn->setZOrder(30);
-        m_demonsTabBtn->setScale(0.8f);
-        m_menu->addChild(m_demonsTabBtn);
-
-        auto diamond_sprite = CCSprite::createWithSpriteFrameName("diamond_small01_001.png");
-        m_diamondsTabBtn = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, diamond_sprite, this, menu_selector(MoreLeaderboards::onTab));
-        m_diamondsTabBtn->setPosition(82.f, 132);
-        m_diamondsTabBtn->setTag(static_cast<int>(StatsListType::Diamonds));
-        m_diamondsTabBtn->setZOrder(30);
-        m_diamondsTabBtn->setScale(0.8f);
-        m_menu->addChild(m_diamondsTabBtn);
-
-        auto creators_sprite = CCSprite::createWithSpriteFrameName("GJ_hammerIcon_001.png");
-        m_creatorsTabBtn = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, creators_sprite, this, menu_selector(MoreLeaderboards::onTab));
-        m_creatorsTabBtn->setPosition(136.f, 132);
-        m_creatorsTabBtn->setTag(static_cast<int>(StatsListType::Creators));
-        m_creatorsTabBtn->setZOrder(30);
-        m_creatorsTabBtn->setScale(0.8f);
-        m_menu->addChild(m_creatorsTabBtn);
+        tab_page = 0;
 
         // tabs gradient
         #ifndef GEODE_IS_IOS
@@ -310,12 +261,10 @@ bool MoreLeaderboards::init(std::string type) {
         m_tabsGradientNode->setStencil(m_tabsGradientStencil);
         #endif
 
-        // add menus
-        m_menu->setZOrder(1);
-
         this->addChild(m_tabsGradientNode);
         this->addChild(m_tabsGradientStencil);
-        this->addChild(m_menu);
+
+        changeTabPage();
 
         // select first tab
         this->onTab(nullptr);
@@ -452,6 +401,26 @@ void MoreLeaderboards::startLoadingMore() {
             type = "cp";
         } else if (g_tab == StatsListType::Stars) {
             type = "stars";
+        } else if (g_tab == StatsListType::classicDemonsEasy) {
+            type = "classicDemonsEasy";
+        } else if (g_tab == StatsListType::classicDemonsMedium) {
+            type = "classicDemonsMedium";
+        } else if (g_tab == StatsListType::classicDemonsHard) {
+            type = "classicDemonsHard";
+        } else if (g_tab == StatsListType::classicDemonsInsane) {
+            type = "classicDemonsInsane";
+        } else if (g_tab == StatsListType::classicDemonsExtreme) {
+            type = "classicDemonsExtreme";
+        } else if (g_tab == StatsListType::platformerDemonsEasy) {
+            type = "platformerDemonsEasy";
+        } else if (g_tab == StatsListType::platformerDemonsMedium) {
+            type = "platformerDemonsMedium";
+        } else if (g_tab == StatsListType::platformerDemonsHard) {
+            type = "platformerDemonsHard";
+        } else if (g_tab == StatsListType::platformerDemonsInsane) {
+            type = "platformerDemonsInsane";
+        } else if (g_tab == StatsListType::platformerDemonsExtreme) {
+            type = "platformerDemonsExtreme";
         }
 
         const geode::utils::MiniFunction<void(std::string const&)> expect = [this](std::string const& error) {
@@ -660,6 +629,249 @@ void MoreLeaderboards::loadPageStats() {
     }
 
     addChild(menu);
+
+    loadTabPageButtons();
+}
+
+void MoreLeaderboards::loadTabPageButtons() {
+    if (tab_page > 0) {
+        auto tab_page_left_sprite = CCSprite::createWithSpriteFrameName("GJ_arrow_03_001.png");
+        tab_page_left_sprite->setScale(0.6f);
+        tab_page_left = CCMenuItemSpriteExtra::create(
+            tab_page_left_sprite,
+            this,
+            menu_selector(MoreLeaderboards::onTabPageLeft)
+        );
+        tab_page_left->setPosition(-184, 138);
+        m_menu->addChild(tab_page_left);
+    }
+    
+    if (tab_page < 2) {
+        auto tab_page_right_sprite = CCSprite::createWithSpriteFrameName("GJ_arrow_03_001.png");
+        tab_page_right_sprite->setScale(0.6f);
+        tab_page_right_sprite->setFlipX(true);
+        tab_page_right = CCMenuItemSpriteExtra::create(
+            tab_page_right_sprite,
+            this,
+            menu_selector(MoreLeaderboards::onTabPageRight)
+        );
+        tab_page_right->setPosition(184, 138);
+        m_menu->addChild(tab_page_right);
+    }
+}
+
+void MoreLeaderboards::onTabPageLeft(CCObject* pSender) {
+    if (loading) return;
+
+    tab_page--;
+    changeTabPage();
+
+    page = 0;
+    this->onTab(nullptr);
+}
+
+void MoreLeaderboards::onTabPageRight(CCObject* pSender) {
+    if (loading) return;
+
+    tab_page++;
+    changeTabPage();
+
+    page = 0;
+    this->onTab(nullptr);
+}
+
+void MoreLeaderboards::changeTabPage() {
+    if (m_tab1 != nullptr) m_tab1->removeFromParentAndCleanup(true);
+    if (m_tab2 != nullptr) m_tab2->removeFromParentAndCleanup(true);
+    if (m_tab3 != nullptr) m_tab3->removeFromParentAndCleanup(true);
+    if (m_tab4 != nullptr) m_tab4->removeFromParentAndCleanup(true);
+    if (m_tab5 != nullptr) m_tab5->removeFromParentAndCleanup(true);
+    if (m_tab6 != nullptr) m_tab6->removeFromParentAndCleanup(true);
+
+    m_tab1 = nullptr;
+    m_tab2 = nullptr;
+    m_tab3 = nullptr;
+    m_tab4 = nullptr;
+    m_tab5 = nullptr;
+    m_tab6 = nullptr;
+
+    if (m_menu != nullptr) m_menu->removeFromParentAndCleanup(true);
+
+    m_menu = CCMenu::create();
+    m_menu->setZOrder(1);
+
+    auto stars_sprite = CCSprite::createWithSpriteFrameName("star_small01_001.png");
+    auto moons_sprite = CCSprite::createWithSpriteFrameName("moon_small01_001.png");
+    auto diamond_sprite = CCSprite::createWithSpriteFrameName("diamond_small01_001.png");
+    auto usercoins_sprite = CCSprite::createWithSpriteFrameName("GJ_coinsIcon2_001.png");
+    auto demons_sprite = CCSprite::createWithSpriteFrameName("GJ_demonIcon_001.png");
+    auto creators_sprite = CCSprite::createWithSpriteFrameName("GJ_hammerIcon_001.png");
+
+    auto classic_sprite = CCSprite::createWithSpriteFrameName("star_small01_001.png");
+    classic_sprite->setPositionX(30);
+    classic_sprite->setScale(1.2f);
+
+    auto platformer_sprite = CCSprite::createWithSpriteFrameName("moon_small01_001.png");
+    platformer_sprite->setPositionX(30);
+    platformer_sprite->setScale(1.2f);
+
+    auto easydemon_sprite_classic = CCSprite::createWithSpriteFrameName("diffIcon_07_btn_001.png");
+    easydemon_sprite_classic->addChild(classic_sprite);
+    auto mediumdemon_sprite_classic = CCSprite::createWithSpriteFrameName("diffIcon_08_btn_001.png");
+    mediumdemon_sprite_classic->addChild(classic_sprite);
+    auto harddemon_sprite_classic = CCSprite::createWithSpriteFrameName("diffIcon_06_btn_001.png");
+    harddemon_sprite_classic->addChild(classic_sprite);
+    auto insane_sprite_classic = CCSprite::createWithSpriteFrameName("diffIcon_09_btn_001.png");
+    insane_sprite_classic->addChild(classic_sprite);
+    auto extreme_sprite_classic = CCSprite::createWithSpriteFrameName("diffIcon_10_btn_001.png");
+    extreme_sprite_classic->addChild(classic_sprite);
+
+    auto easydemon_sprite_platformer = CCSprite::createWithSpriteFrameName("diffIcon_07_btn_001.png");
+    easydemon_sprite_platformer->addChild(platformer_sprite);
+    auto mediumdemon_sprite_platformer = CCSprite::createWithSpriteFrameName("diffIcon_08_btn_001.png");
+    mediumdemon_sprite_platformer->addChild(platformer_sprite);
+    auto harddemon_sprite_platformer = CCSprite::createWithSpriteFrameName("diffIcon_06_btn_001.png");
+    harddemon_sprite_platformer->addChild(platformer_sprite);
+    auto insane_sprite_platformer = CCSprite::createWithSpriteFrameName("diffIcon_09_btn_001.png");
+    insane_sprite_platformer->addChild(platformer_sprite);
+    auto extreme_sprite_platformer = CCSprite::createWithSpriteFrameName("diffIcon_10_btn_001.png");
+    extreme_sprite_platformer->addChild(platformer_sprite);
+
+    switch (tab_page) {
+        case 0:
+            g_tab = StatsListType::Stars;
+
+            m_tab1 = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, stars_sprite, this, menu_selector(MoreLeaderboards::onTab));
+            m_tab1->setPosition(-140.f, 132);
+            m_tab1->setTag(static_cast<int>(StatsListType::Stars));
+            m_tab1->setZOrder(30);
+            m_tab1->setScale(0.8f);
+            m_menu->addChild(m_tab1);
+
+            m_tab2 = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, moons_sprite, this, menu_selector(MoreLeaderboards::onTab));
+            m_tab2->setPosition(-86.f, 132);
+            m_tab2->setTag(static_cast<int>(StatsListType::Moons));
+            m_tab2->setZOrder(30);
+            m_tab2->setScale(0.8f);
+            m_menu->addChild(m_tab2);
+            
+            m_tab3 = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, usercoins_sprite, this, menu_selector(MoreLeaderboards::onTab));
+            m_tab3->setPosition(-30.f, 132);
+            m_tab3->setTag(static_cast<int>(StatsListType::UserCoins));
+            m_tab3->setZOrder(30);
+            m_tab3->setScale(0.8f);
+            m_menu->addChild(m_tab3);
+            
+            m_tab4 = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, demons_sprite, this, menu_selector(MoreLeaderboards::onTab));
+            m_tab4->setPosition(26.f, 132);
+            m_tab4->setTag(static_cast<int>(StatsListType::Demons));
+            m_tab4->setZOrder(30);
+            m_tab4->setScale(0.8f);
+            m_menu->addChild(m_tab4);
+
+            m_tab5 = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, diamond_sprite, this, menu_selector(MoreLeaderboards::onTab));
+            m_tab5->setPosition(82.f, 132);
+            m_tab5->setTag(static_cast<int>(StatsListType::Diamonds));
+            m_tab5->setZOrder(30);
+            m_tab5->setScale(0.8f);
+            m_menu->addChild(m_tab5);
+
+            m_tab6 = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, creators_sprite, this, menu_selector(MoreLeaderboards::onTab));
+            m_tab6->setPosition(138.f, 132);
+            m_tab6->setTag(static_cast<int>(StatsListType::Creators));
+            m_tab6->setZOrder(30);
+            m_tab6->setScale(0.8f);
+            m_menu->addChild(m_tab6);
+
+            break;
+        case 1:
+            g_tab = StatsListType::classicDemonsEasy;
+
+            m_tab2 = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, CCSprite::create(), this, menu_selector(MoreLeaderboards::onTab));
+            m_tab2->setPosition(-140.f, 132);
+            m_tab2->setTag(static_cast<int>(StatsListType::classicDemonsEasy));
+            m_tab2->setZOrder(30);
+            m_tab2->setScale(0.8f);
+            m_menu->addChild(m_tab2);
+
+            m_tab2 = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, easydemon_sprite_classic, this, menu_selector(MoreLeaderboards::onTab));
+            m_tab2->setPosition(-86.f, 132);
+            m_tab2->setTag(static_cast<int>(StatsListType::classicDemonsEasy));
+            m_tab2->setZOrder(30);
+            m_tab2->setScale(0.8f);
+            m_menu->addChild(m_tab2);
+
+            m_tab3 = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, mediumdemon_sprite_classic, this, menu_selector(MoreLeaderboards::onTab));
+            m_tab3->setPosition(-30.f, 132);
+            m_tab3->setTag(static_cast<int>(StatsListType::classicDemonsMedium));
+            m_tab3->setZOrder(30);
+            m_tab3->setScale(0.8f);
+            m_menu->addChild(m_tab3);
+
+            m_tab4 = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, harddemon_sprite_classic, this, menu_selector(MoreLeaderboards::onTab));
+            m_tab4->setPosition(26.f, 132);
+            m_tab4->setTag(static_cast<int>(StatsListType::classicDemonsHard));
+            m_tab4->setZOrder(30);
+            m_tab4->setScale(0.8f);
+            m_menu->addChild(m_tab4);
+
+            m_tab5 = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, insane_sprite_classic, this, menu_selector(MoreLeaderboards::onTab));
+            m_tab5->setPosition(82.f, 132);
+            m_tab5->setTag(static_cast<int>(StatsListType::classicDemonsInsane));
+            m_tab5->setZOrder(30);
+            m_tab5->setScale(0.8f);
+            m_menu->addChild(m_tab5);
+
+            m_tab6 = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, extreme_sprite_classic, this, menu_selector(MoreLeaderboards::onTab));
+            m_tab6->setPosition(138.f, 132);
+            m_tab6->setTag(static_cast<int>(StatsListType::classicDemonsExtreme));
+            m_tab6->setZOrder(30);
+            m_tab6->setScale(0.8f);
+            m_menu->addChild(m_tab6);
+
+            break;
+        case 2:
+            g_tab = StatsListType::platformerDemonsEasy;
+
+            m_tab1 = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, easydemon_sprite_platformer, this, menu_selector(MoreLeaderboards::onTab));
+            m_tab1->setPosition(-140.f, 132);
+            m_tab1->setTag(static_cast<int>(StatsListType::platformerDemonsEasy));
+            m_tab1->setZOrder(30);
+            m_tab1->setScale(0.8f);
+            m_menu->addChild(m_tab1);
+
+            m_tab2 = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, mediumdemon_sprite_platformer, this, menu_selector(MoreLeaderboards::onTab));
+            m_tab2->setPosition(-86.f, 132);
+            m_tab2->setTag(static_cast<int>(StatsListType::platformerDemonsMedium));
+            m_tab2->setZOrder(30);
+            m_tab2->setScale(0.8f);
+            m_menu->addChild(m_tab2);
+
+            m_tab3 = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, harddemon_sprite_platformer, this, menu_selector(MoreLeaderboards::onTab));
+            m_tab3->setPosition(-30.f, 132);
+            m_tab3->setTag(static_cast<int>(StatsListType::platformerDemonsHard));
+            m_tab3->setZOrder(30);
+            m_tab3->setScale(0.8f);
+            m_menu->addChild(m_tab3);
+
+            m_tab4 = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, insane_sprite_platformer, this, menu_selector(MoreLeaderboards::onTab));
+            m_tab4->setPosition(26.f, 132);
+            m_tab4->setTag(static_cast<int>(StatsListType::platformerDemonsInsane));
+            m_tab4->setZOrder(30);
+            m_tab4->setScale(0.8f);
+            m_menu->addChild(m_tab4);
+
+            m_tab5 = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, extreme_sprite_platformer, this, menu_selector(MoreLeaderboards::onTab));
+            m_tab5->setPosition(82.f, 132);
+            m_tab5->setTag(static_cast<int>(StatsListType::platformerDemonsExtreme));
+            m_tab5->setZOrder(30);
+            m_tab5->setScale(0.8f);
+            m_menu->addChild(m_tab5);
+
+            break;
+    }
+
+    this->addChild(m_menu);
 }
 
 void MoreLeaderboards::onPageLeft(CCObject* pSender) {
@@ -762,12 +974,12 @@ void MoreLeaderboards::onTab(CCObject* pSender) {
             m_tabsGradientStencil->setPosition(member->m_onButton->convertToWorldSpace({0.f, 0.f}));
     };
 
-    toggleTab(m_starsTabBtn);
-    toggleTab(m_diamondsTabBtn);
-    toggleTab(m_usercoinsTabBtn);
-    toggleTab(m_demonsTabBtn);
-    toggleTab(m_moonsTabBtn);
-    toggleTab(m_creatorsTabBtn);
+    if (m_tab1 != nullptr) toggleTab(m_tab1);
+    if (m_tab2 != nullptr) toggleTab(m_tab2);
+    if (m_tab3 != nullptr) toggleTab(m_tab3);
+    if (m_tab4 != nullptr) toggleTab(m_tab4);
+    if (m_tab5 != nullptr) toggleTab(m_tab5);
+    if (m_tab6 != nullptr) toggleTab(m_tab6);
 
     if (loading) {
         startLoadingMore();

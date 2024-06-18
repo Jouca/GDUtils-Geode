@@ -4,7 +4,7 @@
 class NewTabButton : public CCMenuItemToggler {
     public:
         static NewTabButton* create(
-            TabBaseColor unselected, TabBaseColor selected, CCSprite* icon,
+            TabBaseColor unselected, TabBaseColor selected, CCNode* icon,
             cocos2d::CCObject* target, cocos2d::SEL_MenuHandler callback
         );
 };
@@ -60,7 +60,7 @@ class NewBasedButtonSprite : public cocos2d::CCSprite {
 class NewTabButtonSprite : public NewBasedButtonSprite {
     public:
         static NewTabButtonSprite* create(
-            CCSprite* icon,
+            CCNode* icon,
             TabBaseColor color,
             TabBaseSize size = TabBaseSize::Normal
         );

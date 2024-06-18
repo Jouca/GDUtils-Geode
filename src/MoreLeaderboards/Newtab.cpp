@@ -1,7 +1,7 @@
 #include "Newtab.h"
 
 NewTabButton* NewTabButton::create(
-    TabBaseColor unselected, TabBaseColor selected, CCSprite* icon, cocos2d::CCObject* target,
+    TabBaseColor unselected, TabBaseColor selected, CCNode* icon, cocos2d::CCObject* target,
     cocos2d::SEL_MenuHandler callback
 ) {
     auto ret = new NewTabButton();
@@ -61,7 +61,7 @@ CCNode* NewBasedButtonSprite::getTopNode() const {
 
 NewBasedButtonSprite::~NewBasedButtonSprite() {}
 
-NewTabButtonSprite* NewTabButtonSprite::create(CCSprite* icon, TabBaseColor color, TabBaseSize size) {
+NewTabButtonSprite* NewTabButtonSprite::create(CCNode* icon, TabBaseColor color, TabBaseSize size) {
     auto ret = new NewTabButtonSprite();
     if (ret && ret->init(
         icon, BaseType::Tab, 
