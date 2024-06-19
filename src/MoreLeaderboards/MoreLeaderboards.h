@@ -1,6 +1,7 @@
 #pragma once
 #include "../includes.h"
 #include <Geode/utils/web.hpp>
+#include "../BrownAlertDelegate.hpp"
 #include "MoreLeaderboardsListView.h"
 #include "SelectRegion.h"
 
@@ -46,8 +47,6 @@ class MoreLeaderboards : public CCLayer {
 
     int country_id = 0;
 
-    bool loading = false;
-
     CCMenu* m_menu;
     CCMenuItemToggler* m_tab1;
     CCMenuItemToggler* m_tab2;
@@ -56,6 +55,8 @@ class MoreLeaderboards : public CCLayer {
     CCMenuItemToggler* m_tab5;
     CCMenuItemToggler* m_tab6;
     int tab_page = 0;
+
+    CCMenuItemSpriteExtra* m_search = nullptr;
 
     #ifndef GEODE_IS_IOS
     CCClippingNode* m_tabsGradientNode = nullptr;
@@ -78,6 +79,7 @@ class MoreLeaderboards : public CCLayer {
     public:
         static std::string data_response_moreLB;
         static StatsListType g_tab;
+        bool loading = false;
 
         void onMoreLeaderboards(CCObject*);
         void onModsList(CCObject*);
@@ -93,6 +95,8 @@ class MoreLeaderboards : public CCLayer {
         void onTabPageLeft(CCObject* pSender);
         void onTabPageRight(CCObject* pSender);
         void changeTabPage();
+
+        void onSearch(CCObject*);
 
         static MoreLeaderboards* create(std::string type);
         void fadeLoadingCircle();

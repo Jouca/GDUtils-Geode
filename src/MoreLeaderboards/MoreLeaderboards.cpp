@@ -32,6 +32,63 @@ std::vector<std::string> MoreLeaderboards::getWords(std::string s, std::string d
     res.push_back(token);
     return res;
 }
+
+class SearchUserLBLayer : public BrownAlertDelegate {
+    protected:
+        MoreLeaderboards* m_layer;
+
+        virtual void setup() {
+            auto winSize = cocos2d::CCDirector::sharedDirector()->getWinSize();
+            InputNode* input_username = InputNode::create(200.0F, "Username", "bigFont.fnt", "", 20);
+            input_username->setPositionY(10);
+            this->m_buttonMenu->addChild(input_username);
+            auto validate_spr = ButtonSprite::create("Search", 60, true, "bigFont.fnt", "GJ_button_01.png", 30, .5F);
+            auto validate_btn = CCMenuItemSpriteExtra::create(
+                validate_spr,
+                this,
+                menu_selector(SearchUserLBLayer::onValidate)
+            );
+
+            validate_btn->setPosition({
+                0,
+                -35
+            });
+            this->m_buttonMenu->addChild(validate_btn, 1);
+            this->m_mainLayer->addChild(this->m_buttonMenu);
+            setTouchEnabled(true);
+        }
+        cocos2d::CCSize m_sScrLayerSize;
+        void onClose(cocos2d::CCObject* pSender) {
+            BrownAlertDelegate::onClose(pSender);
+        }
+        void onValidate(cocos2d::CCObject*);
+        float m_fWidth = s_defWidth;
+        float m_fHeight = s_defHeight;
+    public:
+        static constexpr const float s_defWidth = 260.0f;
+        static constexpr const float s_defHeight = 120.0f;
+        static SearchUserLBLayer* create(MoreLeaderboards* layer) {
+            auto pRet = new SearchUserLBLayer();
+            if (pRet && pRet->init(SearchUserLBLayer::s_defWidth, SearchUserLBLayer::s_defHeight, "GJ_square01.png")) {
+                pRet->autorelease();
+                pRet->m_layer = layer;
+                return pRet;
+            }
+            CC_SAFE_DELETE(pRet);
+            return nullptr;
+        }
+};
+
+void SearchUserLBLayer::onValidate(CCObject* pSender) {
+    if (this->m_layer->loading) return;
+
+    this->m_layer->changeTabPage();
+
+    this->m_layer->onTab(nullptr);
+
+    BrownAlertDelegate::onClose(pSender);
+}
+
 CCDictionary* MoreLeaderboards::responseToDict(const std::string& response){
     auto dict = CCDictionary::create();
     std::stringstream responseStream(response);
@@ -63,6 +120,7 @@ CCDictionary* MoreLeaderboards::responseToDict(const std::string& response){
     }
     return dict;
 }
+
 void MoreLeaderboards::onMoreLeaderboards(CCObject* pSender) {
     auto scene = CCScene::create();
     auto layer = MoreLeaderboards::create("more");
@@ -556,14 +614,16 @@ void MoreLeaderboards::handle_request_more(std::string const& data) {
 
         int id = 0;
         while (data_page.size() > 0) {
-            std::string page = data_page[0];
+            std::string page_test = data_page[0];
 
             if (id == 0) {
-                start_count = std::stoi(page);
+                start_count = std::stoi(page_test);
             } else if (id == 1) {
-                end_count = std::stoi(page);
+                end_count = std::stoi(page_test);
             } else if (id == 2) {
-                total_count = std::stoi(page);
+                total_count = std::stoi(page_test);
+            } else if (id == 3) {
+                page = std::stoi(page_test);
             }
 
             id++;
@@ -585,6 +645,10 @@ void MoreLeaderboards::loadPageMore() {
     listLayer->setPosition(winSize / 2 - listLayer->getScaledContentSize() / 2 - CCPoint(0,5));
 
     addChild(listLayer);
+}
+
+void MoreLeaderboards::onSearch(CCObject*) {
+    SearchUserLBLayer::create(this)->show();
 }
 
 void MoreLeaderboards::loadPageStats() {
@@ -679,6 +743,15 @@ void MoreLeaderboards::loadTabPageButtons() {
         tab_page_right->setPosition(184, 138);
         m_menu->addChild(tab_page_right);
     }
+
+    auto searchSpr = CCSprite::createWithSpriteFrameName("gj_findBtn_001.png");
+    m_search = CCMenuItemSpriteExtra::create(
+        searchSpr,
+        this,
+        menu_selector(MoreLeaderboards::onSearch)
+    );
+    m_search->setPosition(239, 104);
+    m_menu->addChild(m_search);
 }
 
 void MoreLeaderboards::onTabPageLeft(CCObject* pSender) {
