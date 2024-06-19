@@ -69,6 +69,8 @@ class $modify(CustomScoreCell, GJScoreCell) {
             std::vector<std::string> dataString = MoreLeaderboards::getWords(data_flag, "#");
             std::vector<std::string> users = MoreLeaderboards::getWords(dataString[0], "|");
 
+            std::string count_diff = "0";
+
             while (users.size() > 0) {
                 std::string user = users[0];
 
@@ -90,6 +92,9 @@ class $modify(CustomScoreCell, GJScoreCell) {
                             AxisLayoutOptions::create()->setAutoScale(true)->setScalePriority(1)
                         );
                         menu_playername->addChild(flagSpr);
+                    }
+                    if (id == "9991") {
+                        count_diff = info;
                     }
 
                     data_info.erase(data_info.begin());
@@ -117,6 +122,18 @@ class $modify(CustomScoreCell, GJScoreCell) {
             menu->setLayout(layout);
             menu->updateLayout();
 
+            // get main layer
+            CCLayer* mainLayer = nullptr;
+            CCObject* obj;
+            CCARRAY_FOREACH(this->getChildren(), obj) {
+                CCLayer* search = typeinfo_cast<CCLayer*>(obj);
+                if (search != nullptr && search->getChildrenCount() > 2) {
+                    mainLayer = search;
+                    break;
+                }
+            }
+            auto statsMenu = mainLayer->getChildByIDRecursive("stats-menu");
+
             // BetterProgression part
             Loader* loader = Loader::get();
             if (!loader->isModLoaded("itzkiba.better_progression") && MoreLeaderboards::g_tab == StatsListType::BetterProgression) {
@@ -127,23 +144,263 @@ class $modify(CustomScoreCell, GJScoreCell) {
                 badgeSpr->setPosition({75, 17.5});
                 badgeSpr->setScale(0.62);
 
-                // get main layer
-                CCLayer* mainLayer = nullptr;
-                CCObject* obj;
-                CCARRAY_FOREACH(this->getChildren(), obj) {
-                    CCLayer* search = typeinfo_cast<CCLayer*>(obj);
-                    if (search != nullptr && search->getChildrenCount() > 2) {
-                        mainLayer = search;
-                        break;
-                    }
-                }
-
                 mainLayer->addChild(badgeSpr);
 
-                auto statsMenu = mainLayer->getChildByIDRecursive("stats-menu");
                 statsMenu->setScale(0.83);
                 statsMenu->setPositionX(statsMenu->getPositionX() + 13.f);
             }
+
+            // Classic & Platformer Demons part
+            auto classic_sprite = CCSprite::createWithSpriteFrameName("star_small01_001.png");
+            classic_sprite->setPositionX(30);
+            classic_sprite->setScale(1.2f);
+
+            auto platformer_sprite = CCSprite::createWithSpriteFrameName("moon_small01_001.png");
+            platformer_sprite->setPositionX(30);
+            platformer_sprite->setScale(1.2f);
+
+            auto easydemon_sprite_classic = CCSprite::createWithSpriteFrameName("diffIcon_07_btn_001.png");
+            easydemon_sprite_classic->addChild(classic_sprite);
+            auto mediumdemon_sprite_classic = CCSprite::createWithSpriteFrameName("diffIcon_08_btn_001.png");
+            mediumdemon_sprite_classic->addChild(classic_sprite);
+            auto harddemon_sprite_classic = CCSprite::createWithSpriteFrameName("diffIcon_06_btn_001.png");
+            harddemon_sprite_classic->addChild(classic_sprite);
+            auto insane_sprite_classic = CCSprite::createWithSpriteFrameName("diffIcon_09_btn_001.png");
+            insane_sprite_classic->addChild(classic_sprite);
+            auto extreme_sprite_classic = CCSprite::createWithSpriteFrameName("diffIcon_10_btn_001.png");
+
+            auto easydemon_sprite_platformer = CCSprite::createWithSpriteFrameName("diffIcon_07_btn_001.png");
+            easydemon_sprite_platformer->addChild(platformer_sprite);
+            auto mediumdemon_sprite_platformer = CCSprite::createWithSpriteFrameName("diffIcon_08_btn_001.png");
+            mediumdemon_sprite_platformer->addChild(platformer_sprite);
+            auto harddemon_sprite_platformer = CCSprite::createWithSpriteFrameName("diffIcon_06_btn_001.png");
+            harddemon_sprite_platformer->addChild(platformer_sprite);
+            auto insane_sprite_platformer = CCSprite::createWithSpriteFrameName("diffIcon_09_btn_001.png");
+            insane_sprite_platformer->addChild(platformer_sprite);
+            auto extreme_sprite_platformer = CCSprite::createWithSpriteFrameName("diffIcon_10_btn_001.png");
+            extreme_sprite_platformer->addChild(platformer_sprite);
+
+            // Change Z orders
+            statsMenu->getChildByIDRecursive("diamonds-label")->setZOrder(0);
+            statsMenu->getChildByIDRecursive("diamonds-icon")->setZOrder(1);
+            statsMenu->getChildByIDRecursive("coins-label")->setZOrder(2);
+            statsMenu->getChildByIDRecursive("coins-icon")->setZOrder(3);
+            statsMenu->getChildByIDRecursive("user-coins-label")->setZOrder(4);
+            statsMenu->getChildByIDRecursive("user-coins-icon")->setZOrder(5);
+            statsMenu->getChildByIDRecursive("demons-label")->setZOrder(6);
+            statsMenu->getChildByIDRecursive("demons-icon")->setZOrder(7);
+            auto cp_label = statsMenu->getChildByIDRecursive("creator-points-label");
+            if (cp_label) cp_label->setZOrder(8);
+            auto cp_icon = statsMenu->getChildByIDRecursive("creator-points-icon");
+            if (cp_icon) cp_icon->setZOrder(9);
+
+            auto demon_icon = mainLayer->getChildByIDRecursive("demons-icon");
+            auto demon_icon_pos = demon_icon->getPosition();
+            auto demon_icon_scale = demon_icon->getScale();
+            auto demon_icon_z = demon_icon->getZOrder();
+            auto demon_icon_tag = demon_icon->getTag();
+            auto demon_icon_layout = demon_icon->getLayoutOptions();
+            auto demon_label = mainLayer->getChildByIDRecursive("demons-label");
+            auto demon_label_pos = demon_label->getPosition();
+            auto demon_label_scale = demon_label->getScale();
+            auto demon_label_z = demon_label->getZOrder();
+            auto demon_label_tag = demon_label->getTag();
+            auto demon_label_layout = demon_label->getLayoutOptions();
+
+            switch (MoreLeaderboards::g_tab) {
+                case StatsListType::platformerDemonsEasy:
+                    demon_icon->removeFromParent();
+                    demon_icon = easydemon_sprite_platformer;
+                    demon_icon->setPosition(demon_icon_pos);
+                    demon_icon->setScale(demon_icon_scale);
+                    demon_icon->setLayoutOptions(demon_icon_layout);
+                    demon_icon->setTag(demon_icon_tag);
+                    demon_icon->setZOrder(demon_icon_z);
+                    statsMenu->addChild(easydemon_sprite_platformer);
+
+                    demon_label->removeFromParent();
+                    demon_label = CCLabelBMFont::create(count_diff.c_str(), "bigFont.fnt");
+                    demon_label->setPosition(demon_label_pos);
+                    demon_label->setScale(demon_label_scale);
+                    demon_label->setZOrder(demon_label_z);
+                    demon_label->setTag(demon_label_tag);
+                    demon_label->setLayoutOptions(demon_label_layout);
+                    statsMenu->addChild(demon_label);
+                    break;
+                case StatsListType::platformerDemonsMedium:
+                    demon_icon->removeFromParent();
+                    demon_icon = mediumdemon_sprite_platformer;
+                    demon_icon->setPosition(demon_icon_pos);
+                    demon_icon->setScale(demon_icon_scale);
+                    demon_icon->setLayoutOptions(demon_icon_layout);
+                    demon_icon->setTag(demon_icon_tag);
+                    demon_icon->setZOrder(demon_icon_z);
+                    statsMenu->addChild(mediumdemon_sprite_platformer);
+
+                    demon_label->removeFromParent();
+                    demon_label = CCLabelBMFont::create(count_diff.c_str(), "bigFont.fnt");
+                    demon_label->setPosition(demon_label_pos);
+                    demon_label->setScale(demon_label_scale);
+                    demon_label->setZOrder(demon_label_z);
+                    demon_label->setTag(demon_label_tag);
+                    demon_label->setLayoutOptions(demon_label_layout);
+                    statsMenu->addChild(demon_label);
+                    break;
+                case StatsListType::platformerDemonsHard:
+                    demon_icon->removeFromParent();
+                    demon_icon = harddemon_sprite_platformer;
+                    demon_icon->setPosition(demon_icon_pos);
+                    demon_icon->setScale(demon_icon_scale);
+                    demon_icon->setLayoutOptions(demon_icon_layout);
+                    demon_icon->setTag(demon_icon_tag);
+                    demon_icon->setZOrder(demon_icon_z);
+                    statsMenu->addChild(harddemon_sprite_platformer);
+
+                    demon_label->removeFromParent();
+                    demon_label = CCLabelBMFont::create(count_diff.c_str(), "bigFont.fnt");
+                    demon_label->setPosition(demon_label_pos);
+                    demon_label->setScale(demon_label_scale);
+                    demon_label->setZOrder(demon_label_z);
+                    demon_label->setTag(demon_label_tag);
+                    demon_label->setLayoutOptions(demon_label_layout);
+                    statsMenu->addChild(demon_label);
+                    break;
+                case StatsListType::platformerDemonsInsane:
+                    demon_icon->removeFromParent();
+                    demon_icon = insane_sprite_platformer;
+                    demon_icon->setPosition(demon_icon_pos);
+                    demon_icon->setScale(demon_icon_scale);
+                    demon_icon->setLayoutOptions(demon_icon_layout);
+                    demon_icon->setTag(demon_icon_tag);
+                    demon_icon->setZOrder(demon_icon_z);
+                    statsMenu->addChild(insane_sprite_platformer);
+
+                    demon_label->removeFromParent();
+                    demon_label = CCLabelBMFont::create(count_diff.c_str(), "bigFont.fnt");
+                    demon_label->setPosition(demon_label_pos);
+                    demon_label->setScale(demon_label_scale);
+                    demon_label->setZOrder(demon_label_z);
+                    demon_label->setTag(demon_label_tag);
+                    demon_label->setLayoutOptions(demon_label_layout);
+                    statsMenu->addChild(demon_label);
+                    break;
+                case StatsListType::platformerDemonsExtreme:
+                    demon_icon->removeFromParent();
+                    demon_icon = extreme_sprite_platformer;
+                    demon_icon->setPosition(demon_icon_pos);
+                    demon_icon->setScale(demon_icon_scale);
+                    demon_icon->setLayoutOptions(demon_icon_layout);
+                    demon_icon->setTag(demon_icon_tag);
+                    demon_icon->setZOrder(demon_icon_z);
+                    statsMenu->addChild(extreme_sprite_platformer);
+
+                    demon_label->removeFromParent();
+                    demon_label = CCLabelBMFont::create(count_diff.c_str(), "bigFont.fnt");
+                    demon_label->setPosition(demon_label_pos);
+                    demon_label->setScale(demon_label_scale);
+                    demon_label->setZOrder(demon_label_z);
+                    demon_label->setTag(demon_label_tag);
+                    demon_label->setLayoutOptions(demon_label_layout);
+                    statsMenu->addChild(demon_label);
+                    break;
+                case StatsListType::classicDemonsEasy:
+                    demon_icon->removeFromParent();
+                    demon_icon = easydemon_sprite_classic;
+                    demon_icon->setPosition(demon_icon_pos);
+                    demon_icon->setScale(demon_icon_scale);
+                    demon_icon->setLayoutOptions(demon_icon_layout);
+                    demon_icon->setTag(demon_icon_tag);
+                    demon_icon->setZOrder(demon_icon_z);
+                    statsMenu->addChild(easydemon_sprite_classic);
+
+                    demon_label->removeFromParent();
+                    demon_label = CCLabelBMFont::create(count_diff.c_str(), "bigFont.fnt");
+                    demon_label->setPosition(demon_label_pos);
+                    demon_label->setScale(demon_label_scale);
+                    demon_label->setZOrder(demon_label_z);
+                    demon_label->setTag(demon_label_tag);
+                    demon_label->setLayoutOptions(demon_label_layout);
+                    statsMenu->addChild(demon_label);
+                    break;
+                case StatsListType::classicDemonsMedium:
+                    demon_icon->removeFromParent();
+                    demon_icon = mediumdemon_sprite_classic;
+                    demon_icon->setPosition(demon_icon_pos);
+                    demon_icon->setScale(demon_icon_scale);
+                    demon_icon->setLayoutOptions(demon_icon_layout);
+                    demon_icon->setTag(demon_icon_tag);
+                    demon_icon->setZOrder(demon_icon_z);
+                    statsMenu->addChild(mediumdemon_sprite_classic);
+
+                    demon_label->removeFromParent();
+                    demon_label = CCLabelBMFont::create(count_diff.c_str(), "bigFont.fnt");
+                    demon_label->setPosition(demon_label_pos);
+                    demon_label->setScale(demon_label_scale);
+                    demon_label->setZOrder(demon_label_z);
+                    demon_label->setTag(demon_label_tag);
+                    demon_label->setLayoutOptions(demon_label_layout);
+                    statsMenu->addChild(demon_label);
+                    break;
+                case StatsListType::classicDemonsHard:
+                    demon_icon->removeFromParent();
+                    demon_icon = harddemon_sprite_classic;
+                    demon_icon->setPosition(demon_icon_pos);
+                    demon_icon->setScale(demon_icon_scale);
+                    demon_icon->setLayoutOptions(demon_icon_layout);
+                    demon_icon->setTag(demon_icon_tag);
+                    demon_icon->setZOrder(demon_icon_z);
+                    statsMenu->addChild(harddemon_sprite_classic);
+
+                    demon_label->removeFromParent();
+                    demon_label = CCLabelBMFont::create(count_diff.c_str(), "bigFont.fnt");
+                    demon_label->setPosition(demon_label_pos);
+                    demon_label->setScale(demon_label_scale);
+                    demon_label->setZOrder(demon_label_z);
+                    demon_label->setTag(demon_label_tag);
+                    demon_label->setLayoutOptions(demon_label_layout);
+                    statsMenu->addChild(demon_label);
+                    break;
+                case StatsListType::classicDemonsInsane:
+                    demon_icon->removeFromParent();
+                    demon_icon = insane_sprite_classic;
+                    demon_icon->setPosition(demon_icon_pos);
+                    demon_icon->setScale(demon_icon_scale);
+                    demon_icon->setLayoutOptions(demon_icon_layout);
+                    demon_icon->setTag(demon_icon_tag);
+                    demon_icon->setZOrder(demon_icon_z);
+                    statsMenu->addChild(insane_sprite_classic);
+
+                    demon_label->removeFromParent();
+                    demon_label = CCLabelBMFont::create(count_diff.c_str(), "bigFont.fnt");
+                    demon_label->setPosition(demon_label_pos);
+                    demon_label->setScale(demon_label_scale);
+                    demon_label->setZOrder(demon_label_z);
+                    demon_label->setTag(demon_label_tag);
+                    demon_label->setLayoutOptions(demon_label_layout);
+                    statsMenu->addChild(demon_label);
+                    break;
+                case StatsListType::classicDemonsExtreme:
+                    demon_icon->removeFromParent();
+                    demon_icon = extreme_sprite_classic;
+                    demon_icon->setPosition(demon_icon_pos);
+                    demon_icon->setScale(demon_icon_scale);
+                    demon_icon->setLayoutOptions(demon_icon_layout);
+                    demon_icon->setTag(demon_icon_tag);
+                    demon_icon->setZOrder(demon_icon_z);
+                    statsMenu->addChild(extreme_sprite_classic);
+
+                    demon_label->removeFromParent();
+                    demon_label = CCLabelBMFont::create(count_diff.c_str(), "bigFont.fnt");
+                    demon_label->setPosition(demon_label_pos);
+                    demon_label->setScale(demon_label_scale);
+                    demon_label->setZOrder(demon_label_z);
+                    demon_label->setTag(demon_label_tag);
+                    demon_label->setLayoutOptions(demon_label_layout);
+                    statsMenu->addChild(demon_label);
+                    break;
+            }
+
+            statsMenu->updateLayout();
 
             layer->addChild(menu);
             layer->updateLayout();
