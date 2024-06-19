@@ -1,4 +1,10 @@
 # Changelog
+## <cj>v1.3.0-alpha.16</c> <cb>(2024-06-20)</c>
+* <cg>Added</c> Better Progression leaderboard
+* <cg>Added</c> Classic/Platformer demons leaderboards
+* <cg>Added</c> RobTop badge in Moderators list
+* <cy>Fixed</c> lists progression bar that were not showing correctly the real progression of the user
+
 ## <cj>v1.3.0-alpha.15</c> <cb>(2024-06-18)</c>
 * <cg>Added</c> user progression when receiving a list rate notification
 
