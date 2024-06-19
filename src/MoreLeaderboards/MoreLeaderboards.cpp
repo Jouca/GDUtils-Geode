@@ -283,11 +283,12 @@ bool MoreLeaderboards::init(std::string type) {
 }
 
 void MoreLeaderboards::backButton(cocos2d::CCObject*) {
+    MoreLeaderboards::data_response_moreLB = "";
+    MoreLeaderboards::g_tab = StatsListType::Stars;
     cocos2d::CCDirector::sharedDirector()->popSceneWithTransition(0.5F, cocos2d::PopTransition::kPopTransitionFade);
 };
 
 void MoreLeaderboards::keyBackClicked() {
-    MoreLeaderboards::data_response_moreLB = "";
     backButton(CCNode::create());
 }
 
