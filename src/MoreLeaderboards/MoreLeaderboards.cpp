@@ -389,40 +389,58 @@ void MoreLeaderboards::startLoadingMore() {
         std::string type = "";
         geode::utils::web::WebRequest request = web::WebRequest();
 
-        if (g_tab == StatsListType::Diamonds) {
-            type = "diamonds";
-        } else if (g_tab == StatsListType::UserCoins) {
-            type = "ucoins";
-        } else if (g_tab == StatsListType::Demons) {
-            type = "demons";
-        } else if (g_tab == StatsListType::Moons) {
-            type = "moons";
-        } else if (g_tab == StatsListType::Creators) {
-            type = "cp";
-        } else if (g_tab == StatsListType::Stars) {
-            type = "stars";
-        } else if (g_tab == StatsListType::classicDemonsEasy) {
-            type = "classicDemonsEasy";
-        } else if (g_tab == StatsListType::classicDemonsMedium) {
-            type = "classicDemonsMedium";
-        } else if (g_tab == StatsListType::classicDemonsHard) {
-            type = "classicDemonsHard";
-        } else if (g_tab == StatsListType::classicDemonsInsane) {
-            type = "classicDemonsInsane";
-        } else if (g_tab == StatsListType::classicDemonsExtreme) {
-            type = "classicDemonsExtreme";
-        } else if (g_tab == StatsListType::platformerDemonsEasy) {
-            type = "platformerDemonsEasy";
-        } else if (g_tab == StatsListType::platformerDemonsMedium) {
-            type = "platformerDemonsMedium";
-        } else if (g_tab == StatsListType::platformerDemonsHard) {
-            type = "platformerDemonsHard";
-        } else if (g_tab == StatsListType::platformerDemonsInsane) {
-            type = "platformerDemonsInsane";
-        } else if (g_tab == StatsListType::platformerDemonsExtreme) {
-            type = "platformerDemonsExtreme";
-        } else if (g_tab == StatsListType::BetterProgression) {
-            type = "betterProgression";
+        switch (g_tab) {
+            case StatsListType::Diamonds:
+                type = "diamonds";
+                break;
+            case StatsListType::UserCoins:
+                type = "ucoins";
+                break;
+            case StatsListType::Demons:
+                type = "demons";
+                break;
+            case StatsListType::Moons:
+                type = "moons";
+                break;
+            case StatsListType::Creators:
+                type = "cp";
+                break;
+            case StatsListType::Stars:
+                type = "stars";
+                break;
+            case StatsListType::classicDemonsEasy:
+                type = "classicDemonsEasy";
+                break;
+            case StatsListType::classicDemonsMedium:
+                type = "classicDemonsMedium";
+                break;
+            case StatsListType::classicDemonsHard:
+                type = "classicDemonsHard";
+                break;
+            case StatsListType::classicDemonsInsane:
+                type = "classicDemonsInsane";
+                break;
+            case StatsListType::classicDemonsExtreme:
+                type = "classicDemonsExtreme";
+                break;
+            case StatsListType::platformerDemonsEasy:
+                type = "platformerDemonsEasy";
+                break;
+            case StatsListType::platformerDemonsMedium:
+                type = "platformerDemonsMedium";
+                break;
+            case StatsListType::platformerDemonsHard:
+                type = "platformerDemonsHard";
+                break;
+            case StatsListType::platformerDemonsInsane:
+                type = "platformerDemonsInsane";
+                break;
+            case StatsListType::platformerDemonsExtreme:
+                type = "platformerDemonsExtreme";
+                break;
+            case StatsListType::BetterProgression:
+                type = "betterProgression";
+                break;
         }
 
         const geode::utils::MiniFunction<void(std::string const&)> expect = [this](std::string const& error) {
@@ -789,7 +807,7 @@ void MoreLeaderboards::changeTabPage() {
 
             break;
         case 1:
-            g_tab = StatsListType::classicDemonsEasy;
+            g_tab = StatsListType::BetterProgression;
 
             m_tab1 = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, better_progression, this, menu_selector(MoreLeaderboards::onTab));
             m_tab1->setPosition(-140.f, 132);
