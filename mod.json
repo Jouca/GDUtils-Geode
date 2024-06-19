@@ -33,7 +33,8 @@
         ],
         "spritesheets": {
             "countries": ["resources/countries/*.png"],
-            "gauntlets": ["resources/gauntlets/*.png"]
+            "gauntlets": ["resources/gauntlets/*.png"],
+            "betterprogression": ["resources/betterprogression/*.png"]
         }
     },
     "settings": {

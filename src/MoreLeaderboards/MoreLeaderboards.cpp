@@ -3,7 +3,7 @@
 #include <Geode/modify/LeaderboardsLayer.hpp>
 #include <Geode/ui/GeodeUI.hpp>
 
-static StatsListType g_tab = StatsListType::Stars;
+StatsListType MoreLeaderboards::g_tab = StatsListType::Stars;
 static int page = 0;
 static int start_count = 0;
 static int end_count = 0;

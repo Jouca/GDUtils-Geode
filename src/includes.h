@@ -6,6 +6,7 @@ using namespace geode::prelude;
 #include <variant>
 #include <mutex>
 #include <thread>
+#include <algorithm>
 #ifdef GEODE_IS_WINDOWS
 #include <synchapi.h>
 #endif

@@ -4,6 +4,7 @@
 #include "../includes.h"
 #include "MoreLeaderboards.h"
 #include "SelectRegion.h"
+#include "LevelHelper.cpp"
 
 
 class $modify(CustomScoreCell, GJScoreCell) {
@@ -115,6 +116,34 @@ class $modify(CustomScoreCell, GJScoreCell) {
 
             menu->setLayout(layout);
             menu->updateLayout();
+
+            // BetterProgression part
+            Loader* loader = Loader::get();
+            if (!loader->isModLoaded("itzkiba.better_progression") && MoreLeaderboards::g_tab == StatsListType::BetterProgression) {
+                int currentEXP = LevelHelper::calculateTotalEXP(score);
+                int currentLevel = LevelHelper::getLevelFromEXP(currentEXP);
+
+                auto badgeSpr = SpriteHelper::createFullSprite(currentLevel);
+                badgeSpr->setPosition({75, 17.5});
+                badgeSpr->setScale(0.62);
+
+                // get main layer
+                CCLayer* mainLayer = nullptr;
+                CCObject* obj;
+                CCARRAY_FOREACH(this->getChildren(), obj) {
+                    CCLayer* search = typeinfo_cast<CCLayer*>(obj);
+                    if (search != nullptr && search->getChildrenCount() > 2) {
+                        mainLayer = search;
+                        break;
+                    }
+                }
+
+                mainLayer->addChild(badgeSpr);
+
+                auto statsMenu = mainLayer->getChildByIDRecursive("stats-menu");
+                statsMenu->setScale(0.83);
+                statsMenu->setPositionX(statsMenu->getPositionX() + 13.f);
+            }
 
             layer->addChild(menu);
             layer->updateLayout();

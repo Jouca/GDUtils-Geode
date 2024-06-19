@@ -77,6 +77,7 @@ class MoreLeaderboards : public CCLayer {
         void resetInfos();
     public:
         static std::string data_response_moreLB;
+        static StatsListType g_tab;
 
         void onMoreLeaderboards(CCObject*);
         void onModsList(CCObject*);
