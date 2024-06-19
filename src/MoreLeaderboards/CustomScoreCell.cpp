@@ -82,6 +82,9 @@ class $modify(CustomScoreCell, GJScoreCell) {
                     if (id == "1") {
                         if (info != playerName) break;
                     }
+                    if (id == "9989") {
+                        count_diff = info;
+                    }
                     if (id == "9990") {
                         if (info == "XX") break;
                         auto flagSpr = CCSprite::createWithSpriteFrameName((""_spr+info+".png").c_str());
@@ -92,9 +95,6 @@ class $modify(CustomScoreCell, GJScoreCell) {
                             AxisLayoutOptions::create()->setAutoScale(true)->setScalePriority(1)
                         );
                         menu_playername->addChild(flagSpr);
-                    }
-                    if (id == "9991") {
-                        count_diff = info;
                     }
 
                     data_info.erase(data_info.begin());
@@ -168,6 +168,7 @@ class $modify(CustomScoreCell, GJScoreCell) {
             auto insane_sprite_classic = CCSprite::createWithSpriteFrameName("diffIcon_09_btn_001.png");
             insane_sprite_classic->addChild(classic_sprite);
             auto extreme_sprite_classic = CCSprite::createWithSpriteFrameName("diffIcon_10_btn_001.png");
+            extreme_sprite_classic->addChild(classic_sprite);
 
             auto easydemon_sprite_platformer = CCSprite::createWithSpriteFrameName("diffIcon_07_btn_001.png");
             easydemon_sprite_platformer->addChild(platformer_sprite);
