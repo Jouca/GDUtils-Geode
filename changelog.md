@@ -1,67 +1,73 @@
 # Changelog
-## <cj>v1.3.0-alpha.16</c> <cb>(2024-06-20)</c>
+## <cl>v1.3.0-beta.1</c> <cb>(2024-06-20)</c>
+* <cg>Added</c> user search for more leaderboards
+* <cg>Added</c> RobTop in credits (thanks!)
+* <cy>Fixed</c> random crashes when doing HTTP requests
+* <cy>Fixed</c> buttons not removing after selecting country
+
+## <cl>v1.3.0-alpha.16</c> <cb>(2024-06-20)</c>
 * <cg>Added</c> Better Progression leaderboard
 * <cg>Added</c> Classic/Platformer demons leaderboards
 * <cg>Added</c> RobTop badge in Moderators list
 * <cy>Fixed</c> lists progression bar that were not showing correctly the real progression of the user
 
-## <cj>v1.3.0-alpha.15</c> <cb>(2024-06-18)</c>
+## <cl>v1.3.0-alpha.15</c> <cb>(2024-06-18)</c>
 * <cg>Added</c> user progression when receiving a list rate notification
 
-## <cj>v1.3.0-alpha.14</c> <cb>(2024-06-17)</c>
+## <cl>v1.3.0-alpha.14</c> <cb>(2024-06-17)</c>
 * <cy>Fixed</c> country flags not showing everytime
 * <cy>Fixed</c> loading circle superposition when loading More Leaderboards & Moderators List TOO FAST <cl>(speedy guy...)</c>
 * <cy>Updated</c> content for changelog, about & README
 
-## <cj>v1.3.0-alpha.13</c> <cb>(2024-06-17)</c>
+## <cl>v1.3.0-alpha.13</c> <cb>(2024-06-17)</c>
 * <cg>Added</c> Monster gauntlet new design
 * <cy>Fixed</c> crashes when returning to profile when viewing for lists/levels
 
-## <cj>v1.3.0-alpha.12</c> <cb>(2024-06-16)</c>
+## <cl>v1.3.0-alpha.12</c> <cb>(2024-06-16)</c>
 * <cg>Added</c> list rate notifications
 * <cy>Fixed</c> crashes with cosmetics
 * <cy>Fixed</c> notifications clicking during in-game situations
 
-## <cj>v1.3.0-alpha.11</c> <cb>(2024-06-15)</c>
+## <cl>v1.3.0-alpha.11</c> <cb>(2024-06-15)</c>
 * <cy>Fixed</c> flags sprites to be more sweet
 * <cy>Changed</c> sprites for new TAB buttons for More Leaderboards
 * <cy>Changed</c> More Leaderboards HTTP POST requests to GET (increase performance!)
 
-## <cj>v1.3.0-alpha.10</c> <cb>(2024-06-14)</c>
+## <cl>v1.3.0-alpha.10</c> <cb>(2024-06-14)</c>
 * <cy>Changed</c> sprites for new TAB buttons for More Leaderboards (in preparation)
 
-## <cj>v1.3.0-alpha.9</c> <cb>(2024-06-14)</c>
+## <cl>v1.3.0-alpha.9</c> <cb>(2024-06-14)</c>
 * <cg>Added</c> flags on usernames in More Leaderboards
 * <cy>Fixed</c> NodeIDs stuffs with More Leaderboards
 
-## <cj>v1.3.0-alpha.8</c> <cb>(2024-06-12)</c>
+## <cl>v1.3.0-alpha.8</c> <cb>(2024-06-12)</c>
 * <cy>Adapted</c> regions HTTP requests to make it only one
 
-## <cj>v1.3.0-alpha.7</c> <cb>(2024-06-11)</c>
+## <cl>v1.3.0-alpha.7</c> <cb>(2024-06-11)</c>
 * <cg>Added</c> selection for leaderboards by countries
 
-## <cj>v1.3.0-alpha.6</c> <cb>(2024-06-10)</c>
+## <cl>v1.3.0-alpha.6</c> <cb>(2024-06-10)</c>
 * <cg>Added</c> Doom & Split gauntlets new design
 * <cg>Added</c> UI settings for gauntlets & share URL button
 * <cy>Fixed</c> bug making in double the GDUtils badge for developers
 
-## <cj>v1.3.0-alpha.5</c> <cb>(2024-06-09)</c>
+## <cl>v1.3.0-alpha.5</c> <cb>(2024-06-09)</c>
 * <cg>Added</c> NCS gauntlets new design
 * <cy>Fixed</c> some crashes with daily chest notifications
 
-## <cj>v1.3.0-alpha.4</c> <cb>(2024-06-08)</c>
+## <cl>v1.3.0-alpha.4</c> <cb>(2024-06-08)</c>
 * <cy>Fixed</c> some informations with changelog, about & README
 
-## <cj>v1.3.0-alpha.3</c> <cb>(2024-06-08)</c>
+## <cl>v1.3.0-alpha.3</c> <cb>(2024-06-08)</c>
 * <cy>Fixed</c> some internal crashes
 
-## <cj>v1.3.0-alpha.2</c> <cb>(2024-06-08)</c>
+## <cl>v1.3.0-alpha.2</c> <cb>(2024-06-08)</c>
 * <cg>Added</c> daily chest notifications
 * <cg>Added</c> previews for locked icons with colors
 * <cg>Added</c> some epic gauntlet redesigns
 * <cy>Fixed</c> some dependencies
 
-## <cj>v1.3.0-alpha.1</c> <cb>(2024-06-07)</c>
+## <cl>v1.3.0-alpha.1</c> <cb>(2024-06-07)</c>
 * <co>Preparing support for GD 2.206</c>
 
 ## <cj>v1.2.20</c> <cb>(2024-05-03)</c>
