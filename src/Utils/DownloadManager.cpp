@@ -6,6 +6,7 @@
 #include <Geode/utils/file.hpp>
 
 static std::unordered_map<std::string, web::WebTask> RUNNING_REQUESTS {};
+static std::mutex lock_var;
 
 // ------
 // 204 = MAX
@@ -92,10 +93,12 @@ void DownloadManager::setup() {
     };
 
     geode::utils::web::WebRequest request = web::WebRequest();
+    const std::lock_guard<std::mutex> lock(lock_var);
     RUNNING_REQUESTS.emplace(
         "@loaderDownloadManagerGDUtils",
         request.get(this->m_sUrl).map(
             [expect = std::move(expect), then = std::move(then)](web::WebResponse* response) {
+                const std::lock_guard<std::mutex> lock(lock_var);
                 if (response->ok()) {
                     then(response->data());
                 } else {

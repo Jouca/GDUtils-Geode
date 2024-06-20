@@ -5,6 +5,8 @@
 #include <Geode/utils/web.hpp>
 
 static std::unordered_map<std::string, web::WebTask> RUNNING_REQUESTS {};
+static std::mutex lock_var;
+const std::lock_guard<std::mutex> lock(lock_var);
 
 std::vector<std::string> EventsPush::getWords(std::string s, std::string delim) {
     std::vector<std::string> res;
@@ -307,11 +309,13 @@ void EventsPush::onClickBtn(CCObject* ret) {
         #endif
         std::string const& fields = "secret=Wmfd2893gb7&type=0&str=" + std::to_string(level_id);
 
+        const std::lock_guard<std::mutex> lock(lock_var);
         geode::utils::web::WebRequest request = web::WebRequest();
         RUNNING_REQUESTS.emplace(
             "@loaderEventRateNotification",
             request.bodyString(fields).post(url).map(
                 [](web::WebResponse* response) {
+                    const std::lock_guard<std::mutex> lock(lock_var);
                     if (response->ok()) {
                         if (response->data().empty()) {
                             FLAlertLayer::create(nullptr,

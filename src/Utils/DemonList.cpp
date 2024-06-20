@@ -7,6 +7,7 @@
 // demon list
 std::unordered_map<int, int> demonListCache; // Will clear after game exit, or if user deletes level
 static std::unordered_map<std::string, web::WebTask> RUNNING_REQUESTS {};
+static std::mutex lock_var;
 
 // love url encoded characters :D
 // also for some reason this is required on mac because Geode's web requests doesnt automatically append this for some reason.
@@ -137,11 +138,12 @@ class $modify(LevelInfoLayer) {
             };
 
             geode::utils::web::WebRequest request = web::WebRequest();
-
+            const std::lock_guard<std::mutex> lock(lock_var);
             RUNNING_REQUESTS.emplace(
                 "@loaderDemonListLevelInfo",
                 request.get(fmt::format("https://pointercrate.com/api/v2/demons/listed/?name={}", url_encode(level->m_levelName).c_str())).map(
                     [expect = std::move(expect), then = std::move(then)](web::WebResponse* response) {
+                        const std::lock_guard<std::mutex> lock(lock_var);
                         if (response->ok()) {
                             then(response->json());
                         } else {

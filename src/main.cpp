@@ -25,6 +25,7 @@
 #include <codecvt>
 
 static std::unordered_map<std::string, web::WebTask> RUNNING_REQUESTS {};
+static std::mutex lock_var;
 
 int reconnectionDelay = 1000;
 int reconnectionDelayMax = 5000;
@@ -238,10 +239,12 @@ class $modify(CCScheduler) { // GD Protocol part
                     geode::utils::web::WebRequest request = web::WebRequest();
                     request.userAgent("");
                     request.header("Content-Type", "application/x-www-form-urlencoded");
+                    const std::lock_guard<std::mutex> lock(lock_var);
                     RUNNING_REQUESTS.emplace(
                         "@loaderLevelProtocolURL",
                         request.bodyString(fields).post(url).map(
                             [](web::WebResponse* response) {
+                                const std::lock_guard<std::mutex> lock(lock_var);
                                 if (response->ok()) {
                                     if (response->data().empty()) {
                                         FLAlertLayer::create(nullptr,

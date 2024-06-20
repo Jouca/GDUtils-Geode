@@ -12,6 +12,9 @@ static int end_count = 0;
 static int total_count = 0;
 std::string MoreLeaderboards::data_response_moreLB = "";
 static std::unordered_map<std::string, web::WebTask> RUNNING_REQUESTS {};
+static std::mutex lock_var;
+
+EventListener<web::WebTask> m_listener;
 
 std::vector<std::string> MoreLeaderboards::getWords(std::string s, std::string delim) {
     std::vector<std::string> res;
@@ -418,11 +421,13 @@ void MoreLeaderboards::startLoadingMods() {
         fadeLoadingCircle();
     };
 
+    const std::lock_guard<std::mutex> lock(lock_var);
     geode::utils::web::WebRequest request = web::WebRequest();
     RUNNING_REQUESTS.emplace(
         "@loaderModListCheck",
         request.get("https://clarifygdps.com/gdutils/modslist.php").map(
             [expect = std::move(expect), then = std::move(then)](web::WebResponse* response) {
+                const std::lock_guard<std::mutex> lock(lock_var);
                 if (response->ok()) {
                     then(response->string().value());
                 } else {
@@ -540,6 +545,7 @@ void MoreLeaderboards::startLoadingMore() {
 
         const geode::utils::MiniFunction<void(std::string const&)> expect = [this](std::string const& error) {
             loading = false;
+
             auto scene = CCDirector::sharedDirector()->getRunningScene();
             auto layer = scene->getChildren()->objectAtIndex(0);
             if (layer == nullptr) return this->release();
@@ -562,6 +568,8 @@ void MoreLeaderboards::startLoadingMore() {
 
         const geode::utils::MiniFunction<void(std::string const&)> then = [this](std::string const& data) {
             loading = false;
+
+            const std::lock_guard<std::mutex> lock(lock_var);
             auto scene = CCDirector::sharedDirector()->getRunningScene();
             auto layer = scene->getChildren()->objectAtIndex(0);
             if (layer == nullptr) return this->release();
@@ -606,6 +614,7 @@ void MoreLeaderboards::startLoadingMore() {
             this->release();
         };
 
+        const std::lock_guard<std::mutex> lock(lock_var);
         RUNNING_REQUESTS.emplace(
             "@loaderMoreLeaderboardCheck",
             request.param("type", type).param("page", page).param("country", country_id).param("username", username).get("https://clarifygdps.com/gdutils/moreleaderboards.php").map(
@@ -624,20 +633,17 @@ void MoreLeaderboards::startLoadingMore() {
     };
 
     if (data_region == "") {
-        RUNNING_REQUESTS.emplace(
-        "@loaderMoreLeaderboardRegionGet",
-        request.get("https://clarifygdps.com/gdutils/moreleaderboards_region.php").map(
-            [expect = std::move(expect), then = std::move(then)](web::WebResponse* response) {
-                if (response->ok()) {
-                    then(response->string().value());
+        m_listener.bind([expect = std::move(expect), then = std::move(then)] (web::WebTask::Event* e) {
+            if (web::WebResponse* res = e->getValue()) {
+                if (res->ok()) {
+                    then(res->string().value());
                 } else {
                     expect("An error occured while sending a request on our server. Please try again later.");
                 }
-
-                RUNNING_REQUESTS.erase("@loaderMoreLeaderboardRegionGet");
-                return *response;
             }
-        ));
+        });
+
+        m_listener.setFilter(request.get("https://clarifygdps.com/gdutils/moreleaderboards_region.php"));
     } else {
         then(data_region);
     }
