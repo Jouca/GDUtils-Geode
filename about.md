@@ -49,6 +49,7 @@ A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute,
 * [Jouca](https://x.com/JoucaJouca)
 * [Firee](https://youtube.com/@gdfiree)
 * [nekitdev](https://x.com/nekitdev)
+* [RobTop](http://robtopgames.com/) (for his help to reconstruct the Particle system & some other parts of GDUtils)
 * [Maverick](https://www.youtube.com/channel/UCoFBsXJ-6o6l6ZYP-k6DE_g)
 * [Zidnes](https://x.com/SZidnes)
 * [GammaReXx](user:3913739)
