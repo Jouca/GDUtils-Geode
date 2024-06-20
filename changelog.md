@@ -1,4 +1,7 @@
 # Changelog
+## <cl>v1.3.0-beta.2</c> <cb>(2024-06-20)</c>
+* <cy>Fixed</c> more leaderboards tab not changing when clicked
+
 ## <cl>v1.3.0-beta.1</c> <cb>(2024-06-20)</c>
 * <cg>Added</c> user search for more leaderboards
 * <cg>Added</c> RobTop in credits (thanks!)
