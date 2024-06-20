@@ -56,7 +56,7 @@ class MoreLeaderboards : public CCLayer {
     CCMenuItemToggler* m_tab6;
     int tab_page = 0;
 
-    CCMenuItemSpriteExtra* m_search = nullptr;
+    CCMenuItemSpriteExtra* m_search;
 
     #ifndef GEODE_IS_IOS
     CCClippingNode* m_tabsGradientNode = nullptr;
@@ -79,6 +79,8 @@ class MoreLeaderboards : public CCLayer {
     public:
         static std::string data_response_moreLB;
         static StatsListType g_tab;
+        static std::string username;
+        static int scroll_int;
         bool loading = false;
 
         void onMoreLeaderboards(CCObject*);

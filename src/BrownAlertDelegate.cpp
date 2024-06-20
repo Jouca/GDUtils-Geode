@@ -1,7 +1,8 @@
 #include "BrownAlertDelegate.hpp"
 
 bool BrownAlertDelegate::init(float _w, float _h, const char* _spr, const char* _title) {
-    auto winSize = cocos2d::CCDirector::sharedDirector()->getWinSize();
+    auto director = cocos2d::CCDirector::sharedDirector();
+    auto winSize = director->getWinSize();
     this->m_pLrSize = cocos2d::CCSize { _w, _h };
 
     if (!this->initWithColor({ 0, 0, 0, 105 })) return false;
@@ -48,6 +49,9 @@ bool BrownAlertDelegate::init(float _w, float _h, const char* _spr, const char* 
 
     this->setKeypadEnabled(true);
     this->setTouchEnabled(true);
+
+    m_mainLayer->setTouchPriority(director->getTouchDispatcher()->getTargetPrio());
+    director->getTouchDispatcher()->registerForcePrio(this, 2);
 
     return true;
 }

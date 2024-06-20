@@ -4,6 +4,8 @@
 #include <Geode/ui/GeodeUI.hpp>
 
 StatsListType MoreLeaderboards::g_tab = StatsListType::Stars;
+std::string MoreLeaderboards::username = "";
+int MoreLeaderboards::scroll_int = 0;
 static int page = 0;
 static int start_count = 0;
 static int end_count = 0;
@@ -36,10 +38,10 @@ std::vector<std::string> MoreLeaderboards::getWords(std::string s, std::string d
 class SearchUserLBLayer : public BrownAlertDelegate {
     protected:
         MoreLeaderboards* m_layer;
+        InputNode* input_username = InputNode::create(200.0F, "Username", "bigFont.fnt", "", 20);
 
         virtual void setup() {
             auto winSize = cocos2d::CCDirector::sharedDirector()->getWinSize();
-            InputNode* input_username = InputNode::create(200.0F, "Username", "bigFont.fnt", "", 20);
             input_username->setPositionY(10);
             this->m_buttonMenu->addChild(input_username);
             auto validate_spr = ButtonSprite::create("Search", 60, true, "bigFont.fnt", "GJ_button_01.png", 30, .5F);
@@ -54,14 +56,33 @@ class SearchUserLBLayer : public BrownAlertDelegate {
                 -35
             });
             this->m_buttonMenu->addChild(validate_btn, 1);
+
+            if (MoreLeaderboards::username != "") {
+                input_username->setString(MoreLeaderboards::username);
+
+                auto delete_spr = CCSprite::createWithSpriteFrameName("GJ_deleteBtn_001.png");
+                delete_spr->setScale(.45f);
+                auto delete_btn = CCMenuItemSpriteExtra::create(
+                    delete_spr,
+                    this,
+                    menu_selector(SearchUserLBLayer::onRemoveUsername)
+                );
+                delete_btn->setPosition({
+                    113,
+                    11
+                });
+                this->m_buttonMenu->addChild(delete_btn, 1);
+            }
+
             this->m_mainLayer->addChild(this->m_buttonMenu);
-            setTouchEnabled(true);
+            this->setTouchEnabled(true);
         }
         cocos2d::CCSize m_sScrLayerSize;
         void onClose(cocos2d::CCObject* pSender) {
             BrownAlertDelegate::onClose(pSender);
         }
         void onValidate(cocos2d::CCObject*);
+        void onRemoveUsername(cocos2d::CCObject*);
         float m_fWidth = s_defWidth;
         float m_fHeight = s_defHeight;
     public:
@@ -82,8 +103,21 @@ class SearchUserLBLayer : public BrownAlertDelegate {
 void SearchUserLBLayer::onValidate(CCObject* pSender) {
     if (this->m_layer->loading) return;
 
+    MoreLeaderboards::username = input_username->getString();
+
     this->m_layer->changeTabPage();
 
+    this->m_layer->onTab(nullptr);
+
+    BrownAlertDelegate::onClose(pSender);
+}
+
+void SearchUserLBLayer::onRemoveUsername(CCObject* pSender) {
+    MoreLeaderboards::username = "";
+    MoreLeaderboards::scroll_int = 0;
+    input_username->setString("");
+
+    this->m_layer->changeTabPage();
     this->m_layer->onTab(nullptr);
 
     BrownAlertDelegate::onClose(pSender);
@@ -343,6 +377,8 @@ bool MoreLeaderboards::init(std::string type) {
 void MoreLeaderboards::backButton(cocos2d::CCObject*) {
     MoreLeaderboards::data_response_moreLB = "";
     MoreLeaderboards::g_tab = StatsListType::Stars;
+    MoreLeaderboards::username = "";
+    MoreLeaderboards::scroll_int = 0;
     cocos2d::CCDirector::sharedDirector()->popSceneWithTransition(0.5F, cocos2d::PopTransition::kPopTransitionFade);
 };
 
@@ -546,6 +582,22 @@ void MoreLeaderboards::startLoadingMore() {
                 this->release();
                 return;
             }
+            if (data == "-2" || data.length() < 2) {
+                fadeLoadingCircle();
+                FLAlertLayer::create(nullptr,
+                    "Error",
+                    "User not found : " + MoreLeaderboards::username,
+                    "OK",
+                    nullptr,
+                    200.0F
+                )->show();
+
+                MoreLeaderboards::scroll_int = 0;
+                this->release();
+
+                loadTabPageButtons();
+                return;
+            }
 
             handle_request_more(data);
             fadeLoadingCircle();
@@ -556,7 +608,7 @@ void MoreLeaderboards::startLoadingMore() {
 
         RUNNING_REQUESTS.emplace(
             "@loaderMoreLeaderboardCheck",
-            request.param("type", type).param("page", page).param("country", country_id).get("https://clarifygdps.com/gdutils/moreleaderboards.php").map(
+            request.param("type", type).param("page", page).param("country", country_id).param("username", username).get("https://clarifygdps.com/gdutils/moreleaderboards.php").map(
                 [expect = std::move(expect), then = std::move(then)](web::WebResponse* response) {
                     if (response->ok()) {
                         then(response->string().value());
@@ -624,6 +676,11 @@ void MoreLeaderboards::handle_request_more(std::string const& data) {
                 total_count = std::stoi(page_test);
             } else if (id == 3) {
                 page = std::stoi(page_test);
+            } else if (id == 4) {
+                log::debug("test {}", std::stoi(page_test));
+                if (std::stoi(page_test) != 0) {
+                    MoreLeaderboards::scroll_int = std::stoi(page_test);
+                }
             }
 
             id++;
@@ -645,6 +702,12 @@ void MoreLeaderboards::loadPageMore() {
     listLayer->setPosition(winSize / 2 - listLayer->getScaledContentSize() / 2 - CCPoint(0,5));
 
     addChild(listLayer);
+
+    if (MoreLeaderboards::scroll_int != 0) {
+        log::debug("scrolling by {}", MoreLeaderboards::scroll_int);
+        listLayer->m_listView->m_tableView->scrollLayer(-99999999);
+        listLayer->m_listView->m_tableView->scrollLayer(MoreLeaderboards::scroll_int);
+    }
 }
 
 void MoreLeaderboards::onSearch(CCObject*) {
@@ -775,6 +838,9 @@ void MoreLeaderboards::onTabPageRight(CCObject* pSender) {
 }
 
 void MoreLeaderboards::changeTabPage() {
+    if (m_search != nullptr) m_search->removeFromParentAndCleanup(true);
+    m_search = nullptr;
+
     if (m_tab1 != nullptr) m_tab1->removeFromParentAndCleanup(true);
     if (m_tab2 != nullptr) m_tab2->removeFromParentAndCleanup(true);
     if (m_tab3 != nullptr) m_tab3->removeFromParentAndCleanup(true);
@@ -973,6 +1039,9 @@ void MoreLeaderboards::changeTabPage() {
 void MoreLeaderboards::onPageLeft(CCObject* pSender) {
     if (loading) return;
 
+    MoreLeaderboards::username = "";
+    MoreLeaderboards::scroll_int = 0;
+
     loading = true;
 
     loading_circle = LoadingCircle::create();
@@ -997,6 +1066,9 @@ void MoreLeaderboards::onPageLeft(CCObject* pSender) {
 
 void MoreLeaderboards::onPageRight(CCObject* pSender) {
     if (loading) return;
+
+    MoreLeaderboards::username = "";
+    MoreLeaderboards::scroll_int = 0;
 
     loading = true;
 
