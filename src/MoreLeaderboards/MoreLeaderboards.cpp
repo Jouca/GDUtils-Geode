@@ -194,12 +194,13 @@ void MoreLeaderboards::onRegion(CCObject* pSender) {
         }
 
         page = 0;
-        resetInfos();
         
         if (loading) {
             startLoadingMore();
             loadPageMore();
         }
+
+        resetInfos();
     });
     /*geode::createQuickPopup(
         "Coming soon!",
@@ -470,7 +471,7 @@ void MoreLeaderboards::startLoadingMore() {
             "OK", nullptr,
             [this](auto, bool btn2) {
                 if (!btn2) {
-                    g_tab = StatsListType::Diamonds;
+                    MoreLeaderboards::g_tab = StatsListType::Stars;
                     keyBackClicked();
                 }
             }
@@ -489,7 +490,7 @@ void MoreLeaderboards::startLoadingMore() {
         std::string type = "";
         geode::utils::web::WebRequest request = web::WebRequest();
 
-        switch (g_tab) {
+        switch (MoreLeaderboards::g_tab) {
             case StatsListType::Diamonds:
                 type = "diamonds";
                 break;
@@ -556,7 +557,7 @@ void MoreLeaderboards::startLoadingMore() {
                 "OK", nullptr,
                 [this](auto, bool btn2) {
                     if (!btn2) {
-                        g_tab = StatsListType::Diamonds;
+                        MoreLeaderboards::g_tab = StatsListType::Stars;
                         keyBackClicked();
                     }
                 }
@@ -582,7 +583,7 @@ void MoreLeaderboards::startLoadingMore() {
                     "OK", nullptr,
                     [this](auto, bool btn2) {
                         if (!btn2) {
-                            g_tab = StatsListType::Diamonds;
+                            MoreLeaderboards::g_tab = StatsListType::Stars;
                             keyBackClicked();
                         }
                     }
@@ -683,7 +684,6 @@ void MoreLeaderboards::handle_request_more(std::string const& data) {
             } else if (id == 3) {
                 page = std::stoi(page_test);
             } else if (id == 4) {
-                log::debug("test {}", std::stoi(page_test));
                 if (std::stoi(page_test) != 0) {
                     MoreLeaderboards::scroll_int = std::stoi(page_test);
                 }
@@ -710,7 +710,6 @@ void MoreLeaderboards::loadPageMore() {
     addChild(listLayer);
 
     if (MoreLeaderboards::scroll_int != 0) {
-        log::debug("scrolling by {}", MoreLeaderboards::scroll_int);
         listLayer->m_listView->m_tableView->scrollLayer(-99999999);
         listLayer->m_listView->m_tableView->scrollLayer(MoreLeaderboards::scroll_int);
     }
@@ -907,7 +906,7 @@ void MoreLeaderboards::changeTabPage() {
 
     switch (tab_page) {
         case 0:
-            g_tab = StatsListType::Stars;
+            MoreLeaderboards::g_tab = StatsListType::Stars;
 
             m_tab1 = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, stars_sprite, this, menu_selector(MoreLeaderboards::onTab));
             m_tab1->setPosition(-140.f, 132);
@@ -953,7 +952,7 @@ void MoreLeaderboards::changeTabPage() {
 
             break;
         case 1:
-            g_tab = StatsListType::BetterProgression;
+            MoreLeaderboards::g_tab = StatsListType::BetterProgression;
 
             m_tab1 = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, better_progression, this, menu_selector(MoreLeaderboards::onTab));
             m_tab1->setPosition(-140.f, 132);
@@ -999,7 +998,7 @@ void MoreLeaderboards::changeTabPage() {
 
             break;
         case 2:
-            g_tab = StatsListType::platformerDemonsEasy;
+            MoreLeaderboards::g_tab = StatsListType::platformerDemonsEasy;
 
             m_tab1 = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, easydemon_sprite_platformer, this, menu_selector(MoreLeaderboards::onTab));
             m_tab1->setPosition(-140.f, 132);
@@ -1108,8 +1107,6 @@ void MoreLeaderboards::resetInfos() {
     page_left = nullptr;
     page_right = nullptr;
     trophy = nullptr;
-
-    changeTabPage();
 }
 
 void MoreLeaderboards::onTab(CCObject* pSender) {
@@ -1129,15 +1126,17 @@ void MoreLeaderboards::onTab(CCObject* pSender) {
     }
 
     if (pSender) {
-        g_tab = static_cast<StatsListType>(pSender->getTag());
+        MoreLeaderboards::g_tab = static_cast<StatsListType>(pSender->getTag());
     }
+
+
 
     resetInfos();
 
     page = 0;
 
     auto toggleTab = [this](CCMenuItemToggler* member) -> void {
-        auto isSelected = member->getTag() == static_cast<int>(g_tab);
+        auto isSelected = member->getTag() == static_cast<int>(MoreLeaderboards::g_tab);
         auto targetMenu = m_menu;
         member->toggle(isSelected);
         if (member->getParent() != targetMenu) {
