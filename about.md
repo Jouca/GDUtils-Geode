@@ -58,4 +58,4 @@ A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute,
 * [SMJS](user:7121414)
 * [RobTop](http://robtopgames.com/) (for his help to reconstruct the Particle system & some other parts of GDUtils)
 
-**Thank you to RobTopGames for his trust on the mod.**
+**Thank you RobTopGames for your trust on this mod!**
