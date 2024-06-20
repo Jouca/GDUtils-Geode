@@ -25,7 +25,9 @@
     "tags": [
         "online",
         "enhancement",
-        "utility"
+        "utility",
+        "interface",
+        "customization"
     ],
     "resources": {
         "sprites": [
