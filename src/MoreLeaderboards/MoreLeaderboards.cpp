@@ -1102,6 +1102,8 @@ void MoreLeaderboards::resetInfos() {
     page_left = nullptr;
     page_right = nullptr;
     trophy = nullptr;
+
+    changeTabPage();
 }
 
 void MoreLeaderboards::onTab(CCObject* pSender) {
