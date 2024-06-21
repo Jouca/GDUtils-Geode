@@ -15,21 +15,22 @@ A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute,
 * You can also set when notifications **should appear** or **not appear**! This includes __being shown in levels__, __in the editor__, __etc__.
 
 ### More Leaderboards
-* Thanks to [Updated Leaderboards](https://discord.gg/HpC5Xc3JMh), it's now possible for you to view leaderboards for users with the most **Stars**, **Moons**, **Diamonds**, **User Coins**, **Demons!** and **Creator Points**! You can also view your accurate leaderboard placement.
+* Thanks to [Updated Leaderboards](https://discord.gg/HpC5Xc3JMh), it's now possible for you to view leaderboards for users with the most **Stars**, **Moons**, **Diamonds**, **User Coins**, **Demons!**, **Creator Points**, **Better Progression Levels** and **Classic/Platformers demons**! You can also view your accurate leaderboard placement.
 * Leaderboards are now **infinite**! You can see the placement of every Geometry Dash players (registered with [Updated Leaderboards](https://discord.gg/HpC5Xc3JMh)) with this one.
 * You can also see **leaderboards by countries**!
+
+### Gauntlets redesign
+* Gauntlets are now redesigned to make them more **EPIC**, with **particles** and **new textures**!
 
 ### View Demon List Placement
 * Instead of having to go to Pointercrate to view the demon placement of a level, you can now **view the position** of an extreme demon!
 
 ### Level URL Sharing Feature (Windows Only)
 * You can share levels easily by copying the URL of it and sending it to your friends! Or you can quickly go to a level by going to `https://gdutils.com/{levelid}` (Replacing `{levelid}` with the ID of the level)
+* With the compatility of **Thumbnail Mod**, you will be able to see it by sending it on **Discord**!
 
 ### Moderator List 
 * You can view the list of **Elder Moderators**/**Moderators**/**Leaderboard Moderators** and their socials!
-
-### Gauntlets redesign
-* Gauntlets are now redesigned to make them more **EPIC**, with **particles** and **new textures**!
 
 ### Auto-Mute Spotify (or any application)
 * Allows you to **auto mute Spotify** or any other applications when you are __playing a level__, __playtesting in the editor__, and more!

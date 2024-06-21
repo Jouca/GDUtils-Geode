@@ -1,4 +1,22 @@
 # Changelog
+## <cj>v1.3.0</c> <cb>(2024-06-22)</c>
+* <cp>Port to Geometry Dash 2.206</c>
+* <cg>Added</c> list rate notifications
+* <cg>Added</c> daily chest notifications
+* <cy>Increased</c> leaderboards top to INFINITE
+* <cg>Added</c> user search for more leaderboards
+* <cg>Added</c> selection for leaderboards by countries
+* <cg>Added</c> Stars, Classic/Platformer demons & BetterProgression leaderboards
+* <cg>Added</c> epic gauntlet redesigns (<cr>Demon</c>, <cg>Monster</c>, Doom, <cj>Portal</c>, <cp>Strange</c>, <co>Fantasy</c>, <cy>Mystery</c>, <cg>Cursed</c>, <cb>Castle</c>, <cy>World</c>, <co>Galaxy</c>, <cp>Universe</c>, <cp>Split</c>) & particles (<cr>Demon</c> only)
+* <cg>Added</c> previews for locked icons with colors
+* <cg>Added</c> support for thumbnails for levels URLs when sharing it on Discord
+* <cg>Added</c> UI settings for gauntlets & share URL button
+* <cg>Added</c> RobTop in credits (thanks!)
+* <cy>Fixed</c> loading circle superposition when loading More Leaderboards & Moderators List TOO FAST <cl>(speedy guy...)</c>
+* <cy>Fixed</c> bug making in double the GDUtils badge for developers
+* <cy>Updated</c> content for changelog, about & README
+* <cr>MAJOR bug fixes</c>
+
 ## <cl>v1.3.0-beta.4</c> <cb>(2024-06-22)</c>
 * <co>Bump to Geode beta 5</c>
 

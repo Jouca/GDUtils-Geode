@@ -16,21 +16,22 @@ A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute,
 * You can also set when notifications <cg>should appear</c> or <cr>not appear</c>! This includes __being shown in levels__, __in the editor__, __etc__.
 
 ### More Leaderboards
-* Thanks to [Updated Leaderboards](https://discord.gg/HpC5Xc3JMh), it's now possible for you to <cy>view leaderboards for users</c> with the most <cy>Stars</c>, <cl>Moons</c>, <cj>Diamonds</c>, **User Coins**, <cr>Demons!</c> and **Creator Points**! You can also view your <cy>accurate leaderboard placement</c>.
+* Thanks to [Updated Leaderboards](https://discord.gg/HpC5Xc3JMh), it's now possible for you to <cy>view leaderboards for users</c> with the most <cy>Stars</c>, <cl>Moons</c>, <cj>Diamonds</c>, **User Coins**, <cr>Demons!</c>, **Creator Points**, <cp>Better Progression Levels</c> and <cr>Classic/Platformers demons</c>! You can also view your <cy>accurate leaderboard placement</c>.
 * Leaderboards are now <cp>INFINITE</c>! You can see the placement of <cy>every Geometry Dash players</c> (registered with [Updated Leaderboards](https://discord.gg/HpC5Xc3JMh)).
 * You can also see <cj>leaderboards by countries</c>!
+
+### Gauntlets redesign
+* <cy>Gauntlets are now redesigned</c> to make them more <co>EPIC</c>, with <cp>particles</c> and <cj>new textures</c>!
 
 ### View Demon List Placement
 * Instead of having to go to [Pointercrate](https://pointercrate.com/) to view the demon placement of a level, you can now <cy>view the position</c> of an extreme demon!
 
 ### Level URL Sharing Feature (Windows Only)
 * You can <cg>share levels easily by copying the URL</c> of it and sending it to your friends! Or you can quickly go to a level by going to `https://gdutils.com/{levelid}` (Replacing `{levelid}` with the ID of the level)
+* With the compatility of <cy>Thumbnail Mod</c>, you will be able to see it by sending it on <cl>Discord</c>!
 
 ### Moderator List 
 * You can <cy>view the list</c> of <cp>Elder Moderators</c>/<cy>Moderators</c>/<cl>Leaderboard Moderators</c> and their socials!
-
-### Gauntlets redesign
-* <cy>Gauntlets are now redesigned</c> to make them more <co>EPIC</c>, with <cp>particles</c> and <cj>new textures</c>!
 
 ### Auto-Mute Spotify (or any application)
 * Allows you to <cg>auto mute Spotify</c> or any other applications when you are __playing a level__, __playtesting in the editor__, and more!
