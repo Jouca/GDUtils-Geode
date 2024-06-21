@@ -4,6 +4,38 @@
 #include "../Utils/ParticleManager.hpp"
 
 class $modify(GauntletSelectLayer) {
+    void reverseGauntlet(CCNode* node) {
+        CCNode* gauntlet_node = node->getChildByID("gauntlet-info-node");
+
+        CCSprite* checkmark = typeinfo_cast<CCSprite*>(node->getChildByID("checkmark-sprite"));
+        if (checkmark) {
+            checkmark->setPositionY(78);
+
+            CCSprite* checkmark_shadow = typeinfo_cast<CCSprite*>(node->getChildByID("checkmark-shadow-sprite"));
+            checkmark_shadow->setPositionY(78);
+        }
+
+        CCLabelBMFont* label_reward = typeinfo_cast<CCLabelBMFont*>(gauntlet_node->getChildByID("reward-label"));
+        if (label_reward) {
+            label_reward->setPositionY(50);
+            CCLabelBMFont* label_reward_shadow = typeinfo_cast<CCLabelBMFont*>(gauntlet_node->getChildByID("reward-shadow-label"));
+            label_reward_shadow->setPositionY(50);
+
+            CCSprite* chest = typeinfo_cast<CCSprite*>(gauntlet_node->getChildByID("chest-sprite"));
+            chest->setPositionY(80);
+            chest->setFlipY(true);
+            CCSprite* chest_shadow = typeinfo_cast<CCSprite*>(gauntlet_node->getChildByID("chest-shadow-sprite"));
+            chest_shadow->setPositionY(80);
+            chest_shadow->setFlipY(true);
+        }
+
+        CCLabelBMFont* label_progress = typeinfo_cast<CCLabelBMFont*>(gauntlet_node->getChildByID("gauntlet-progress-label"));
+        label_progress->setPositionY(29);
+
+        CCLabelBMFont* label_progress_shadow = typeinfo_cast<CCLabelBMFont*>(gauntlet_node->getChildByID("gauntlet-progress-shadow-label"));
+        label_progress_shadow->setPositionY(29);
+    }
+
     void setupGauntlets() {
         GauntletSelectLayer::setupGauntlets();
 
@@ -145,6 +177,20 @@ class $modify(GauntletSelectLayer) {
                         sprite->setScale(1.270f);
                         sprite->setZOrder(0);
                         node->addChild(sprite);
+                    } else if (gauntletName == "Mystery") {
+                        CCSprite* sprite = CCSprite::createWithSpriteFrameName("mystery_gauntlet.png"_spr);
+                        sprite->setPosition(bg->getPosition());
+                        sprite->setScale(1.270f);
+                        sprite->setZOrder(0);
+                        node->addChild(sprite);
+                    } else if (gauntletName == "Strange") {
+                        CCSprite* sprite = CCSprite::createWithSpriteFrameName("strange_gauntlet.png"_spr);
+                        sprite->setPosition(bg->getPosition());
+                        sprite->setScale(1.270f);
+                        sprite->setZOrder(0);
+                        node->addChild(sprite);
+
+                        reverseGauntlet(node);
                     } else if (gauntletName == "NCS I") {
                         CCSprite* sprite = CCSprite::createWithSpriteFrameName("ncs_gauntlet_1.png"_spr);
                         sprite->setPosition(bg->getPosition());
