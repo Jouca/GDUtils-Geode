@@ -65,19 +65,21 @@ class $modify(CustomGauntletSelectLayer, GauntletSelectLayer) {
         );
 
         CCSprite* bottom_corner_right = typeinfo_cast<CCSprite*>(this->getChildByIDRecursive("bottom-right-corner"));
-        infoBtn->setPosition(bottom_corner_right->getPosition());
-        infoBtn->setScale(.8f);
-        infoBtn->setZOrder(10);
-        infoBtn->setColor(cocos2d::ccc3(236, 149, 19));
+        if (bottom_corner_right) {
+            infoBtn->setPosition(bottom_corner_right->getPosition());
+            infoBtn->setScale(.8f);
+            infoBtn->setZOrder(10);
+            infoBtn->setColor(cocos2d::ccc3(236, 149, 19));
 
-        CCMenu* menu_btr = typeinfo_cast<CCMenu*>(this->getChildByIDRecursive("bottom-right-menu"));
-        menu_btr->addChild(infoBtn);
-        menu_btr->updateLayout();
+            CCMenu* menu_btr = typeinfo_cast<CCMenu*>(this->getChildByIDRecursive("bottom-right-menu"));
+            menu_btr->addChild(infoBtn);
+            menu_btr->updateLayout();
 
-        CCParticleSystemQuad* particle_info = GameToolbox::particleFromString("26a-1a1.66a0.3a30a90a180a14a0a1a1a0a7a0a0a0a0a2a1a0a0a1a0a0.568627a0a0.12549a0a1a0a1a1a0a0a1a0a0.501961a0a0a0a1a0a0a0a0.46a0a0a0a0a0a0a0a0a2a1a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
-        infoBtn->addChild(particle_info);
-        particle_info->setPosition(infoSpr->getPosition());
-        particle_info->setZOrder(9);
+            CCParticleSystemQuad* particle_info = GameToolbox::particleFromString("26a-1a1.66a0.3a30a90a180a14a0a1a1a0a7a0a0a0a0a2a1a0a0a1a0a0.568627a0a0.12549a0a1a0a1a1a0a0a1a0a0.501961a0a0a0a1a0a0a0a0.46a0a0a0a0a0a0a0a0a2a1a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
+            infoBtn->addChild(particle_info);
+            particle_info->setPosition(infoSpr->getPosition());
+            particle_info->setZOrder(9);
+        }
 
         auto list = this->getChildByIDRecursive("gauntlets-list");
 
