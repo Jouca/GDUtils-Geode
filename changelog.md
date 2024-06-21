@@ -1,4 +1,7 @@
 # Changelog
+## <cl>v1.3.0-beta.3</c> <cb>(2024-06-21)</c>
+* <co>Bump to Geode beta 4</c>
+
 ## <cl>v1.3.0-beta.2</c> <cb>(2024-06-20)</c>
 * <cy>Fixed</c> more leaderboards tab not changing when clicked
 

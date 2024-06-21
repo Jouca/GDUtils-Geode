@@ -8,8 +8,6 @@
 
 
 class $modify(CustomScoreCell, GJScoreCell) {
-    GJUserScore* score_registered = nullptr;
-
     void loadFromScore(GJUserScore* score) {
         GJScoreCell::loadFromScore(score);
 

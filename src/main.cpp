@@ -299,7 +299,6 @@ class $modify(CCScheduler) { // GD Protocol part
 
 // Backgrounds
 class $modify(CCSprite) {
-    bool isGradient;
     static CCSprite* create(char const* name) {
         auto ret = CCSprite::create(name);
         if (ret == nullptr) return ret;
