@@ -1,4 +1,8 @@
 # Changelog
+## <cj>v1.3.10</c> <cb>(2024-06-22)</c>
+* <cg>Added</c> Badges API dependency
+* <cg>Added</c> RobTop badge to profile
+
 ## <cj>v1.3.0</c> <cb>(2024-06-22)</c>
 * <cp>Port to Geometry Dash 2.206</c>
 * <cg>Added</c> list rate notifications

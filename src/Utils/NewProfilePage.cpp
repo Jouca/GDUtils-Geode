@@ -138,6 +138,21 @@ You found a <co>GDUtils developer</c>! :O
 
 }
 
+void NewProfilePage::onRobTopBadgePressed(CCObject* pSender) {
+    FLAlertLayer::create(
+        nullptr,
+        "RobTop Games",
+        R"text(
+<cj>RobTop</c> is the creator and the main developer of <cl>Geometry Dash</c>. 
+
+He is the <cy>only developer of the game</c> and is responsible for <cy>all the updates and content</c> that is added to the game.
+        )text",
+        "OK",
+        nullptr,
+        300.0f
+    )->show();
+}
+
 // Mod badges descriptions & GDUtils dev badge
 class $modify(ProfilePage) {
     void loadPageFromUserInfo(GJUserScore* a2) {
@@ -159,15 +174,24 @@ class $modify(ProfilePage) {
             if (modbadge != nullptr) {
                 modbadge->removeFromParentAndCleanup(true);
 
-                badgeBtn = CCMenuItemSpriteExtra::create(
-                    modbadge,
-                    this,
-                    menu_selector(NewProfilePage::onBadgePressed)
-                );
+                if (a2->m_userName == "RobTop") {
+                    auto robtopSpr = CCSprite::create("robtop_badge.png"_spr);
+                    robtopSpr->setScale(.04f);
+                    badgeBtn = CCMenuItemSpriteExtra::create(
+                        robtopSpr,
+                        this,
+                        menu_selector(NewProfilePage::onRobTopBadgePressed)
+                    );
+                } else {
+                    badgeBtn = CCMenuItemSpriteExtra::create(
+                        modbadge,
+                        this,
+                        menu_selector(NewProfilePage::onBadgePressed)
+                    );
+                }
 
                 badgeBtn->setID("mod-badge");
                 badgeBtn->setUserObject(a2);
-                badgeBtn->setPosition(label->getPosition() + CCPoint { -5.f, -1.f });
                 username_menu->addChild(badgeBtn);
 
                 modbadge_bool = true;
@@ -185,11 +209,6 @@ class $modify(ProfilePage) {
                     );
 
                     badgeGDUtilBtn->setID("gdutils-badge");
-                    if (modbadge_bool)
-                        badgeGDUtilBtn->setPosition(badgeBtn->getPosition() + CCPoint { -5.f, -1.f });
-                    else
-                        badgeGDUtilBtn->setPosition(label->getPosition() + CCPoint { -5.f, -1.f });
-
                     username_menu->addChild(badgeGDUtilBtn);
                 }
             }

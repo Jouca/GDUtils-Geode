@@ -8,4 +8,5 @@ class NewProfilePage : public CCLayer {
     public:
         void onBadgePressed(CCObject* pSender);
         void onGDUtilsBadgePressed(CCObject* pSender);
+        void onRobTopBadgePressed(CCObject* pSender);
 };
