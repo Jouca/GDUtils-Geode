@@ -1,7 +1,7 @@
 # GDUtils
 
 <img src="https://img.shields.io/github/downloads/Jouca/GDUtils-Geode/total?style=for-the-badge" style="text-align: center;"></img>
-<img src="https://dcbadge.limes.pink/api/server/1200028471297056809" style="text-align: center;"></img>
+<img src="https://dcbadge.limes.pink/api/server/MU4Rpc6xbJ" style="text-align: center;"></img>
 <img src="https://img.shields.io/github/last-commit/Jouca/GDUtils-Geode?display_timestamp=committer&style=for-the-badge" style="text-align: center;"></img>
 <img src="https://img.shields.io/github/commit-activity/w/Jouca/GDUtils-Geode?style=for-the-badge" style="text-align: center;"></img>
 <img src="https://img.shields.io/github/commits-since/Jouca/GDUtils-Geode/latest?style=for-the-badge" style="text-align: center;"></img>
