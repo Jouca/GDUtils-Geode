@@ -1,7 +1,9 @@
 # Changelog
-## <cj>v1.3.10</c> <cb>(2024-06-22)</c>
+## <cj>v1.3.1</c> <cb>(2024-06-29)</c>
+* <cg>Added</c> <cb>Discord</c> gauntlet design
 * <cg>Added</c> Badges API dependency
 * <cg>Added</c> RobTop badge to profile
+* <cy>Fixed</c> crash & progress bar on easter egg
 
 ## <cj>v1.3.0</c> <cb>(2024-06-22)</c>
 * <cp>Port to Geometry Dash 2.206</c>
