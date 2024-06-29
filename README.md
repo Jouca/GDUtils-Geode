@@ -2,7 +2,7 @@
 
 <img src="https://img.shields.io/github/downloads/Jouca/GDUtils-Geode/total?style=for-the-badge" style="text-align: center;"></img>
 <a href="https://discord.gg/MU4Rpc6xbJ" style="text-align: center;"><img src="https://dcbadge.limes.pink/api/server/MU4Rpc6xbJ"></img></a>
-<img src="https://img.shields.io/github/last-commit/Jouca/GDUtils-Geode?display_timestamp=committer&style=for-the-badge" style="text-align: center;"></img>
+<img src="https://img.shields.io/github/last-commit/Jouca/GDUtils-Geode?display_timestamp=committer&style=for-the-badge&logoColor=ffA500" style="text-align: center;"></img>
 <img src="https://img.shields.io/github/commit-activity/w/Jouca/GDUtils-Geode?style=for-the-badge" style="text-align: center;"></img>
 <img src="https://img.shields.io/github/commits-since/Jouca/GDUtils-Geode/latest?style=for-the-badge" style="text-align: center;"></img>
 <img src="https://img.shields.io/github/created-at/Jouca/GDUtils-Geode?style=for-the-badge" style="text-align: center;"></img>
