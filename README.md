@@ -1,10 +1,10 @@
 # GDUtils
 
-<img src="https://img.shields.io/github/downloads/Jouca/GDUtils-Geode/total?style=for-the-badge" style="text-align: center;">GitHub Downloads (all assets, all releases)</p>
-<img src="https://img.shields.io/github/last-commit/Jouca/GDUtils-Geode?display_timestamp=committer&style=for-the-badge" style="text-align: center;">GitHub Last Commit</p>
-<img src="https://img.shields.io/github/commit-activity/w/Jouca/GDUtils-Geode?style=for-the-badge" style="text-align: center;">GitHub commit activity</p>
-<img src="https://img.shields.io/github/commits-since/Jouca/GDUtils-Geode/latest?style=for-the-badge" style="text-align: center;">GitHub commits since latest release</p>
-<img src="https://img.shields.io/github/created-at/Jouca/GDUtils-Geode?style=for-the-badge" style="text-align: center;">GitHub Created At</p>
+<img src="https://img.shields.io/github/downloads/Jouca/GDUtils-Geode/total?style=for-the-badge" style="text-align: center;"></img>
+<img src="https://img.shields.io/github/last-commit/Jouca/GDUtils-Geode?display_timestamp=committer&style=for-the-badge" style="text-align: center;"></img>
+<img src="https://img.shields.io/github/commit-activity/w/Jouca/GDUtils-Geode?style=for-the-badge" style="text-align: center;"></img>
+<img src="https://img.shields.io/github/commits-since/Jouca/GDUtils-Geode/latest?style=for-the-badge" style="text-align: center;"></img>
+<img src="https://img.shields.io/github/created-at/Jouca/GDUtils-Geode?style=for-the-badge" style="text-align: center;"></img>
 
 **By [Jouca](https://github.com/Jouca) and [Firee](https://github.com/FireMario211)**
 A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute, game fixes & more!
