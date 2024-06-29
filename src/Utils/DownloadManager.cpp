@@ -5,8 +5,7 @@
 #include <Geode/utils/web.hpp>
 #include <Geode/utils/file.hpp>
 
-static std::unordered_map<std::string, web::WebTask> RUNNING_REQUESTS {};
-static std::mutex lock_var;
+EventListener<web::WebTask> m_listener_dl;
 
 // ------
 // 204 = MAX
@@ -42,9 +41,9 @@ ProgressBar* ProgressBar::create() {
 }
 // ------
 // credits https://stackoverflow.com/a/1639047
-int DownloadManager::progress_func(void*, double totalDownload, double downloadAmount, double TotalToUpload, double NowUploaded) {
-    if (totalDownload <= 0.0) return 0;
-    float amountDownloaded = round((downloadAmount / totalDownload) * 100);
+int DownloadManager::progress_func(void*, double totalDownload, std::optional<float> downloadAmount, double TotalToUpload, double NowUploaded) {
+    if (totalDownload <= 0.0 || !downloadAmount) return 0;
+    float amountDownloaded = round((downloadAmount.value() / totalDownload) * 100);
     auto scene = CCDirector::sharedDirector()->getRunningScene();
     auto layer = reinterpret_cast<ProgressBar*>(reinterpret_cast<CCLayer*>(reinterpret_cast<CCLayer*>(scene->getChildByTag(6942084))->getChildren()->objectAtIndex(0))->getChildByTag(4592));
     if (layer != nullptr) {
@@ -93,39 +92,20 @@ void DownloadManager::setup() {
     };
 
     geode::utils::web::WebRequest request = web::WebRequest();
-    const std::lock_guard<std::mutex> lock(lock_var);
-    RUNNING_REQUESTS.emplace(
-        "@loaderDownloadManagerGDUtils",
-        request.get(this->m_sUrl).map(
-            [expect = std::move(expect), then = std::move(then)](web::WebResponse* response) {
-                const std::lock_guard<std::mutex> lock(lock_var);
-                if (response->ok()) {
-                    then(response->data());
-                } else {
-                    expect(response->code());
-                }
 
-                RUNNING_REQUESTS.erase("@loaderDownloadManagerGDUtils");
-                return *response;
+    m_listener_dl.bind([expect = std::move(expect), then = std::move(then)] (web::WebTask::Event* e) {
+        if (web::WebProgress* progress = e->getProgress()) {
+            progress_func(NULL, 100, progress->downloadProgress(), progress->uploadTotal(), progress->uploaded());
+        } else if (web::WebResponse* result = e->getValue()) {
+            if (result->ok()) {
+                then(result->data());
+            } else {
+                expect(result->code());
             }
-        )
-    );
+        }
+    });
 
-    /*web::AsyncWebRequest()
-        .join("bad-apple")
-        .fetch(this->m_sUrl)
-        .into(this->m_sDestination)
-        .then([this](auto) {
-            ProcessLambdas::callMenuHandler(this, this->m_pSelector);
-            this->onClose(CCNode::create());
-        })
-        .expect([](std::string const& err) {
-            FLAlertLayer::create(nullptr, "Error!", "An error occured while trying to send a request to the servers. Check <cy>logs</c> for more information.", "OK", nullptr, 200.0F)->show();
-            log::error("Error downloading: {}", err);
-        })
-        .progress([](auto&, double now, double total) {
-            progress_func(NULL, total, now, 0.0, 0.0);
-        });*/
+    m_listener_dl.setFilter(request.get(this->m_sUrl));
 }
 
 DownloadManager* DownloadManager::create(const char* url, const char* destination, cocos2d::SEL_MenuHandler selector) {

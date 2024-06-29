@@ -31,6 +31,6 @@ class DownloadManager : public BrownAlertDelegate {
         static DownloadManager* create(const char* url, const char* destination, cocos2d::SEL_MenuHandler callback); //, cocos2d::SEL_MenuHandler callback
         
         // Downloader class
-        static int progress_func(void*, double, double, double, double);
+        static int progress_func(void*, double, std::optional<float>, double, double);
 };
 #endif

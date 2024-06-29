@@ -53,25 +53,54 @@ bool cote = false;
 #include <Geode/modify/SecretLayer2.hpp>
 
 class $modify(SecretVault, SecretLayer2) {
+    struct Fields {
+        CCMenu* m_menu = nullptr;
+    };
+
     bool init() {
         if (!SecretLayer2::init()) return false;
         bad_apple = false;
         cote = false;
         return true;
     }
+
     void onSubmit(CCObject* obj) {
         SecretLayer2::onSubmit(obj);
-        CCLabelBMFont* vault_text = typeinfo_cast<cocos2d::CCLabelBMFont*>(this->getChildren()->objectAtIndex(3));
-        CCMenu* menu = nullptr;
-        if (this->getChildrenCount() > 8) {
-            menu = typeinfo_cast<cocos2d::CCMenu*>(this->getChildren()->objectAtIndex(8)); //6 before
-        } else {
-            menu = typeinfo_cast<cocos2d::CCMenu*>(this->getChildren()->objectAtIndex(6));
+
+        if (m_fields->m_menu == nullptr) {
+            m_fields->m_menu = CCMenu::create();
+            m_fields->m_menu->setPosition(50, 200);
+            m_fields->m_menu->setContentSize({ 100, 200 });
+            m_fields->m_menu->setLayout(
+                ColumnLayout::create()
+                    ->setCrossAxisAlignment(cocos2d::AxisAlignment::Center)
+            );
         }
+
+        this->addChild(m_fields->m_menu);
+        m_fields->m_menu->removeAllChildren();
+
+        CCLabelBMFont* vault_text = nullptr;
+        if (this->getChildByIDRecursive("vault-text") == nullptr) {
+            vault_text = typeinfo_cast<cocos2d::CCLabelBMFont*>(this->getChildren()->objectAtIndex(3));
+        } else {
+            vault_text = as<CCLabelBMFont*>(this->getChildByIDRecursive("vault-text"));
+            vault_text->setID("vault-text");
+        }
+
         if (!strcmp(text_input.c_str(), "bad apple")) {
             if (!bad_apple) {
                 std::filesystem::create_directory("gdutils");
                 bad_apple = true;
+                cote = false;
+
+                auto menu = CCMenu::create();
+                menu->setLayout(
+                    RowLayout::create()
+                        ->setAxis(cocos2d::Axis::Column)
+                        ->setAxisAlignment(cocos2d::AxisAlignment::Center)
+                        ->setGap(3)
+                );
 
                 vault_text->setString("It's time... Touhou Fan");
                 vault_text->setColor({ 255, 0, 0 });
@@ -87,14 +116,31 @@ class $modify(SecretVault, SecretLayer2) {
                 auto badappleLabel = CCLabelBMFont::create("Bad Apple", "bigFont.fnt");
                 badappleLabel->setScale(.4f);
                 badappleLabel->setPosition(44, 237);
-                this->addChild(badappleLabel);
-            }
-        }
+                badappleLabel->setLayoutOptions(
+                    AxisLayoutOptions::create()
+                        ->setAutoScale(true)
+                        ->setMinScale(0)
+                        ->setMaxScale(.4f)
+                        ->setScalePriority(1)
+                );
+                menu->addChild(badappleLabel);
 
-        if (!strcmp(text_input.c_str(), "honami best girl")) {
+                menu->updateLayout();
+                m_fields->m_menu->addChild(menu);
+            }
+        } else if (!strcmp(text_input.c_str(), "honami best girl")) {
             if (!cote) {
                 std::filesystem::create_directory("gdutils");
                 cote = true;
+                bad_apple = false;
+
+                auto menu = CCMenu::create();
+                menu->setLayout(
+                    RowLayout::create()
+                        ->setAxis(cocos2d::Axis::Column)
+                        ->setAxisAlignment(cocos2d::AxisAlignment::Center)
+                        ->setGap(3)
+                );
 
                 vault_text->setString("Well, you have good taste.");
                 vault_text->setColor({ 245, 143, 221 });
@@ -110,9 +156,24 @@ class $modify(SecretVault, SecretLayer2) {
                 auto COTELabel = CCLabelBMFont::create("Classroom of the Elite", "bigFont.fnt");
                 COTELabel->setScale(.2f);
                 COTELabel->setPosition(44, 237);
-                this->addChild(COTELabel);
+                COTELabel->setLayoutOptions(
+                    AxisLayoutOptions::create()
+                        ->setAutoScale(true)
+                        ->setMinScale(0)
+                        ->setMaxScale(.2f)
+                        ->setScalePriority(1)
+                );
+                menu->addChild(COTELabel);
+
+                menu->updateLayout();
+                m_fields->m_menu->addChild(menu);
             }
+        } else {
+            cote = false;
+            bad_apple = false;
         }
+
+        m_fields->m_menu->updateLayout();
     }
 
     void launchBadApple(CCObject* pSender) {
