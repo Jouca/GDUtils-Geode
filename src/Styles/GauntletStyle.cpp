@@ -243,6 +243,13 @@ class $modify(CustomGauntletSelectLayer, GauntletSelectLayer) {
                         sprite->setScale(1.270f);
                         sprite->setZOrder(0);
                         node->addChild(sprite);
+                    } else if (gauntletName == "Discord") {
+                        CCSprite* sprite = CCSprite::createWithSpriteFrameName("discord_gauntlet.png"_spr);
+                        sprite->setPosition({bg->getPositionX(), bg->getPositionY() + 3});
+                        sprite->setScale(1.245f);
+                        sprite->setZOrder(0);
+                        item->setZOrder(1);
+                        node->addChild(sprite);
                     } else {
                         bg->setVisible(true);
                         label->setVisible(true);

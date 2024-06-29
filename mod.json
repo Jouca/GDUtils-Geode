@@ -1,5 +1,5 @@
 {
-    "geode": "3.0.0",
+    "geode": "3.1.1",
     "version": "v1.3.0",
     "gd": {
         "win": "2.206",
@@ -10,7 +10,7 @@
     "id": "gdutilsdevs.gdutils",
     "name": "GDUtils",
     "developers": ["Jouca", "Firee"],
-    "description": "Realtime Rate Notifications, auto-song mute, game fixes & more!",
+    "description": "Realtime Rate Notifications, leaderboard extension, epic UI redesign, auto-song mute, game fixes & more!",
     "repository": "https://github.com/Jouca/GDUtils-Geode",
     "links": {
         "community": "https://discord.gg/MU4Rpc6xbJ"
@@ -18,12 +18,12 @@
     "dependencies": [
         {
             "id": "geode.node-ids",
-            "version": ">=v1.12.0-beta.2",
+            "version": ">=v1.12.0",
             "importance": "required"
         },
         {
             "id": "jouca.badgesapi",
-            "version": ">=v1.0.0",
+            "version": ">=v1.0.3",
             "importance": "required"
         }
     ],
