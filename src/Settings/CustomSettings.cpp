@@ -42,22 +42,31 @@ std::string GetOpenFileName() {
 #endif
 void SettingAppNode::onPickFile(CCObject*) {
     #ifdef GEODE_IS_MACOS
-    if (auto path = file::pickFile(
+    // thanks catto
+    file::pick(
         file::PickMode::OpenFile,
         {
             "/Applications", // sorry mac users but idk the path for spotify
             {}
         }
-    )) {
-        std::string strPath = path.unwrap().string();
-        size_t lastBackslashPos = strPath.find_last_of('/');
-        if (lastBackslashPos != std::string::npos) {
-            std::string lastPart = strPath.substr(lastBackslashPos + 1);
-            m_currentApp = lastPart;
-            defaultApp_input->setString(lastPart.c_str());
-            this->dispatchChanged();
-        }
-    }
+
+    ).listen(
+        [this](Result<std::filesystem::path>* result) {
+            if (!result->isOk()) return;
+
+            auto path = result->unwrap();
+            std::string strPath = path.string();
+            size_t lastBackslashPos = strPath.find_last_of('/');
+            if (lastBackslashPos != std::string::npos) {
+                std::string lastPart = strPath.substr(lastBackslashPos + 1);
+                m_currentApp = lastPart;
+                defaultApp_input->setString(lastPart.c_str());
+                this->dispatchChanged();
+            }
+
+        },
+        [](auto const&){}
+    );
     #else
     #ifdef GEODE_IS_WINDOWS // i get an error, i so badly want to use elif but it gives me an error
     std::string filePath = GetOpenFileName();

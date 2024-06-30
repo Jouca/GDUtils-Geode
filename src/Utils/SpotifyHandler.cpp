@@ -198,13 +198,13 @@ void MuteApplication() {
         std::string muteCommand = "osascript -e 'tell application \"" + targetName + "\" to set volume ";
         if (is_muted) {
             system((muteCommand + "100'").c_str());
-            log::info(targetName + " has been unmuted.");
+            log::info("{} has been unmuted.", targetName);
         } else {
             system((muteCommand + "0'").c_str());
-            log::info(targetName + " has been muted.");
+            log::info("{} has been muted.", targetName);
         }
     } else {
-        log::info("Couldn't find application " + targetName + ", aborting.");
+        log::info("Couldn't find application {}, aborting.", targetName);
     }
 }
 void toggleSpotifyMute(bool automatic = false, bool muted = false) {
