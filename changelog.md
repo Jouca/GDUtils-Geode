@@ -1,7 +1,7 @@
 # Changelog
-## <cj>v1.3.2</c> <cb>(---)</c>
+## <cj>v1.3.2</c> <cb>(2024-07-03)</c>
 * <cg>Added</c> Mac Support
-* <cg>Added</c> <cg>Monster</c>, Doom, <cj>Portal</c>, <cp>Strange</c>, <co>Fantasy</c>, <cy>Mystery</c>, <cg>Cursed</c> and <cp>Split</c> gauntlets particles
+* <cg>Added</c> <cg>Monster</c>, Doom, <cj>Portal</c>, <cp>Strange</c>, <co>Fantasy</c>, <cy>Mystery</c>, <cg>Cursed</c>, <cy>World</c>, <co>Galaxy</c>, <cp>Universe</c> and <cp>Split</c> gauntlets particles
 
 ## <cj>v1.3.1</c> <cb>(2024-06-29)</c>
 * <cg>Added</c> <cb>Discord</c> gauntlet design
