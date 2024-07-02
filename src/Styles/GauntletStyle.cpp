@@ -254,6 +254,33 @@ class $modify(CustomGauntletSelectLayer, GauntletSelectLayer) {
                         sprite->setScale(1.270f);
                         sprite->setZOrder(0);
                         node->addChild(sprite);
+
+                        // Show gauntlets sprite again
+                        gauntlet->setVisible(true);
+                        gauntlet->setPosition({1, 16});
+                        gauntlet->setScale(1);
+                        gauntlet_node->setZOrder(3);
+
+                        // Particle
+                        CCParticleSystemQuad* particle = GameToolbox::particleFromString("5a-1a1a0.3a3a90a90a29a0a11a0a0a0a0a0a0a0a50a1a24a45a0.105882a0a0.380392a0a0.105882a0a1a0a44a1a48a28a0.105882a0a0.380392a0a0.105882a0a1a0a0a0a0a0a0a0a0a0a0a0a1a2a1a0a0a0a175a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
+                        node->addChild(particle);
+                        particle->setPosition(gauntlet->getPosition());
+                        particle->setZOrder(1);
+                        particle->setScaleX(2.035f);
+                        particle->setScaleY(2.035f);
+                        CCParticleSystemQuad* particle2 = GameToolbox::particleFromString("5a-1a1a0.3a3a90a90a29a0a11a0a0a0a0a0a0a0a50a1a24a45a0.105882a0a0.380392a0a0.105882a0a1a0a44a1a48a28a0.105882a0a0.380392a0a0.105882a0a1a0a0a0a0a0a0a0a0a0a0a0a1a2a1a0a0a0a175a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
+                        node->addChild(particle2);
+                        particle2->setPosition(gauntlet->getPosition());
+                        particle2->setZOrder(1);
+                        particle2->setScaleX(2.035f);
+                        particle2->setScaleY(2.035f);
+                        CCParticleSystemQuad* particle3 = GameToolbox::particleFromString("93a-1a1a0.3a71a90a0a52a0a10a0a23a0a0a0a0a0a2a1a0a0a0.00392157a0a0.905882a0a0a0a1a0a2a1a30a0a0.00392157a0a0.905882a0a0a0a1a0a0.3a0a0.5a0a0a0a0a0a0a0a0a2a1a0a0a0a32a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
+                        node->addChild(particle3);
+                        particle3->setPosition({17, 94});
+                        particle3->setZOrder(1);
+                        particle3->setScaleX(4.510f);
+                        particle3->setScaleY(3.335f);
+                        particle3->setRotation(180);
                     } else if (gauntletName == "Doom") {
                         CCSprite* sprite = CCSprite::createWithSpriteFrameName("doom_gauntlet.png"_spr);
                         sprite->setPosition(bg->getPosition());
