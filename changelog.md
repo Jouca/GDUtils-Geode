@@ -1,4 +1,8 @@
 # Changelog
+## <cj>v1.3.2</c> <cb>(---)</c>
+* <cg>Added</c> Mac Support
+* <cg>Added</c> <co>Fantasy</c>, <cg>Monster</c>, <cj>Portal</c> gauntlets particles
+
 ## <cj>v1.3.1</c> <cb>(2024-06-29)</c>
 * <cg>Added</c> <cb>Discord</c> gauntlet design
 * <cg>Added</c> Badges API dependency
