@@ -260,12 +260,100 @@ class $modify(CustomGauntletSelectLayer, GauntletSelectLayer) {
                         sprite->setScale(1.270f);
                         sprite->setZOrder(0);
                         node->addChild(sprite);
+
+                        // Show gauntlets sprite again
+                        gauntlet->setVisible(true);
+                        gauntlet->setPosition({0, 19});
+                        gauntlet->setScale(1.025f);
+                        gauntlet_node->setZOrder(3);
+
+                        // Particle
+                        CCParticleSystemQuad* particle = GameToolbox::particleFromString("66a-1a3a0.3a20a90a27a11a0a43a83a0a0a0a0a0a0a5a1a0a0a0.733333a0a0.607843a0a0.12549a0a1a0a3a1a0a0a0.733333a0a0.470588a0a0.12549a0a1a0a0.5a0a1a0a0a0a0a0a0a0a0a2a1a0a0a0a28a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
+                        node->addChild(particle);
+                        particle->setPosition({0, -7});
+                        particle->setZOrder(1);
+                        particle->setScaleX(1.235f);
+                        particle->setScaleY(1.235f);
+                        CCParticleSystemQuad* particle2 = GameToolbox::particleFromString("44a-1a3a0.3a13a90a27a11a0a32a62a0a0a0a0a0a0a50a1a0a0a0.0666667a0a0.0509804a0a0.0470588a0a1a0a50a1a0a0a0.0666667a0a0.0509804a0a0.0470588a0a1a0a0.5a0a1a0a0a0a0a0a0a0a0a2a1a0a0a0a46a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
+                        node->addChild(particle2);
+                        particle2->setPosition({0, -13});
+                        particle2->setZOrder(1);
+                        particle2->setScaleX(1.310f);
+                        particle2->setScaleY(1.435f);
+                        CCParticleSystemQuad* particle3 = GameToolbox::particleFromString("6a-1a1.9a0a3a90a17a69a0a3a0a0a-102a0a0a0a0a4a1a57a105a1a0a1a0a1a0a1a0a4a1a0a0a1a0a1a0a1a0a1a0a0a0a0a0a0a0a0a0a0a0a0a2a1a0a0a0a145a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
+                        node->addChild(particle3);
+                        particle3->setPosition(gauntlet->getPosition());
+                        particle3->setZOrder(1);
+                        particle3->setScaleX(2.035f);
+                        particle3->setScaleY(2.035f);
                     } else if (gauntletName == "Split") {
                         CCSprite* sprite = CCSprite::createWithSpriteFrameName("split_gauntlet.png"_spr);
                         sprite->setPosition(bg->getPosition());
                         sprite->setScale(1.270f);
                         sprite->setZOrder(0);
                         node->addChild(sprite);
+
+                        // Show gauntlets sprite again
+                        gauntlet->setVisible(true);
+                        gauntlet->setPosition({-1, 20});
+                        gauntlet->setScale(0.975f);
+                        gauntlet_node->setZOrder(2);
+
+                        // Particle
+                        CCParticleSystemQuad* particle = GameToolbox::particleFromString("48a-1a2a0.3a20a90a2a19a0a10a20a0a0a0a0a0a0a4a1a0a0a0.666667a0a0.360784a0a0.603922a0a1a0a2a1a0a0a0.666667a0a0.360784a0a0.603922a0a1a0a0.5a0a0.5a0a0a0a0a0a0a0a0a2a1a0a0a0a31a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
+                        node->addChild(particle);
+                        particle->setPosition({-28, -65});
+                        particle->setZOrder(1);
+                        particle->setScaleX(2.180f);
+                        particle->setScaleY(4.003f);
+                        CCParticleSystemQuad* particle2 = GameToolbox::particleFromString("48a-1a2a0.3a20a90a2a19a0a10a20a0a0a0a0a0a0a4a1a0a0a0.454902a0a0.215686a0a0.403922a0a1a0a2a1a0a0a0.454902a0a0.215686a0a0.403922a0a1a0a0.5a0a0.5a0a0a0a0a0a0a0a0a2a1a0a0a0a28a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
+                        node->addChild(particle2);
+                        particle2->setPosition({-28, -65});
+                        particle2->setZOrder(1);
+                        particle2->setScaleX(2.180f);
+                        particle2->setScaleY(4.003f);
+                        CCParticleSystemQuad* particle3 = GameToolbox::particleFromString("48a-1a2a0.3a20a90a2a19a0a10a20a0a0a0a0a0a0a4a1a0a0a0.243137a0a0.329412a0a0.341176a0a1a0a2a1a0a0a0.243137a0a0.329412a0a0.341176a0a1a0a0.5a0a0.5a0a0a0a0a0a0a0a0a2a1a0a0a0a31a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
+                        node->addChild(particle3);
+                        particle3->setPosition({25, 65});
+                        particle3->setZOrder(1);
+                        particle3->setScaleX(2.180f);
+                        particle3->setScaleY(4.003f);
+                        particle3->setRotation(180);
+                        CCParticleSystemQuad* particle4 = GameToolbox::particleFromString("48a-1a2a0.3a20a90a2a19a0a10a20a0a0a0a0a0a0a4a1a0a0a0.145098a0a0.203922a0a0.207843a0a1a0a2a1a0a0a0.145098a0a0.203922a0a0.207843a0a1a0a0.5a0a0.5a0a0a0a0a0a0a0a0a2a1a0a0a0a28a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
+                        node->addChild(particle4);
+                        particle4->setPosition({25, 65});
+                        particle4->setZOrder(1);
+                        particle4->setScaleX(2.180f);
+                        particle4->setScaleY(4.003f);
+                        particle4->setRotation(180);
+                        CCParticleSystemQuad* particle5 = GameToolbox::particleFromString("30a-1a2a0.3a13a90a90a29a0a11a0a0a0a0a0a0a0a6a1a0a0a0.705882a0a0.34902a0a0.698039a0a1a0a2a1a0a0a0.584314a0a0.34902a0a0.705882a0a1a0a0a0a0.5a0a6a0a34a0a0a0a1a2a1a0a0a0a159a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
+                        node->addChild(particle5);
+                        particle5->setPosition({0, 29});
+                        particle5->setZOrder(1);
+                        particle5->setScaleX(1.955f);
+                        particle5->setScaleY(1.955f);
+                        particle5->setRotation(90);
+                        CCParticleSystemQuad* particle6 = GameToolbox::particleFromString("30a-1a2a0.3a13a90a90a29a0a11a0a0a0a0a0a0a0a6a1a0a0a0.254902a0a0.333333a0a0.388235a0a1a0a2a1a0a0a0.254902a0a0.333333a0a0.388235a0a1a0a0a0a0.5a0a6a0a34a0a0a0a1a2a1a0a0a0a159a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
+                        node->addChild(particle6);
+                        particle6->setPosition({0, 29});
+                        particle6->setZOrder(1);
+                        particle6->setScaleX(1.955f);
+                        particle6->setScaleY(1.955f);
+                        particle6->setRotation(-90);
+                        CCParticleSystemQuad* particle7 = GameToolbox::particleFromString("30a-1a2a0.3a13a90a90a29a0a11a0a0a0a0a0a0a0a6a1a0a0a0.705882a0a0.34902a0a0.698039a0a1a0a2a1a0a0a0.584314a0a0.34902a0a0.705882a0a1a0a0a0a0.5a0a6a0a34a0a0a0a1a2a1a0a0a0a28a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
+                        node->addChild(particle7);
+                        particle7->setPosition({0, 29});
+                        particle7->setZOrder(1);
+                        particle7->setScaleX(1.955f);
+                        particle7->setScaleY(1.955f);
+                        particle7->setRotation(90);
+                        CCParticleSystemQuad* particle8 = GameToolbox::particleFromString("30a-1a2a0.3a13a90a90a29a0a11a0a0a0a0a0a0a0a6a1a0a0a0.254902a0a0.333333a0a0.388235a0a1a0a2a1a0a0a0.254902a0a0.333333a0a0.388235a0a1a0a0a0a0.5a0a6a0a34a0a0a0a1a2a1a0a0a0a28a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
+                        node->addChild(particle8);
+                        particle8->setPosition({0, 29});
+                        particle8->setZOrder(1);
+                        particle8->setScaleX(1.955f);
+                        particle8->setScaleY(1.955f);
+                        particle8->setRotation(-90);
                     } else if (gauntletName == "Monster") {
                         CCSprite* sprite = CCSprite::createWithSpriteFrameName("monster_gauntlet.png"_spr);
                         sprite->setPosition(bg->getPosition());
@@ -304,6 +392,26 @@ class $modify(CustomGauntletSelectLayer, GauntletSelectLayer) {
                         sprite->setScale(1.270f);
                         sprite->setZOrder(0);
                         node->addChild(sprite);
+
+                        // Show gauntlets sprite again
+                        gauntlet->setVisible(true);
+                        gauntlet->setPosition({3, 13});
+                        gauntlet->setScale(0.975f);
+                        gauntlet_node->setZOrder(3);
+
+                        // Particle
+                        CCParticleSystemQuad* particle = GameToolbox::particleFromString("30a-1a3a0.3a9a90a180a29a0a11a0a0a0a0a0a0a0a2a1a0a0a1a0a0.8a0a0.258824a0a1a0a8a1a0a0a1a0a0.8a0a0.258824a0a1a0a0.5a0a0.5a0a6a0a30a0a0a0a1a2a0a0a0a0a11a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
+                        node->addChild(particle);
+                        particle->setPosition(gauntlet->getPosition());
+                        particle->setZOrder(2);
+                        particle->setScaleX(2.035f);
+                        particle->setScaleY(2.035f);
+                        CCParticleSystemQuad* particle2 = GameToolbox::particleFromString("31a-1a3a0.3a9a90a180a0a0a29a82a0a0a0a0a0a0a4a1a0a0a0.388235a0a0.741176a0a1a0a1a0a15a1a0a0a0.388235a0a0.741176a0a1a0a1a0a1a0a1a0a6a0a30a0a0a0a0a2a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
+                        node->addChild(particle2);
+                        particle2->setPosition({0, 0});
+                        particle2->setZOrder(1);
+                        particle2->setScaleX(1.435f);
+                        particle2->setScaleY(1.435f);
                     } else if (gauntletName == "Strange") {
                         CCSprite* sprite = CCSprite::createWithSpriteFrameName("strange_gauntlet.png"_spr);
                         sprite->setPosition(bg->getPosition());
@@ -312,6 +420,29 @@ class $modify(CustomGauntletSelectLayer, GauntletSelectLayer) {
                         node->addChild(sprite);
 
                         reverseGauntlet(node);
+
+                        // Show gauntlets sprite again
+                        gauntlet->setVisible(true);
+                        gauntlet->setPosition({2, -18});
+                        gauntlet->setRotation(180);
+                        gauntlet->setScale(0.975f);
+                        gauntlet->setFlipX(true);
+                        gauntlet_node->setZOrder(2);
+
+                        // Particle
+                        CCParticleSystemQuad* particle = GameToolbox::particleFromString("36a-1a3a0.3a6a-90a24a9a0a11a0a0a-7a0a0a0a0a2a1a76a325a0.592157a0a0.294118a0a0.658824a0a1a0a2a1a201a149a0.592157a0a0.294118a0a0.658824a0a1a0a0.3a0a0.3a0a0a0a0a0a0a0a0a2a0a0a0a0a96a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
+                        node->addChild(particle);
+                        particle->setPosition({2, -65});
+                        particle->setZOrder(2);
+                        particle->setScaleX(2.480f);
+                        particle->setScaleY(2.728f);
+                        particle->setRotation(180);
+                        CCParticleSystemQuad* particle2 = GameToolbox::particleFromString("17a-1a4a0.3a3a180a0a8a0a47a34a0a0a0a0a0a0a50a1a0a0a0.243137a0a0.239216a0a0.239216a0a1a0a50a1a0a0a0.454902a0a0.447059a0a0.447059a0a1a0a1a0a1a0a0a0a0a0a0a0a0a2a1a0a0a0a46a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
+                        node->addChild(particle2);
+                        particle2->setPosition({17, 60});
+                        particle2->setZOrder(3);
+                        particle2->setScaleX(0.805f);
+                        particle2->setScaleY(1.155f);
                     } else if (gauntletName == "NCS I") {
                         CCSprite* sprite = CCSprite::createWithSpriteFrameName("ncs_gauntlet_1.png"_spr);
                         sprite->setPosition(bg->getPosition());
