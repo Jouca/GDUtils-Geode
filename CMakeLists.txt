@@ -1,15 +1,14 @@
-cmake_minimum_required(VERSION 3.5.0)
-
-set(GEODE_GD_VERSION 2.206)
-set(GEODE_COMP_GD_VERSION 22060)
-
+cmake_minimum_required(VERSION 3.21)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-if(NOT DEFINED GEODE_TARGET_PLATFORM)
-    set(GEODE_TARGET_PLATFORM "Win64")
-endif()
 set(CMAKE_OSX_ARCHITECTURES "arm64;x86_64")
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+
+if(NOT DEFINED GEODE_TARGET_PLATFORM)
+    set(GEODE_TARGET_PLATFORM "Win64")
+    set(GEODE_GD_VERSION 2.206)
+    set(GEODE_COMP_GD_VERSION 22060)
+endif()
 
 if (${GEODE_TARGET_PLATFORM} STREQUAL "Win64")
     set(GEODE_COMPILER "clang-cl")
@@ -61,10 +60,8 @@ add_subdirectory(libs/socket.io-client-cpp EXCLUDE_FROM_ALL)
 add_dependencies(${PROJECT_NAME} sioclient)
 if (APPLE) # AND NOT (${GEODE_TARGET_PLATFORM} STREQUAL "iOS" OR IOS)
   target_link_libraries(${PROJECT_NAME} sioclient "-framework OpenGL")
-  #${CMAKE_CURRENT_SOURCE_DIR}/libs/link-libs/discord-rpc/libdiscord-rpc.a
 else()
   target_link_libraries(${PROJECT_NAME} sioclient)
-  #${CMAKE_CURRENT_SOURCE_DIR}/libs/link-libs/discord-rpc/discord-rpc.lib
 endif()
 if (CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux" AND WIN32)
   message("compiling on linux!!")
