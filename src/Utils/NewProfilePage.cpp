@@ -1,6 +1,10 @@
 #include "NewProfilePage.h"
 #include "../includes.h"
 #include <Geode/modify/ProfilePage.hpp>
+#include <Geode/utils/web.hpp>
+
+static std::unordered_map<std::string, web::WebTask> RUNNING_REQUESTS {};
+static std::mutex lock_var;
 
 void NewProfilePage::onBadgePressed(CCObject* pSender) {
     GJUserScore* score = static_cast<GJUserScore*>(static_cast<CCNode*>(pSender)->getUserObject());
@@ -124,7 +128,7 @@ There's currently <cp>no way</c> to become a <cb>Leaderboard Moderator</c> by ap
     }
 }
 
-void NewProfilePage::onGDUtilsBadgePressed(CCObject* pSender) {
+void NewProfilePage::onGDUtilsDevBadgePressed(CCObject* pSender) {
     FLAlertLayer::create(
         nullptr,
         "GDUtils Developer",
@@ -135,7 +139,21 @@ You found a <co>GDUtils developer</c>! :O
         nullptr,
         250.0f
     )->show();
+}
 
+void NewProfilePage::onGDUtilsContributorBadgePressed(CCObject* pSender) {
+    FLAlertLayer::create(
+        nullptr,
+        "GDUtils Contributor",
+        R"text(
+<cg>GDUtils Contributor</c> is a user that has contributed to the <cl>GDUtils</c> project by <cy>writing code</c>, <cy>adding new features</c> on GitHub.
+
+This badge is given to users that have contributed to the project by having merged <cy>pull requests</c> and have been recognized by the <cl>GDUtils</c> team.
+        )text",
+        "OK",
+        nullptr,
+        350.0f
+    )->show();
 }
 
 void NewProfilePage::onRobTopBadgePressed(CCObject* pSender) {
@@ -155,6 +173,91 @@ He is the <cy>only developer of the game</c> and is responsible for <cy>all the 
 
 // Mod badges descriptions & GDUtils dev badge
 class $modify(ProfilePage) {
+    void requestGDUtilsBadges(int accountID, CCLayer* layer) {
+        const geode::utils::MiniFunction<void(std::string const&)> then = [this, accountID, layer](std::string const& result) {
+            std::vector<std::string> data_user = MoreLeaderboards::getWords(result, "|");
+
+            while (data_user.size() > 0) {
+                std::vector<std::string> data = MoreLeaderboards::getWords(data_user[0], "?");
+
+                int badge = 0;
+                int accountID_data = 0;
+
+                while (data.size() > 0) {
+                    std::string id = data[0];
+                    std::string name = data[1];
+
+                    if (id == "1") {
+                        accountID_data = std::stoi(name);
+                    } else if (id == "3") {
+                        badge = std::stoi(name);
+                    }
+
+                    data.erase(data.begin());
+                    data.erase(data.begin());
+                }
+
+                if (accountID_data == accountID) {
+                    if (badge == 1) {
+                        if (!layer->getChildByIDRecursive("gdutils-contributor-badge")) {
+                            CCMenu* username_menu = typeinfo_cast<CCMenu*>(layer->getChildByIDRecursive("username-menu"));
+
+                            auto badgeGDUtil = CCSprite::create("contributorBadge.png"_spr);
+                            badgeGDUtil->setScale(1.075f);
+                            auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
+                                badgeGDUtil,
+                                layer,
+                                menu_selector(NewProfilePage::onGDUtilsContributorBadgePressed)
+                            );
+
+                            badgeGDUtilBtn->setID("gdutils-contributor-badge");
+                            username_menu->addChild(badgeGDUtilBtn);
+                            username_menu->updateLayout();
+                        }
+                    } else if (badge == 2) {
+                        if (!layer->getChildByIDRecursive("gdutils-dev-badge")) {
+                            CCMenu* username_menu = typeinfo_cast<CCMenu*>(layer->getChildByIDRecursive("username-menu"));
+
+                            auto badgeGDUtil = CCSprite::create("gdutils_badge.png"_spr);
+                            badgeGDUtil->setScale(.3f);
+                            auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
+                                badgeGDUtil,
+                                layer,
+                                menu_selector(NewProfilePage::onGDUtilsDevBadgePressed)
+                            );
+
+                            badgeGDUtilBtn->setID("gdutils-dev-badge");
+                            username_menu->addChild(badgeGDUtilBtn);
+                            username_menu->updateLayout();
+                        }
+                    }
+                }
+
+                data_user.erase(data_user.begin());
+            }
+        };
+        const geode::utils::MiniFunction<void(std::string const&)> expect = [this](std::string const& error) {
+            log::error("Failed to get GDUtils badges: {}", error);
+        };
+
+        geode::utils::web::WebRequest request = web::WebRequest();
+        RUNNING_REQUESTS.emplace(
+            "@loaderGDUtilsBadgesGet",
+            request.get("https://clarifygdps.com/gdutils/gdutils_roles.php").map(
+                [expect = std::move(expect), then = std::move(then)](web::WebResponse* response) {
+                    if (response->ok()) {
+                        then(response->string().value());
+                    } else {
+                        expect("Request failed");
+                    }
+
+                    RUNNING_REQUESTS.erase("@loaderGDUtilsBadgesGet");
+                    return *response;
+                }
+            )
+        );
+    }
+
     void loadPageFromUserInfo(GJUserScore* a2) {
         auto layer = m_mainLayer;
         CCMenuItemSpriteExtra* badgeBtn = nullptr;
@@ -197,23 +300,9 @@ class $modify(ProfilePage) {
                 modbadge_bool = true;
             }
 
-            std::vector<int> gdutils_accountID_devs = { 7026949, 6253758, 5509312 };
-            if (std::find(gdutils_accountID_devs.begin(), gdutils_accountID_devs.end(), a2->m_accountID) != gdutils_accountID_devs.end()) {
-                if (label != nullptr && !layer->getChildByIDRecursive("gdutils-badge")) {
-                    auto badgeGDUtil = CCSprite::create("gdutils_badge.png"_spr);
-                    badgeGDUtil->setScale(.3f);
-                    badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
-                        badgeGDUtil,
-                        this,
-                        menu_selector(NewProfilePage::onGDUtilsBadgePressed)
-                    );
-
-                    badgeGDUtilBtn->setID("gdutils-badge");
-                    username_menu->addChild(badgeGDUtilBtn);
-                }
-            }
-
             if (username_menu != nullptr) username_menu->updateLayout();
         }
+
+        requestGDUtilsBadges(a2->m_accountID, layer);
     }
 };
