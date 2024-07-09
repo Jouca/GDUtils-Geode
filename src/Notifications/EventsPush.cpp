@@ -354,7 +354,9 @@ void EventsPush::onClickBtn(CCObject* ret) {
             //DailyLevelPage::create(eventType == EventType::Weekly)->show();
             return;
         } else if (eventType == EventType::smallChest || eventType == EventType::largeChest) {
+            #ifndef GEODE_IS_MACOS
             RewardsPage::create()->show();
+            #endif
             return;
         }
     } else { // copy to clipboard
