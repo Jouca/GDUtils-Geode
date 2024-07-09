@@ -3,6 +3,7 @@
 #include "Geode/utils/general.hpp"
 #include <queue>
 #include <Geode/utils/web.hpp>
+#include <Geode/modify/RewardsPage.hpp>
 
 static std::unordered_map<std::string, web::WebTask> RUNNING_REQUESTS {};
 static std::mutex lock_var;
@@ -297,27 +298,44 @@ void EventsPush::onClickBtn(CCObject* ret) {
     if (events_layer->level->m_levelID == 0) return;
     std::string layerName = typeid(*layer).name() + 6;
     if (layerName != "PlayLayer" && layerName != "PauseLayer" && layerName != "LevelEditorLayer") { // redirect to level
-        if (eventType != EventType::Rate) { // EventType::NA should never happen
-            //DailyLevelPage::create(eventType == EventType::Weekly)->show();
-            return;
-        }
-        std::string const& url = "http://www.boomlings.com/database/getGJLevels21.php";
-        #ifndef GEODE_IS_MACOS
-        int level_id = events_layer->level->m_levelID.value();
-        #else // mac os 
-        int level_id = events_layer->levelId;
-        #endif
-        std::string const& fields = "secret=Wmfd2893gb7&type=0&str=" + std::to_string(level_id);
+        if (eventType == EventType::Rate) {
+            std::string const& url = "http://www.boomlings.com/database/getGJLevels21.php";
+            #ifndef GEODE_IS_MACOS
+            int level_id = events_layer->level->m_levelID.value();
+            #else // mac os 
+            int level_id = events_layer->levelId;
+            #endif
+            std::string const& fields = "secret=Wmfd2893gb7&type=0&str=" + std::to_string(level_id);
 
-        const std::lock_guard<std::mutex> lock(lock_var);
-        geode::utils::web::WebRequest request = web::WebRequest();
-        RUNNING_REQUESTS.emplace(
-            "@loaderEventRateNotification",
-            request.bodyString(fields).post(url).map(
-                [](web::WebResponse* response) {
-                    const std::lock_guard<std::mutex> lock(lock_var);
-                    if (response->ok()) {
-                        if (response->data().empty()) {
+            const std::lock_guard<std::mutex> lock(lock_var);
+            geode::utils::web::WebRequest request = web::WebRequest();
+            RUNNING_REQUESTS.emplace(
+                "@loaderEventRateNotification",
+                request.bodyString(fields).post(url).map(
+                    [](web::WebResponse* response) {
+                        const std::lock_guard<std::mutex> lock(lock_var);
+                        if (response->ok()) {
+                            if (response->data().empty()) {
+                                FLAlertLayer::create(nullptr,
+                                    "Error",
+                                    "An server error happened.",
+                                    "OK",
+                                    nullptr,
+                                    180.0F
+                                )->show();
+                            } else {
+                                auto data_result = response->string().value();
+                                if (data_result != "-1") {
+                                    auto scene = CCScene::create();
+                                    auto layer = LevelInfoLayer::create(EventsPush::convertLevelToJSON(data_result), false);
+                                    layer->downloadLevel();
+                                    scene->addChild(layer);
+                                    CCDirector::sharedDirector()->pushScene(cocos2d::CCTransitionFade::create(0.5f, scene));
+                                } else {
+                                    log::info("Level not found. (-1)");
+                                }
+                            }
+                        } else {
                             FLAlertLayer::create(nullptr,
                                 "Error",
                                 "An server error happened.",
@@ -325,33 +343,20 @@ void EventsPush::onClickBtn(CCObject* ret) {
                                 nullptr,
                                 180.0F
                             )->show();
-                        } else {
-                            auto data_result = response->string().value();
-                            if (data_result != "-1") {
-                                auto scene = CCScene::create();
-                                auto layer = LevelInfoLayer::create(EventsPush::convertLevelToJSON(data_result), false);
-                                layer->downloadLevel();
-                                scene->addChild(layer);
-                                CCDirector::sharedDirector()->pushScene(cocos2d::CCTransitionFade::create(0.5f, scene));
-                            } else {
-                                log::info("Level not found. (-1)");
-                            }
                         }
-                    } else {
-                        FLAlertLayer::create(nullptr,
-                            "Error",
-                            "An server error happened.",
-                            "OK",
-                            nullptr,
-                            180.0F
-                        )->show();
-                    }
 
-                    RUNNING_REQUESTS.erase("@loaderEventRateNotification");
-                    return *response;
-                }
-            )
-        );
+                        RUNNING_REQUESTS.erase("@loaderEventRateNotification");
+                        return *response;
+                    }
+                )
+            );
+        } else if (eventType == EventType::Daily) {
+            //DailyLevelPage::create(eventType == EventType::Weekly)->show();
+            return;
+        } else if (eventType == EventType::smallChest || eventType == EventType::largeChest) {
+            RewardsPage::create()->show();
+            return;
+        }
     } else { // copy to clipboard
         #ifndef GEODE_IS_MACOS
         clipboard::write(std::to_string(events_layer->level->m_levelID));
@@ -360,6 +365,7 @@ void EventsPush::onClickBtn(CCObject* ret) {
         #endif
     }
 }
+
 bool EventsPush::init(sio::message::ptr const& data) {
     auto scene = CCDirector::sharedDirector()->getRunningScene();
     // type
@@ -467,8 +473,12 @@ bool EventsPush::init(sio::message::ptr const& data) {
     // screen width divided by 2 / screen height divided by 2 = middle
 
     // TODO : click to notifications to be redirected to specific content
-    /*auto bg_btn = CCMenuItemSpriteExtra::create(bg_click_spr, this, menu_selector(EventsPush::onClickBtn));
-    menu->addChild(bg_btn);*/
+    auto layer = scene->getChildren()->objectAtIndex(0);
+    std::string layerName = typeid(*layer).name() + 6;
+    if (layerName != "PlayLayer" && layerName != "PauseLayer" && layerName != "LevelEditorLayer") {
+        auto bg_btn = CCMenuItemSpriteExtra::create(bg_click_spr, this, menu_selector(EventsPush::onClickBtn));
+        menu->addChild(bg_btn);
+    }
     
     menu->setPosition({ bg->getContentSize().width / 2, bg->getContentSize().height / 2 });
     bg->addChild(menu);
