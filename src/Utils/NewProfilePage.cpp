@@ -3,9 +3,6 @@
 #include <Geode/modify/ProfilePage.hpp>
 #include <Geode/utils/web.hpp>
 
-static std::unordered_map<std::string, web::WebTask> RUNNING_REQUESTS {};
-static std::mutex lock_var;
-
 void NewProfilePage::onBadgePressed(CCObject* pSender) {
     GJUserScore* score = static_cast<GJUserScore*>(static_cast<CCNode*>(pSender)->getUserObject());
     switch (score->m_modBadge) {
@@ -218,6 +215,10 @@ He is the <cy>only developer of the game</c> and is responsible for <cy>all the 
 
 // Mod badges descriptions & GDUtils dev badge
 class $modify(ProfilePage) {
+    struct Fields {
+        EventListener<web::WebTask> m_listener;
+    };
+
     void requestGDUtilsBadges(int accountID, CCLayer* layer) {
         const geode::utils::MiniFunction<void(std::string const&)> then = [this, accountID, layer](std::string const& result) {
             std::vector<std::string> data_user = MoreLeaderboards::getWords(result, "|");
@@ -333,22 +334,18 @@ class $modify(ProfilePage) {
             log::error("Failed to get GDUtils badges: {}", error);
         };
 
-        geode::utils::web::WebRequest request = web::WebRequest();
-        RUNNING_REQUESTS.emplace(
-            "@loaderGDUtilsBadgesGet",
-            request.get("https://clarifygdps.com/gdutils/gdutils_roles.php").map(
-                [expect = std::move(expect), then = std::move(then)](web::WebResponse* response) {
-                    if (response->ok()) {
-                        then(response->string().value());
-                    } else {
-                        expect("Request failed");
-                    }
-
-                    RUNNING_REQUESTS.erase("@loaderGDUtilsBadgesGet");
-                    return *response;
+        m_fields->m_listener.bind([expect = std::move(expect), then = std::move(then)] (web::WebTask::Event* e) {
+            if (web::WebResponse* res = e->getValue()) {
+                if (res->ok()) {
+                    then(res->string().value());
+                } else {
+                    expect("Request failed");
                 }
-            )
-        );
+            }
+        });
+
+        auto req = web::WebRequest();
+        m_fields->m_listener.setFilter(req.get("https://clarifygdps.com/gdutils/gdutils_roles.php"));
     }
 
     void loadPageFromUserInfo(GJUserScore* a2) {
