@@ -190,7 +190,7 @@ void NewProfilePage::onULHelperBadgePressed(CCObject* pSender) {
         R"text(
 <cg>Updated Leaderboard Helper</c> is a user that is helping the <cl>Updated Leaderboard</c> project by <cy>managing the project</c> with others <cy>UL Managers</c>.
 
-They are responsible of the <cy>management</c> of the leaderboards by <cy>adding new users</cy>, <cy>checking for cheaters</c> and <cy>managing the leaderboards</c> with the <cy>UL Managers</c>.
+They are responsible of the <cy>management</c> of the leaderboards by <cy>adding new users</c>, <cy>checking for cheaters</c> and <cy>managing the leaderboards</c> with the <cy>UL Managers</c>.
         )text",
         "OK",
         nullptr,
