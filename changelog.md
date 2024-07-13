@@ -1,4 +1,9 @@
 # Changelog
+## <cj>v1.3.3</c> <cb>(2024-07-13)</c>
+* <cg>Added</c> Updated Leaderboard staff badges
+* <cy>Adjusted</c> default parameters for Spotify to be <cb>false</cy>
+* <cy>Fixed</c> crash when closing profile page before the HTTP requests for getting custom badges finished
+
 ## <cj>v1.3.2</c> <cb>(2024-07-10)</c>
 * <cg>Added</c> Mac Support
 * <cg>Added</c> <cg>Monster</c>, Doom, <cj>Portal</c>, <cp>Strange</c>, <co>Fantasy</c>, <cy>Mystery</c>, <cg>Cursed</c>, <cy>World</c>, <co>Galaxy</c>, <cp>Universe</c> and <cp>Split</c> gauntlets particles

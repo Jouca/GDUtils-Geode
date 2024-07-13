@@ -1,6 +1,6 @@
 {
     "geode": "3.2.0",
-    "version": "v1.3.2",
+    "version": "v1.3.3",
     "gd": {
         "win": "2.206",
         "mac": "2.206",
@@ -24,7 +24,7 @@
         },
         {
             "id": "jouca.badgesapi",
-            "version": ">=v1.0.4",
+            "version": ">=v1.0.6",
             "importance": "required"
         }
     ],
@@ -178,13 +178,13 @@
             "name": "In Editor",
             "description": "Disabling this will not auto-mute Spotify when you are playing music in the Editor.",
             "type": "bool",
-            "default": true
+            "default": false
         },
         "inLevelsSpotify": {
             "name": "In Levels",
             "description": "Disabling this will not auto-mute Spotify when you are playing a level, and music is playing.",
             "type": "bool",
-            "default": true
+            "default": false
         },
         "spotifyApp": {
             "name": "Application",
