@@ -156,6 +156,51 @@ This badge is given to users that have contributed to the project by having merg
     )->show();
 }
 
+void NewProfilePage::onULDevBadgePressed(CCObject* pSender) {
+    FLAlertLayer::create(
+        nullptr,
+        "UL Developer",
+        R"text(
+<cg>Updated Leaderboard Developer</c> is a user that has contributed to the <cl>Updated Leaderboard</c> project by <cy>writing code</c> and <cy>managing the project</c>.
+
+They are responsible for <cy>all the updates and content</c> that is added to the <cl>Updated Leaderboard</c> project.
+        )text",
+        "OK",
+        nullptr,
+        350.0f
+    )->show();
+}
+
+void NewProfilePage::onULOfficerBadgePressed(CCObject* pSender) {
+    FLAlertLayer::create(
+        nullptr,
+        "UL Manager",
+        R"text(
+<cg>Updated Leaderboard Manager</c> is a user that is handling the <cl>Updated Leaderboard</c> project by <cy>managing the project</c> with others <cy>UL Helpers</c>.
+
+They are responsible of the <cy>management</c> and the <cy>Helper team</c> of the <cl>Updated Leaderboard</c> project and they have the same permissions as the <cy>UL Helpers</c>.
+        )text",
+        "OK",
+        nullptr,
+        350.0f
+    )->show();
+}
+
+void NewProfilePage::onULHelperBadgePressed(CCObject* pSender) {
+    FLAlertLayer::create(
+        nullptr,
+        "UL Helper",
+        R"text(
+<cg>Updated Leaderboard Helper</c> is a user that is helping the <cl>Updated Leaderboard</c> project by <cy>managing the project</c> with others <cy>UL Managers</c>.
+
+They are responsible of the <cy>management</c> of the leaderboards by <cy>adding new users</cy>, <cy>checking for cheaters</c> and <cy>managing the leaderboards</c> with the <cy>UL Managers</c>.
+        )text",
+        "OK",
+        nullptr,
+        350.0f
+    )->show();
+}
+
 void NewProfilePage::onRobTopBadgePressed(CCObject* pSender) {
     FLAlertLayer::create(
         nullptr,
@@ -199,10 +244,26 @@ class $modify(ProfilePage) {
 
                 if (accountID_data == accountID) {
                     if (badge == 1) {
+                        if (!layer->getChildByIDRecursive("gdutils-dev-badge")) {
+                            CCMenu* username_menu = typeinfo_cast<CCMenu*>(layer->getChildByIDRecursive("username-menu"));
+
+                            auto badgeGDUtil = CCSprite::createWithSpriteFrameName("gdutils_badge.png"_spr);
+                            badgeGDUtil->setScale(.3f);
+                            auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
+                                badgeGDUtil,
+                                layer,
+                                menu_selector(NewProfilePage::onGDUtilsDevBadgePressed)
+                            );
+
+                            badgeGDUtilBtn->setID("gdutils-dev-badge");
+                            username_menu->addChild(badgeGDUtilBtn);
+                            username_menu->updateLayout();
+                        }
+                    } else if (badge == 2) {
                         if (!layer->getChildByIDRecursive("gdutils-contributor-badge")) {
                             CCMenu* username_menu = typeinfo_cast<CCMenu*>(layer->getChildByIDRecursive("username-menu"));
 
-                            auto badgeGDUtil = CCSprite::create("contributorBadge.png"_spr);
+                            auto badgeGDUtil = CCSprite::createWithSpriteFrameName("contributorBadge.png"_spr);
                             badgeGDUtil->setScale(1.075f);
                             auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
                                 badgeGDUtil,
@@ -214,19 +275,51 @@ class $modify(ProfilePage) {
                             username_menu->addChild(badgeGDUtilBtn);
                             username_menu->updateLayout();
                         }
-                    } else if (badge == 2) {
-                        if (!layer->getChildByIDRecursive("gdutils-dev-badge")) {
+                    } else if (badge == 5) {
+                        if (!layer->getChildByIDRecursive("gdutils-ul-developer-badge")) {
                             CCMenu* username_menu = typeinfo_cast<CCMenu*>(layer->getChildByIDRecursive("username-menu"));
 
-                            auto badgeGDUtil = CCSprite::create("gdutils_badge.png"_spr);
-                            badgeGDUtil->setScale(.3f);
+                            auto badgeGDUtil = CCSprite::createWithSpriteFrameName("ul_dev_badge.png"_spr);
+                            badgeGDUtil->setScale(.75f);
                             auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
                                 badgeGDUtil,
                                 layer,
-                                menu_selector(NewProfilePage::onGDUtilsDevBadgePressed)
+                                menu_selector(NewProfilePage::onULDevBadgePressed)
                             );
 
-                            badgeGDUtilBtn->setID("gdutils-dev-badge");
+                            badgeGDUtilBtn->setID("gdutils-ul-developer-badge");
+                            username_menu->addChild(badgeGDUtilBtn);
+                            username_menu->updateLayout();
+                        }
+                    } else if (badge == 6) {
+                        if (!layer->getChildByIDRecursive("gdutils-ul-officer-badge")) {
+                            CCMenu* username_menu = typeinfo_cast<CCMenu*>(layer->getChildByIDRecursive("username-menu"));
+
+                            auto badgeGDUtil = CCSprite::createWithSpriteFrameName("ul_officer_badge.png"_spr);
+                            badgeGDUtil->setScale(.75f);
+                            auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
+                                badgeGDUtil,
+                                layer,
+                                menu_selector(NewProfilePage::onULOfficerBadgePressed)
+                            );
+
+                            badgeGDUtilBtn->setID("gdutils-ul-officer-badge");
+                            username_menu->addChild(badgeGDUtilBtn);
+                            username_menu->updateLayout();
+                        }
+                    } else if (badge == 7) {
+                        if (!layer->getChildByIDRecursive("gdutils-ul-helper-badge")) {
+                            CCMenu* username_menu = typeinfo_cast<CCMenu*>(layer->getChildByIDRecursive("username-menu"));
+
+                            auto badgeGDUtil = CCSprite::createWithSpriteFrameName("ul_helper_badge.png"_spr);
+                            badgeGDUtil->setScale(.75f);
+                            auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
+                                badgeGDUtil,
+                                layer,
+                                menu_selector(NewProfilePage::onULHelperBadgePressed)
+                            );
+
+                            badgeGDUtilBtn->setID("gdutils-ul-helper-badge");
                             username_menu->addChild(badgeGDUtilBtn);
                             username_menu->updateLayout();
                         }
@@ -278,7 +371,7 @@ class $modify(ProfilePage) {
                 modbadge->removeFromParentAndCleanup(true);
 
                 if (a2->m_userName == "RobTop") {
-                    auto robtopSpr = CCSprite::create("robtop_badge.png"_spr);
+                    auto robtopSpr = CCSprite::createWithSpriteFrameName("robtop_badge.png"_spr);
                     robtopSpr->setScale(.04f);
                     badgeBtn = CCMenuItemSpriteExtra::create(
                         robtopSpr,

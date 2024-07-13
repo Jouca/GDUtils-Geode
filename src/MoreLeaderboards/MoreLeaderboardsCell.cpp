@@ -22,7 +22,7 @@ void MoreLeaderboardsCell::loadFromDict(cocos2d::CCDictionary* content)
             usernameTemp = name;
         } else if (id == "3") {
             if (name == "0") {
-                auto robtopbadge = cocos2d::CCSprite::create("robtop_badge.png"_spr);
+                auto robtopbadge = cocos2d::CCSprite::createWithSpriteFrameName("robtop_badge.png"_spr);
                 robtopbadge->setPosition({ 30, 20 });
                 robtopbadge->setScale(0.05f);
                 this->m_mainLayer->addChild(robtopbadge);

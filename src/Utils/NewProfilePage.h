@@ -10,5 +10,8 @@ class NewProfilePage : public CCLayer {
         void onBadgePressed(CCObject* pSender);
         void onGDUtilsDevBadgePressed(CCObject* pSender);
         void onGDUtilsContributorBadgePressed(CCObject* pSender);
+        void onULDevBadgePressed(CCObject* pSender);
+        void onULOfficerBadgePressed(CCObject* pSender);
+        void onULHelperBadgePressed(CCObject* pSender);
         void onRobTopBadgePressed(CCObject* pSender);
 };

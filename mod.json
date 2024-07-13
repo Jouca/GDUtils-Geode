@@ -42,7 +42,8 @@
         "spritesheets": {
             "countries": ["resources/countries/*.png"],
             "gauntlets": ["resources/gauntlets/*.png"],
-            "betterprogression": ["resources/betterprogression/*.png"]
+            "betterprogression": ["resources/betterprogression/*.png"],
+            "badges": ["resources/badges/*.png"]
         }
     },
     "settings": {
