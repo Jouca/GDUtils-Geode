@@ -1,7 +1,8 @@
 # Changelog
 ## <cj>v1.3.4</c> <cb>(2024-07-16)</c>
-* <cg>Added</c> Daily/Weekly button notifications redirection
-* <cy>Fixed</c> Level button notifications redirection not correctly working
+* <cg>Added</c> Daily/Weekly level button notification redirection
+* <cg>Added</c> List level button notification redirection
+* <cy>Fixed</c> Level button notification redirection not correctly working
 * <cr>Removed</c> daily chests notifications coming up every 20 minutes, it will only be pushed during the loading of the game
 
 ## <cj>v1.3.3</c> <cb>(2024-07-13)</c>
