@@ -358,6 +358,13 @@ void EventsPush::onClickBtn(CCObject* ret) {
         } else if (eventType == EventType::Weekly) {
             DailyLevelPage::create(GJTimedLevelType::Weekly)->show();
             return;
+        } else if (eventType == EventType::List) {
+            if (events_layer->level->m_levelID == 0) return;
+
+            GJSearchObject* search_obj = GJSearchObject::create(SearchType::Search, std::to_string(events_layer->level->m_levelID));
+            search_obj->m_searchMode = 1;
+            LevelBrowserLayer::create(search_obj)->show();
+            return;
         } /*else if (eventType == EventType::smallChest) {
             RewardsPage::create()->show();
             return;
