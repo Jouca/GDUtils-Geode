@@ -1,5 +1,6 @@
 #include "EventsPush.h"
 #include "../Settings/CustomSettings.hpp"
+#include "DailyChest.h"
 #include "Geode/utils/general.hpp"
 #include <queue>
 #include <Geode/utils/web.hpp>
@@ -295,10 +296,11 @@ void EventsPush::onClickBtn(CCObject* ret) {
     if (layer == nullptr) return;
     auto events_layer = reinterpret_cast<EventsPush*>(scene->getChildByTag(1932));
     if (events_layer == nullptr) return;
-    if (events_layer->level->m_levelID == 0) return;
     std::string layerName = typeid(*layer).name() + 6;
     if (layerName != "PlayLayer" && layerName != "PauseLayer" && layerName != "LevelEditorLayer") { // redirect to level
         if (eventType == EventType::Rate) {
+            if (events_layer->level->m_levelID == 0) return;
+            
             std::string const& url = "http://www.boomlings.com/database/getGJLevels21.php";
             #ifndef GEODE_IS_MACOS
             int level_id = events_layer->level->m_levelID.value();
@@ -351,12 +353,15 @@ void EventsPush::onClickBtn(CCObject* ret) {
                 )
             );
         } else if (eventType == EventType::Daily) {
-            //DailyLevelPage::create(eventType == EventType::Weekly)->show();
+            DailyLevelPage::create(GJTimedLevelType::Daily)->show();
             return;
-        } else if (eventType == EventType::smallChest || eventType == EventType::largeChest) {
+        } else if (eventType == EventType::Weekly) {
+            DailyLevelPage::create(GJTimedLevelType::Weekly)->show();
+            return;
+        } /*else if (eventType == EventType::smallChest) {
             RewardsPage::create()->show();
             return;
-        }
+        }*/
     } else { // copy to clipboard
         #ifndef GEODE_IS_MACOS
         clipboard::write(std::to_string(events_layer->level->m_levelID));

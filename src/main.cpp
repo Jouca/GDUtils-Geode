@@ -95,12 +95,12 @@ bool setSocket(sio::socket::ptr sock) {
 }
 
 // Daily chests notifications
-void dailyChestThread() {
+/*void dailyChestThread() {
     while (true) {
         chestQueue.push(1);
-        std::this_thread::sleep_for(std::chrono::minutes(20));
+        std::this_thread::sleep_for(std::chrono::minutes(1));
     }
-}
+}*/
 
 void start_socket_func() {
     while (true) {
@@ -112,8 +112,8 @@ void start_socket_func() {
         sock.set_open_listener(&ConnectionHandler::onSuccess);
         sock.set_close_listener(&ConnectionHandler::onClose);
         sock.set_fail_listener(&ConnectionHandler::onFail);
-        sock.connect("http://gdutils.clarifygdps.com:13573");
-        //sock.connect("http://gdutilstest.clarifygdps.com:46276");
+        //sock.connect("http://gdutils.clarifygdps.com:13573");
+        sock.connect("http://gdutilstest.clarifygdps.com:46276");
         if (!connect_finish) {
             cond.wait(unique_lock);
         }
@@ -169,10 +169,10 @@ class $modify(CCScheduler) { // used to be GameManager
         if (currentLayer != layerName) {
             currentLayer = layerName;
             EventsPush::stopNow(scene);
-            processChestEvent(scene);
             bool everywhereElse = Mod::get()->getSettingValue<bool>("everywhereElse");
             if ((layerName != "LevelEditorLayer" && layerName != "PlayLayer") && !everywhereElse) return;
             if ((layerName != "LevelEditorLayer" && layerName != "PlayLayer") && everywhereElse) {
+                processChestEvent(scene);
                 processEvent(scene);
             }
         }
@@ -406,11 +406,11 @@ class $modify(MenuLayer) {
     bool init() {
         if (!MenuLayer::init()) return false;
         
-        if (!is_dailychest_ready) {
+        /*if (!is_dailychest_ready) {
             std::thread hThread(dailyChestThread);
             hThread.detach();
             is_dailychest_ready = true;
-        }
+        }*/
 
         return true;
     }
@@ -419,6 +419,9 @@ class $modify(MenuLayer) {
 // When the socket connection is made
 $on_mod(Loaded) {
     log::info("GDUtils Mod Loaded");
+
+    chestQueue.push(1);
+
     bool startSocketServer = Mod::get()->getSettingValue<bool>("socketServer");
     if (startSocketServer) {
         current_socket = sio::socket::ptr();

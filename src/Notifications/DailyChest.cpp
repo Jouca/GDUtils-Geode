@@ -1,6 +1,9 @@
 #include "DailyChest.h"
 #include "EventsPush.h"
 
+static GJRewardItem* time1 = nullptr;
+static GJRewardItem* time2 = nullptr;
+
 void DailyChest::getRewards(unsigned int type) {
     GameLevelManager* glm = GameLevelManager::sharedState();
     glm->m_GJRewardDelegate = this;
@@ -16,8 +19,8 @@ void DailyChest::rewardsStatusFinished(int p0) {
     // Get the rewards
     int time1_value = 0x1;
     int time2_value = 0x2;
-    GJRewardItem* time1 = typeinfo_cast<GJRewardItem*>(gsm->m_rewardItems->objectForKey(time1_value));
-    GJRewardItem* time2 = typeinfo_cast<GJRewardItem*>(gsm->m_rewardItems->objectForKey(time2_value));
+    time1 = typeinfo_cast<GJRewardItem*>(gsm->m_rewardItems->objectForKey(time1_value));
+    time2 = typeinfo_cast<GJRewardItem*>(gsm->m_rewardItems->objectForKey(time2_value));
 
     sio::message::ptr msg = sio::object_message::create();
     msg->get_map()["sprite"] = sio::string_message::create("GJ_square04.png");
