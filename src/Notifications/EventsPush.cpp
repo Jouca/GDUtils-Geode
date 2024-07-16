@@ -864,8 +864,9 @@ bool EventsPush::init(sio::message::ptr const& data) {
         nullptr
     ));
 
-    if (Mod::get()->getSettingValue<bool>("sfx") && type != 3 && type != 4) FMODAudioEngine::sharedEngine()->playEffect("crystal01.ogg");
-    if (Mod::get()->getSettingValue<bool>("sfx") && (type == 3 || type == 4)) FMODAudioEngine::sharedEngine()->playEffect("reward01.ogg");
+    auto volume = GameManager::get()->m_sfxVolume;
+    if (Mod::get()->getSettingValue<bool>("sfx") && type != 3 && type != 4) FMODAudioEngine::sharedEngine()->playEffect("crystal01.ogg", 1, 1, volume);
+    if (Mod::get()->getSettingValue<bool>("sfx") && (type == 3 || type == 4)) FMODAudioEngine::sharedEngine()->playEffect("reward01.ogg", 1, 1, volume);
 
     return true;
 }
