@@ -41,7 +41,7 @@ class $modify(CustomGauntletSelectLayer, GauntletSelectLayer) {
             nullptr,
             "Gauntlets redesign",
             R"text(
-    All <cl>new designs for Gauntlets</c> are made by <cy>Zidnes</c>.
+    All <cl>new designs for Gauntlets</c> are made by <cy>Zidnes</c> and <cy>brift</c>.
     <cl>Particles</c> are made by <cy>GammaReXx</c>.
 
     Thanks for their contributions!
@@ -638,6 +638,36 @@ class $modify(CustomGauntletSelectLayer, GauntletSelectLayer) {
                         particle2->setScaleY(1.155f);
                     } else if (gauntletName == "Water") {
                         CCSprite* sprite = CCSprite::createWithSpriteFrameName("water_gauntlet.png"_spr);
+                        sprite->setPosition(bg->getPosition());
+                        sprite->setScale(1.270f);
+                        sprite->setZOrder(0);
+                        node->addChild(sprite);
+                    } else if (gauntletName == "Fire") {
+                        CCSprite* sprite = CCSprite::createWithSpriteFrameName("fire_gauntlet.png"_spr);
+                        sprite->setPosition(bg->getPosition());
+                        sprite->setScale(1.270f);
+                        sprite->setZOrder(0);
+                        node->addChild(sprite);
+                    } else if (gauntletName == "Ice") {
+                        CCSprite* sprite = CCSprite::createWithSpriteFrameName("ice_gauntlet.png"_spr);
+                        sprite->setPosition(bg->getPosition());
+                        sprite->setScale(1.270f);
+                        sprite->setZOrder(0);
+                        node->addChild(sprite);
+                    } else if (gauntletName == "Poison") {
+                        CCSprite* sprite = CCSprite::createWithSpriteFrameName("poison_gauntlet.png"_spr);
+                        sprite->setPosition(bg->getPosition());
+                        sprite->setScale(1.270f);
+                        sprite->setZOrder(0);
+                        node->addChild(sprite);
+                    } else if (gauntletName == "Time") {
+                        CCSprite* sprite = CCSprite::createWithSpriteFrameName("time_gauntlet.png"_spr);
+                        sprite->setPosition(bg->getPosition());
+                        sprite->setScale(1.270f);
+                        sprite->setZOrder(0);
+                        node->addChild(sprite);
+                    } else if (gauntletName == "Spike") {
+                        CCSprite* sprite = CCSprite::createWithSpriteFrameName("spike_gauntlet.png"_spr);
                         sprite->setPosition(bg->getPosition());
                         sprite->setScale(1.270f);
                         sprite->setZOrder(0);

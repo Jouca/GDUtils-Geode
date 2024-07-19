@@ -1,6 +1,6 @@
 # Changelog
 ## <cj>v1.3.5</c> <cb>(---)</c>
-* <cg>Added</c> <cj>Water</c> gauntlet design
+* <cg>Added</c> <co>Fire</c>, <cj>Ice</c>, <cg>Poison</c>, <cb>Time</c>, <co>Spike</c> and <cj>Water</c> gauntlet design
 * <cg>Added</c> SFX volume for notifications (using current SFX volume for GD)
 
 ## <cj>v1.3.4</c> <cb>(2024-07-16)</c>
