@@ -669,7 +669,13 @@ class $modify(CustomGauntletSelectLayer, GauntletSelectLayer) {
                     } else if (gauntletName == "Spike") {
                         CCSprite* sprite = CCSprite::createWithSpriteFrameName("spike_gauntlet.png"_spr);
                         sprite->setPosition(bg->getPosition());
-                        sprite->setScale(1.270f);
+                        sprite->setScale(1.920f);
+                        sprite->setZOrder(0);
+                        node->addChild(sprite);
+                    } else if (gauntletName == "Shadow") {
+                        CCSprite* sprite = CCSprite::createWithSpriteFrameName("shadow_gauntlet.png"_spr);
+                        sprite->setPosition(bg->getPosition());
+                        sprite->setScale(1.745f);
                         sprite->setZOrder(0);
                         node->addChild(sprite);
                     } else if (gauntletName == "NCS I") {
