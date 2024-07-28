@@ -2,7 +2,7 @@
 ## <cj>v1.3.6</c> <cb>(2024-07-28)</c>
 * <cg>Added</c> <cp>Shadow</c> gauntlet design
 * <cy>Changed</c> <cb>Time</c> and <co>Spike</c> gauntlet designs
-* <cy>Fixed</c> redirecting nofications that was crashing when clicking on it (again)
+* <cy>Fixed</c> redirecting notifications that was crashing when clicking on it (again)
 
 ## <cj>v1.3.5</c> <cb>(2024-07-20)</c>
 * <cg>Added</c> <co>Fire</c>, <cj>Ice</c>, <cg>Poison</c>, <cb>Time</c>, <co>Spike</c> and <cj>Water</c> gauntlet design (thanks brift for joining the project for gauntlets!)
