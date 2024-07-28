@@ -1,4 +1,8 @@
 # Changelog
+## <cj>v1.3.6</c> <cb>(2024-07-28)</c>
+* <cy>Changed</c> <cb>Time</c> gauntlet design
+* <cy>Fixed</c> redirecting nofications that was crashing when clicking on it
+
 ## <cj>v1.3.5</c> <cb>(2024-07-20)</c>
 * <cg>Added</c> <co>Fire</c>, <cj>Ice</c>, <cg>Poison</c>, <cb>Time</c>, <co>Spike</c> and <cj>Water</c> gauntlet design (thanks brift for joining the project for gauntlets!)
 * <cg>Added</c> SFX volume for notifications (using current SFX volume for GD)
