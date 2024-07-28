@@ -1,4 +1,7 @@
 # Changelog
+## <cj>v1.3.7</c> <cb>(---)</c>
+* <cg>Added</c> Notifications SFX settings
+
 ## <cj>v1.3.6</c> <cb>(2024-07-28)</c>
 * <cg>Added</c> <cp>Shadow</c> gauntlet design
 * <cy>Changed</c> <cb>Time</c> and <co>Spike</c> gauntlet designs

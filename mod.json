@@ -119,6 +119,24 @@
             "type": "bool",
             "default": true
         },
+        "sfx-link": {
+            "name": "Link Game SFX to Notification",
+            "description": "Link the game's SFX to the GDUtils notification SFX.",
+            "type": "bool",
+            "default": true
+        },
+        "sfx-volume": {
+            "name": "SFX Volume",
+            "description": "The volume of the notification sound effect.\n\n<cr>Can only be applied if 'Link Game SFX to Notification' is disabled.</c>",
+            "type": "float",
+            "default": 1,
+            "min": 0.0,
+            "max": 1,
+            "control": {
+                "slider-step": 0.0001,
+                "arrows": false
+            }
+        },
         "customDifficultyFaces": {
             "name": "Custom Difficulty Faces",
             "description": "Enable custom difficulty faces for Legendary/Mythic",
