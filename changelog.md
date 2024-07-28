@@ -1,5 +1,5 @@
 # Changelog
-## <cj>v1.3.7</c> <cb>(---)</c>
+## <cj>v1.3.7</c> <cb>(2024-07-28)</c>
 * <cg>Added</c> Notifications SFX settings
 
 ## <cj>v1.3.6</c> <cb>(2024-07-28)</c>
