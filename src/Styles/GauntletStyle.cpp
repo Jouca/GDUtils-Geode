@@ -663,7 +663,7 @@ class $modify(CustomGauntletSelectLayer, GauntletSelectLayer) {
                     } else if (gauntletName == "Time") {
                         CCSprite* sprite = CCSprite::createWithSpriteFrameName("time_gauntlet.png"_spr);
                         sprite->setPosition(bg->getPosition());
-                        sprite->setScale(1.270f);
+                        sprite->setScale(1.220f);
                         sprite->setZOrder(0);
                         node->addChild(sprite);
                     } else if (gauntletName == "Spike") {

@@ -309,13 +309,11 @@ void EventsPush::onClickBtn(CCObject* ret) {
             #endif
             std::string const& fields = "secret=Wmfd2893gb7&type=0&str=" + std::to_string(level_id);
 
-            const std::lock_guard<std::mutex> lock(lock_var);
             geode::utils::web::WebRequest request = web::WebRequest();
             RUNNING_REQUESTS.emplace(
                 "@loaderEventRateNotification",
                 request.bodyString(fields).post(url).map(
                     [](web::WebResponse* response) {
-                        const std::lock_guard<std::mutex> lock(lock_var);
                         if (response->ok()) {
                             if (response->data().empty()) {
                                 FLAlertLayer::create(nullptr,
