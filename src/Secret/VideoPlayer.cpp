@@ -4,6 +4,7 @@
 
 // NO MUSIC BECUASE SOMEONE FORGOT TO ADD FMOD FIELDS :(
 
+#include "fmod.h"
 #define PL_MPEG_IMPLEMENTATION
 #include "VideoPlayer.hpp"
 #ifdef GEODE_IS_WINDOWS
@@ -135,10 +136,7 @@ namespace videoplayer {
         m_samples = {};
         engine->m_system->createStream(nullptr, FMOD_OPENUSER, &soundInfo, &m_sound);
 
-        FMOD::ChannelGroup* group;
-        engine->m_globalChannel->getChannelGroup(&group);
-
-        engine->m_system->playSound(m_sound, group, false, &m_channel);
+        engine->m_system->playSound(m_sound, engine->m_globalChannel, false, &m_channel);
         m_channel->setVolume(m_volume);
         
         m_channel->setUserData(this);

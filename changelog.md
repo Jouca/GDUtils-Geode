@@ -1,4 +1,7 @@
 # Changelog
+## <cj>v1.3.8</c> <cb>(2024-08-06)</c>
+* <cy>Fixed</c> crash with Notifications Server conflicting with Mega Hack.
+
 ## <cj>v1.3.7</c> <cb>(2024-07-28)</c>
 * <cg>Added</c> Notifications SFX settings
 

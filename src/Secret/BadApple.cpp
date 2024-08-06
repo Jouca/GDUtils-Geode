@@ -177,7 +177,9 @@ class $modify(SecretVault, SecretLayer2) {
     }
 
     void launchBadApple(CCObject* pSender) {
+        
         //GameSoundManager::sharedManager()->stopBackgroundMusic();
+        FMODAudioEngine::sharedEngine()->stopAllMusic();
         auto scene = cocos2d::CCScene::create();
         auto layer = BadApple::create();
         scene->addChild(layer);
@@ -199,6 +201,7 @@ class $modify(SecretVault, SecretLayer2) {
 
     void launchCOTE(CCObject* pSender) {
         //GameSoundManager::sharedManager()->stopBackgroundMusic();
+        FMODAudioEngine::sharedEngine()->stopAllMusic();
         auto scene = cocos2d::CCScene::create();
         auto layer = COTE::create();
         scene->addChild(layer);
