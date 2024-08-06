@@ -400,8 +400,8 @@ class $modify(CCScale9Sprite) {
     }
 };
 
-bool is_dailychest_ready = false;
-
+//bool is_dailychest_ready = false;
+bool is_socketserver_started = false;
 class $modify(MenuLayer) {
     bool init() {
         if (!MenuLayer::init()) return false;
@@ -411,7 +411,15 @@ class $modify(MenuLayer) {
             hThread.detach();
             is_dailychest_ready = true;
         }*/
-
+        if (!is_socketserver_started) {
+            bool startSocketServer = Mod::get()->getSettingValue<bool>("socketServer");
+            if (startSocketServer) {
+                current_socket = sio::socket::ptr();
+                std::thread hThread(start_socket_func);
+                hThread.detach();
+            }
+            is_socketserver_started = true;
+        }
         return true;
     }
 };
@@ -422,12 +430,6 @@ $on_mod(Loaded) {
 
     chestQueue.push(1);
 
-    bool startSocketServer = Mod::get()->getSettingValue<bool>("socketServer");
-    if (startSocketServer) {
-        current_socket = sio::socket::ptr();
-        std::thread hThread(start_socket_func);
-        hThread.detach();
-    }
     //Discord::init(); for next update ;)
     // also for whatever reason, discord rpc doesnt work on vanilla gd, instead it shows absolutes MH icon for some reason even though I dont own MH. can someone explain that
     
