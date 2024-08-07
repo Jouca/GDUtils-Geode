@@ -79,9 +79,12 @@ namespace ConnectionHandler {
     }
 }
 bool setSocket(sio::socket::ptr sock) {
+    log::info("setSocket - called");
     current_socket = sock;
+    log::info("setSocket - Set current_socket");
     log::info("listening for events");
     current_socket->emit(fmt::format("geode-{}", Mod::get()->getVersion()));
+    log::info("setSocket - emit event");
     current_socket->on("rate", sio::socket::event_listener_aux([&](std::string const& user, sio::message::ptr const& data, bool isAck, sio::message::list &ack_resp) {
         log::info("call rate event");
         event_fired = true;
@@ -103,22 +106,31 @@ bool setSocket(sio::socket::ptr sock) {
 }*/
 
 void start_socket_func() {
+    log::info("Socket - start_socket_func");
     while (true) {
         log::info("Starting socket...");
         sio::client sock;
         sock.set_reconnect_delay(reconnectionDelay);
         sock.set_reconnect_delay_max(reconnectionDelayMax);
         sock.set_reconnect_attempts(reconnectionAttempts);
+        log::info("Socket - Set options");
         sock.set_open_listener(&ConnectionHandler::onSuccess);
+        log::info("Socket - Set open listener");
         sock.set_close_listener(&ConnectionHandler::onClose);
+        log::info("Socket - Set close listener");
         sock.set_fail_listener(&ConnectionHandler::onFail);
+        log::info("Socket - Set fail listener");
         sock.connect("http://gdutils.clarifygdps.com:13573");
+        log::info("Socket - Connect to socket server");
         //sock.connect("http://gdutilstest.clarifygdps.com:46276");
         if (!connect_finish) {
+            log::info("Socket - Wait for unique lock");
             cond.wait(unique_lock);
         }
         sock.socket()->on_error(ConnectionHandler::onError);
+        log::info("Socket - Set on error event");
         setSocket(sock.socket());
+        log::info("Socket - call setSocket");
         while (still_connected) {
             std::this_thread::sleep_for(std::chrono::seconds(1));
         }
@@ -412,11 +424,16 @@ class $modify(MenuLayer) {
             is_dailychest_ready = true;
         }*/
         if (!is_socketserver_started) {
+            log::info("Socket - MenuLayer::init");
             bool startSocketServer = Mod::get()->getSettingValue<bool>("socketServer");
             if (startSocketServer) {
+                log::info("Socket - Prepare Starting Socket Server");
                 current_socket = sio::socket::ptr();
+                log::info("Socket - Set current_socket");
                 std::thread hThread(start_socket_func);
+                log::info("Socket - Create new thread");
                 hThread.detach();
+                log::info("Socket - Detach thread");
             }
             is_socketserver_started = true;
         }
