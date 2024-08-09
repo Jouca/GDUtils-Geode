@@ -452,6 +452,7 @@ $on_mod(Loaded) {
     
     Mod::get()->addCustomSetting<SettingTestValue>("test-notification", "none");
     Mod::get()->addCustomSetting<SettingPosValue>("notificationPlacement", 4);
+    Mod::get()->addCustomSetting<SettingDLPosValue>("demonListSelection", 2);
     // Sections
     Mod::get()->addCustomSetting<SettingSectionValue>("notification-section", "none");
     Mod::get()->addCustomSetting<SettingSectionValue>("notification-placement-section", "none");

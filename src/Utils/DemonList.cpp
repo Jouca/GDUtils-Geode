@@ -2,6 +2,7 @@
 #include <string>
 #include <Geode/modify/LevelInfoLayer.hpp>
 #include <Geode/utils/web.hpp>
+#include "../Settings/CustomSettings.hpp"
 
 
 // demon list
@@ -103,33 +104,54 @@ class $modify(LevelInfoLayer) {
             const geode::utils::MiniFunction<void(Result<matjson::Value>)> then = [this, level, levelID, loading_circle, positionLabel, demonSpr, winSize](Result<matjson::Value> const& result_json) {
                 matjson::Value json = result_json.value();
 
-                if (loading_circle != nullptr) {
-                    loading_circle->fadeAndRemove();
-                }
-                auto scene = CCDirector::sharedDirector()->getRunningScene();
-                if (json.dump() == "[]") { //idk how to check size, doing .count crashes
-                    log::info("Level not found in pointercrate.");
-                    this->release();
+                int listId = Mod::get()->getSettingValue<SettingDLPosStruct>("demonListSelection").m_pos;
+
+                if (listId == 2) {
+                    if (loading_circle != nullptr) {
+                        loading_circle->fadeAndRemove();
+                    }
+                    auto scene = CCDirector::sharedDirector()->getRunningScene();
+                    if (json.dump() == "[]") { //idk how to check size, doing .count crashes
+                        log::info("Level not found in Pointercrate.");
+                        this->release();
+                    } else {
+                        auto info = json.get<matjson::Value>(0);
+                        auto position = info.get<int>("position");
+                        positionLabel->setString(fmt::format("#{}", position).c_str());
+                        positionLabel->setScale(getScaleBasedPos(position));
+                        positionLabel->setVisible(true);
+                        demonSpr->setVisible(true);
+                        set(levelID, position);
+                        log::info("Level found in Pointercrate! {} at #{}", level->m_levelName.c_str(), position);
+                        this->release();
+                    }
                 } else {
-                    auto info = json.get<matjson::Value>(0);
-                    auto position = info.get<int>("position");
-                    positionLabel->setString(fmt::format("#{}", position).c_str());
-                    positionLabel->setScale(getScaleBasedPos(position));
-                    positionLabel->setVisible(true);
-                    demonSpr->setVisible(true);
-                    set(levelID, position);
-                    log::info("Level found in Pointercrate! {} at #{}", level->m_levelName.c_str(), position);
-                    this->release();
+                    if (loading_circle != nullptr) {
+                        loading_circle->fadeAndRemove();
+                    }
+                    auto scene = CCDirector::sharedDirector()->getRunningScene();
+                    if (json.contains("code")) {
+                        this->release();
+                    } else {
+                        auto position = json.get<int>("position");
+                        positionLabel->setString(fmt::format("#{}", position).c_str());
+                        positionLabel->setScale(getScaleBasedPos(position));
+                        positionLabel->setVisible(true);
+                        demonSpr->setVisible(true);
+                        set(levelID, position);
+                        log::info("Level found in AREDL! {} at #{}", level->m_levelName.c_str(), position);
+                        this->release();
+                    }
                 }
             };
             const geode::utils::MiniFunction<void(std::string const&)> expect = [this, loading_circle](std::string const& error) {
                 if (loading_circle != nullptr) {
                     loading_circle->fadeAndRemove();
                 }
-                log::error("Error while sending a request to Pointercrate: {}", error);
+                log::error("Error while sending a request to Demon List: {}", error);
                 FLAlertLayer::create(nullptr,
                     "Error",
-                    "Failed to make a request to <cy>Pointercrate</c>. Please either <cg>try again later</c>, look at the error logs to see what might have happened, or report this to the developers.",
+                    "Failed to make a request to <cy>Demon List</c>. Please either <cg>try again later</c>, look at the error logs to see what might have happened, or report this to the developers.",
                     "OK",
                     nullptr,
                     350.0F
@@ -137,11 +159,19 @@ class $modify(LevelInfoLayer) {
                 this->release();
             };
 
+            int listId = Mod::get()->getSettingValue<SettingDLPosStruct>("demonListSelection").m_pos;
+            std::string url = "";
+            if (listId == 2) {
+                url = fmt::format("https://pointercrate.com/api/v2/demons/listed/?name={}", url_encode(level->m_levelName).c_str());
+            } else {
+                url = fmt::format("https://api.aredl.net/api/aredl/levels/{}", levelID);
+            }
+
             geode::utils::web::WebRequest request = web::WebRequest();
             const std::lock_guard<std::mutex> lock(lock_var);
             RUNNING_REQUESTS.emplace(
                 "@loaderDemonListLevelInfo",
-                request.get(fmt::format("https://pointercrate.com/api/v2/demons/listed/?name={}", url_encode(level->m_levelName).c_str())).map(
+                request.get(url.c_str()).map(
                     [expect = std::move(expect), then = std::move(then)](web::WebResponse* response) {
                         const std::lock_guard<std::mutex> lock(lock_var);
                         if (response->ok()) {

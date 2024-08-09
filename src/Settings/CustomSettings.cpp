@@ -17,6 +17,9 @@ SettingNode* SettingAppValue::createNode(float width) {
 SettingNode* SettingPosValue::createNode(float width) {
     return SettingPosNode::create(this, width);
 }
+SettingNode* SettingDLPosValue::createNode(float width) {
+    return SettingDLNode::create(this, width);
+}
 SettingNode* SettingCreditsValue::createNode(float width) {
     return SettingCreditsNode::create(this, width);
 }

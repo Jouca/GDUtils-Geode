@@ -229,6 +229,11 @@
             "type": "bool",
             "default": true
         },
+        "demonListSelection": {
+            "name": "Demon List Selection",
+            "description": "Whether or not to select between <cg>Pointercrate</c> or <cg>AreDL</c> for placements.",
+            "type": "custom"
+        },
         "levelsProtocol": {
             "name": "Allow Levels Protocol",
             "description": "Whether or not to allow <cg>Geometry Dash</c> to <cy>redirect to a level</c> if you were to use a <cy>https://gdutils.com/</c> url, or <cy>gdutils:</c> protocol.",
