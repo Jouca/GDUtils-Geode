@@ -1,5 +1,7 @@
 # Changelog
 ## <cj>v1.3.8</c> <cb>(2024-08-06)</c>
+* <cg>Added</c> GDUtils GFX and GD Awards badges.
+* <cy>Changed</c> badges for GDUtils Developer and GDUtils collaborator badges.
 * <cy>Fixed</c> crash with Notifications Server conflicting with Mega Hack.
 
 ## <cj>v1.3.7</c> <cb>(2024-07-28)</c>
