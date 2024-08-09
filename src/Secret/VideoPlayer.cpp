@@ -136,7 +136,7 @@ namespace videoplayer {
         m_samples = {};
         engine->m_system->createStream(nullptr, FMOD_OPENUSER, &soundInfo, &m_sound);
 
-        engine->m_system->playSound(m_sound, engine->m_globalChannel, false, &m_channel);
+        engine->m_system->playSound(m_sound, engine->getChannelGroup(0, false), false, &m_channel);
         m_channel->setVolume(m_volume);
         
         m_channel->setUserData(this);
