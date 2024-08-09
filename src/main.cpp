@@ -18,9 +18,7 @@
 #include <thread>
 #include <queue>
 #include <unordered_map>
-#include <algorithm>
 #include <string>
-#include <sstream>
 #include "Notifications/DailyChest.h"
 #include <codecvt>
 
@@ -31,8 +29,8 @@ int reconnectionDelay = 1000;
 int reconnectionDelayMax = 5000;
 int reconnectionAttempts = 1000;
 
-bool still_connected = false;
-bool connect_finish = false;
+std::atomic<bool> connect_finish(false);
+std::atomic<bool> still_connected(false);
 
 bool event_fired = false;
 
@@ -41,9 +39,9 @@ std::queue<sio::message::ptr> dataQueue;
 std::queue<int> chestQueue;
 
 sio::message::ptr event_data = nullptr;
-std::mutex lock;
+/*std::mutex lock;
 std::unique_lock<std::mutex> unique_lock(lock);
-std::condition_variable cond;
+std::condition_variable cond;*/ 
 sio::socket::ptr current_socket;
 
 // for some reason log and fmt dont work together on android
@@ -61,7 +59,7 @@ namespace ConnectionHandler {
         log::info("Socket Connection successful!");
         connect_finish = true;
         still_connected = true;
-        cond.notify_all();
+        //cond.notify_all();
     }
 
     void onClose(sio::client::close_reason const& reason) {
@@ -110,6 +108,7 @@ void start_socket_func() {
     while (true) {
         log::info("Starting socket...");
         sio::client sock;
+        connect_finish = false;
         sock.set_reconnect_delay(reconnectionDelay);
         sock.set_reconnect_delay_max(reconnectionDelayMax);
         sock.set_reconnect_attempts(reconnectionAttempts);
@@ -122,17 +121,22 @@ void start_socket_func() {
         log::info("Socket - Set fail listener");
         sock.connect("http://gdutils.clarifygdps.com:13573");
         log::info("Socket - Connect to socket server");
-        //sock.connect("http://gdutilstest.clarifygdps.com:46276");
-        if (!connect_finish) {
-            log::info("Socket - Wait for unique lock");
-            cond.wait(unique_lock);
+        auto start_time = std::chrono::steady_clock::now();
+        while (!connect_finish) {
+            if (std::chrono::steady_clock::now() - start_time > std::chrono::seconds(10)) {
+                log::error("Connection timeout");
+                break;
+            }
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
-        sock.socket()->on_error(ConnectionHandler::onError);
-        log::info("Socket - Set on error event");
-        setSocket(sock.socket());
-        log::info("Socket - call setSocket");
-        while (still_connected) {
-            std::this_thread::sleep_for(std::chrono::seconds(1));
+        if (connect_finish) {
+            sock.socket()->on_error(ConnectionHandler::onError);
+            log::info("Socket - Set on error event");
+            setSocket(sock.socket());
+            log::info("Socket - call setSocket");
+            while (still_connected) {
+                std::this_thread::sleep_for(std::chrono::seconds(1));
+            }
         }
         if (!still_connected) {
             log::warn("Disconnected from server. Attempting to reconnect...");
