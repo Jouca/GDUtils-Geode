@@ -1,6 +1,7 @@
 # Changelog
 ## <cj>v1.3.8</c> <cb>(2024-08-06)</c>
 * <cg>Added</c> GDUtils GFX and GD Awards badges.
+* <cg>Added</c> setting to show buttons for previewing icons colors when they are not unlocked.
 * <cy>Changed</c> badges for GDUtils Developer and GDUtils collaborator badges.
 * <cy>Fixed</c> crash with Notifications Server conflicting with Mega Hack.
 

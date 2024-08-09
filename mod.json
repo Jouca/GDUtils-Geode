@@ -253,6 +253,12 @@
             "type": "bool",
             "default": true
         },
+        "previewIcons": {
+            "name": "Preview Icons",
+            "description": "Show some buttons to preview icons in the <cg>Icon Kit</c> for those who haven't been unlocked yet.",
+            "type": "bool",
+            "default": true
+        },
         "background-section": {
             "name": "Backgrounds",
             "description": "This category is for changing the <cy>background colors</c>.",
