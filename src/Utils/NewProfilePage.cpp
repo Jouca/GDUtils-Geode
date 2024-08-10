@@ -169,13 +169,13 @@ void NewProfilePage::onGDUtilsArtistBadgePressed(CCObject* pSender) {
 void NewProfilePage::onGDUtilsGDAwards2023BadgePressed(CCObject* pSender) {
     FLAlertLayer::create(
         nullptr,
-        "GDUtils GDAwards",
+        "GD Awards 2023 Winner",
         R"text(
-<cg>GDUtils GDAwards</c> is a user that won the <cg>GD Award 2023 Edition</c> published on <cg>RobTop YouTube channel</c>.
+<cy>GD Awards 2023 Winner</c> is a user that won the <cg>GD Award 2023 Edition</c> published on <cy>RobTopGames YouTube channel</c>.
         )text",
         "OK",
         nullptr,
-        250.0f
+        300.0f
     )->show();
 } 
 
