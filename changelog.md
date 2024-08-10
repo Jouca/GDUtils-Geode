@@ -5,7 +5,6 @@
 * <cg>Added</c> GDUtils GFX and GD Awards badges.
 * <cg>Added</c> setting to show buttons for previewing icons colors when they are not unlocked.
 * <cy>Changed</c> badges for GDUtils Developer and GDUtils collaborator badges.
-* <cy>Fixed</c> crash with Notifications Server conflicting with Mega Hack.
 
 ## <cj>v1.3.7</c> <cb>(2024-07-28)</c>
 * <cg>Added</c> Notifications SFX settings
