@@ -7,6 +7,8 @@
 <img src="https://img.shields.io/github/commits-since/Jouca/GDUtils-Geode/latest?style=for-the-badge" style="text-align: center;"></img>
 <img src="https://img.shields.io/github/created-at/Jouca/GDUtils-Geode?style=for-the-badge" style="text-align: center;"></img>
 
+**Support us on Ko-Fi** : [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/G2G711NJVI)
+
 **By [Jouca](https://github.com/Jouca) and [Firee](https://github.com/FireMario211)**
 A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute, game fixes & more!
 ![Mod Example](resources/Screenshot_1.png)
