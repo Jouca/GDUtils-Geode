@@ -11,7 +11,7 @@
 A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute, game fixes & more!
 ![Mod Example](resources/Screenshot_1.png)
 
-# [![Ko-Fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/G2G711NJVI)
+[![Ko-Fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/G2G711NJVI)
 By supporting us on **Ko-Fi**, you contribute to **help developers** for their **work on the mod**, but also for the **rent of the server** we use for **notifications, URL redirection & more!**
 
 **Extra perks for Membership (1.50$ / month)**:
