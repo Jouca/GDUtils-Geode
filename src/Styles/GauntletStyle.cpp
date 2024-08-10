@@ -678,6 +678,12 @@ class $modify(CustomGauntletSelectLayer, GauntletSelectLayer) {
                         sprite->setScale(1.745f);
                         sprite->setZOrder(0);
                         node->addChild(sprite);
+                    } else if (gauntletName == "Lava") {
+                        CCSprite* sprite = CCSprite::createWithSpriteFrameName("lava_gauntlet.png"_spr);
+                        sprite->setPosition(bg->getPosition());
+                        sprite->setScale(1.270f);
+                        sprite->setZOrder(0);
+                        node->addChild(sprite);
                     } else if (gauntletName == "NCS I") {
                         CCSprite* sprite = CCSprite::createWithSpriteFrameName("ncs_gauntlet_1.png"_spr);
                         sprite->setPosition(bg->getPosition());

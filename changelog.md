@@ -1,5 +1,6 @@
 # Changelog
 ## <cj>v1.3.8</c> <cb>(2024-08-06)</c>
+* <cg>Added</c> <cr>Lava</c> gauntlet design
 * <cg>Added</c> Pointercrate & AreDL setting for demon placement.
 * <cg>Added</c> GDUtils GFX and GD Awards badges.
 * <cg>Added</c> setting to show buttons for previewing icons colors when they are not unlocked.
