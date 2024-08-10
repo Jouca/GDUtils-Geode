@@ -110,6 +110,7 @@ void start_socket_func() {
         sock.set_open_listener(&ConnectionHandler::onSuccess);
         sock.set_close_listener(&ConnectionHandler::onClose);
         sock.set_fail_listener(&ConnectionHandler::onFail);
+        sock.set_logs_quiet();
         sock.connect("http://gdutils.clarifygdps.com:13573");
         auto start_time = std::chrono::steady_clock::now();
         while (!connect_finish) {
