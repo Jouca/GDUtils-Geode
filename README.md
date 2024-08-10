@@ -7,11 +7,19 @@
 <img src="https://img.shields.io/github/commits-since/Jouca/GDUtils-Geode/latest?style=for-the-badge" style="text-align: center;"></img>
 <img src="https://img.shields.io/github/created-at/Jouca/GDUtils-Geode?style=for-the-badge" style="text-align: center;"></img>
 
-# Support us on Ko-Fi : [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/G2G711NJVI)
-
 **By [Jouca](https://github.com/Jouca) and [Firee](https://github.com/FireMario211)**
 A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute, game fixes & more!
 ![Mod Example](resources/Screenshot_1.png)
+
+# Support us on [![Ko-Fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/G2G711NJVI)
+By supporting us on **Ko-Fi**, you contribute to **help developers** for their **work on the mod**, but also for the **rent of the server** we use for **notifications, URL redirection & more!**
+
+**Extra perks for Membership (1.50$ / month)**:
+* **GDUtils Supporter Badge** on GD Profile & Comments!
+* **Discord role**!
+* **Priority for suggesting ideas** on Discord server!
+
+__**Join the Discord and Follow the instructions to Receive your In-Game Perks!**__
 
 ## Need help?
 * You can join our [Discord server](https://discord.gg/MU4Rpc6xbJ) for **any assistance** or about **next updates**, **sneak peeks** & **more**!

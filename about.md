@@ -4,6 +4,16 @@ A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute,
 
 ![Mod Example](gdutilsdevs.gdutils/Screenshot_1.png&scale:0.8)
 
+# Support us on [Ko-Fi](https://ko-fi.com/gdutils)!
+By supporting us on <cp>Ko-Fi</c>, you contribute to <cg>help developers</c> for their **work on the mod**, but also for the **rent of the server** we use for <cy>notifications, URL redirection & more!</c>
+
+**Extra perks for Membership (1.50$ / month)**:
+* <cg>GDUtils Supporter Badge</c> on GD Profile & Comments!
+* <cg>Discord role</c>!
+* <cg>Priority for suggesting ideas</c> on Discord server!
+
+__**Join the Discord and Follow the instructions to Receive your In-Game Perks!**__
+
 # Need help?
 * You can join our [Discord server](https://discord.gg/MU4Rpc6xbJ) for **any assistance** or about **next updates**, **sneak peeks** & **more**!
 

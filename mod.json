@@ -14,7 +14,8 @@
     "description": "Realtime Rate Notifications, leaderboard extension, epic UI redesign, auto-song mute, game fixes & more!",
     "repository": "https://github.com/Jouca/GDUtils-Geode",
     "links": {
-        "community": "https://discord.gg/MU4Rpc6xbJ"
+        "community": "https://discord.gg/MU4Rpc6xbJ",
+        "source": "https://github.com/Jouca/GDUtils-Geode"
     },
     "dependencies": [
         {
