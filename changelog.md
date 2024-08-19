@@ -1,5 +1,5 @@
 # Changelog
-## <cj>v1.3.9</c> <cb>(---)</c>
+## <cj>v1.3.9</c> <cb>(2024-08-19)</c>
 * <cg>Added</c> <cp>Ko-Fi Supporter</c> badge on profile + link to get it on the "gift button" ([or also here](https://ko-fi.com/gdutils))
 * <cg>Added</c> GD moderators leaderboards
 * <cg>Added</c> GD moderators filter per badge on leaderboards

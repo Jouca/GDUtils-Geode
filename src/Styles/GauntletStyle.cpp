@@ -41,7 +41,7 @@ class $modify(CustomGauntletSelectLayer, GauntletSelectLayer) {
             nullptr,
             "Gauntlets redesign",
             R"text(
-    All <cl>new designs for Gauntlets</c> are made by <cy>Zidnes</c> and <cy>brift</c>.
+    All <cl>new designs for Gauntlets</c> are made by <cy>xvia</c> and <cy>brift</c>.
     <cl>Particles</c> are made by <cy>GammaReXx</c>.
 
     Thanks for their contributions!

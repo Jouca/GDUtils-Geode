@@ -51,8 +51,9 @@ A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute,
 * [Firee](https://youtube.com/@gdfiree)
 * [nekitdev](https://x.com/nekitdev)
 * [Maverick](https://www.youtube.com/channel/UCoFBsXJ-6o6l6ZYP-k6DE_g)
-* [Zidnes](https://x.com/SZidnes)
+* [xvia](https://x.com/SZidnes)
 * [GammaReXx](user:3913739)
+* [brift](https://x.com/BriftXD)
 
 # Contributors
 * [sofabeddd](user:7976112)

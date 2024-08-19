@@ -73,7 +73,8 @@ __**Join the Discord and Follow the instructions to Receive your In-Game Perks!*
 * [Firee](https://youtube.com/@gdfiree)
 * [nekitdev](https://twitter.com/nekitdev)
 * [Maverick](https://www.youtube.com/channel/UCoFBsXJ-6o6l6ZYP-k6DE_g)
-* [Zidnes](https://x.com/SZidnes)
+* [xvia](https://x.com/SZidnes)
+* [brift](https://x.com/BriftXD)
 
 **Thank you to RobTopGames for his trust on the mod.**
 
