@@ -239,6 +239,25 @@ He is the <cy>only developer of the game</c> and is responsible for <cy>all the 
     )->show();
 }
 
+void NewProfilePage::onGDUtilsSupporterBadgePressed(CCObject* pSender) {
+    geode::createQuickPopup(
+        "GDUtils Supporter",
+        R"text(
+<cp>GDUtils Supporter</c> is a user that has took a membership on the <cl>GDUtils</c> project by <cy>donating</c> via <cp>Ko-Fi</c>.
+
+<cy>You can also get this badge and support the project by donating on the following link:</c>
+        )text",
+        "OK", "Ko-Fi",
+        [](auto, bool btn2) {
+            if (btn2) {
+                geode::utils::web::openLinkInBrowser("https://ko-fi.com/gdutils");
+            }
+
+            
+        }
+    );
+}
+
 // Mod badges descriptions & GDUtils dev badge
 class $modify(ProfilePage) {
     struct Fields {
@@ -379,6 +398,22 @@ class $modify(ProfilePage) {
                             );
 
                             badgeGDUtilBtn->setID("gdutils-ul-helper-badge");
+                            username_menu->addChild(badgeGDUtilBtn);
+                            username_menu->updateLayout();
+                        }
+                    } else if (badge == 8) {
+                        if (!layer->getChildByIDRecursive("gdutils-supporter-badge")) {
+                            CCMenu* username_menu = typeinfo_cast<CCMenu*>(layer->getChildByIDRecursive("username-menu"));
+
+                            auto badgeGDUtil = CCSprite::createWithSpriteFrameName("supporter_badge.png"_spr);
+                            badgeGDUtil->setScale(1.075f);
+                            auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
+                                badgeGDUtil,
+                                layer,
+                                menu_selector(NewProfilePage::onGDUtilsSupporterBadgePressed)
+                            );
+
+                            badgeGDUtilBtn->setID("gdutils-supporter-badge");
                             username_menu->addChild(badgeGDUtilBtn);
                             username_menu->updateLayout();
                         }
