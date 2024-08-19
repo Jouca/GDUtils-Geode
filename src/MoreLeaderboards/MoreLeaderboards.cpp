@@ -4,6 +4,8 @@
 #include <Geode/ui/GeodeUI.hpp>
 
 StatsListType MoreLeaderboards::g_tab = StatsListType::Stars;
+bool MoreLeaderboards::modFilter = false;
+int MoreLeaderboards::modFilterType = 0;
 std::string MoreLeaderboards::username = "";
 int MoreLeaderboards::scroll_int = 0;
 static int page = 0;
@@ -383,6 +385,8 @@ void MoreLeaderboards::backButton(cocos2d::CCObject*) {
     MoreLeaderboards::g_tab = StatsListType::Stars;
     MoreLeaderboards::username = "";
     MoreLeaderboards::scroll_int = 0;
+    MoreLeaderboards::modFilter = false;
+    MoreLeaderboards::modFilterType = 0;
     cocos2d::CCDirector::sharedDirector()->popSceneWithTransition(0.5F, cocos2d::PopTransition::kPopTransitionFade);
 };
 
@@ -618,7 +622,7 @@ void MoreLeaderboards::startLoadingMore() {
         const std::lock_guard<std::mutex> lock(lock_var);
         RUNNING_REQUESTS.emplace(
             "@loaderMoreLeaderboardCheck",
-            request.param("type", type).param("page", page).param("country", country_id).param("username", username).get("https://clarifygdps.com/gdutils/moreleaderboards.php").map(
+            request.param("type", type).param("page", page).param("country", country_id).param("username", username).param("mod", (modFilter ? "1" : "0")).param("modFilter", modFilterType).get("https://clarifygdps.com/gdutils/moreleaderboards.php").map(
                 [expect = std::move(expect), then = std::move(then)](web::WebResponse* response) {
                     if (response->ok()) {
                         then(response->string().value());
@@ -724,8 +728,11 @@ void MoreLeaderboards::loadPageStats() {
     auto winSize = CCDirector::sharedDirector()->getWinSize();
 
     if (page_label != nullptr) page_label->removeFromParentAndCleanup(true);
+    if (this->getChildByIDRecursive("menu_label") != nullptr) this->getChildByIDRecursive("menu_label")->removeFromParentAndCleanup(true);
+    if (this->getChildByIDRecursive("menu_page") != nullptr) this->getChildByIDRecursive("menu_page")->removeFromParentAndCleanup(true);
 
     CCMenu* menu_label = CCMenu::create();
+    menu_label->setID("menu_label");
     menu_label->setLayout(
         RowLayout::create()
         ->setAxisAlignment(AxisAlignment::Center)
@@ -755,6 +762,7 @@ void MoreLeaderboards::loadPageStats() {
     menu_label->updateLayout();
 
     CCMenu* menu = CCMenu::create();
+    menu->setID("menu_page");
 
     if (page_left != nullptr) page_left->removeFromParentAndCleanup(true);
     if (page_right != nullptr) page_right->removeFromParentAndCleanup(true);
@@ -820,6 +828,67 @@ void MoreLeaderboards::loadTabPageButtons() {
     );
     m_search->setPosition(239, 104);
     m_menu->addChild(m_search);
+
+    auto mod_filter_btn_spr = CCSprite::createWithSpriteFrameName("modBadge_01_001.png");
+    mod_filter_btn_spr->setScale(1.4f);
+    if (!modFilter) {
+        mod_filter_btn_spr->setColor({ 100, 100, 100 });
+    }
+    mod_filter_btn = CCMenuItemSpriteExtra::create(
+        mod_filter_btn_spr,
+        this,
+        menu_selector(MoreLeaderboards::onModFilter)
+    );
+    mod_filter_btn->setPosition(239.f, 69.f);
+    m_menu->addChild(mod_filter_btn);
+
+    // Mod type filter
+    if (modFilter) {
+        CCSprite* mod_filter_type_spr;
+        CCSprite* mod_filter_type_spr1;
+        CCSprite* mod_filter_type_spr2;
+        CCSprite* mod_filter_type_spr3;
+        switch (modFilterType) {
+            case 0:
+                mod_filter_type_spr1 = CCSprite::createWithSpriteFrameName("modBadge_01_001.png");
+                mod_filter_type_spr1->setScale(1.2f);
+                mod_filter_type_spr2 = CCSprite::createWithSpriteFrameName("modBadge_02_001.png");
+                mod_filter_type_spr2->setScale(1.2f);
+                mod_filter_type_spr3 = CCSprite::createWithSpriteFrameName("modBadge_03_001.png");
+                mod_filter_type_spr3->setScale(1.2f);
+
+                mod_filter_type_spr1->setPosition({30, 21});
+                mod_filter_type_spr2->setPosition({10, 21});
+                mod_filter_type_spr3->setPosition({20, 11});
+
+                mod_filter_type_spr = CCSprite::create();
+                mod_filter_type_spr->addChild(mod_filter_type_spr1);
+                mod_filter_type_spr->addChild(mod_filter_type_spr2);
+                mod_filter_type_spr->addChild(mod_filter_type_spr3);
+                mod_filter_type_spr->setContentSize({ 40, 40 });
+                break;
+            case 1:
+                mod_filter_type_spr = CCSprite::createWithSpriteFrameName("modBadge_01_001.png");
+                mod_filter_type_spr->setScale(1.4f);
+                break;
+            case 2:
+                mod_filter_type_spr = CCSprite::createWithSpriteFrameName("modBadge_02_001.png");
+                mod_filter_type_spr->setScale(1.4f);
+                break;
+            case 3:
+                mod_filter_type_spr = CCSprite::createWithSpriteFrameName("modBadge_03_001.png");
+                mod_filter_type_spr->setScale(1.4f);
+                break;
+        };
+
+        mod_filter_type_btn = CCMenuItemSpriteExtra::create(
+            mod_filter_type_spr,
+            this,
+            menu_selector(MoreLeaderboards::onModFilterType)
+        );
+        mod_filter_type_btn->setPosition(239.f, 34.f);
+        m_menu->addChild(mod_filter_type_btn);
+    }
 }
 
 void MoreLeaderboards::onTabPageLeft(CCObject* pSender) {
@@ -837,6 +906,28 @@ void MoreLeaderboards::onTabPageRight(CCObject* pSender) {
 
     tab_page++;
     changeTabPage();
+
+    page = 0;
+    this->onTab(nullptr);
+}
+
+void MoreLeaderboards::onModFilter(CCObject* pSender) {
+    if (loading) return;
+
+    modFilter = !modFilter;
+    modFilterType = 0;
+
+    page = 0;
+    this->onTab(nullptr);
+}
+
+void MoreLeaderboards::onModFilterType(CCObject* pSender) {
+    if (loading) return;
+
+    if (modFilterType == 3) {
+        modFilterType = 0;
+    } else
+    modFilterType += 1;
 
     page = 0;
     this->onTab(nullptr);
@@ -860,9 +951,12 @@ void MoreLeaderboards::changeTabPage() {
     m_tab5 = nullptr;
     m_tab6 = nullptr;
 
-    if (m_menu != nullptr) m_menu->removeFromParentAndCleanup(true);
+    if (this->getChildByIDRecursive("menu_gdutils_buttons") != nullptr) {
+        this->getChildByIDRecursive("menu_gdutils_buttons")->removeFromParentAndCleanup(true);
+    }
 
     m_menu = CCMenu::create();
+    m_menu->setID("menu_gdutils_buttons");
     m_menu->setZOrder(1);
 
     auto stars_sprite = CCSprite::createWithSpriteFrameName("star_small01_001.png");
@@ -1102,11 +1196,15 @@ void MoreLeaderboards::resetInfos() {
     if (page_left != nullptr) page_left->removeFromParentAndCleanup(true);
     if (page_right != nullptr) page_right->removeFromParentAndCleanup(true);
     if (trophy != nullptr) trophy->removeFromParentAndCleanup(true);
+    if (mod_filter_btn != nullptr) mod_filter_btn->removeFromParentAndCleanup(true);
+    if (mod_filter_type_btn != nullptr) mod_filter_type_btn->removeFromParentAndCleanup(true);
 
     page_label = nullptr;
     page_left = nullptr;
     page_right = nullptr;
     trophy = nullptr;
+    mod_filter_btn = nullptr;
+    mod_filter_type_btn = nullptr;
 }
 
 void MoreLeaderboards::onTab(CCObject* pSender) {

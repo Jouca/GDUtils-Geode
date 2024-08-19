@@ -1,4 +1,8 @@
 # Changelog
+## <cj>v1.3.9</c> <cb>(---)</c>
+* <cg>Added</c> GD moderators leaderboards
+* <cg>Added</c> GD moderators filter per badge on leaderboards
+
 ## <cj>v1.3.8</c> <cb>(2024-08-06)</c>
 * <cg>Added</c> <cr>Lava</c> gauntlet design
 * <cg>Added</c> Pointercrate & AreDL setting for demon placement.

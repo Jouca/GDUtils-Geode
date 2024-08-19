@@ -40,6 +40,8 @@ class MoreLeaderboards : public CCLayer {
     CCMenuItemSpriteExtra* page_right = nullptr;
     CCMenuItemSpriteExtra* tab_page_left = nullptr;
     CCMenuItemSpriteExtra* tab_page_right = nullptr;
+    CCMenuItemSpriteExtra* mod_filter_btn = nullptr;
+    CCMenuItemSpriteExtra* mod_filter_type_btn = nullptr;
     CCSprite* trophy = nullptr;
 
     CCString* datas = nullptr;
@@ -81,6 +83,8 @@ class MoreLeaderboards : public CCLayer {
         static StatsListType g_tab;
         static std::string username;
         static int scroll_int;
+        static bool modFilter;
+        static int modFilterType;
         bool loading = false;
 
         void onMoreLeaderboards(CCObject*);
@@ -96,6 +100,8 @@ class MoreLeaderboards : public CCLayer {
         void loadTabPageButtons();
         void onTabPageLeft(CCObject* pSender);
         void onTabPageRight(CCObject* pSender);
+        void onModFilter(CCObject* pSender);
+        void onModFilterType(CCObject* pSender);
         void changeTabPage();
 
         void onSearch(CCObject*);
