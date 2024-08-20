@@ -97,6 +97,16 @@ class $modify(CommentCell) {
                             as<CCLabelBMFont*>(commentText)->setColor(color);
                             cell->m_comment->m_color = color;
                         }
+                        if (auto commentText = cell->getChildByIDRecursive("comment-text-area")) {
+                            TextArea* textArea = as<TextArea*>(commentText);
+                            MultilineBitmapFont* bmFont = as<MultilineBitmapFont*>(textArea->getChildren()->objectAtIndex(0));
+                            CCArray* children = bmFont->getChildren();
+                            for (int i = 0; i < children->count(); i++) {
+                                auto child = as<CCLabelBMFont*>(children->objectAtIndex(i));
+                                child->setColor(color);
+                            }
+                        }
+                        
                         badgeGDUtilBtn->setID("gdutils-dev-badge");
                         if (cell->getChildByIDRecursive("percentage-label")) {
                             username_menu->insertBefore(badgeGDUtilBtn, cell->getChildByIDRecursive("percentage-label"));
@@ -228,6 +238,15 @@ class $modify(CommentCell) {
                             as<CCLabelBMFont*>(commentText)->setColor(color);
                             cell->m_comment->m_color = color;
                         }
+                        if (auto commentText = cell->getChildByIDRecursive("comment-text-area")) {
+                            TextArea* textArea = as<TextArea*>(commentText);
+                            MultilineBitmapFont* bmFont = as<MultilineBitmapFont*>(textArea->getChildren()->objectAtIndex(0));
+                            CCArray* children = bmFont->getChildren();
+                            for (int i = 0; i < children->count(); i++) {
+                                auto child = as<CCLabelBMFont*>(children->objectAtIndex(i));
+                                child->setColor(color);
+                            }
+                        }
 
                         badgeGDUtilBtn->setID("gdutils-supporter-badge");
                         if (cell->getChildByIDRecursive("percentage-label")) {
@@ -252,6 +271,8 @@ class $modify(CommentCell) {
         auto layer = m_mainLayer;
 
         CommentCell::loadFromComment(comment);
+
+        if (comment->m_commentDeleted) return;
 
         if (result_global.empty()) {
             m_fields->m_listener.bind([] (web::WebTask::Event* e) {
