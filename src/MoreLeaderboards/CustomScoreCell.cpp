@@ -1,10 +1,11 @@
-#include "../includes.h"
 #include <Geode/modify/GJScoreCell.hpp>
 #include <Geode/modify/Field.hpp>
-#include "../includes.h"
 #include "MoreLeaderboards.h"
 #include "SelectRegion.h"
 #include "LevelHelper.cpp"
+
+#include <Geode/Geode.hpp>
+using namespace geode::prelude;
 
 
 class $modify(CustomScoreCell, GJScoreCell) {

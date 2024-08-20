@@ -444,7 +444,6 @@ class $modify(ProfilePage) {
     void loadPageFromUserInfo(GJUserScore* a2) {
         auto layer = m_mainLayer;
         CCMenuItemSpriteExtra* badgeBtn = nullptr;
-        CCMenuItemSpriteExtra* badgeGDUtilBtn = nullptr;
 
         bool modbadge_bool = false;
 
@@ -452,8 +451,6 @@ class $modify(ProfilePage) {
 
         CCMenu* username_menu = typeinfo_cast<CCMenu*>(layer->getChildByIDRecursive("username-menu"));
         CCLabelBMFont* label = typeinfo_cast<CCLabelBMFont*>(layer->getChildByIDRecursive("username-label"));
-
-        // Keep 7976112 for contributors soon
 
         if (layer) {
             CCSprite* modbadge = typeinfo_cast<CCSprite*>(layer->getChildByIDRecursive("mod-badge"));
