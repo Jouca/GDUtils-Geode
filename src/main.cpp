@@ -253,8 +253,8 @@ class $modify(CCScheduler) { // GD Protocol part
                                 if (response->ok()) {
                                     if (response->data().empty()) {
                                         FLAlertLayer::create(nullptr,
-                                            "Error",
-                                            "An server error happened.",
+                                            "Error (GDUtils)",
+                                            "An error has occured with <cy>Robtop's servers</c>. The response returned empty.",
                                             "OK",
                                             nullptr,
                                             180.0F
@@ -282,8 +282,8 @@ class $modify(CCScheduler) { // GD Protocol part
                                     }
                                 } else {
                                     FLAlertLayer::create(nullptr,
-                                        "Error",
-                                        "An server error happened.",
+                                	"Error (GDUtils)",
+                                        "An error has occured with <cy>Robtop's servers</c>. The reason could be because you are either ratelimited, blocked, or another issue.",
                                         "OK",
                                         nullptr,
                                         180.0F
