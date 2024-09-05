@@ -34,7 +34,6 @@ class $modify(CommentCell) {
 
             if (username == "RobTop") {
                 auto robtopSpr = CCSprite::createWithSpriteFrameName("robtop_badge.png"_spr);
-                robtopSpr->setScale(.028f);
                 badgeBtn = CCMenuItemSpriteExtra::create(
                     robtopSpr,
                     this,

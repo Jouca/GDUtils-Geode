@@ -459,7 +459,6 @@ class $modify(ProfilePage) {
 
                 if (a2->m_userName == "RobTop") {
                     auto robtopSpr = CCSprite::createWithSpriteFrameName("robtop_badge.png"_spr);
-                    robtopSpr->setScale(.04f);
                     badgeBtn = CCMenuItemSpriteExtra::create(
                         robtopSpr,
                         this,

@@ -24,7 +24,7 @@ void MoreLeaderboardsCell::loadFromDict(cocos2d::CCDictionary* content)
             if (name == "0") {
                 auto robtopbadge = cocos2d::CCSprite::createWithSpriteFrameName("robtop_badge.png"_spr);
                 robtopbadge->setPosition({ 30, 20 });
-                robtopbadge->setScale(0.05f);
+                robtopbadge->setScale(1.225f);
                 this->m_mainLayer->addChild(robtopbadge);
             } else if (name == "2") {
                 auto elderModBadge = cocos2d::CCSprite::createWithSpriteFrameName("modBadge_01_001.png");
