@@ -37,7 +37,7 @@ class SpriteHelper {
     public:
         inline static CCSprite* createFullSprite(int currentLevel) {
             auto badgeSprite = SpriteHelper::getBadgeFromLevel(currentLevel);
-            badgeSprite->setID("tier-badge"_spr);
+            badgeSprite->setID("itzkiba.better_progression/tier-badge");
             badgeSprite->setZOrder(10);
 
             auto badgeLabel = CCLabelBMFont::create(std::to_string(currentLevel).c_str(), "bigFont.fnt");
@@ -46,7 +46,7 @@ class SpriteHelper {
             badgeLabel->setPosition({badgeSprite->getContentSize().width / 2, badgeSprite->getContentSize().height / 2 + 1.f});
             badgeSprite->addChild(badgeLabel);
 
-            auto badgeShadow = CCSprite::createWithSpriteFrameName("shadow.png"_spr);
+            auto badgeShadow = CCSprite::createWithSpriteFrameName("itzkiba.better_progression/shadow.png");
             badgeShadow->setZOrder(-5);
             badgeShadow->setScale(0.9);
             badgeShadow->setPosition({badgeSprite->getContentSize().width / 2, badgeSprite->getContentSize().height / 2});
@@ -86,269 +86,269 @@ class SpriteHelper {
 
         inline static CCSprite* getBadgeFromLevel(int level) {
             if (level >= 0 && level <= 4) {
-                return CCSprite::createWithSpriteFrameName("tier0_0.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier0_0.png");
             }
             if (level >= 5 && level <= 9) {
-                return CCSprite::createWithSpriteFrameName("tier0_1.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier0_1.png");
             }
             if (level >= 10 && level <= 14) {
-                return CCSprite::createWithSpriteFrameName("tier0_2.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier0_2.png");
             }
             if (level >= 15 && level <= 19) {
-                return CCSprite::createWithSpriteFrameName("tier0_3.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier0_3.png");
             }
             if (level >= 20 && level <= 24) {
-                return CCSprite::createWithSpriteFrameName("tier0_4.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier0_4.png");
             }
 
             if (level >= 25 && level <= 29) {
-                return CCSprite::createWithSpriteFrameName("tier1_0.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier1_0.png");
             }
             if (level >= 30 && level <= 34) {
-                return CCSprite::createWithSpriteFrameName("tier1_1.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier1_1.png");
             }
             if (level >= 35 && level <= 39) {
-                return CCSprite::createWithSpriteFrameName("tier1_2.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier1_2.png");
             }
             if (level >= 40 && level <= 44) {
-                return CCSprite::createWithSpriteFrameName("tier1_3.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier1_3.png");
             }
             if (level >= 45 && level <= 49) {
-                return CCSprite::createWithSpriteFrameName("tier1_4.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier1_4.png");
             }
 
             if (level >= 50 && level <= 54) {
-                return CCSprite::createWithSpriteFrameName("tier2_0.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier2_0.png");
             }
             if (level >= 55 && level <= 59) {
-                return CCSprite::createWithSpriteFrameName("tier2_1.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier2_1.png");
             }
             if (level >= 60 && level <= 64) {
-                return CCSprite::createWithSpriteFrameName("tier2_2.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier2_2.png");
             }
             if (level >= 65 && level <= 69) {
-                return CCSprite::createWithSpriteFrameName("tier2_3.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier2_3.png");
             }
             if (level >= 70 && level <= 74) {
-                return CCSprite::createWithSpriteFrameName("tier2_4.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier2_4.png");
             }
 
             if (level >= 75 && level <= 79) {
-                return CCSprite::createWithSpriteFrameName("tier3_0.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier3_0.png");
             }
             if (level >= 80 && level <= 84) {
-                return CCSprite::createWithSpriteFrameName("tier3_1.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier3_1.png");
             }
             if (level >= 85 && level <= 89) {
-                return CCSprite::createWithSpriteFrameName("tier3_2.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier3_2.png");
             }
             if (level >= 90 && level <= 94) {
-                return CCSprite::createWithSpriteFrameName("tier3_3.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier3_3.png");
             }
             if (level >= 95 && level <= 99) {
-                return CCSprite::createWithSpriteFrameName("tier3_4.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier3_4.png");
             }
 
             if (level >= 100 && level <= 104) {
-                return CCSprite::createWithSpriteFrameName("tier4_0.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier4_0.png");
             }
             if (level >= 105 && level <= 109) {
-                return CCSprite::createWithSpriteFrameName("tier4_1.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier4_1.png");
             }
             if (level >= 110 && level <= 114) {
-                return CCSprite::createWithSpriteFrameName("tier4_2.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier4_2.png");
             }
             if (level >= 115 && level <= 119) {
-                return CCSprite::createWithSpriteFrameName("tier4_3.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier4_3.png");
             }
             if (level >= 120 && level <= 124) {
-                return CCSprite::createWithSpriteFrameName("tier4_4.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier4_4.png");
             }
 
             if (level >= 125 && level <= 129) {
-                return CCSprite::createWithSpriteFrameName("tier5_0.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier5_0.png");
             }
             if (level >= 130 && level <= 134) {
-                return CCSprite::createWithSpriteFrameName("tier5_1.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier5_1.png");
             }
             if (level >= 135 && level <= 139) {
-                return CCSprite::createWithSpriteFrameName("tier5_2.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier5_2.png");
             }
             if (level >= 140 && level <= 144) {
-                return CCSprite::createWithSpriteFrameName("tier5_3.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier5_3.png");
             }
             if (level >= 145 && level <= 149) {
-                return CCSprite::createWithSpriteFrameName("tier5_4.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier5_4.png");
             }
 
             if (level >= 150 && level <= 154) {
-                return CCSprite::createWithSpriteFrameName("tier6_0.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier6_0.png");
             }
             if (level >= 155 && level <= 159) {
-                return CCSprite::createWithSpriteFrameName("tier6_1.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier6_1.png");
             }
             if (level >= 160 && level <= 164) {
-                return CCSprite::createWithSpriteFrameName("tier6_2.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier6_2.png");
             }
             if (level >= 165 && level <= 169) {
-                return CCSprite::createWithSpriteFrameName("tier6_3.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier6_3.png");
             }
             if (level >= 170 && level <= 174) {
-                return CCSprite::createWithSpriteFrameName("tier6_4.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier6_4.png");
             }
 
             if (level >= 175 && level <= 179) {
-                return CCSprite::createWithSpriteFrameName("tier7_0.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier7_0.png");
             }
             if (level >= 180 && level <= 184) {
-                return CCSprite::createWithSpriteFrameName("tier7_1.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier7_1.png");
             }
             if (level >= 185 && level <= 189) {
-                return CCSprite::createWithSpriteFrameName("tier7_2.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier7_2.png");
             }
             if (level >= 190 && level <= 194) {
-                return CCSprite::createWithSpriteFrameName("tier7_3.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier7_3.png");
             }
             if (level >= 195 && level <= 199) {
-                return CCSprite::createWithSpriteFrameName("tier7_4.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier7_4.png");
             }
 
             if (level >= 200 && level <= 204) {
-                return CCSprite::createWithSpriteFrameName("tier8_0.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier8_0.png");
             }
             if (level >= 205 && level <= 209) {
-                return CCSprite::createWithSpriteFrameName("tier8_1.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier8_1.png");
             }
             if (level >= 210 && level <= 214) {
-                return CCSprite::createWithSpriteFrameName("tier8_2.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier8_2.png");
             }
             if (level >= 215 && level <= 219) {
-                return CCSprite::createWithSpriteFrameName("tier8_3.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier8_3.png");
             }
             if (level >= 220 && level <= 224) {
-                return CCSprite::createWithSpriteFrameName("tier8_4.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier8_4.png");
             }
 
             if (level >= 225 && level <= 229) {
-                return CCSprite::createWithSpriteFrameName("tier9_0.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier9_0.png");
             }
             if (level >= 230 && level <= 234) {
-                return CCSprite::createWithSpriteFrameName("tier9_1.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier9_1.png");
             }
             if (level >= 235 && level <= 239) {
-                return CCSprite::createWithSpriteFrameName("tier9_2.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier9_2.png");
             }
             if (level >= 240 && level <= 244) {
-                return CCSprite::createWithSpriteFrameName("tier9_3.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier9_3.png");
             }
             if (level >= 245 && level <= 249) {
-                return CCSprite::createWithSpriteFrameName("tier9_4.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier9_4.png");
             }
 
             if (level >= 250 && level <= 254) {
-                return CCSprite::createWithSpriteFrameName("tier10_0.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier10_0.png");
             }
             if (level >= 255 && level <= 259) {
-                return CCSprite::createWithSpriteFrameName("tier10_1.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier10_1.png");
             }
             if (level >= 260 && level <= 264) {
-                return CCSprite::createWithSpriteFrameName("tier10_2.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier10_2.png");
             }
             if (level >= 265 && level <= 269) {
-                return CCSprite::createWithSpriteFrameName("tier10_3.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier10_3.png");
             }
             if (level >= 270 && level <= 274) {
-                return CCSprite::createWithSpriteFrameName("tier10_4.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier10_4.png");
             }
 
             if (level >= 275 && level <= 279) {
-                return CCSprite::createWithSpriteFrameName("tier11_0.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier11_0.png");
             }
             if (level >= 280 && level <= 284) {
-                return CCSprite::createWithSpriteFrameName("tier11_1.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier11_1.png");
             }
             if (level >= 285 && level <= 289) {
-                return CCSprite::createWithSpriteFrameName("tier11_2.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier11_2.png");
             }
             if (level >= 290 && level <= 294) {
-                return CCSprite::createWithSpriteFrameName("tier11_3.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier11_3.png");
             }
             if (level >= 295 && level <= 299) {
-                return CCSprite::createWithSpriteFrameName("tier11_4.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier11_4.png");
             }
             if (level >= 300 && level <= 349) {
-                return CCSprite::createWithSpriteFrameName("tier12.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier12.png");
             }
             // TEMP
-            return CCSprite::createWithSpriteFrameName("tier0_0.png"_spr);
+            return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/tier0_0.png");
         }
 
         inline static CCSprite* getGlowFromLevel(int level) {
             if (level >= 200 && level <= 204) {
-                return CCSprite::createWithSpriteFrameName("glow_0.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/glow_0.png");
             }
             if (level >= 205 && level <= 209) {
-                return CCSprite::createWithSpriteFrameName("glow_1.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/glow_1.png");
             }
             if (level >= 210 && level <= 214) {
-                return CCSprite::createWithSpriteFrameName("glow_2.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/glow_2.png");
             }
             if (level >= 215 && level <= 219) {
-                return CCSprite::createWithSpriteFrameName("glow_3.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/glow_3.png");
             }
             if (level >= 220 && level <= 224) {
-                return CCSprite::createWithSpriteFrameName("glow_4.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/glow_4.png");
             }
 
             if (level >= 225 && level <= 229) {
-                return CCSprite::createWithSpriteFrameName("glow_0.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/glow_0.png");
             }
             if (level >= 230 && level <= 234) {
-                return CCSprite::createWithSpriteFrameName("glow_1.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/glow_1.png");
             }
             if (level >= 235 && level <= 239) {
-                return CCSprite::createWithSpriteFrameName("glow_2.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/glow_2.png");
             }
             if (level >= 240 && level <= 244) {
-                return CCSprite::createWithSpriteFrameName("glow_3.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/glow_3.png");
             }
             if (level >= 245 && level <= 249) {
-                return CCSprite::createWithSpriteFrameName("glow_4.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/glow_4.png");
             }
 
             if (level >= 250 && level <= 254) {
-                return CCSprite::createWithSpriteFrameName("glow_0.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/glow_0.png");
             }
             if (level >= 255 && level <= 259) {
-                return CCSprite::createWithSpriteFrameName("glow_1.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/glow_1.png");
             }
             if (level >= 260 && level <= 264) {
-                return CCSprite::createWithSpriteFrameName("glow_2.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/glow_2.png");
             }
             if (level >= 265 && level <= 269) {
-                return CCSprite::createWithSpriteFrameName("glow_3.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/glow_3.png");
             }
             if (level >= 270 && level <= 274) {
-                return CCSprite::createWithSpriteFrameName("glow_4.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/glow_4.png");
             }
 
             if (level >= 275 && level <= 279) {
-                return CCSprite::createWithSpriteFrameName("glow_0.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/glow_0.png");
             }
             if (level >= 280 && level <= 284) {
-                return CCSprite::createWithSpriteFrameName("glow_1.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/glow_1.png");
             }
             if (level >= 285 && level <= 289) {
-                return CCSprite::createWithSpriteFrameName("glow_2.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/glow_2.png");
             }
             if (level >= 290 && level <= 294) {
-                return CCSprite::createWithSpriteFrameName("glow_3.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/glow_3.png");
             }
             if (level >= 295 && level <= 299) {
-                return CCSprite::createWithSpriteFrameName("glow_4.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/glow_4.png");
             }
             if (level >= 300 && level <= 349) {
-                return CCSprite::createWithSpriteFrameName("glow_4.png"_spr);
+                return CCSprite::createWithSpriteFrameName("itzkiba.better_progression/glow_4.png");
             }
 
             return nullptr;
