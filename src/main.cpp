@@ -310,12 +310,14 @@ class $modify(CCSprite) {
         // better code, thanks camila!
         if (!strcmp(name, "GJ_gradientBG.png") && Mod::get()->getSettingValue<bool>("activate-background")) {
             Loader::get()->queueInMainThread([=] {
-                if (ret->getColor() == ccc3(0, 102, 255)) {
-                    auto scene = CCDirector::sharedDirector()->getRunningScene();
-                    if (scene->getChildrenCount() == 0) return;
-                    auto layer = scene->getChildren()->objectAtIndex(0);
-                    std::string layerName = misc::getNodeName(layer);
-                    ret->setColor(Mod::get()->getSettingValue<ccColor3B>("background"));
+                if (ret != nullptr) {
+                    if (ret->getColor() == ccc3(0, 102, 255)) {
+                        auto scene = CCDirector::sharedDirector()->getRunningScene();
+                        if (scene->getChildrenCount() == 0) return;
+                        auto layer = scene->getChildren()->objectAtIndex(0);
+                        std::string layerName = misc::getNodeName(layer);
+                        ret->setColor(Mod::get()->getSettingValue<ccColor3B>("background"));
+                    }
                 }
             });
 
@@ -332,72 +334,74 @@ class $modify(CCScale9Sprite) {
         // better code, thanks camila!
         if ((!strcmp(name, "square02b_001.png") || !strcmp(name, "square02b_small.png")) && Mod::get()->getSettingValue<bool>("activate-background")) {
             Loader::get()->queueInMainThread([=] {
-                // jouca waht
-                if (ret->getColor() == ccc3(0, 56, 141)) {
-                    ccColor3B new_color = Mod::get()->getSettingValue<ccColor3B>("child-background");
-                    if (Mod::get()->getSettingValue<bool>("syncBGcolor")) {
-                        new_color = Mod::get()->getSettingValue<ccColor3B>("background");
+                if (ret != nullptr) {
+                    // jouca waht
+                    if (ret->getColor() == ccc3(0, 56, 141)) {
+                        ccColor3B new_color = Mod::get()->getSettingValue<ccColor3B>("child-background");
+                        if (Mod::get()->getSettingValue<bool>("syncBGcolor")) {
+                            new_color = Mod::get()->getSettingValue<ccColor3B>("background");
+                        }
+                        if (Mod::get()->getSettingValue<bool>("addChildBDGradient")) {
+                            new_color = ccc3(new_color.r * 0.79, new_color.g * 0.79, new_color.b * 0.79);
+                        }
+                        if (Mod::get()->getSettingValue<bool>("bgchild-transparency")) {
+                            int opacity = Mod::get()->getSettingValue<int64_t>("bgchild-transparency-scroll");
+                            ret->setOpacity(opacity);
+                        }
+                        ret->setColor(new_color);
+                    } else if (ret->getColor() == ccc3(0, 39, 98)) {
+                        ccColor3B new_color = Mod::get()->getSettingValue<ccColor3B>("child-background");
+                        if (Mod::get()->getSettingValue<bool>("syncBGcolor")) {
+                            new_color = Mod::get()->getSettingValue<ccColor3B>("background");
+                        }
+                        if (Mod::get()->getSettingValue<bool>("addChildBDGradient")) {
+                            new_color = ccc3(new_color.r * 0.71, new_color.g * 0.71, new_color.b * 0.71);
+                        }
+                        if (Mod::get()->getSettingValue<bool>("bgchild-transparency")) {
+                            int opacity = Mod::get()->getSettingValue<int64_t>("bgchild-transparency-scroll");
+                            ret->setOpacity(opacity);
+                        }
+                        ret->setColor(new_color);
+                    } else if (ret->getColor() == ccc3(0, 46, 117)) {
+                        ccColor3B new_color = Mod::get()->getSettingValue<ccColor3B>("child-background");
+                        if (Mod::get()->getSettingValue<bool>("syncBGcolor")) {
+                            new_color = Mod::get()->getSettingValue<ccColor3B>("background");
+                        }
+                        if (Mod::get()->getSettingValue<bool>("addChildBDGradient")) {
+                            new_color = ccc3(new_color.r * 0.74, new_color.g * 0.74, new_color.b * 0.74);
+                        }
+                        if (Mod::get()->getSettingValue<bool>("bgchild-transparency")) {
+                            int opacity = Mod::get()->getSettingValue<int64_t>("bgchild-transparency-scroll");
+                            ret->setOpacity(opacity);
+                        }
+                        ret->setColor(new_color);
+                    } else if (ret->getColor() == ccc3(0, 36, 91)) {
+                        ccColor3B new_color = Mod::get()->getSettingValue<ccColor3B>("child-background");
+                        if (Mod::get()->getSettingValue<bool>("syncBGcolor")) {
+                            new_color = Mod::get()->getSettingValue<ccColor3B>("background");
+                        }
+                        if (Mod::get()->getSettingValue<bool>("addChildBDGradient")) {
+                            new_color = ccc3(new_color.r * 0.70, new_color.g * 0.70, new_color.b * 0.70);
+                        }
+                        if (Mod::get()->getSettingValue<bool>("bgchild-transparency")) {
+                            int opacity = Mod::get()->getSettingValue<int64_t>("bgchild-transparency-scroll");
+                            ret->setOpacity(opacity);
+                        }
+                        ret->setColor(new_color);
+                    } else if (ret->getColor() == ccc3(0, 31, 79)) {
+                        ccColor3B new_color = Mod::get()->getSettingValue<ccColor3B>("child-background");
+                        if (Mod::get()->getSettingValue<bool>("syncBGcolor")) {
+                            new_color = Mod::get()->getSettingValue<ccColor3B>("background");
+                        }
+                        if (Mod::get()->getSettingValue<bool>("addChildBDGradient")) {
+                            new_color = ccc3(new_color.r * 0.67, new_color.g * 0.67, new_color.b * 0.67);
+                        }
+                        if (Mod::get()->getSettingValue<bool>("bgchild-transparency")) {
+                            int opacity = Mod::get()->getSettingValue<int64_t>("bgchild-transparency-scroll");
+                            ret->setOpacity(opacity);
+                        }
+                        ret->setColor(new_color);
                     }
-                    if (Mod::get()->getSettingValue<bool>("addChildBDGradient")) {
-                        new_color = ccc3(new_color.r * 0.79, new_color.g * 0.79, new_color.b * 0.79);
-                    }
-                    if (Mod::get()->getSettingValue<bool>("bgchild-transparency")) {
-                        int opacity = Mod::get()->getSettingValue<int64_t>("bgchild-transparency-scroll");
-                        ret->setOpacity(opacity);
-                    }
-                    ret->setColor(new_color);
-                } else if (ret->getColor() == ccc3(0, 39, 98)) {
-                    ccColor3B new_color = Mod::get()->getSettingValue<ccColor3B>("child-background");
-                    if (Mod::get()->getSettingValue<bool>("syncBGcolor")) {
-                        new_color = Mod::get()->getSettingValue<ccColor3B>("background");
-                    }
-                    if (Mod::get()->getSettingValue<bool>("addChildBDGradient")) {
-                        new_color = ccc3(new_color.r * 0.71, new_color.g * 0.71, new_color.b * 0.71);
-                    }
-                    if (Mod::get()->getSettingValue<bool>("bgchild-transparency")) {
-                        int opacity = Mod::get()->getSettingValue<int64_t>("bgchild-transparency-scroll");
-                        ret->setOpacity(opacity);
-                    }
-                    ret->setColor(new_color);
-                } else if (ret->getColor() == ccc3(0, 46, 117)) {
-                    ccColor3B new_color = Mod::get()->getSettingValue<ccColor3B>("child-background");
-                    if (Mod::get()->getSettingValue<bool>("syncBGcolor")) {
-                        new_color = Mod::get()->getSettingValue<ccColor3B>("background");
-                    }
-                    if (Mod::get()->getSettingValue<bool>("addChildBDGradient")) {
-                        new_color = ccc3(new_color.r * 0.74, new_color.g * 0.74, new_color.b * 0.74);
-                    }
-                    if (Mod::get()->getSettingValue<bool>("bgchild-transparency")) {
-                        int opacity = Mod::get()->getSettingValue<int64_t>("bgchild-transparency-scroll");
-                        ret->setOpacity(opacity);
-                    }
-                    ret->setColor(new_color);
-                } else if (ret->getColor() == ccc3(0, 36, 91)) {
-                    ccColor3B new_color = Mod::get()->getSettingValue<ccColor3B>("child-background");
-                    if (Mod::get()->getSettingValue<bool>("syncBGcolor")) {
-                        new_color = Mod::get()->getSettingValue<ccColor3B>("background");
-                    }
-                    if (Mod::get()->getSettingValue<bool>("addChildBDGradient")) {
-                        new_color = ccc3(new_color.r * 0.70, new_color.g * 0.70, new_color.b * 0.70);
-                    }
-                    if (Mod::get()->getSettingValue<bool>("bgchild-transparency")) {
-                        int opacity = Mod::get()->getSettingValue<int64_t>("bgchild-transparency-scroll");
-                        ret->setOpacity(opacity);
-                    }
-                    ret->setColor(new_color);
-                } else if (ret->getColor() == ccc3(0, 31, 79)) {
-                    ccColor3B new_color = Mod::get()->getSettingValue<ccColor3B>("child-background");
-                    if (Mod::get()->getSettingValue<bool>("syncBGcolor")) {
-                        new_color = Mod::get()->getSettingValue<ccColor3B>("background");
-                    }
-                    if (Mod::get()->getSettingValue<bool>("addChildBDGradient")) {
-                        new_color = ccc3(new_color.r * 0.67, new_color.g * 0.67, new_color.b * 0.67);
-                    }
-                    if (Mod::get()->getSettingValue<bool>("bgchild-transparency")) {
-                        int opacity = Mod::get()->getSettingValue<int64_t>("bgchild-transparency-scroll");
-                        ret->setOpacity(opacity);
-                    }
-                    ret->setColor(new_color);
                 }
             });
         }
