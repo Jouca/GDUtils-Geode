@@ -1,96 +1,17 @@
 #include "CustomSettings.hpp"
 #include <Geode/loader/Dirs.hpp>
-#include <filesystem>
 #include "../Notifications/EventsPush.h"
 #include "../includes.h"
 int cycleTypes = -1;
 
-SettingNode* SettingSectionValue::createNode(float width) {
-    return SettingSectionNode::create(this, width);
+SettingNodeV3* SettingTestValue::createNode(float width) {
+    return SettingTestNode::create(static_pointer_cast<SettingTestValue>(shared_from_this()), width);
 }
-SettingNode* SettingTestValue::createNode(float width) {
-    return SettingTestNode::create(this, width);
+SettingNodeV3* SettingPosValue::createNode(float width) {
+    return SettingPosNode::create(static_pointer_cast<SettingPosValue>(shared_from_this()), width);
 }
-SettingNode* SettingAppValue::createNode(float width) {
-    return SettingAppNode::create(this, width);
-}
-SettingNode* SettingPosValue::createNode(float width) {
-    return SettingPosNode::create(this, width);
-}
-SettingNode* SettingDLPosValue::createNode(float width) {
-    return SettingDLNode::create(this, width);
-}
-SettingNode* SettingCreditsValue::createNode(float width) {
-    return SettingCreditsNode::create(this, width);
-}
-#ifdef GEODE_IS_WINDOWS
-std::string GetOpenFileName() {
-    OPENFILENAME ofn;
-    char szFile[MAX_PATH] = { 0 };
-
-    ZeroMemory(&ofn, sizeof(ofn));
-    ofn.lStructSize = sizeof(ofn);
-    ofn.hwndOwner = NULL;
-    ofn.lpstrFilter = "Executable Files (*.exe)\0*.exe\0All Files (*.*)\0*.*\0";
-    ofn.lpstrFile = szFile;
-    ofn.nMaxFile = sizeof(szFile);
-    ofn.lpstrInitialDir = "\%appdata\%\\Spotify"; // Set your desired default path here
-    ofn.Flags = OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
-    if (GetOpenFileName(&ofn))
-        return std::string(szFile);
-    else
-        return "";
-    return "";
-}
-#endif
-void SettingAppNode::onPickFile(CCObject*) {
-    #ifdef GEODE_IS_MACOS
-    // thanks catto
-    file::pick(
-        file::PickMode::OpenFile,
-        {
-            "/Applications", // sorry mac users but idk the path for spotify
-            {}
-        }
-
-    ).listen(
-        [this](Result<std::filesystem::path>* result) {
-            if (!result->isOk()) return;
-
-            auto path = result->unwrap();
-            std::string strPath = path.string();
-            size_t lastBackslashPos = strPath.find_last_of('/');
-            if (lastBackslashPos != std::string::npos) {
-                std::string lastPart = strPath.substr(lastBackslashPos + 1);
-                m_currentApp = lastPart;
-                defaultApp_input->setString(lastPart.c_str());
-                this->dispatchChanged();
-            }
-
-        },
-        [](auto const&){}
-    );
-    #else
-    #ifdef GEODE_IS_WINDOWS // i get an error, i so badly want to use elif but it gives me an error
-    std::string filePath = GetOpenFileName();
-    if (!filePath.empty()) {
-        std::filesystem::path fullPath(filePath);
-        std::string appName = fullPath.filename().string();
-        if (!appName.empty()) {
-            m_currentApp = appName;
-            defaultApp_input->setString(appName.c_str());
-            this->dispatchChanged();
-        }
-    }
-    #else 
-    FLAlertLayer::create(nullptr,
-        "Error",
-        "This setting is not supported on this platform.",
-        "OK",
-        nullptr
-    )->show();
-    #endif
-    #endif
+SettingNodeV3* SettingCreditsValue::createNode(float width) {
+    return SettingCreditsNode::create(static_pointer_cast<SettingCreditsValue>(shared_from_this()), width);
 }
 
 void SettingTestNode::onTestBtn(CCObject*) {
@@ -190,5 +111,4 @@ void SettingTestNode::onTestBtn(CCObject*) {
             break;
     }
     EventsPush::pushRateLevel(scene, data);
-
 }

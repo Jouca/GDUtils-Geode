@@ -146,13 +146,12 @@ void toggleSpotifyMute(bool automatic = false, bool muted = false) {
     } else {
         is_muted = muted;
     }
-
     if (is_muted) {
         log::info("Muting Spotify...");
     } else {
         log::info("Unmuting Spotify...");
     }
-    std::wstring targetExeName = StringToWstring(Mod::get()->getSettingValue<SettingAppStruct>("spotifyApp").m_application);
+    std::wstring targetExeName = Mod::get()->template getSettingValue<std::filesystem::path>("spotifyApp").filename().wstring();
     DWORD processId = GetProcessIdByName(targetExeName);
     if (processId) {
         MuteAudioSessionByProcessId(processId, is_muted);
@@ -186,7 +185,7 @@ bool isApplicationRunning(const std::string& appName) {
     return (result.find("true") != std::string::npos);
 }
 void MuteApplication() {
-    std::string targetName = Mod::get()->getSettingValue<SettingAppStruct>("spotifyApp").m_application;
+    std::string targetName = Mod::get()->template getSettingValue<std::filesystem::path>("spotifyApp").filename().string();
     // Remove the ".app" extension if it exists
     size_t dotAppPos = targetName.find(".app");
     if (dotAppPos != std::string::npos) {

@@ -58,7 +58,7 @@ class $modify(LevelInfoLayer) {
     }
     bool init(GJGameLevel* level, bool p1) { // inspiration le gdbrowser, what does p1 do? idk
         if (!LevelInfoLayer::init(level, p1)) return false;
-        if (!Mod::get()->getSettingValue<bool>("demonListPlacement")) return true;
+        if (!Mod::get()->template getSettingValue<bool>("demonListPlacement")) return true;
         
         if (level->m_demon.value() == 0 || level->m_stars.value() != 10) return true;
         if (level->m_demonDifficulty != 6) return true;
@@ -104,9 +104,9 @@ class $modify(LevelInfoLayer) {
             const geode::utils::MiniFunction<void(Result<matjson::Value>)> then = [this, level, levelID, loading_circle, positionLabel, demonSpr, winSize](Result<matjson::Value> const& result_json) {
                 matjson::Value json = result_json.value();
 
-                int listId = Mod::get()->getSettingValue<SettingDLPosStruct>("demonListSelection").m_pos;
+                std::string listId = Mod::get()->template getSettingValue<std::string>("demonListSelection");
 
-                if (listId == 2) {
+                if (listId == "Pointercrate") {
                     if (loading_circle != nullptr) {
                         loading_circle->fadeAndRemove();
                     }
@@ -159,9 +159,9 @@ class $modify(LevelInfoLayer) {
                 this->release();
             };
 
-            int listId = Mod::get()->getSettingValue<SettingDLPosStruct>("demonListSelection").m_pos;
+            std::string listId = Mod::get()->template getSettingValue<std::string>("demonListSelection");
             std::string url = "";
-            if (listId == 2) {
+            if (listId == "Pointercrate") {
                 url = fmt::format("https://pointercrate.com/api/v2/demons/listed/?name={}", url_encode(level->m_levelName).c_str());
             } else {
                 url = fmt::format("https://api.aredl.net/api/aredl/levels/{}", levelID);

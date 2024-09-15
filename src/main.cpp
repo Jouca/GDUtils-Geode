@@ -174,7 +174,7 @@ class $modify(CCScheduler) { // used to be GameManager
         if (currentLayer != layerName) {
             currentLayer = layerName;
             EventsPush::stopNow(scene);
-            bool everywhereElse = Mod::get()->getSettingValue<bool>("everywhereElse");
+            bool everywhereElse = Mod::get()->template getSettingValue<bool>("everywhereElse");
             if ((layerName != "LevelEditorLayer" && layerName != "PlayLayer") && !everywhereElse) return;
             if ((layerName != "LevelEditorLayer" && layerName != "PlayLayer") && everywhereElse) {
                 processChestEvent(scene);
@@ -184,9 +184,9 @@ class $modify(CCScheduler) { // used to be GameManager
         if (!event_fired) return;
         if (event_data == nullptr) return;
         event_fired = false;
-        bool everywhereElse = Mod::get()->getSettingValue<bool>("everywhereElse");
-        bool inLevels = Mod::get()->getSettingValue<bool>("inLevels");
-        bool inEditor = Mod::get()->getSettingValue<bool>("inEditor");
+        bool everywhereElse = Mod::get()->template getSettingValue<bool>("everywhereElse");
+        bool inLevels = Mod::get()->template getSettingValue<bool>("inLevels");
+        bool inEditor = Mod::get()->template getSettingValue<bool>("inEditor");
         
         bool pushEvent = true;
         if (layerName == "PlayLayer" && !inLevels) {
@@ -221,7 +221,7 @@ class $modify(CCScheduler) { // GD Protocol part
         if (layerName == "PlayLayer") return;
         if (layerName == "LoadingLayer") return;
 
-        bool levelsProtocol = Mod::get()->getSettingValue<bool>("levelsProtocol");
+        bool levelsProtocol = Mod::get()->template getSettingValue<bool>("levelsProtocol");
         if (!levelsProtocol) return;
         auto glm = GameLevelManager::sharedState();
 
@@ -308,7 +308,7 @@ class $modify(CCSprite) {
         auto ret = CCSprite::create(name);
         if (ret == nullptr) return ret;
         // better code, thanks camila!
-        if (!strcmp(name, "GJ_gradientBG.png") && Mod::get()->getSettingValue<bool>("activate-background")) {
+        if (!strcmp(name, "GJ_gradientBG.png") && Mod::get()->template getSettingValue<bool>("activate-background")) {
             Loader::get()->queueInMainThread([=] {
                 if (ret != nullptr) {
                     if (ret->getColor() == ccc3(0, 102, 255)) {
@@ -316,7 +316,7 @@ class $modify(CCSprite) {
                         if (scene->getChildrenCount() == 0) return;
                         auto layer = scene->getChildren()->objectAtIndex(0);
                         std::string layerName = misc::getNodeName(layer);
-                        ret->setColor(Mod::get()->getSettingValue<ccColor3B>("background"));
+                        ret->setColor(Mod::get()->template getSettingValue<ccColor3B>("background"));
                     }
                 }
             });
@@ -332,72 +332,72 @@ class $modify(CCScale9Sprite) {
         auto ret = cocos2d::extension::CCScale9Sprite::create(name, rect);
         if (ret == nullptr) return ret;
         // better code, thanks camila!
-        if ((!strcmp(name, "square02b_001.png") || !strcmp(name, "square02b_small.png")) && Mod::get()->getSettingValue<bool>("activate-background")) {
+        if ((!strcmp(name, "square02b_001.png") || !strcmp(name, "square02b_small.png")) && Mod::get()->template getSettingValue<bool>("activate-background")) {
             Loader::get()->queueInMainThread([=] {
                 if (ret != nullptr) {
                     // jouca waht
                     if (ret->getColor() == ccc3(0, 56, 141)) {
-                        ccColor3B new_color = Mod::get()->getSettingValue<ccColor3B>("child-background");
-                        if (Mod::get()->getSettingValue<bool>("syncBGcolor")) {
-                            new_color = Mod::get()->getSettingValue<ccColor3B>("background");
+                        ccColor3B new_color = Mod::get()->template getSettingValue<ccColor3B>("child-background");
+                        if (Mod::get()->template getSettingValue<bool>("syncBGcolor")) {
+                            new_color = Mod::get()->template getSettingValue<ccColor3B>("background");
                         }
-                        if (Mod::get()->getSettingValue<bool>("addChildBDGradient")) {
+                        if (Mod::get()->template getSettingValue<bool>("addChildBDGradient")) {
                             new_color = ccc3(new_color.r * 0.79, new_color.g * 0.79, new_color.b * 0.79);
                         }
-                        if (Mod::get()->getSettingValue<bool>("bgchild-transparency")) {
-                            int opacity = Mod::get()->getSettingValue<int64_t>("bgchild-transparency-scroll");
+                        if (Mod::get()->template getSettingValue<bool>("bgchild-transparency")) {
+                            int opacity = Mod::get()->template getSettingValue<int64_t>("bgchild-transparency-scroll");
                             ret->setOpacity(opacity);
                         }
                         ret->setColor(new_color);
                     } else if (ret->getColor() == ccc3(0, 39, 98)) {
-                        ccColor3B new_color = Mod::get()->getSettingValue<ccColor3B>("child-background");
-                        if (Mod::get()->getSettingValue<bool>("syncBGcolor")) {
-                            new_color = Mod::get()->getSettingValue<ccColor3B>("background");
+                        ccColor3B new_color = Mod::get()->template getSettingValue<ccColor3B>("child-background");
+                        if (Mod::get()->template getSettingValue<bool>("syncBGcolor")) {
+                            new_color = Mod::get()->template getSettingValue<ccColor3B>("background");
                         }
-                        if (Mod::get()->getSettingValue<bool>("addChildBDGradient")) {
+                        if (Mod::get()->template getSettingValue<bool>("addChildBDGradient")) {
                             new_color = ccc3(new_color.r * 0.71, new_color.g * 0.71, new_color.b * 0.71);
                         }
-                        if (Mod::get()->getSettingValue<bool>("bgchild-transparency")) {
-                            int opacity = Mod::get()->getSettingValue<int64_t>("bgchild-transparency-scroll");
+                        if (Mod::get()->template getSettingValue<bool>("bgchild-transparency")) {
+                            int opacity = Mod::get()->template getSettingValue<int64_t>("bgchild-transparency-scroll");
                             ret->setOpacity(opacity);
                         }
                         ret->setColor(new_color);
                     } else if (ret->getColor() == ccc3(0, 46, 117)) {
-                        ccColor3B new_color = Mod::get()->getSettingValue<ccColor3B>("child-background");
-                        if (Mod::get()->getSettingValue<bool>("syncBGcolor")) {
-                            new_color = Mod::get()->getSettingValue<ccColor3B>("background");
+                        ccColor3B new_color = Mod::get()->template getSettingValue<ccColor3B>("child-background");
+                        if (Mod::get()->template getSettingValue<bool>("syncBGcolor")) {
+                            new_color = Mod::get()->template getSettingValue<ccColor3B>("background");
                         }
-                        if (Mod::get()->getSettingValue<bool>("addChildBDGradient")) {
+                        if (Mod::get()->template getSettingValue<bool>("addChildBDGradient")) {
                             new_color = ccc3(new_color.r * 0.74, new_color.g * 0.74, new_color.b * 0.74);
                         }
-                        if (Mod::get()->getSettingValue<bool>("bgchild-transparency")) {
-                            int opacity = Mod::get()->getSettingValue<int64_t>("bgchild-transparency-scroll");
+                        if (Mod::get()->template getSettingValue<bool>("bgchild-transparency")) {
+                            int opacity = Mod::get()->template getSettingValue<int64_t>("bgchild-transparency-scroll");
                             ret->setOpacity(opacity);
                         }
                         ret->setColor(new_color);
                     } else if (ret->getColor() == ccc3(0, 36, 91)) {
-                        ccColor3B new_color = Mod::get()->getSettingValue<ccColor3B>("child-background");
-                        if (Mod::get()->getSettingValue<bool>("syncBGcolor")) {
-                            new_color = Mod::get()->getSettingValue<ccColor3B>("background");
+                        ccColor3B new_color = Mod::get()->template getSettingValue<ccColor3B>("child-background");
+                        if (Mod::get()->template getSettingValue<bool>("syncBGcolor")) {
+                            new_color = Mod::get()->template getSettingValue<ccColor3B>("background");
                         }
-                        if (Mod::get()->getSettingValue<bool>("addChildBDGradient")) {
+                        if (Mod::get()->template getSettingValue<bool>("addChildBDGradient")) {
                             new_color = ccc3(new_color.r * 0.70, new_color.g * 0.70, new_color.b * 0.70);
                         }
-                        if (Mod::get()->getSettingValue<bool>("bgchild-transparency")) {
-                            int opacity = Mod::get()->getSettingValue<int64_t>("bgchild-transparency-scroll");
+                        if (Mod::get()->template getSettingValue<bool>("bgchild-transparency")) {
+                            int opacity = Mod::get()->template getSettingValue<int64_t>("bgchild-transparency-scroll");
                             ret->setOpacity(opacity);
                         }
                         ret->setColor(new_color);
                     } else if (ret->getColor() == ccc3(0, 31, 79)) {
-                        ccColor3B new_color = Mod::get()->getSettingValue<ccColor3B>("child-background");
-                        if (Mod::get()->getSettingValue<bool>("syncBGcolor")) {
-                            new_color = Mod::get()->getSettingValue<ccColor3B>("background");
+                        ccColor3B new_color = Mod::get()->template getSettingValue<ccColor3B>("child-background");
+                        if (Mod::get()->template getSettingValue<bool>("syncBGcolor")) {
+                            new_color = Mod::get()->template getSettingValue<ccColor3B>("background");
                         }
-                        if (Mod::get()->getSettingValue<bool>("addChildBDGradient")) {
+                        if (Mod::get()->template getSettingValue<bool>("addChildBDGradient")) {
                             new_color = ccc3(new_color.r * 0.67, new_color.g * 0.67, new_color.b * 0.67);
                         }
-                        if (Mod::get()->getSettingValue<bool>("bgchild-transparency")) {
-                            int opacity = Mod::get()->getSettingValue<int64_t>("bgchild-transparency-scroll");
+                        if (Mod::get()->template getSettingValue<bool>("bgchild-transparency")) {
+                            int opacity = Mod::get()->template getSettingValue<int64_t>("bgchild-transparency-scroll");
                             ret->setOpacity(opacity);
                         }
                         ret->setColor(new_color);
@@ -421,7 +421,7 @@ class $modify(MenuLayer) {
             is_dailychest_ready = true;
         }*/
         if (!is_socketserver_started) {
-            bool startSocketServer = Mod::get()->getSettingValue<bool>("socketServer");
+            bool startSocketServer = Mod::get()->template getSettingValue<bool>("socketServer");
             if (startSocketServer) {
                 current_socket = sio::socket::ptr();
                 std::thread hThread(start_socket_func);
@@ -474,6 +474,16 @@ class $modify(MyMenuLayerGDUTILS, MenuLayer) {
 };
 */
 
+$execute {
+    (void)Mod::get()->registerCustomSettingType("test-notification", &SettingTestValue::parse);
+    (void)Mod::get()->registerCustomSettingType("credit-buttons", &SettingCreditsValue::parse);
+    //(void)Mod::get()->registerCustomSettingType("notificationPlacement", &SettingPosValue::parse);
+    auto ret = Mod::get()->registerCustomSettingType("notification-placement", &SettingPosValue::parse);
+    if (!ret) {
+        log::error("Unable to register setting type: {}", ret.unwrapErr());
+    }
+}
+
 // When the socket connection is made
 $on_mod(Loaded) {
     log::info("GDUtils Mod Loaded");
@@ -483,24 +493,15 @@ $on_mod(Loaded) {
     //Discord::init(); for next update ;)
     // also for whatever reason, discord rpc doesnt work on vanilla gd, instead it shows absolutes MH icon for some reason even though I dont own MH. can someone explain that
     
-    Mod::get()->addCustomSetting<SettingTestValue>("test-notification", "none");
-    Mod::get()->addCustomSetting<SettingPosValue>("notificationPlacement", 4);
-    Mod::get()->addCustomSetting<SettingDLPosValue>("demonListSelection", 2);
-    // Sections
-    Mod::get()->addCustomSetting<SettingSectionValue>("notification-section", "none");
-    Mod::get()->addCustomSetting<SettingSectionValue>("notification-placement-section", "none");
-    Mod::get()->addCustomSetting<SettingSectionValue>("notification-appearance-section", "none");
-    Mod::get()->addCustomSetting<SettingSectionValue>("spotify-section", "none");
-    Mod::get()->addCustomSetting<SettingSectionValue>("misc-section", "none");
-    Mod::get()->addCustomSetting<SettingSectionValue>("background-section", "none");
-    Mod::get()->addCustomSetting<SettingSectionValue>("credits-section", "none");
+    /*Mod::get()->registerCustomSettingType<SettingPosValue>("notificationPlacement", 4);
+    Mod::get()->registerCustomSettingType<SettingDLPosValue>("demonListSelection", 2);
     // ok listen here, you dont provide a way to JUST get the file name, you provide the full path which isnt what i want, so dont complain geode devs. Okay? we good? ok
     #ifdef GEODE_IS_WINDOWS
-    Mod::get()->addCustomSetting<SettingAppValue>("spotifyApp", "Spotify.exe");
+    Mod::get()->registerCustomSettingType<SettingAppValue>("spotifyApp", "Spotify.exe");
     #else
-    Mod::get()->addCustomSetting<SettingAppValue>("spotifyApp", "Spotify.app");
+    Mod::get()->registerCustomSettingType<SettingAppValue>("spotifyApp", "Spotify.app");
     #endif
-    Mod::get()->addCustomSetting<SettingCreditsValue>("credit-buttons", "none");
+    Mod::get()->registerCustomSettingType<SettingCreditsValue>("credit-buttons", "none");*/
 
     #ifdef GEODE_IS_WINDOWS
     #include <Windows.h>

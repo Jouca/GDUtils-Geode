@@ -18,7 +18,7 @@ class $modify(InfoLayer) {
 
         // Check if it's InfoLayer for level
         if (level == nullptr) return true;
-        if (!Mod::get()->getSettingValue<bool>("levelsProtocolButton")) return true;
+        if (!Mod::get()->template getSettingValue<bool>("levelsProtocolButton")) return true;
 
         std::string levelID = std::to_string(level->m_levelID.value());
 
