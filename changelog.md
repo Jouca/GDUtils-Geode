@@ -1,14 +1,18 @@
 # Changelog
 ## <cj>v1.3.10</c> <cb>(2024-09-15)</c>
+* <cg>Added</c> Cyborg, Death and <co>Inferno</c> gauntlet designs.
+* <cg>Added</c> custom badges in comments.
+* <cg>Added</c> color comments for <co>GDUtils developer</c> & <cp>Ko-Fi Supporter</c>
+* <cy>Optimized</c> the size of GDUtils stored on the mod folder.
 * <cy>Updated</c> settings to the new V3 ones for custom settings.
 
 ## <cj>v1.3.9</c> <cb>(2024-08-19)</c>
-* <cg>Added</c> <cp>Ko-Fi Supporter</c> badge on profile + link to get it on the "gift button" ([or also here](https://ko-fi.com/gdutils))
-* <cg>Added</c> GD moderators leaderboards
-* <cg>Added</c> GD moderators filter per badge on leaderboards
+* <cg>Added</c> <cp>Ko-Fi Supporter</c> badge on profile + link to get it on the "gift button" ([or also here](https://ko-fi.com/gdutils)).
+* <cg>Added</c> GD moderators leaderboards.
+* <cg>Added</c> GD moderators filter per badge on leaderboards.
 
 ## <cj>v1.3.8</c> <cb>(2024-08-06)</c>
-* <cg>Added</c> <cr>Lava</c> gauntlet design
+* <cg>Added</c> <cr>Lava</c> gauntlet design.
 * <cg>Added</c> Pointercrate & AreDL setting for demon placement.
 * <cg>Added</c> GDUtils GFX and GD Awards badges.
 * <cg>Added</c> setting to show buttons for previewing icons colors when they are not unlocked.
