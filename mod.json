@@ -1,5 +1,5 @@
 {
-    "geode": "3.4.0",
+    "geode": "3.6.1",
     "version": "v1.3.9",
     "gd": {
         "win": "2.206",
@@ -20,12 +20,12 @@
     "dependencies": [
         {
             "id": "geode.node-ids",
-            "version": ">=v1.13.1",
+            "version": ">=v1.14.0",
             "importance": "required"
         },
         {
             "id": "jouca.badgesapi",
-            "version": ">=v1.0.7",
+            "version": ">=v1.1.0",
             "importance": "required"
         }
     ],
