@@ -127,7 +127,7 @@ class $modify(GJGarageLayer) {
     void onSelect(cocos2d::CCObject* sender) {
         GJGarageLayer::onSelect(sender);
 
-        if (!Mod::get()->getSettingValue<bool>("previewIcons")) return;
+        if (!Mod::get()->template getSettingValue<bool>("previewIcons")) return;
 
         IconLockColors::createIconColor();
     }

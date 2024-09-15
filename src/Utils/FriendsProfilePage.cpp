@@ -63,7 +63,7 @@ class SearchUserLayer : public BrownAlertDelegate {
 class $modify(FriendPage, FriendsProfilePage) {
     bool init(UserListType type) {
         if (!FriendsProfilePage::init(type)) return false;
-        if (!Mod::get()->getSettingValue<bool>("friendSearch")) return true;
+        if (!Mod::get()->template getSettingValue<bool>("friendSearch")) return true;
         auto menu = this->m_buttonMenu;
 
         auto downSpr = CCSprite::createWithSpriteFrameName("edit_downBtn2_001.png");

@@ -55,7 +55,7 @@ class $modify(CustomGauntletSelectLayer, GauntletSelectLayer) {
     void setupGauntlets() {
         GauntletSelectLayer::setupGauntlets();
 
-        if (!Mod::get()->getSettingValue<bool>("gauntletDesign")) return;
+        if (!Mod::get()->template getSettingValue<bool>("gauntletDesign")) return;
 
         CCSprite* infoSpr = CCSprite::createWithSpriteFrameName("GJ_infoIcon_001.png");
         CCMenuItemSpriteExtra* infoBtn = CCMenuItemSpriteExtra::create(

@@ -1,6 +1,6 @@
 {
     "geode": "3.6.1",
-    "version": "v1.3.9",
+    "version": "v1.3.10",
     "gd": {
         "win": "2.206",
         "mac": "2.206",
@@ -52,14 +52,11 @@
         "notification-section": {
             "name": "Notifications",
             "description": "This category is for where it should <cy>show notifications</c>, and also <cy>what notifications</c> precisely.",
-            "type": "custom",
-            "scale": 300,
-            "posX": 65
+            "type": "title"
         },
         "test-notification": {
             "name": "Test",
-            "description": "NONE",
-            "type": "custom"
+            "type": "custom:test-notification"
         },
         "everywhereElse": {
             "name": "Everywhere Else",
@@ -148,21 +145,18 @@
         "notification-placement-section": {
             "name": "Notification Placement",
             "description": "This category is for where to <cy>show the notification</c> in the screen on a specific corner.",
-            "type": "custom",
-            "scale": 300,
-            "posX": 100
+            "type": "title"
         },
         "notificationPlacement": {
             "name": "Placement",
-            "description": "Where the notification should be placed.\n1 = <cy>Top Left</c> | 2 = <cy>Top Right</c>\n3 = <cy>Bottom Left</c> | 4 = <cy>Bottom Right</c>",
-            "type": "custom"
+            "descriptionold": "Where the notification should be placed.\n1 = <cy>Top Left</c> | 2 = <cy>Top Right</c>\n3 = <cy>Bottom Left</c> | 4 = <cy>Bottom Right</c>",
+            "type": "custom:notification-placement",
+            "default": 4
         },
         "notification-appearance-section": {
             "name": "Notification Appearance",
             "description": "This category is for <cy>setting notification boxes</c> for how it should appear.\nYou can also use <cb>decimals</c> in these options, such as <cy>0.5 size</c>, or <cy>3.5 seconds.</c>",
-            "type": "custom",
-            "scale": 350,
-            "posX": 105
+            "type": "title"
         },
         "size": {
             "name": "Size",
@@ -190,34 +184,46 @@
         "spotify-section": {
             "name": "Spotify",
             "description": "This category is for determining when <cg>Spotify</c> should toggle <cr>mute</c>.\nThis only works if you currently have the <cg>Spotify App</c> open.\n\n<cy>If your music volume is set to 0, </c><cg>Spotify</c><cy>\nwill not be affected.</c>",
-            "type": "custom",
-            "scale": 350,
-            "posX": 40
+            "type": "title",
+            "platforms": ["win","mac"]
         },
         "inEditorSpotify": {
             "name": "In Editor",
             "description": "Disabling this will not auto-mute Spotify when you are playing music in the Editor.",
             "type": "bool",
-            "default": false
+            "default": false,
+            "platforms": ["win","mac"]
         },
         "inLevelsSpotify": {
             "name": "In Levels",
             "description": "Disabling this will not auto-mute Spotify when you are playing a level, and music is playing.",
             "type": "bool",
-            "default": false
+            "default": false,
+            "platforms": ["win","mac"]
         },
         "spotifyApp": {
             "name": "Application",
             "description": "This will decide what application should be auto-muted.",
-            "type": "custom",
-            "default": "Spotify.exe"
+            "type": "file",
+            "default": {
+                "win": "Spotify.exe",
+                "mac": "Spotify.app"
+            },
+            "platforms": ["win","mac"],
+            "control": {
+                "dialog": "open",
+                "filters": [
+                    {
+                        "files": ["*.exe", "*.app", "*.*"],
+                        "description": "Executable programs"
+                    }
+                ]
+            }
         },
         "misc-section": {
             "name": "Miscellaneous",
             "description": "This category is for any other feature for <cy>GDUtils</c>.\nYou can choose whether to <cy>enable</c> or <cy>disable</c> some options if you do not want them.",
-            "type": "custom",
-            "scale": 300,
-            "posX": 65
+            "type": "title"
         },
         "friendSearch": {
             "name": "Search Friends",
@@ -234,7 +240,9 @@
         "demonListSelection": {
             "name": "Demon List Selection",
             "description": "Whether or not to select between <cg>Pointercrate</c> or <cg>AreDL</c> for placements.",
-            "type": "custom"
+            "type": "string",
+            "default": "Pointercrate",
+            "one-of": ["Pointercrate", "AreDL"]
         },
         "levelsProtocol": {
             "name": "Allow Levels Protocol",
@@ -269,9 +277,7 @@
         "background-section": {
             "name": "Backgrounds",
             "description": "This category is for changing the <cy>background colors</c>.",
-            "type": "custom",
-            "scale": 350,
-            "posX": 60
+            "type": "title"
         },
         "activate-background": {
             "name": "Activate Background",
@@ -283,31 +289,36 @@
             "name": "Background",
             "description": "Change the color of GD backgrounds.",
             "type": "color",
-            "default": "#0066FF"
+            "default": "#0066FF",
+            "enable-if": "activate-background"
         },
         "child-background": {
             "name": "Child Background",
             "description": "Change the color of GD child backgrounds (associated with GD backgrounds).",
             "type": "color",
-            "default": "#00388D"
+            "default": "#00388D", 
+            "enable-if": "activate-background"
         },
         "syncBGcolor": {
             "name": "Sync BG Color",
             "description": "Allows you to <cg>synchronise the GD backgrounds</c> with child backgrounds.",
             "type": "bool",
-            "default": true
+            "default": true,
+            "enable-if": "activate-background"
         },
         "addChildBDGradient": {
             "name": "Add child BG Gradient",
             "description": "Adds a gradient to child backgrounds (only for level browsing).",
             "type": "bool",
-            "default": true
+            "default": true,
+            "enable-if": "activate-background"
         },
         "bgchild-transparency": {
             "name": "BG Child Transparency",
             "description": "Change the transparency of child backgrounds.",
             "type": "bool",
-            "default": false
+            "default": false,
+            "enable-if": "activate-background"
         },
         "bgchild-transparency-scroll": {
             "name": "Transparency Opacity",
@@ -318,18 +329,17 @@
             "max": 255,
             "control": {
                 "slider": true
-            }
+            },
+            "enable-if": "activate-background"
         },
         "credits-section": {
             "name": "Credits",
             "description": "Below are the credits for those that developed the mod, and beta-tested the mod!",
-            "type": "custom",
-            "scale": 300,
-            "posX": 40
+            "type": "title"
         },
         "credit-buttons": {
             "name": "Credit Buttons",
-            "type": "custom"
+            "type": "custom:credit-buttons"
         }
     }
 }

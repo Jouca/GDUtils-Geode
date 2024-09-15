@@ -416,12 +416,12 @@ bool EventsPush::init(sio::message::ptr const& data) {
     
     auto menu = CCMenu::create();
 
-    bool newRate = Mod::get()->getSettingValue<bool>("newRate");
-    bool daily = Mod::get()->getSettingValue<bool>("daily");
-    bool weekly = Mod::get()->getSettingValue<bool>("weekly");
-    bool smallChest = Mod::get()->getSettingValue<bool>("smallChest");
-    bool largeChest = Mod::get()->getSettingValue<bool>("largeChest");
-    bool list = Mod::get()->getSettingValue<bool>("newListRate");
+    bool newRate = Mod::get()->template getSettingValue<bool>("newRate");
+    bool daily = Mod::get()->template getSettingValue<bool>("daily");
+    bool weekly = Mod::get()->template getSettingValue<bool>("weekly");
+    bool smallChest = Mod::get()->template getSettingValue<bool>("smallChest");
+    bool largeChest = Mod::get()->template getSettingValue<bool>("largeChest");
+    bool list = Mod::get()->template getSettingValue<bool>("newListRate");
     switch (type) {
         case 0: // Rate
             eventType = EventType::Rate;
@@ -471,7 +471,7 @@ bool EventsPush::init(sio::message::ptr const& data) {
     auto winSize = director->getWinSize();
     auto bg = cocos2d::extension::CCScale9Sprite::create(sprite_name.c_str(), { .0f, .0f, 80.0f, 80.0f, });
     auto bg_click_spr = cocos2d::extension::CCScale9Sprite::create(sprite_name.c_str(), { .0f, .0f, 80.0f, 80.0f, });
-    float lrScale = (float)Mod::get()->getSettingValue<double>("size");
+    float lrScale = (float)Mod::get()->template getSettingValue<double>("size");
     auto LrSize = CCSize{ 240, 70 }; // * lrScale for both
     bg->setScale(lrScale);
     this->setZOrder(zOrder);
@@ -560,7 +560,7 @@ bool EventsPush::init(sio::message::ptr const& data) {
                 bg->addChild(legendary);
                 bg->addChild(diffFace);
 
-                if (Mod::get()->getSettingValue<bool>("customDifficultyFaces")) {
+                if (Mod::get()->template getSettingValue<bool>("customDifficultyFaces")) {
                     CCSprite* legendaryFace = nullptr;
                     if (isDemon == 0) {
                         if (starsum >= 10) {
@@ -591,7 +591,7 @@ bool EventsPush::init(sio::message::ptr const& data) {
             case 4: // Mythic
                 bg->addChild(mythic);
 
-                if (Mod::get()->getSettingValue<bool>("customDifficultyFaces")) {
+                if (Mod::get()->template getSettingValue<bool>("customDifficultyFaces")) {
                     CCSprite* mythicFace = nullptr;
                     if (isDemon == 0) {
                         if (starsum >= 10) {
@@ -830,24 +830,24 @@ bool EventsPush::init(sio::message::ptr const& data) {
     // Move action
     //CCDelayTime
     
-    float delayTime = (float)Mod::get()->getSettingValue<double>("time");
+    float delayTime = (float)Mod::get()->template getSettingValue<double>("time");
 
-    int cornerId = Mod::get()->getSettingValue<SettingPosStruct>("notificationPlacement").m_pos;//ConfigHandler::readConfigInt("notificationPlacement");
+    auto cornerId = Mod::get()->getSettingValue<SettingPosEnum>("notificationPlacement");
     float moveX = .0F;
     switch (cornerId) {
-        case 1: // top left
+        case SettingPosEnum::TopLeft: // top left
             bg->setPosition((-(bg->getContentSize().width / 2)) * lrScale, ((winSize.height - (bg->getContentSize().height / 2)) - (20 * lrScale)));
             moveX = (bg->getContentSize().width) * lrScale;
             break;
-        case 2: // top right
+        case SettingPosEnum::TopRight: // top right
             bg->setPosition(winSize.width + ((bg->getContentSize().width / 2) * lrScale), ((winSize.height - (bg->getContentSize().height / 2)) - (20 * lrScale)));
             moveX = -(bg->getContentSize().width * lrScale);
             break;
-        case 3: // bottom left
+        case SettingPosEnum::BottomLeft: // bottom left
             bg->setPosition((-(bg->getContentSize().width / 2)) * lrScale, (bg->getContentSize().height / 2) * lrScale);
             moveX = (bg->getContentSize().width) * lrScale;
             break;
-        case 4: // bottom right
+        case SettingPosEnum::BottomRight: // bottom right
             bg->setPosition({ winSize.width + ((bg->getContentSize().width / 2) * lrScale), (bg->getContentSize().height / 2) * lrScale});
             moveX = -((bg->getContentSize().width) * lrScale);
             break;
@@ -863,14 +863,14 @@ bool EventsPush::init(sio::message::ptr const& data) {
     ));
 
     float volume = 0.0f;
-    if (Mod::get()->getSettingValue<bool>("sfx-link")) {
+    if (Mod::get()->template getSettingValue<bool>("sfx-link")) {
         volume = GameManager::get()->m_sfxVolume;
     } else {
-        volume = Mod::get()->getSettingValue<double>("sfx-volume");
+        volume = Mod::get()->template getSettingValue<double>("sfx-volume");
     }
     
-    if (Mod::get()->getSettingValue<bool>("sfx") && type != 3 && type != 4) FMODAudioEngine::sharedEngine()->playEffect("crystal01.ogg", 1, 1, volume);
-    if (Mod::get()->getSettingValue<bool>("sfx") && (type == 3 || type == 4)) FMODAudioEngine::sharedEngine()->playEffect("reward01.ogg", 1, 1, volume);
+    if (Mod::get()->template getSettingValue<bool>("sfx") && type != 3 && type != 4) FMODAudioEngine::sharedEngine()->playEffect("crystal01.ogg", 1, 1, volume);
+    if (Mod::get()->template getSettingValue<bool>("sfx") && (type == 3 || type == 4)) FMODAudioEngine::sharedEngine()->playEffect("reward01.ogg", 1, 1, volume);
 
     return true;
 }
