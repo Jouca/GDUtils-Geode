@@ -54,6 +54,7 @@ class $modify(CustomGauntletSelectLayer, GauntletSelectLayer) {
             infoBtn->setScale(.8f);
             infoBtn->setZOrder(10);
             infoBtn->setColor(cocos2d::ccc3(236, 149, 19));
+            infoBtn->setID("particle-info-button"_spr);
 
             CCMenu* menu_btr = static_cast<CCMenu*>(this->getChildByIDRecursive("bottom-right-menu"));
             menu_btr->addChild(infoBtn);
