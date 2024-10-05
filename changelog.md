@@ -1,9 +1,13 @@
 # Changelog
+## <cj>v1.3.11</c> <cb>(2024-10-05)</c>
+* <cg>Added</c> <cj>NCS I</c> and <cp>NCS II</c> gauntlets designs and particles.
+* <cy>Fixed</c> demonlist level position bug.
+
 ## <cj>v1.3.10</c> <cb>(2024-09-15)</c>
 * <cg>Added</c> Cyborg, Death and <co>Inferno</c> gauntlet designs.
 * <cg>Added</c> custom badges in comments.
 * <cg>Added</c> color comments for <co>GDUtils developer</c> & <cp>Ko-Fi Supporter</c>
-* <cy>Optimized</c> the size of GDUtils stored on the mod folder.
+* <cy>Optimized</c> the size of GDUtils stored on the mod folder (thanks [Alphalaneous](user:1139015)!)
 * <cy>Updated</c> settings to the new V3 ones for custom settings.
 
 ## <cj>v1.3.9</c> <cb>(2024-08-19)</c>
