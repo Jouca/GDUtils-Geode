@@ -56,6 +56,8 @@ class IconLockColors {
                     }
                 }
             }
+
+            return nullptr;
         }
 
         static void createIconColor() {
