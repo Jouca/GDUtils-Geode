@@ -716,12 +716,60 @@ class $modify(CustomGauntletSelectLayer, GauntletSelectLayer) {
                     sprite->setScale(1.270f/scaleFactor);
                     sprite->setZOrder(0);
                     node->addChild(sprite);
+
+                    // Show gauntlets sprite again
+                    gauntlet->setVisible(true);
+                    gauntlet->setPosition({0, 16});
+                    gauntlet->setScale(0.9f);
+                    gauntlet_node->setZOrder(3);
+
+                    CCParticleSystemQuad* particle = GameToolbox::particleFromString("25a-1a1a0.3a19a90a90a0a0a0a0a0a0a0a0a0a0a23a1a0a98a0.0980392a0a0.176471a0a0.219608a0a1a0a50a1a0a0a0.0980392a0a0.176471a0a0.219608a0a1a0a0a0a0a0a0a0a0a0a0a0a0a2a1a0a0a0a185a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
+                    node->addChild(particle);
+                    particle->setPosition({0, 20});
+                    particle->setZOrder(2);
+                    particle->setScale(2.060f);
+
+                    CCParticleSystemQuad* particle2 = GameToolbox::particleFromString("25a-1a1a0.3a19a90a90a0a0a0a0a0a0a0a0a0a0a12a1a0a98a0.0980392a0a0.176471a0a0.219608a0a1a0a36a1a0a0a0.0980392a0a0.176471a0a0.219608a0a1a0a0a0a0a0a0a0a0a0a0a0a0a2a1a0a0a0a167a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
+                    node->addChild(particle2);
+                    particle2->setPosition(gauntlet->getPosition());
+                    particle2->setZOrder(2);
+                    particle2->setScale(4.210f);
+
+                    CCParticleSystemQuad* particle3 = GameToolbox::particleFromString("30a-1a2.5a0.3a10a90a12a19a0a23a0a0a11a0a0a0a0a4a1a0a0a0.313726a0a0.458824a0a0.529412a0a1a0a2a1a0a0a0.313726a0a0.458824a0a0.529412a0a1a0a0a0a0.5a0a0a0a0a0a0a0a0a2a1a0a0a0a19a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
+                    node->addChild(particle3);
+                    particle3->setZOrder(0);
+                    particle3->setPosition({0, -81});
+                    particle3->setScale(2.035f);
                 } else if (gauntletName == "NCS II") {
                     CCSprite* sprite = CCSprite::create("ncs_gauntlet_2.png"_spr);
                     sprite->setPosition(bg->getPosition());
                     sprite->setScale(1.270f/scaleFactor);
                     sprite->setZOrder(0);
                     node->addChild(sprite);
+
+                    // Show gauntlets sprite again
+                    gauntlet->setVisible(true);
+                    gauntlet->setPosition({0, 16});
+                    gauntlet->setScale(0.9f);
+                    gauntlet_node->setZOrder(3);
+
+                    CCParticleSystemQuad* particle = GameToolbox::particleFromString("25a-1a1a0.3a19a90a90a0a0a0a0a0a0a0a0a0a0a23a1a0a98a0.301961a0a0.156863a0a0.341176a0a1a0a50a1a0a0a0.301961a0a0.156863a0a0.341176a0a1a0a0a0a0a0a0a0a0a0a0a0a0a2a1a0a0a0a185a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
+                    node->addChild(particle);
+                    particle->setPosition({0, 20});
+                    particle->setZOrder(2);
+                    particle->setScale(2.060f);
+
+                    CCParticleSystemQuad* particle2 = GameToolbox::particleFromString("25a-1a1a0.3a19a90a90a0a0a0a0a0a0a0a0a0a0a12a1a0a98a0.301961a0a0.156863a0a0.341176a0a1a0a36a1a0a0a0.301961a0a0.156863a0a0.341176a0a1a0a0a0a0a0a0a0a0a0a0a0a0a2a1a0a0a0a167a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
+                    node->addChild(particle2);
+                    particle2->setPosition(gauntlet->getPosition());
+                    particle2->setZOrder(2);
+                    particle2->setScale(4.210f);
+
+                    CCParticleSystemQuad* particle3 = GameToolbox::particleFromString("30a-1a2.5a0.3a10a90a12a19a0a23a0a0a11a0a0a0a0a4a1a0a0a0.482353a0a0.317647a0a0.533333a0a1a0a2a1a0a0a0.482353a0a0.317647a0a0.533333a0a1a0a0a0a0.5a0a0a0a0a0a0a0a0a2a1a0a0a0a19a0a0a0a0a0a0a0a0a0a0a0a0a0a0", NULL, false);
+                    node->addChild(particle3);
+                    particle3->setZOrder(0);
+                    particle3->setPosition({0, -81});
+                    particle3->setScale(2.035f);
                 } else if (gauntletName == "Discord") {
                     CCSprite* sprite = CCSprite::create("discord_gauntlet.png"_spr);
                     sprite->setPosition({bg->getPositionX(), bg->getPositionY() + 3});
