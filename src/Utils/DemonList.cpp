@@ -162,7 +162,7 @@ class $modify(LevelInfoLayer) {
             std::string listId = Mod::get()->template getSettingValue<std::string>("demonListSelection");
             std::string url = "";
             if (listId == "Pointercrate") {
-                url = fmt::format("https://pointercrate.com/api/v2/demons/listed/?name={}", url_encode(level->m_levelName).c_str());
+                url = fmt::format("https://pointercrate.com/api/v2/demons/listed/?level_id={}", levelID);
             } else {
                 url = fmt::format("https://api.aredl.net/api/aredl/levels/{}", levelID);
             }
