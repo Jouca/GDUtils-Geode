@@ -158,6 +158,12 @@ class $modify(CustomScoreCell, GJScoreCell) {
             platformer_sprite->setPositionX(30);
             platformer_sprite->setScale(1.2f);
 
+            auto pointercrate = CCSprite::createWithSpriteFrameName("diffIcon_06_btn_001.png");
+            auto pointercrate_text = CCLabelBMFont::create("PC", "goldFont.fnt");
+            pointercrate_text->setPosition(28, 0);
+            pointercrate_text->setScale(0.5f);
+            pointercrate->addChild(pointercrate_text);
+
             auto easydemon_sprite_classic = CCSprite::createWithSpriteFrameName("diffIcon_07_btn_001.png");
             easydemon_sprite_classic->addChild(classic_sprite);
             auto mediumdemon_sprite_classic = CCSprite::createWithSpriteFrameName("diffIcon_08_btn_001.png");
@@ -388,6 +394,25 @@ class $modify(CustomScoreCell, GJScoreCell) {
                     demon_icon->setTag(demon_icon_tag);
                     demon_icon->setZOrder(demon_icon_z);
                     statsMenu->addChild(extreme_sprite_classic);
+
+                    demon_label->removeFromParent();
+                    demon_label = CCLabelBMFont::create(count_diff.c_str(), "bigFont.fnt");
+                    demon_label->setPosition(demon_label_pos);
+                    demon_label->setScale(demon_label_scale);
+                    demon_label->setZOrder(demon_label_z);
+                    demon_label->setTag(demon_label_tag);
+                    demon_label->setLayoutOptions(demon_label_layout);
+                    statsMenu->addChild(demon_label);
+                    break;
+                case StatsListType::Pointercrate:
+                    demon_icon->removeFromParent();
+                    demon_icon = pointercrate;
+                    demon_icon->setPosition(demon_icon_pos);
+                    demon_icon->setScale(demon_icon_scale);
+                    demon_icon->setLayoutOptions(demon_icon_layout);
+                    demon_icon->setTag(demon_icon_tag);
+                    demon_icon->setZOrder(demon_icon_z);
+                    statsMenu->addChild(pointercrate);
 
                     demon_label->removeFromParent();
                     demon_label = CCLabelBMFont::create(count_diff.c_str(), "bigFont.fnt");

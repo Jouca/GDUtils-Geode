@@ -2,6 +2,7 @@
 #include "Newtab.h"
 #include <Geode/modify/LeaderboardsLayer.hpp>
 #include <Geode/ui/GeodeUI.hpp>
+#include <Geode/loader/Loader.hpp>
 
 StatsListType MoreLeaderboards::g_tab = StatsListType::Stars;
 bool MoreLeaderboards::modFilter = false;
@@ -546,6 +547,9 @@ void MoreLeaderboards::startLoadingMore() {
             case StatsListType::BetterProgression:
                 type = "betterProgression";
                 break;
+            case StatsListType::Pointercrate:
+                type = "pointercratePoints";
+                break;
         }
 
         const geode::utils::MiniFunction<void(std::string const&)> expect = [this](std::string const& error) {
@@ -975,6 +979,11 @@ void MoreLeaderboards::changeTabPage() {
     platformer_sprite->setScale(1.2f);
 
     auto better_progression = CCSprite::create("better_progression.png"_spr);
+    auto pointercrate = CCSprite::createWithSpriteFrameName("diffIcon_06_btn_001.png");
+    auto pointercrate_text = CCLabelBMFont::create("PC", "goldFont.fnt");
+    pointercrate_text->setPosition(28, 0);
+    pointercrate_text->setScale(0.5f);
+    pointercrate->addChild(pointercrate_text);
 
     auto easydemon_sprite_classic = CCSprite::createWithSpriteFrameName("diffIcon_07_btn_001.png");
     easydemon_sprite_classic->addChild(classic_sprite);
@@ -1046,14 +1055,25 @@ void MoreLeaderboards::changeTabPage() {
 
             break;
         case 1:
-            MoreLeaderboards::g_tab = StatsListType::BetterProgression;
+            if (geode::Loader::get()->isModLoaded("itzkiba.better_progression")) {
+                MoreLeaderboards::g_tab = StatsListType::BetterProgression;
 
-            m_tab1 = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, better_progression, this, menu_selector(MoreLeaderboards::onTab));
-            m_tab1->setPosition(-140.f, 132);
-            m_tab1->setTag(static_cast<int>(StatsListType::BetterProgression));
-            m_tab1->setZOrder(30);
-            m_tab1->setScale(0.8f);
-            m_menu->addChild(m_tab1);
+                m_tab1 = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, better_progression, this, menu_selector(MoreLeaderboards::onTab));
+                m_tab1->setPosition(-140.f, 132);
+                m_tab1->setTag(static_cast<int>(StatsListType::BetterProgression));
+                m_tab1->setZOrder(30);
+                m_tab1->setScale(0.8f);
+                m_menu->addChild(m_tab1);
+            } else {
+                MoreLeaderboards::g_tab = StatsListType::Pointercrate;
+
+                m_tab1 = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, pointercrate, this, menu_selector(MoreLeaderboards::onTab));
+                m_tab1->setPosition(-140.f, 132);
+                m_tab1->setTag(static_cast<int>(StatsListType::Pointercrate));
+                m_tab1->setZOrder(30);
+                m_tab1->setScale(0.8f);
+                m_menu->addChild(m_tab1);
+            }
 
             m_tab2 = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, easydemon_sprite_classic, this, menu_selector(MoreLeaderboards::onTab));
             m_tab2->setPosition(-86.f, 132);
@@ -1128,6 +1148,15 @@ void MoreLeaderboards::changeTabPage() {
             m_tab5->setZOrder(30);
             m_tab5->setScale(0.8f);
             m_menu->addChild(m_tab5);
+
+            if (geode::Loader::get()->isModLoaded("itzkiba.better_progression")) {
+                m_tab6 = NewTabButton::create(TabBaseColor::Unselected, TabBaseColor::Selected, pointercrate, this, menu_selector(MoreLeaderboards::onTab));
+                m_tab6->setPosition(138.f, 132);
+                m_tab6->setTag(static_cast<int>(StatsListType::Pointercrate));
+                m_tab6->setZOrder(30);
+                m_tab6->setScale(0.8f);
+                m_menu->addChild(m_tab6);
+            }
 
             break;
     }

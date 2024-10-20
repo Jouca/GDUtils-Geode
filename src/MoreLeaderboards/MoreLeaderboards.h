@@ -25,7 +25,8 @@ enum class StatsListType {
     platformerDemonsHard,
     platformerDemonsInsane,
     platformerDemonsExtreme,
-    BetterProgression
+    BetterProgression,
+    Pointercrate
 };
 
 class MoreLeaderboards : public CCLayer {
