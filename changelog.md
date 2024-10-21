@@ -1,4 +1,10 @@
 # Changelog
+## <cj>v1.3.12</c> <cb>(2024-10-21)</c>
+* <cg>Added</c> Pointercrate leaderboard.
+* <cg>Added</c> <cb>Magic</c> and <co>Chaos</c> gauntlets designs.
+* <cy>Fixed</c> buttons positions for locked icons.
+* <cy>Fixed</c> crash for second page of more leaderboards.
+
 ## <cj>v1.3.11</c> <cb>(2024-10-05)</c>
 * <cg>Added</c> <cj>NCS I</c> and <cp>NCS II</c> gauntlets designs and particles.
 * <cy>Fixed</c> demonlist level position bug.
