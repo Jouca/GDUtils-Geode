@@ -101,7 +101,7 @@ class $modify(LevelInfoLayer) {
             loading_circle->setParentLayer(this);
             loading_circle->show();
 
-            const geode::utils::MiniFunction<void(Result<matjson::Value>)> then = [this, level, levelID, loading_circle, positionLabel, demonSpr, winSize](Result<matjson::Value> const& result_json) {
+            const std::function<void(Result<matjson::Value>)> then = [this, level, levelID, loading_circle, positionLabel, demonSpr, winSize](Result<matjson::Value> const& result_json) {
                 matjson::Value json = result_json.value();
 
                 std::string listId = Mod::get()->template getSettingValue<std::string>("demonListSelection");
@@ -144,7 +144,7 @@ class $modify(LevelInfoLayer) {
                     }
                 }
             };
-            const geode::utils::MiniFunction<void(std::string const&)> expect = [this, loading_circle](std::string const& error) {
+            const std::function<void(std::string const&)> expect = [this, loading_circle](std::string const& error) {
                 if (loading_circle != nullptr) {
                     loading_circle->fadeAndRemove();
                 }

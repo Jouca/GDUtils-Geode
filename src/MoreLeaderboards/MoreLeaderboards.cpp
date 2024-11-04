@@ -419,11 +419,11 @@ void MoreLeaderboards::handle_request_mods(std::string const& data) {
 }
 
 void MoreLeaderboards::startLoadingMods() {
-    const geode::utils::MiniFunction<void(std::string const&)> then = [this](std::string const& data) {
+    const std::function<void(std::string const&)> then = [this](std::string const& data) {
         handle_request_mods(data);
         fadeLoadingCircle();
     };
-    const geode::utils::MiniFunction<void(std::string const&)> expect = [this](std::string const& error) {
+    const std::function<void(std::string const&)> expect = [this](std::string const& error) {
         fadeLoadingCircle();
     };
 

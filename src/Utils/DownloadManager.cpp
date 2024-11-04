@@ -79,14 +79,14 @@ void DownloadManager::setup() {
 
     // def not copied from geode hahahaha
 
-    const geode::utils::MiniFunction<void(geode::ByteVector const&)> then = [this](geode::ByteVector const& data) {
+    const std::function<void(geode::ByteVector const&)> then = [this](geode::ByteVector const& data) {
         // Save the file
         geode::utils::file::writeBinary(this->m_sDestination, data);
 
         ProcessLambdas::callMenuHandler(this, this->m_pSelector);
         this->onClose(CCNode::create());
     };
-    const geode::utils::MiniFunction<void(int const&)> expect = [this](int const& error) {
+    const std::function<void(int const&)> expect = [this](int const& error) {
         FLAlertLayer::create(nullptr, "Error!", "An error occured while trying to send a request to the servers. Check <cy>logs</c> for more information.", "OK", nullptr, 200.0F)->show();
         log::error("Error downloading: {}", error);
     };

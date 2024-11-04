@@ -265,7 +265,7 @@ class $modify(ProfilePage) {
     };
 
     void requestGDUtilsBadges(int accountID, CCLayer* layer) {
-        const geode::utils::MiniFunction<void(std::string const&)> then = [this, accountID, layer](std::string const& result) {
+        const std::function<void(std::string const&)> then = [this, accountID, layer](std::string const& result) {
             std::vector<std::string> data_user = MoreLeaderboards::getWords(result, "|");
 
             while (data_user.size() > 0) {
@@ -423,7 +423,7 @@ class $modify(ProfilePage) {
                 data_user.erase(data_user.begin());
             }
         };
-        const geode::utils::MiniFunction<void(std::string const&)> expect = [this](std::string const& error) {
+        const std::function<void(std::string const&)> expect = [this](std::string const& error) {
             log::error("Failed to get GDUtils badges: {}", error);
         };
 
