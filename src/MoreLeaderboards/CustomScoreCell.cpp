@@ -33,19 +33,19 @@ class $modify(CustomScoreCell, GJScoreCell) {
             // Move child to menu with layout
             auto starsLabel = as<CCLabelBMFont*>(layer->getChildByIDRecursive("stars-label"));
             starsLabel->setLayoutOptions(
-                AxisLayoutOptions::create()->setAutoScale(true)->setMinScale(0)->setMaxScale(0.5f)->setScalePriority(1)
+                AxisLayoutOptions::create()->setAutoScale(true)->setScaleLimits(0, 0.5F)->setScalePriority(1)
             );
             auto starsIcon = as<CCSprite*>(layer->getChildByIDRecursive("stars-icon"));
             starsIcon->setLayoutOptions(
-                AxisLayoutOptions::create()->setAutoScale(true)->setMinScale(0)->setMaxScale(0.5f)->setScalePriority(1)
+                AxisLayoutOptions::create()->setAutoScale(true)->setScaleLimits(0, 0.5F)->setScalePriority(1)
             );
             auto moonsLabel = as<CCLabelBMFont*>(layer->getChildByIDRecursive("moons-label"));
             moonsLabel->setLayoutOptions(
-                AxisLayoutOptions::create()->setAutoScale(true)->setMinScale(0)->setMaxScale(0.5f)->setScalePriority(1)
+                AxisLayoutOptions::create()->setAutoScale(true)->setScaleLimits(0, 0.5F)->setScalePriority(1)
             );
             auto moonsIcon = as<CCSprite*>(layer->getChildByIDRecursive("moons-icon"));
             moonsIcon->setLayoutOptions(
-                AxisLayoutOptions::create()->setAutoScale(true)->setMinScale(0)->setMaxScale(0.5f)->setScalePriority(1)
+                AxisLayoutOptions::create()->setAutoScale(true)->setScaleLimits(0, 0.5F)->setScalePriority(1)
             );
 
             // Username control
@@ -62,7 +62,7 @@ class $modify(CustomScoreCell, GJScoreCell) {
                 (SEL_MenuHandler)&CustomScoreCell::onViewProfile
             );
             playerNameBtn->setLayoutOptions(
-                AxisLayoutOptions::create()->setAutoScale(true)->setMinScale(0.5f)->setMaxScale(0.8f)->setScalePriority(1)
+                AxisLayoutOptions::create()->setAutoScale(true)->setScaleLimits(0.5F, 0.8F)->setScalePriority(1)
             );
 
             std::vector<std::string> dataString = MoreLeaderboards::getWords(data_flag, "#");

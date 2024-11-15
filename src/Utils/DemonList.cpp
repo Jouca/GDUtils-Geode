@@ -102,7 +102,7 @@ class $modify(LevelInfoLayer) {
             loading_circle->show();
 
             const std::function<void(Result<matjson::Value>)> then = [this, level, levelID, loading_circle, positionLabel, demonSpr, winSize](Result<matjson::Value> const& result_json) {
-                matjson::Value json = result_json.value();
+                matjson::Value json = result_json.unwrapOrDefault();
 
                 std::string listId = Mod::get()->template getSettingValue<std::string>("demonListSelection");
 
@@ -115,15 +115,21 @@ class $modify(LevelInfoLayer) {
                         log::info("Level not found in Pointercrate.");
                         this->release();
                     } else {
-                        auto info = json.get<matjson::Value>(0);
-                        auto position = info.get<int>("position");
-                        positionLabel->setString(fmt::format("#{}", position).c_str());
-                        positionLabel->setScale(getScaleBasedPos(position));
-                        positionLabel->setVisible(true);
-                        demonSpr->setVisible(true);
-                        set(levelID, position);
-                        log::info("Level found in Pointercrate! {} at #{}", level->m_levelName.c_str(), position);
+                        auto info = json.get(0);
+                        if (info.isOk()) {
+                            auto positionRes = info.unwrap().get("position");
+                            if (positionRes.isOk()) {
+                                int position = positionRes.unwrap().asInt().unwrapOrDefault();
+                                positionLabel->setString(fmt::format("#{}", position).c_str());
+                                positionLabel->setScale(getScaleBasedPos(position));
+                                positionLabel->setVisible(true);
+                                demonSpr->setVisible(true);
+                                set(levelID, position);
+                                log::info("Level found in Pointercrate! {} at #{}", level->m_levelName.c_str(), position);
+                            }
+                        }
                         this->release();
+
                     }
                 } else {
                     if (loading_circle != nullptr) {
@@ -133,13 +139,16 @@ class $modify(LevelInfoLayer) {
                     if (json.contains("code")) {
                         this->release();
                     } else {
-                        auto position = json.get<int>("position");
-                        positionLabel->setString(fmt::format("#{}", position).c_str());
-                        positionLabel->setScale(getScaleBasedPos(position));
-                        positionLabel->setVisible(true);
-                        demonSpr->setVisible(true);
-                        set(levelID, position);
-                        log::info("Level found in AREDL! {} at #{}", level->m_levelName.c_str(), position);
+                        auto positionRes = json.get("position");
+                        if (positionRes.isOk()) {
+                            int position = positionRes.unwrap().asInt().unwrapOrDefault();
+                            positionLabel->setString(fmt::format("#{}", position).c_str());
+                            positionLabel->setScale(getScaleBasedPos(position));
+                            positionLabel->setVisible(true);
+                            demonSpr->setVisible(true);
+                            set(levelID, position);
+                            log::info("Level found in AREDL! {} at #{}", level->m_levelName.c_str(), position);
+                        }
                         this->release();
                     }
                 }

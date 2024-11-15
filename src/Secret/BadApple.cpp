@@ -73,7 +73,7 @@ class $modify(SecretVault, SecretLayer2) {
             m_fields->m_menu->setContentSize({ 100, 200 });
             m_fields->m_menu->setLayout(
                 ColumnLayout::create()
-                    ->setCrossAxisAlignment(cocos2d::AxisAlignment::Center)
+                    ->setCrossAxisAlignment(AxisAlignment::Center)
             );
         }
 
@@ -97,8 +97,8 @@ class $modify(SecretVault, SecretLayer2) {
                 auto menu = CCMenu::create();
                 menu->setLayout(
                     RowLayout::create()
-                        ->setAxis(cocos2d::Axis::Column)
-                        ->setAxisAlignment(cocos2d::AxisAlignment::Center)
+                        ->setAxis(Axis::Column)
+                        ->setAxisAlignment(AxisAlignment::Center)
                         ->setGap(3)
                 );
 
@@ -119,8 +119,7 @@ class $modify(SecretVault, SecretLayer2) {
                 badappleLabel->setLayoutOptions(
                     AxisLayoutOptions::create()
                         ->setAutoScale(true)
-                        ->setMinScale(0)
-                        ->setMaxScale(.4f)
+                        ->setScaleLimits(0, 0.4F)
                         ->setScalePriority(1)
                 );
                 menu->addChild(badappleLabel);
@@ -137,8 +136,8 @@ class $modify(SecretVault, SecretLayer2) {
                 auto menu = CCMenu::create();
                 menu->setLayout(
                     RowLayout::create()
-                        ->setAxis(cocos2d::Axis::Column)
-                        ->setAxisAlignment(cocos2d::AxisAlignment::Center)
+                        ->setAxis(Axis::Column)
+                        ->setAxisAlignment(AxisAlignment::Center)
                         ->setGap(3)
                 );
 
@@ -159,8 +158,7 @@ class $modify(SecretVault, SecretLayer2) {
                 COTELabel->setLayoutOptions(
                     AxisLayoutOptions::create()
                         ->setAutoScale(true)
-                        ->setMinScale(0)
-                        ->setMaxScale(.2f)
+                        ->setScaleLimits(0, 0.2F)
                         ->setScalePriority(1)
                 );
                 menu->addChild(COTELabel);

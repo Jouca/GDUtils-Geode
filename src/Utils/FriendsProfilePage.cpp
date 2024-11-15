@@ -20,6 +20,8 @@ const char* toLowerCase(const char* str) {
 class SearchUserLayer : public BrownAlertDelegate {
     protected:
         virtual void setup() {
+            input_username->setMaxCharCount(20);
+            input_username->setPlaceholder("");
             auto winSize = cocos2d::CCDirector::sharedDirector()->getWinSize();
             input_username->setPositionY(10);
             this->m_buttonMenu->addChild(input_username);
@@ -46,7 +48,7 @@ class SearchUserLayer : public BrownAlertDelegate {
         float m_fWidth = s_defWidth;
         float m_fHeight = s_defHeight;
     public:
-        InputNode* input_username = InputNode::create(200.0F, "Username", "bigFont.fnt", "", 20);
+        TextInput* input_username = TextInput::create(200.0F, "Username", "bigFont.fnt");
         static constexpr const float s_defWidth = 260.0f;
         static constexpr const float s_defHeight = 120.0f;
         static SearchUserLayer* create() {

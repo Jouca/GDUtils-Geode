@@ -28,7 +28,7 @@ std::vector<std::string> SelectRegion::getWords(std::string s, std::string delim
 void SelectRegion::scene(const std::function<void(int)>& callback) {
     auto popup = new SelectRegion(callback);
 
-    if (popup && popup->init(250.0f, 210.0f)) {
+    if (popup && popup->initAnchored(250.0f, 210.0f)) {
         popup->autorelease();
         CCDirector::sharedDirector()->getRunningScene()->addChild(popup);
     } else {

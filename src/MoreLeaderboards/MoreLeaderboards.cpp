@@ -44,10 +44,12 @@ std::vector<std::string> MoreLeaderboards::getWords(std::string s, std::string d
 class SearchUserLBLayer : public BrownAlertDelegate {
     protected:
         MoreLeaderboards* m_layer;
-        InputNode* input_username = InputNode::create(200.0F, "Username", "bigFont.fnt", "", 20);
+        TextInput* input_username = TextInput::create(200.0F, "Username", "bigFont.fnt");
 
         virtual void setup() {
             auto winSize = cocos2d::CCDirector::sharedDirector()->getWinSize();
+            input_username->setMaxCharCount(20);
+            input_username->setPlaceholder("");
             input_username->setPositionY(10);
             this->m_buttonMenu->addChild(input_username);
             auto validate_spr = ButtonSprite::create("Search", 60, true, "bigFont.fnt", "GJ_button_01.png", 30, .5F);
@@ -435,7 +437,7 @@ void MoreLeaderboards::startLoadingMods() {
             [expect = std::move(expect), then = std::move(then)](web::WebResponse* response) {
                 const std::lock_guard<std::mutex> lock(lock_var);
                 if (response->ok()) {
-                    then(response->string().value());
+                    then(response->string().unwrapOrDefault());
                 } else {
                     expect("An error occured while sending a request on our server. Please try again later.");
                 }
@@ -464,7 +466,7 @@ void MoreLeaderboards::startLoadingMore() {
 
     this->retain();
 
-    const geode::utils::MiniFunction<void(std::string const&)> expect = [this](std::string const& error) {
+    const std::function<void(std::string const&)> expect = [this](std::string const& error) {
         loading = false;
         auto scene = CCDirector::sharedDirector()->getRunningScene();
         auto layer = scene->getChildren()->objectAtIndex(0);
@@ -486,7 +488,7 @@ void MoreLeaderboards::startLoadingMore() {
         this->release();
     };
 
-    const geode::utils::MiniFunction<void(std::string const&)> then = [this](std::string const& data) {
+    const std::function<void(std::string const&)> then = [this](std::string const& data) {
         if (data != "-1") {
             data_region = data;
             SelectRegion::displayedData = MoreLeaderboards::getWords(data, "|");
@@ -552,7 +554,7 @@ void MoreLeaderboards::startLoadingMore() {
                 break;
         }
 
-        const geode::utils::MiniFunction<void(std::string const&)> expect = [this](std::string const& error) {
+        const std::function<void(std::string const&)> expect = [this](std::string const& error) {
             loading = false;
 
             auto scene = CCDirector::sharedDirector()->getRunningScene();
@@ -575,7 +577,7 @@ void MoreLeaderboards::startLoadingMore() {
             this->release();
         };
 
-        const geode::utils::MiniFunction<void(std::string const&)> then = [this](std::string const& data) {
+        const std::function<void(std::string const&)> then = [this](std::string const& data) {
             loading = false;
 
             const std::lock_guard<std::mutex> lock(lock_var);
@@ -629,7 +631,7 @@ void MoreLeaderboards::startLoadingMore() {
             request.param("type", type).param("page", page).param("country", country_id).param("username", username).param("mod", (modFilter ? "1" : "0")).param("modFilter", modFilterType).get("https://clarifygdps.com/gdutils/moreleaderboards.php").map(
                 [expect = std::move(expect), then = std::move(then)](web::WebResponse* response) {
                     if (response->ok()) {
-                        then(response->string().value());
+                        then(response->string().unwrap());
                     } else {
                         expect("An error occured while sending a request on our server. Please try again later.");
                     }
@@ -645,7 +647,7 @@ void MoreLeaderboards::startLoadingMore() {
         m_listener.bind([expect = std::move(expect), then = std::move(then)] (web::WebTask::Event* e) {
             if (web::WebResponse* res = e->getValue()) {
                 if (res->ok()) {
-                    then(res->string().value());
+                    then(res->string().unwrap());
                 } else {
                     expect("An error occured while sending a request on our server. Please try again later.");
                 }
@@ -751,8 +753,7 @@ void MoreLeaderboards::loadPageStats() {
     page_label->setLayoutOptions(
         AxisLayoutOptions::create()
         ->setAutoScale(true)
-        ->setMinScale(0)
-        ->setMaxScale(0.7f)
+        ->setScaleLimits(0, 0.7F)
         ->setScalePriority(1)
     );
     menu_label->addChild(page_label);
@@ -1255,9 +1256,6 @@ void MoreLeaderboards::onTab(CCObject* pSender) {
     if (pSender) {
         MoreLeaderboards::g_tab = static_cast<StatsListType>(pSender->getTag());
     }
-
-
-
     resetInfos();
 
     page = 0;
@@ -1293,6 +1291,7 @@ class $modify(LeaderboardsLayer) {
     bool init(LeaderboardState state) {
         if (!LeaderboardsLayer::init(state)) return false;
 
+        log::info("weee");
         auto menu = CCMenu::create();
 
         auto plusSpr = CCSprite::createWithSpriteFrameName("GJ_plusBtn_001.png");

@@ -324,7 +324,7 @@ void EventsPush::onClickBtn(CCObject* ret) {
                                     180.0F
                                 )->show();
                             } else {
-                                auto data_result = response->string().value();
+                                auto data_result = response->string().unwrapOrDefault();
                                 if (data_result != "-1") {
                                     auto scene = CCScene::create();
                                     auto layer = LevelInfoLayer::create(EventsPush::convertLevelToJSON(data_result), false);

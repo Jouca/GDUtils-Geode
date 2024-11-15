@@ -5,9 +5,11 @@ static GJRewardItem* time1 = nullptr;
 static GJRewardItem* time2 = nullptr;
 
 void DailyChest::getRewards(unsigned int type) {
-    GameLevelManager* glm = GameLevelManager::sharedState();
-    glm->m_GJRewardDelegate = this;
-    glm->getGJRewards(0);
+    auto glm = GameLevelManager::sharedState();
+    if (glm) {
+        glm->m_GJRewardDelegate = this;
+        glm->getGJRewards(0);
+    }
 };
 
 void DailyChest::rewardsStatusFinished(int p0) {

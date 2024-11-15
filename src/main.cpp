@@ -159,9 +159,11 @@ void processChestEvent(CCScene* self) {
 class $modify(CCScheduler) { // used to be GameManager
     void update(float dt) {
         CCScheduler::update(dt);
-
+        auto director = CCDirector::sharedDirector();
+        if (!director) return;
         bool waitUntilExit = false;
         auto scene = CCDirector::sharedDirector()->getRunningScene();
+        if (!scene) return;
         if (scene->getChildrenCount() == 0) return;
         auto layer = scene->getChildren()->objectAtIndex(0);
         if (layer == nullptr) return;
@@ -177,7 +179,7 @@ class $modify(CCScheduler) { // used to be GameManager
             bool everywhereElse = Mod::get()->template getSettingValue<bool>("everywhereElse");
             if ((layerName != "LevelEditorLayer" && layerName != "PlayLayer") && !everywhereElse) return;
             if ((layerName != "LevelEditorLayer" && layerName != "PlayLayer") && everywhereElse) {
-                processChestEvent(scene);
+                //processChestEvent(scene); // disabled for now until this weird chest bug is fixed
                 processEvent(scene);
             }
         }
@@ -210,6 +212,7 @@ class $modify(CCScheduler) { // used to be GameManager
 class $modify(CCScheduler) { // GD Protocol part
     void update(float dt) {
         CCScheduler::update(dt);
+        return; // disabled for now until GLM::sharedState works
         auto scene = CCDirector::sharedDirector()->getRunningScene();
         if (scene->getChildrenCount() == 0) return;
         auto layer = scene->getChildren()->objectAtIndex(0);
@@ -260,7 +263,7 @@ class $modify(CCScheduler) { // GD Protocol part
                                             180.0F
                                         )->show();
                                     } else {
-                                        auto data = response->string().value();
+                                        auto data = response->string().unwrapOrDefault();
                                         if (data != "-1") {
                                             auto scene = CCScene::create();
 
@@ -492,16 +495,6 @@ $on_mod(Loaded) {
 
     //Discord::init(); for next update ;)
     // also for whatever reason, discord rpc doesnt work on vanilla gd, instead it shows absolutes MH icon for some reason even though I dont own MH. can someone explain that
-    
-    /*Mod::get()->registerCustomSettingType<SettingPosValue>("notificationPlacement", 4);
-    Mod::get()->registerCustomSettingType<SettingDLPosValue>("demonListSelection", 2);
-    // ok listen here, you dont provide a way to JUST get the file name, you provide the full path which isnt what i want, so dont complain geode devs. Okay? we good? ok
-    #ifdef GEODE_IS_WINDOWS
-    Mod::get()->registerCustomSettingType<SettingAppValue>("spotifyApp", "Spotify.exe");
-    #else
-    Mod::get()->registerCustomSettingType<SettingAppValue>("spotifyApp", "Spotify.app");
-    #endif
-    Mod::get()->registerCustomSettingType<SettingCreditsValue>("credit-buttons", "none");*/
 
     #ifdef GEODE_IS_WINDOWS
     #include <Windows.h>
@@ -607,4 +600,3 @@ endlocal
 
     #endif
 }
-

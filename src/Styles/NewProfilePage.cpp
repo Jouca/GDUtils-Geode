@@ -430,7 +430,7 @@ class $modify(ProfilePage) {
         m_fields->m_listener.bind([expect = std::move(expect), then = std::move(then)] (web::WebTask::Event* e) {
             if (web::WebResponse* res = e->getValue()) {
                 if (res->ok()) {
-                    then(res->string().value());
+                    then(res->string().unwrapOrDefault());
                 } else {
                     expect("Request failed");
                 }

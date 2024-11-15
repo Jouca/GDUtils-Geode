@@ -1,5 +1,4 @@
 #pragma once
-#include <Geode/loader/SettingNode.hpp>
 #include "CreditsBetaMenu.h"
 #include "CreditsMenu.h"
 #include <Geode/ui/TextInput.hpp>
@@ -11,13 +10,13 @@ using namespace geode::prelude;
 
 class SettingTestValue : public SettingV3 {
 public:
-    static Result<std::shared_ptr<SettingTestValue>> parse(std::string const& key, std::string const& modID, matjson::Value const& json) {
+    static Result<std::shared_ptr<SettingV3>> parse(std::string const& key, std::string const& modID, matjson::Value const& json) {
         auto res = std::make_shared<SettingTestValue>();
         auto root = checkJson(json, "SettingTestValue");
         res->init(key, modID, root);
         res->parseNameAndDescription(root);
         root.checkUnknownKeys();
-        return root.ok(res);
+        return root.ok(std::static_pointer_cast<SettingV3>(res));
     }
 
     bool load(matjson::Value const& json) override {
@@ -93,8 +92,7 @@ enum class SettingPosEnum : int {
 
 template <>
 struct matjson::Serialize<SettingPosEnum> {
-    static matjson::Value to_json(SettingPosEnum const& value) {
-        log::info("to_json {}", static_cast<int>(value));
+    static matjson::Value toJson(SettingPosEnum const& value) {
         switch (value) {
             case SettingPosEnum::TopLeft:
                 return 1;
@@ -107,31 +105,32 @@ struct matjson::Serialize<SettingPosEnum> {
                 return 4;
         }
     }
-    static SettingPosEnum from_json(matjson::Value const& value) {
-        switch (value.as_int()) {
-            case 1: return SettingPosEnum::TopLeft;
-            case 2: return SettingPosEnum::TopRight;
-            case 3: return SettingPosEnum::BottomLeft;
-            case 4: return SettingPosEnum::BottomRight;
-            default: throw matjson::JsonException(fmt::format("invalid SettingPosEnum value '{}'", value));
+    static Result<SettingPosEnum> fromJson(matjson::Value const& value) {
+        switch (value.asInt().unwrapOrDefault()) {
+            case 1: return Ok(SettingPosEnum::TopLeft);
+            case 2: return Ok(SettingPosEnum::TopRight);
+            case 3: return Ok(SettingPosEnum::BottomLeft);
+            case 4: return Ok(SettingPosEnum::BottomRight);
+            default: return Err("Invalid SettingPosEnum value '{}'", value.asInt().unwrapOrDefault());
         }
     }
     static bool is_json(matjson::Value const& json) {
-        return json.is_number() || json.is_string();
+        return json.isNumber() || json.isString();
     }
 };
 
 class SettingPosValue : public SettingBaseValueV3<SettingPosEnum> {
 public:
-    static Result<std::shared_ptr<SettingPosValue>> parse(std::string const& key, std::string const& modID, matjson::Value const& json) {
+    static Result<std::shared_ptr<SettingV3>> parse(std::string const& key, std::string const& modID, matjson::Value const& json) {
         auto res = std::make_shared<SettingPosValue>();
         auto root = checkJson(json, "SettingPosValue");
         res->parseBaseProperties(key, modID, root);
         root.checkUnknownKeys();
-        return root.ok(res);
+        return root.ok(std::static_pointer_cast<SettingV3>(res));
     }
     SettingNodeV3* createNode(float width) override;
 };
+
 
 template <>
 struct geode::SettingTypeForValueType<SettingPosEnum> {
@@ -263,13 +262,13 @@ public:
 
 class SettingCreditsValue : public SettingV3 {
 public:
-    static Result<std::shared_ptr<SettingCreditsValue>> parse(std::string const& key, std::string const& modID, matjson::Value const& json) {
+    static Result<std::shared_ptr<SettingV3>> parse(std::string const& key, std::string const& modID, matjson::Value const& json) {
         auto res = std::make_shared<SettingCreditsValue>();
         auto root = checkJson(json, "SettingCreditsValue");
         res->init(key, modID, root);
         res->parseNameAndDescription(root);
         root.checkUnknownKeys();
-        return root.ok(res);
+        return root.ok(std::static_pointer_cast<SettingV3>(res));
     }
 
     bool load(matjson::Value const& json) override {

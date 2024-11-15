@@ -278,7 +278,7 @@ class $modify(CommentCell) {
             m_fields->m_listener.bind([] (web::WebTask::Event* e) {
                 if (web::WebResponse* res = e->getValue()) {
                     if (res->ok()) {
-                        result_global = res->string().value();
+                        result_global = res->string().unwrapOrDefault();
                     }
                 }
             });
