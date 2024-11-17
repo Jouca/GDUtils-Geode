@@ -294,7 +294,7 @@ class $modify(ProfilePage) {
                             CCMenu* username_menu = typeinfo_cast<CCMenu*>(layer->getChildByIDRecursive("username-menu"));
 
                             auto badgeGDUtil = CCSprite::createWithSpriteFrameName("gdutils_badge.png"_spr);
-                            badgeGDUtil->setScale(1.15f);
+                            badgeGDUtil->setScale(1);
                             auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
                                 badgeGDUtil,
                                 layer,
@@ -310,7 +310,7 @@ class $modify(ProfilePage) {
                             CCMenu* username_menu = typeinfo_cast<CCMenu*>(layer->getChildByIDRecursive("username-menu"));
 
                             auto badgeGDUtil = CCSprite::createWithSpriteFrameName("contributorBadge.png"_spr);
-                            badgeGDUtil->setScale(1.075f);
+                            badgeGDUtil->setScale(1);
                             auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
                                 badgeGDUtil,
                                 layer,
@@ -326,7 +326,7 @@ class $modify(ProfilePage) {
                             CCMenu* username_menu = typeinfo_cast<CCMenu*>(layer->getChildByIDRecursive("username-menu"));
 
                             auto badgeGDUtil = CCSprite::createWithSpriteFrameName("artistBadge.png"_spr);
-                            badgeGDUtil->setScale(1.075f);
+                            badgeGDUtil->setScale(1);
                             auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
                                 badgeGDUtil,
                                 layer,
@@ -342,7 +342,7 @@ class $modify(ProfilePage) {
                             CCMenu* username_menu = typeinfo_cast<CCMenu*>(layer->getChildByIDRecursive("username-menu"));
 
                             auto badgeGDUtil = CCSprite::createWithSpriteFrameName("gdAwardsBadge.png"_spr);
-                            badgeGDUtil->setScale(1.075f);
+                            badgeGDUtil->setScale(1);
                             auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
                                 badgeGDUtil,
                                 layer,
@@ -406,7 +406,7 @@ class $modify(ProfilePage) {
                             CCMenu* username_menu = typeinfo_cast<CCMenu*>(layer->getChildByIDRecursive("username-menu"));
 
                             auto badgeGDUtil = CCSprite::createWithSpriteFrameName("supporter_badge.png"_spr);
-                            badgeGDUtil->setScale(1.075f);
+                            badgeGDUtil->setScale(1);
                             auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
                                 badgeGDUtil,
                                 layer,

@@ -85,7 +85,7 @@ class $modify(CommentCell) {
                 if (badge == 1) {
                     if (!cell->getChildByIDRecursive("gdutils-dev-badge")) {
                         auto badgeGDUtil = CCSprite::createWithSpriteFrameName("gdutils_badge.png"_spr);
-                        badgeGDUtil->setScale(0.75f);
+                        badgeGDUtil->setScale(0.70f);
                         auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
                             badgeGDUtil,
                             cell,
@@ -118,7 +118,7 @@ class $modify(CommentCell) {
                 } else if (badge == 2) {
                     if (!cell->getChildByIDRecursive("gdutils-contributor-badge")) {
                         auto badgeGDUtil = CCSprite::createWithSpriteFrameName("contributorBadge.png"_spr);
-                        badgeGDUtil->setScale(0.75f);
+                        badgeGDUtil->setScale(0.70f);
                         auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
                             badgeGDUtil,
                             cell,
@@ -136,7 +136,7 @@ class $modify(CommentCell) {
                 } else if (badge == 3) {
                     if (!cell->getChildByIDRecursive("gdutils-artist-badge")) {
                         auto badgeGDUtil = CCSprite::createWithSpriteFrameName("artistBadge.png"_spr);
-                        badgeGDUtil->setScale(0.75f);
+                        badgeGDUtil->setScale(0.70f);
                         auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
                             badgeGDUtil,
                             cell,
@@ -154,7 +154,7 @@ class $modify(CommentCell) {
                 } else if (badge == 4) {
                     if (!cell->getChildByIDRecursive("gdutils-gdawards-badge")) {
                         auto badgeGDUtil = CCSprite::createWithSpriteFrameName("gdAwardsBadge.png"_spr);
-                        badgeGDUtil->setScale(0.75f);
+                        badgeGDUtil->setScale(0.70f);
                         auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
                             badgeGDUtil,
                             cell,
@@ -226,7 +226,7 @@ class $modify(CommentCell) {
                 } else if (badge == 8) {
                     if (!cell->getChildByIDRecursive("gdutils-supporter-badge")) {
                         auto badgeGDUtil = CCSprite::createWithSpriteFrameName("supporter_badge.png"_spr);
-                        badgeGDUtil->setScale(0.75f);
+                        badgeGDUtil->setScale(0.70f);
                         auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
                             badgeGDUtil,
                             cell,
