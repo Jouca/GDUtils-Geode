@@ -45,7 +45,8 @@
         ],
         "spritesheets": {
             "countries": ["resources/countries/*.png"],
-            "badges": ["resources/badges/*.png"]
+            "badges": ["resources/badges/*.png"],
+            "scenes": ["resources/scenes/*.png"]
         }
     },
     "settings": {
@@ -226,6 +227,23 @@
                 ]
             }
         },
+        "design-section": {
+            "name": "Designs",
+            "description": "This category is for changing settings to activate/desactivate <cy>designs</c> of the mod.",
+            "type": "title"
+        },
+        "gauntletDesign": {
+            "name": "New gauntlets design",
+            "description": "Changes the design of the gauntlets in the main menu.",
+            "type": "bool",
+            "default": true
+        },
+        "secretLayerDesign": {
+            "name": "The Vault design",
+            "description": "Changes the design of The Vault.",
+            "type": "bool",
+            "default": true
+        },
         "misc-section": {
             "name": "Miscellaneous",
             "description": "This category is for any other feature for <cy>GDUtils</c>.\nYou can choose whether to <cy>enable</c> or <cy>disable</c> some options if you do not want them.",
@@ -265,12 +283,6 @@
         "socketServer": {
             "name": "Notifications Server",
             "description": "Allows you to <cg>receive rate notifications.</c> (Recommended to keep enabled)\n\nRestart the game to apply changes.",
-            "type": "bool",
-            "default": true
-        },
-        "gauntletDesign": {
-            "name": "New gauntlets design",
-            "description": "Changes the design of the gauntlets in the main menu.",
             "type": "bool",
             "default": true
         },
