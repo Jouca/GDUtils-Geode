@@ -442,12 +442,11 @@ class $modify(ProfilePage) {
     }
 
     void loadPageFromUserInfo(GJUserScore* a2) {
+        ProfilePage::loadPageFromUserInfo(a2);
         auto layer = m_mainLayer;
         CCMenuItemSpriteExtra* badgeBtn = nullptr;
 
         bool modbadge_bool = false;
-
-        ProfilePage::loadPageFromUserInfo(a2);
 
         CCMenu* username_menu = typeinfo_cast<CCMenu*>(layer->getChildByIDRecursive("username-menu"));
         CCLabelBMFont* label = typeinfo_cast<CCLabelBMFont*>(layer->getChildByIDRecursive("username-label"));

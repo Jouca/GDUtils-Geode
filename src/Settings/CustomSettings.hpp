@@ -4,78 +4,8 @@
 #include <Geode/ui/TextInput.hpp>
 using namespace geode::prelude;
 
-/*
-    --- Test ---
-*/
-
-class SettingTestValue : public SettingV3 {
-public:
-    static Result<std::shared_ptr<SettingV3>> parse(std::string const& key, std::string const& modID, matjson::Value const& json) {
-        auto res = std::make_shared<SettingTestValue>();
-        auto root = checkJson(json, "SettingTestValue");
-        res->init(key, modID, root);
-        res->parseNameAndDescription(root);
-        root.checkUnknownKeys();
-        return root.ok(std::static_pointer_cast<SettingV3>(res));
-    }
-
-    bool load(matjson::Value const& json) override {
-        return true;
-    }
-    bool save(matjson::Value& json) const override {
-        return true;
-    }
-    bool isDefaultValue() const override {
-        return true;
-    }
-    void reset() override {}
-    SettingNodeV3* createNode(float width) override;
-};
 
 
-class SettingTestNode : public SettingNodeV3 {
-protected:
-    bool init(std::shared_ptr<SettingTestValue> setting, float width) {
-        if (!SettingNodeV3::init(setting, width))
-            return false;
-        this->setContentSize({ width, 35.f });
-        auto label = CCLabelBMFont::create("Test", "bigFont.fnt");
-        label->setScale(.6F);
-        auto playSpr = CCSprite::createWithSpriteFrameName("GJ_playBtn2_001.png");
-        playSpr->setScale(.4F);
-        auto testBtn = CCMenuItemSpriteExtra::create(
-            playSpr,
-            this,
-            menu_selector(SettingTestNode::onTestBtn)
-        );
-        getButtonMenu()->setContentWidth(width);
-        getButtonMenu()->addChildAtPosition(label, Anchor::Left, {42, 0});
-        getButtonMenu()->addChildAtPosition(testBtn, Anchor::Right, {-15, 0});
-        getButtonMenu()->updateLayout();
-        getNameLabel()->setVisible(false);
-        return true;
-    }
-    void onCommit() override {}
-    void onResetToDefault() override {}
-
-public:
-    void onTestBtn(CCObject*);
-    bool hasUncommittedChanges() const override {
-        return false;
-    }
-    bool hasNonDefaultValue() const override {
-        return false;
-    }
-    static SettingTestNode* create(std::shared_ptr<SettingTestValue> setting, float width) {
-        auto ret = new SettingTestNode();
-        if (ret && ret->init(setting, width)) {
-            ret->autorelease();
-            return ret;
-        }
-        CC_SAFE_DELETE(ret);
-        return nullptr;
-    }
-};
 
 /*
     Notification Position
@@ -267,6 +197,7 @@ public:
         auto root = checkJson(json, "SettingCreditsValue");
         res->init(key, modID, root);
         res->parseNameAndDescription(root);
+        res->parseEnableIf(root);
         root.checkUnknownKeys();
         return root.ok(std::static_pointer_cast<SettingV3>(res));
     }

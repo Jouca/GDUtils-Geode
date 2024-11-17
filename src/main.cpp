@@ -179,7 +179,7 @@ class $modify(CCScheduler) { // used to be GameManager
             bool everywhereElse = Mod::get()->template getSettingValue<bool>("everywhereElse");
             if ((layerName != "LevelEditorLayer" && layerName != "PlayLayer") && !everywhereElse) return;
             if ((layerName != "LevelEditorLayer" && layerName != "PlayLayer") && everywhereElse) {
-                //processChestEvent(scene); // disabled for now until this weird chest bug is fixed
+                processChestEvent(scene);
                 processEvent(scene);
             }
         }
@@ -212,7 +212,6 @@ class $modify(CCScheduler) { // used to be GameManager
 class $modify(CCScheduler) { // GD Protocol part
     void update(float dt) {
         CCScheduler::update(dt);
-        return; // disabled for now until GLM::sharedState works
         auto scene = CCDirector::sharedDirector()->getRunningScene();
         if (scene->getChildrenCount() == 0) return;
         auto layer = scene->getChildren()->objectAtIndex(0);
@@ -478,7 +477,6 @@ class $modify(MyMenuLayerGDUTILS, MenuLayer) {
 */
 
 $execute {
-    (void)Mod::get()->registerCustomSettingType("test-notification", &SettingTestValue::parse);
     (void)Mod::get()->registerCustomSettingType("credit-buttons", &SettingCreditsValue::parse);
     //(void)Mod::get()->registerCustomSettingType("notificationPlacement", &SettingPosValue::parse);
     auto ret = Mod::get()->registerCustomSettingType("notification-placement", &SettingPosValue::parse);

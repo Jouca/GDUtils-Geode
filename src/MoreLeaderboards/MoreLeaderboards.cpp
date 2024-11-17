@@ -720,7 +720,7 @@ void MoreLeaderboards::loadPageMore() {
     addChild(listLayer);
 
     if (MoreLeaderboards::scroll_int != 0) {
-        listLayer->m_listView->m_tableView->scrollLayer(-99999999);
+        listLayer->m_listView->m_tableView->scrollLayer((float)-INT_MAX);
         listLayer->m_listView->m_tableView->scrollLayer(MoreLeaderboards::scroll_int);
     }
 }
@@ -1290,8 +1290,6 @@ void MoreLeaderboards::onTab(CCObject* pSender) {
 class $modify(LeaderboardsLayer) {
     bool init(LeaderboardState state) {
         if (!LeaderboardsLayer::init(state)) return false;
-
-        log::info("weee");
         auto menu = CCMenu::create();
 
         auto plusSpr = CCSprite::createWithSpriteFrameName("GJ_plusBtn_001.png");

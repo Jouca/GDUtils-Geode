@@ -268,9 +268,8 @@ class $modify(CommentCell) {
     }
 
     void loadFromComment(GJComment* comment) {
-        auto layer = m_mainLayer;
-
         CommentCell::loadFromComment(comment);
+        auto layer = m_mainLayer;
 
         if (comment->m_commentDeleted) return;
 

@@ -1,4 +1,3 @@
-#pragma once
 #include "../includes.h"
 
 #define STAR_EXP 5
