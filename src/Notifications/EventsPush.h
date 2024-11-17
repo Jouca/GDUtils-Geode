@@ -7,6 +7,7 @@ enum EventType {
     Rate,
     Daily,
     Weekly,
+    Event,
     smallChest,
     largeChest,
     List,

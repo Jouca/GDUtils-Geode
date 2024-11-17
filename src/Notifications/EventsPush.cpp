@@ -356,6 +356,9 @@ void EventsPush::onClickBtn(CCObject* ret) {
         } else if (eventType == EventType::Weekly) {
             DailyLevelPage::create(GJTimedLevelType::Weekly)->show();
             return;
+        } else if (eventType == EventType::Event) {
+            DailyLevelPage::create(GJTimedLevelType::Event)->show();
+            return;
         } else if (eventType == EventType::List) {
             if (events_layer->level->m_levelID == 0) return;
 
@@ -419,6 +422,7 @@ bool EventsPush::init(sio::message::ptr const& data) {
     bool newRate = Mod::get()->template getSettingValue<bool>("newRate");
     bool daily = Mod::get()->template getSettingValue<bool>("daily");
     bool weekly = Mod::get()->template getSettingValue<bool>("weekly");
+    bool event = Mod::get()->template getSettingValue<bool>("event");
     bool smallChest = Mod::get()->template getSettingValue<bool>("smallChest");
     bool largeChest = Mod::get()->template getSettingValue<bool>("largeChest");
     bool list = Mod::get()->template getSettingValue<bool>("newListRate");
@@ -440,6 +444,9 @@ bool EventsPush::init(sio::message::ptr const& data) {
             break;
         case 5: // List
             eventType = EventType::List;
+            break;
+        case 6: // Event
+            eventType = EventType::Event;
             break;
     }
     if (type == 0 && !newRate) {
@@ -463,6 +470,10 @@ bool EventsPush::init(sio::message::ptr const& data) {
         return true;
     }
     if (type == 5 && !list) {
+        EventsPush::eventCompletedCallback(scene);
+        return true;
+    }
+    if (type == 6 && !event) {
         EventsPush::eventCompletedCallback(scene);
         return true;
     }
@@ -793,10 +804,12 @@ bool EventsPush::init(sio::message::ptr const& data) {
     level_title->limitLabelWidth(120, 0.46f, 0.1f);
     node->addChild(level_title);
 
-    if (type > 0 && type < 3) {
+    if ((type > 0 && type < 3) || type == 6) {
         CCSprite* crown;
         if (type == 1) {
             crown = cocos2d::CCSprite::createWithSpriteFrameName("gj_dailyCrown_001.png");
+        } else if (type == 6) {
+            crown = cocos2d::CCSprite::createWithSpriteFrameName("gj_eventCrown_001.png");
         } else {
             crown = cocos2d::CCSprite::createWithSpriteFrameName("gj_weeklyCrown_001.png");
         }

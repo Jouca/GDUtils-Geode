@@ -89,14 +89,20 @@
             "default": true
         },
         "daily": {
-            "name": "Daily",
+            "name": "Daily Levels",
             "description": "Whether or not to notify about upcoming <cy>Daily Levels</c>",
             "type": "bool",
             "default": true
         },
         "weekly": {
-            "name": "Weekly",
-            "description": "Whether or not to notify about upcoming <cy>Weekly Demons</c>",
+            "name": "Weekly Levels",
+            "description": "Whether or not to notify about upcoming <cr>Weekly Demons</c>",
+            "type": "bool",
+            "default": true
+        },
+        "event": {
+            "name": "Event Levels",
+            "description": "Whether or not to notify about upcoming <cp>Event Levels</c>",
             "type": "bool",
             "default": true
         },
