@@ -40,6 +40,9 @@ __**Join the Discord and Follow the instructions to Receive your In-Game Perks!*
 ### Gauntlets redesign
 * Gauntlets are now redesigned to make them more **EPIC**, with **particles** and **new textures**!
 
+### New designs
+* Some parts of Geometry Dash has been **redesigned** with new textures & stuffs!
+
 ### View Demon List Placement
 * Instead of having to go to Pointercrate to view the demon placement of a level, you can now **view the position** of an extreme demon!
 

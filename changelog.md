@@ -1,4 +1,12 @@
 # Changelog
+## <cj>v1.4.0-beta.2</c> <cb>(2024-11-20)</c>
+* <cg>Added</c> Event levels notifications.
+* <cg>Added</c> new The Vault design.
+* <cy>Updated</c> badges textures.
+
+## <cj>v1.4.0-beta.1</c> <cb>(2024-11-18)</c>
+* <cp>GDUtils ported to Geode 4.0.0 (GD 2.2074)</c>
+
 ## <cj>v1.3.12</c> <cb>(2024-10-21)</c>
 * <cg>Added</c> Pointercrate leaderboard.
 * <cg>Added</c> <cb>Magic</c> and <co>Chaos</c> gauntlets designs.

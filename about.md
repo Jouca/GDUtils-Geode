@@ -23,6 +23,9 @@ A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute,
 ### Gauntlets redesign
 * <cy>Gauntlets are now redesigned</c> to make them more <co>EPIC</c>, with <cp>particles</c> and <cj>new textures</c>!
 
+### New designs
+* Some parts of Geometry Dash has been <cy>redesigned</c> with new textures & stuffs!
+
 ### View Demon List Placement
 * Instead of having to go to [Pointercrate](https://pointercrate.com/) to view the demon placement of a level, you can now <cy>view the position</c> of an extreme demon!
 
