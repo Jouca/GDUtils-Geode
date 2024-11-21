@@ -172,7 +172,7 @@ class $modify(CommentCell) {
                 } else if (badge == 5) {
                     if (!cell->getChildByIDRecursive("gdutils-ul-developer-badge")) {
                         auto badgeGDUtil = CCSprite::createWithSpriteFrameName("ul_dev_badge.png"_spr);
-                        badgeGDUtil->setScale(0.525f);
+                        badgeGDUtil->setScale(0.70f);
                         auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
                             badgeGDUtil,
                             cell,
@@ -190,7 +190,7 @@ class $modify(CommentCell) {
                 } else if (badge == 6) {
                     if (!cell->getChildByIDRecursive("gdutils-ul-officer-badge")) {
                         auto badgeGDUtil = CCSprite::createWithSpriteFrameName("ul_officer_badge.png"_spr);
-                        badgeGDUtil->setScale(0.525f);
+                        badgeGDUtil->setScale(0.70f);
                         auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
                             badgeGDUtil,
                             cell,
@@ -208,7 +208,7 @@ class $modify(CommentCell) {
                 } else if (badge == 7) {
                     if (!cell->getChildByIDRecursive("gdutils-ul-helper-badge")) {
                         auto badgeGDUtil = CCSprite::createWithSpriteFrameName("ul_helper_badge.png"_spr);
-                        badgeGDUtil->setScale(0.525f);
+                        badgeGDUtil->setScale(0.70f);
                         auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
                             badgeGDUtil,
                             cell,
