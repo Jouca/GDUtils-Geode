@@ -1,5 +1,5 @@
 {
-    "geode": "4.0.0-beta.2",
+    "geode": "4.0.1",
     "version": "v1.4.0-beta.2",
     "gd": {
         "win": "2.2074",
@@ -44,7 +44,8 @@
         "spritesheets": {
             "countries": ["resources/countries/*.png"],
             "badges": ["resources/badges/*.png"],
-            "scenes": ["resources/scenes/*.png"]
+            "scenes": ["resources/scenes/*.png"],
+            "extras": ["resources/extras/*.png"]
         }
     },
     "settings": {
