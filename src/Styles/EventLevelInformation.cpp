@@ -16,9 +16,8 @@ class $modify(EventPage, DailyLevelPage) {
         auto infoBtn = CCMenuItemSpriteExtra::create(infoSpr, this, menu_selector(EventPage::onInfo));
 
         // Put on the corner top left of the background
-        auto levelCell = as<CCLayer*>(this->getChildByIDRecursive("main-layer"));
-        auto menu = as<CCMenu*>(levelCell->getChildByIDRecursive("main-menu"));
-        infoBtn->setPosition({ -292, -56 });
+        auto menu = as<CCMenu*>(this->m_mainLayer->getChildByIDRecursive("main-menu"));
+        infoBtn->setPosition({ 14, -83 });
 
         menu->addChild(infoBtn);
 

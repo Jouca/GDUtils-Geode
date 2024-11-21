@@ -1,4 +1,7 @@
 # Changelog
+## <cj>v1.4.0-beta.4</c> <cb>(2024-11-21)</c>
+* <cy>Fixed</c> crash on Event Page.
+
 ## <cj>v1.4.0-beta.3</c> <cb>(2024-11-21)</c>
 * <cg>Added</c> Event levels informations.
 * <cy>Updated</c> Updated Leaderboard badges textures.
