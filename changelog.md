@@ -1,4 +1,8 @@
 # Changelog
+## <cj>v1.4.0-beta.3</c> <cb>(2024-11-21)</c>
+* <cg>Added</c> Event levels informations.
+* <cy>Updated</c> Updated Leaderboard badges textures.
+
 ## <cj>v1.4.0-beta.2</c> <cb>(2024-11-20)</c>
 * <cg>Added</c> Event levels notifications.
 * <cg>Added</c> new The Vault design.
