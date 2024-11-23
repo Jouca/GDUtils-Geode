@@ -17,9 +17,10 @@ class $modify(EventPage, DailyLevelPage) {
 
         // Put on the corner top left of the background
         auto menu = as<CCMenu*>(this->m_mainLayer->getChildByIDRecursive("main-menu"));
-        infoBtn->setPosition({ 14, -83 });
-
-        menu->addChild(infoBtn);
+        if (menu) {
+            infoBtn->setPosition({ 14, -83 });
+            menu->addChild(infoBtn);
+        }
 
         return true;
     }
@@ -30,7 +31,7 @@ void EventLevelInformation::scene() {
 
     if (popup && popup->initAnchored(400.0f, 225.0f, "GJ_square02.png")) {
         popup->autorelease();
-        CCDirector::sharedDirector()->getRunningScene()->addChild(popup, 200);
+        CCDirector::sharedDirector()->getRunningScene()->addChild(popup, 1000);
     } else {
         CC_SAFE_DELETE(popup);
     }
@@ -49,11 +50,65 @@ bool EventLevelInformation::setup() {
 }
 
 void EventLevelInformation::loadPage() {
-    auto image_spr = CCSprite::createWithSpriteFrameName("ncs_album.png"_spr);
+    // Make loading circle
+    loading_circle = LoadingCircle::create();
+    loading_circle->setZOrder(25);
+    loading_circle->setParentLayer(this);
+    loading_circle->show();
+
+    // Load the image
+    std::string URL = "https://clarifygdps.com/gdutils/event_info/image_banner.png?randome=" + std::to_string(static_cast<unsigned int>(time(nullptr)));
+
+    auto req = web::WebRequest();
+    m_downloadListener.bind([this](web::WebTask::Event* e){
+        if (auto res = e->getValue()){
+            if (!res->ok()) {
+                onDownloadFail();
+            } else {
+                auto data = res->data();
+                std::thread imageThread = std::thread([data,this](){
+                    m_image = new CCImage();
+                    m_image->autorelease();
+                    m_image->initWithImageData(const_cast<uint8_t*>(data.data()),data.size());
+                    geode::Loader::get()->queueInMainThread([this](){
+                        imageCreationFinished(m_image);
+                    });
+                });
+                imageThread.detach();
+            }
+        }
+    });
+
+    auto downloadTask = req.header("Cache-Control", "no-cache").header("Pragma", "no-cache").get(URL);
+    m_downloadListener.setFilter(downloadTask);
+}
+
+void EventLevelInformation::imageCreationFinished(CCImage* image) {
+    fadeLoadingCircle();
 
     auto size = this->m_mainLayer->getContentSize();
+    auto texture = new CCTexture2D();
+    texture->initWithImage(image);
+    auto spr = CCSprite::createWithTexture(texture);
+    texture->autorelease();
+    spr->setPosition({ size.width / 2, size.height / 2 });
+    spr->setScale(1.1f);
 
-    image_spr->setPosition({ size.width / 2, size.height / 2 });
-    image_spr->setScale(1.1f);
-    this->m_mainLayer->addChild(image_spr);
+    this->m_mainLayer->addChild(spr);
 }
+
+void EventLevelInformation::onDownloadFail() {
+    fadeLoadingCircle();
+
+    auto size = this->m_mainLayer->getContentSize();
+    auto failLabel = CCLabelBMFont::create("No event banner found.", "bigFont.fnt", 0.0f, kCCTextAlignmentCenter);
+    failLabel->setPosition({ size.width / 2, size.height / 2 });
+    failLabel->setScale(0.7f);
+
+    this->m_mainLayer->addChild(failLabel);
+}
+
+void EventLevelInformation::fadeLoadingCircle() {
+    if (loading_circle == nullptr) return;
+    loading_circle->fadeAndRemove();
+};
