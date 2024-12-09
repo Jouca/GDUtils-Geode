@@ -98,8 +98,10 @@ class $modify(CustomGauntletSelectLayer, GauntletSelectLayer) {
                 CCNode* item = static_cast<CCNode*>(page->objectAtIndex(j));
 
                 // Handle spaces
-                if (j == 0) {
+                if (j == 0 && page->count() > 1) {
                     item->setPositionX(item->getPositionX() - 25.0f);
+                } else if (j == 1 && page->count() == 2) {
+                    item->setPositionX(item->getPositionX() + 25.0f);
                 } else if (j == 2) {
                     item->setPositionX(item->getPositionX() + 25.0f);
                 }
