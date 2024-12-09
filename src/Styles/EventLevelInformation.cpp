@@ -18,7 +18,7 @@ class $modify(EventPage, DailyLevelPage) {
         // Put on the corner top left of the background
         auto menu = as<CCMenu*>(this->m_mainLayer->getChildByIDRecursive("main-menu"));
         if (menu) {
-            infoBtn->setPosition({ 14, -83 });
+            infoBtn->setPosition({ 14, -194 });
             menu->addChild(infoBtn);
         }
 
