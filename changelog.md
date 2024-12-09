@@ -2,6 +2,7 @@
 ## <cj>v1.4.0-beta.5</c> <cb>(2024-12-09)</c>
 * <cg>Added</c> <cj>Force</c>gauntlet designs.
 * <cy>Updated</c> preview icons button position.
+* <cy>Fixed</c> gauntlets positions where they are less than 3.
 
 ## <cj>v1.4.0-beta.4</c> <cb>(2024-11-21)</c>
 * <cy>Fixed</c> crash on Event Page.
