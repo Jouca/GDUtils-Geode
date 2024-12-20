@@ -10,7 +10,6 @@ class IconLockColors {
             GameManager* gm = GameManager::sharedState();
             player->setColor(gm->colorForIdx(gm->getPlayerColor()));
             player->setSecondColor(gm->colorForIdx(gm->getPlayerColor2()));
-            player->m_glowColor = gm->colorForIdx(gm->getPlayerColor());
         };
 
         void onP2(CCObject* pSender) {
@@ -19,7 +18,6 @@ class IconLockColors {
             GameManager* gm = GameManager::sharedState();
             player->setColor(gm->colorForIdx(gm->getPlayerColor2()));
             player->setSecondColor(gm->colorForIdx(gm->getPlayerColor()));
-            player->m_glowColor = gm->colorForIdx(gm->getPlayerColor2());
         };
 
         void onGlow(CCObject* pSender) {
@@ -27,11 +25,7 @@ class IconLockColors {
             GameManager* gm = GameManager::sharedState();
 
             if (!player->m_hasGlowOutline) {
-                if (player->m_firstLayer->getColor() == gm->colorForIdx(gm->getPlayerColor2())) {
-                    player->setGlowOutline(gm->colorForIdx(gm->getPlayerColor()));
-                } else {
-                    player->setGlowOutline(gm->colorForIdx(gm->getPlayerColor2()));
-                }
+                player->setGlowOutline(gm->colorForIdx(gm->getPlayerGlowColor()));
             } else {
                 player->disableGlowOutline();
             }
@@ -75,7 +69,7 @@ class IconLockColors {
                     if (player) {
                         player->setColor(gm->colorForIdx(gm->getPlayerColor()));
                         player->setSecondColor(gm->colorForIdx(gm->getPlayerColor2()));
-                        player->m_glowColor = gm->colorForIdx(gm->getPlayerColor());
+                        player->m_glowColor = gm->colorForIdx(gm->getPlayerGlowColor());
 
                         // Creating buttons
                         auto p1Spr = CCSprite::createWithSpriteFrameName("GJ_checkOff_001.png");
