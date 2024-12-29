@@ -204,19 +204,28 @@ class $modify(FriendPage, FriendsProfilePage) {
         }
     }
 
+    void setupUsersBrowser(cocos2d::CCArray * users, UserListType type)
+    {
+        FriendsProfilePage::setupUsersBrowser(users, type);
+     
+        if (m_buttonMenu->getChildByID("friendsScrollBar"))
+        {
+            m_buttonMenu->removeChildByID("friendsScrollBar");
+        }
+    }
+
     virtual void getUserListFinished(cocos2d::CCArray* a1, UserListType a2) {
         FriendsProfilePage::getUserListFinished(a1,a2);
 
         auto menu = this->m_buttonMenu;
-
+        
         auto scrollBar = Scrollbar::create(this->m_listLayer->m_list->m_tableView);
         scrollBar->setPosition(390, -140);
         scrollBar->setID("friendsScrollBar");
-
         menu->addChild(scrollBar);
     }
 
-    virtual void forceReloadList(UserListType a1) {
+    virtual void onUpdate(UserListType a1) {
         FriendsProfilePage::forceReloadList(a1);
     
         m_buttonMenu->removeChildByID("friendsScrollBar");
