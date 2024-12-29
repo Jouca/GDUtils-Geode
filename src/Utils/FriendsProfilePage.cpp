@@ -68,57 +68,22 @@ class $modify(FriendPage, FriendsProfilePage) {
         if (!Mod::get()->template getSettingValue<bool>("friendSearch")) return true;
         auto menu = this->m_buttonMenu;
 
-        auto downSpr = CCSprite::createWithSpriteFrameName("edit_downBtn2_001.png");
-        auto downBtn = CCMenuItemSpriteExtra::create(
-            downSpr,
-            this,
-            menu_selector(FriendPage::onDown)
-        );
-        downBtn->setPosition(404, -160);
-        menu->addChild(downBtn);
-
-        auto upSpr = CCSprite::createWithSpriteFrameName("edit_upBtn2_001.png");
-        auto upBtn = CCMenuItemSpriteExtra::create(
-            upSpr,
-            this,
-            menu_selector(FriendPage::onUp)
-        );
-        upBtn->setPosition(404, -130);
-        menu->addChild(upBtn);
-
         auto searchSpr = CCSprite::createWithSpriteFrameName("gj_findBtn_001.png");
+        searchSpr->setScale(1.225F);
         auto searchBtn = CCMenuItemSpriteExtra::create(
             searchSpr,
             this,
             menu_selector(FriendPage::onSearch)
         );
-        searchBtn->setPosition(404, -88);
+        searchBtn->setPosition(320, 0);
         menu->addChild(searchBtn);
         return true;
     }
     
-    
-    void onDown(CCObject*) {
-        // JOUCA WHAT IS THIS LOL
-        auto scene = CCDirector::sharedDirector()->getRunningScene();
-        auto sceneChildren = scene->getChildren();
-        auto customList = getCustomList(sceneChildren);
-
-        if (customList == nullptr) return;
-        customList->scrollLayer(200);
-    }
-    void onUp(CCObject*) {
-        // NANI
-        auto scene = CCDirector::sharedDirector()->getRunningScene();
-        auto sceneChildren = scene->getChildren();
-        auto customList = getCustomList(sceneChildren);
-
-        if (customList == nullptr) return;
-        customList->scrollLayer(-200);
-    }
     void onSearch(CCObject*) {
         SearchUserLayer::create()->show();
     }
+
     static TableView* getCustomList(CCArray* sceneChildren) {
         CCLayer* test1 = typeinfo_cast<CCLayer*>(misc::findNode("FriendsProfilePage"));
         if (test1 == nullptr) {
@@ -167,6 +132,7 @@ class $modify(FriendPage, FriendsProfilePage) {
         }
         return static_cast<TableView*>(test3->getChildren()->objectAtIndex(0));
     }
+
     static void searchUser(const char* username) {
         auto scene = CCDirector::sharedDirector()->getRunningScene();
         auto sceneChildren = scene->getChildren();
@@ -236,6 +202,24 @@ class $modify(FriendPage, FriendsProfilePage) {
                 200.0F
             )->show();
         }
+    }
+
+    virtual void getUserListFinished(cocos2d::CCArray* a1, UserListType a2) {
+        FriendsProfilePage::getUserListFinished(a1,a2);
+
+        auto menu = this->m_buttonMenu;
+
+        auto scrollBar = Scrollbar::create(this->m_listLayer->m_list->m_tableView);
+        scrollBar->setPosition(390, -140);
+        scrollBar->setID("friendsScrollBar");
+
+        menu->addChild(scrollBar);
+    }
+
+    virtual void forceReloadList(UserListType a1) {
+        FriendsProfilePage::forceReloadList(a1);
+    
+        m_buttonMenu->removeChildByID("friendsScrollBar");
     }
 };
 
