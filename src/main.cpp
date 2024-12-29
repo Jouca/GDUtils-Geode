@@ -311,6 +311,7 @@ class $modify(CCSprite) {
         if (ret == nullptr) return ret;
         // better code, thanks camila!
         if (!strcmp(name, "GJ_gradientBG.png") && Mod::get()->template getSettingValue<bool>("activate-background")) {
+	    ret->retain();
             Loader::get()->queueInMainThread([=] {
                 if (ret != nullptr) {
                     if (ret->getColor() == ccc3(0, 102, 255)) {
@@ -320,6 +321,7 @@ class $modify(CCSprite) {
                         std::string layerName = misc::getNodeName(layer);
                         ret->setColor(Mod::get()->template getSettingValue<ccColor3B>("background"));
                     }
+		    ret->release();
                 }
             });
 
@@ -335,6 +337,7 @@ class $modify(CCScale9Sprite) {
         if (ret == nullptr) return ret;
         // better code, thanks camila!
         if ((!strcmp(name, "square02b_001.png") || !strcmp(name, "square02b_small.png")) && Mod::get()->template getSettingValue<bool>("activate-background")) {
+	    ret->retain();
             Loader::get()->queueInMainThread([=] {
                 if (ret != nullptr) {
                     // jouca waht
@@ -404,6 +407,7 @@ class $modify(CCScale9Sprite) {
                         }
                         ret->setColor(new_color);
                     }
+		    ret->release();
                 }
             });
         }
