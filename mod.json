@@ -1,6 +1,6 @@
 {
-    "geode": "4.0.1",
-    "version": "v1.4.0-beta.5",
+    "geode": "4.2.0",
+    "version": "v1.4.0-beta.6",
     "gd": {
         "win": "2.2074",
         "mac": "2.2074",
@@ -27,6 +27,9 @@
             "importance": "required"
         }
     ],
+    "api": {
+        "include": [ "include/*.hpp" ]
+    },
     "tags": [
         "online",
         "enhancement",
@@ -240,6 +243,12 @@
         "secretLayerDesign": {
             "name": "The Vault design",
             "description": "Changes the design of The Vault.",
+            "type": "bool",
+            "default": true
+        },
+        "eventLevelInfo": {
+            "name": "Event Level Info",
+            "description": "Adds an info button to show the current event information!",
             "type": "bool",
             "default": true
         },

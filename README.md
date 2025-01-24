@@ -66,6 +66,43 @@ __**Join the Discord and Follow the instructions to Receive your In-Game Perks!*
 ### Moderator Info
 * You can view a description of either the Moderator, Elder Moderator, or other badges users have by clicking on the badge itself on the profile!
 
+## API Usage
+Incase you want to utilize GDUtils for your Geode Mod, you can do so by using it's events!
+
+### Events 
+- `RateEvent` - For other mods wanting to "notify" the user through GDUtils. (You shouldn't use this as a listener)
+- `OnRate` - For checking when GDUtils gives out a rate notification. (You should use this only as a listener)
+
+### Example Code (Pushing out a notification)
+```cpp
+EventData data = {
+    true, // demon
+    2, // starsum
+    6, // stars
+    1, // rate (0 = unrated, 1 = featured, 2 = epic, 3 = legendary, 4 = mythic)
+    EventType::Rate, // type of notification
+    "Custom Notification!", // notification title
+    "GJ_square02.png", // sprite (MUST BE VALID OR WILL CRASH!)
+    "Tidal Wave", // level name
+    "By OniLinkGD", // level creator
+    0, // coins
+    false, // whether coins are verified
+    false // if its platformer
+}; // Level ID is optional
+GDUtils::Events::RateEvent::emit(data);
+```
+
+### Example Code (Listening for notification events from GDUtils)
+```cpp
+$execute {
+    new EventListener<EventFilter<GDUtils::Events::OnRate>>(+[](GDUtils::Events::OnRate* e) {
+        log::info("A rate event with the title {}", e->getTitle()); // A rate event with the title Small Daily Chest available!
+        return ListenerResult::Propagate;
+    });
+}
+```
+View the `test` directory if you want to view an example mod using the API.
+
 ## Libraries Used
 - [Geode](https://github.com/geode-sdk/geode)
 - [socket.io-client-cpp](https://github.com/socketio/socket.io-client-cpp)

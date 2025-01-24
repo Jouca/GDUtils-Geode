@@ -12,6 +12,8 @@ class $modify(EventPage, DailyLevelPage) {
 
         if (type != GJTimedLevelType::Event) return true;
 
+        if (!Mod::get()->template getSettingValue<bool>("eventLevelInfo")) return true;
+
         auto infoSpr = CCSprite::createWithSpriteFrameName("info_btn.png"_spr);
         auto infoBtn = CCMenuItemSpriteExtra::create(infoSpr, this, menu_selector(EventPage::onInfo));
 

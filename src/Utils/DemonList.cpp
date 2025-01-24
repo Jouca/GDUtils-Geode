@@ -54,6 +54,7 @@ class $modify(LevelInfoLayer) {
         if (pos > 0 && pos < 10) return 0.5F;
         if (pos > 10 && pos < 100) return 0.4F;
         if (pos > 100 && pos < 1000) return 0.3F;
+        if (pos > 1000 && pos < 10000) return 0.2F;
         return 0.1F;
     }
     bool init(GJGameLevel* level, bool p1) { // inspiration le gdbrowser, what does p1 do? idk
@@ -68,10 +69,12 @@ class $modify(LevelInfoLayer) {
         auto demonSpr = CCSprite::createWithSpriteFrameName("diffIcon_06_btn_001.png");
         demonSpr->setPosition({(winSize.width / 2) - 85, (winSize.height / 2) + 18});
         demonSpr->setScale(0.5F);
+        demonSpr->setID("demon-spr"_spr);
         auto positionLabel = CCLabelBMFont::create("N/A", "bigFont.fnt");
         positionLabel->setPosition({(winSize.width / 2) - 107, (winSize.height / 2) + 18}); // 178
         positionLabel->setScale(0.5F);
         positionLabel->setVisible(false);
+        positionLabel->setID("demon-pos"_spr);
         demonSpr->setVisible(false);
         this->addChild(demonSpr);
         this->addChild(positionLabel);
