@@ -70,10 +70,10 @@ void EventLevelInformation::loadPage() {
                 auto data = res->data();
                 std::thread imageThread = std::thread([data,this](){
                     m_image = new CCImage();
-                    m_image->autorelease();
                     m_image->initWithImageData(const_cast<uint8_t*>(data.data()),data.size());
                     geode::Loader::get()->queueInMainThread([this](){
                         imageCreationFinished(m_image);
+                        m_image->release();
                     });
                 });
                 imageThread.detach();
