@@ -152,8 +152,8 @@ class $modify(CommentCell) {
                         username_menu->updateLayout();
                     }
                 } else if (badge == 4) {
-                    if (!cell->getChildByIDRecursive("gdutils-gdawards-badge")) {
-                        auto badgeGDUtil = CCSprite::createWithSpriteFrameName("gdAwardsBadge.png"_spr);
+                    if (!cell->getChildByIDRecursive("gdutils-gdawards2023-badge")) {
+                        auto badgeGDUtil = CCSprite::createWithSpriteFrameName("gdAwards2023Badge.png"_spr);
                         badgeGDUtil->setScale(0.70f);
                         auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
                             badgeGDUtil,
@@ -161,7 +161,7 @@ class $modify(CommentCell) {
                             menu_selector(NewProfilePage::onGDUtilsGDAwards2023BadgePressed)
                         );
 
-                        badgeGDUtilBtn->setID("gdutils-gdawards-badge");
+                        badgeGDUtilBtn->setID("gdutils-gdawards2023-badge");
                         if (cell->getChildByIDRecursive("percentage-label")) {
                             username_menu->insertBefore(badgeGDUtilBtn, cell->getChildByIDRecursive("percentage-label"));
                         } else {
@@ -249,6 +249,24 @@ class $modify(CommentCell) {
                         }
 
                         badgeGDUtilBtn->setID("gdutils-supporter-badge");
+                        if (cell->getChildByIDRecursive("percentage-label")) {
+                            username_menu->insertBefore(badgeGDUtilBtn, cell->getChildByIDRecursive("percentage-label"));
+                        } else {
+                            username_menu->addChild(badgeGDUtilBtn);
+                        }
+                        username_menu->updateLayout();
+                    }
+                } else if (badge == 9) {
+                    if (!cell->getChildByIDRecursive("gdutils-gdawards2024-badge")) {
+                        auto badgeGDUtil = CCSprite::createWithSpriteFrameName("gdAwards2024Badge.png"_spr);
+                        badgeGDUtil->setScale(0.70f);
+                        auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
+                            badgeGDUtil,
+                            cell,
+                            menu_selector(NewProfilePage::onGDUtilsGDAwards2024BadgePressed)
+                        );
+
+                        badgeGDUtilBtn->setID("gdutils-gdawards2024-badge");
                         if (cell->getChildByIDRecursive("percentage-label")) {
                             username_menu->insertBefore(badgeGDUtilBtn, cell->getChildByIDRecursive("percentage-label"));
                         } else {
