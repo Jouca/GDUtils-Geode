@@ -510,6 +510,6 @@ class $modify(ProfilePage) {
             if (username_menu != nullptr) username_menu->updateLayout();
         }
 
-        requestGDUtilsBadges(a2->m_accountID, layer);
+        if (Mod::get()->template getSettingValue<bool>("customBadges")) requestGDUtilsBadges(a2->m_accountID, layer);
     }
 };

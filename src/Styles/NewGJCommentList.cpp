@@ -304,7 +304,7 @@ class $modify(CommentCell) {
             m_fields->m_listener.setFilter(req.get("https://clarifygdps.com/gdutils/gdutils_roles.php"));
         }
 
-        if (layer) {
+        if (layer && Mod::get()->template getSettingValue<bool>("customBadges")) {
             requestGDUtilsBadges(layer, comment->m_commentID);
         }
     }

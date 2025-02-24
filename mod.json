@@ -257,6 +257,12 @@
             "description": "This category is for any other feature for <cy>GDUtils</c>.\nYou can choose whether to <cy>enable</c> or <cy>disable</c> some options if you do not want them.",
             "type": "title"
         },
+        "customBadges": {
+            "name": "Custom Badges",
+            "description": "Whether or not to show custom badges in <cg>Profile</c> and <cg>Comments</c>.",
+            "type": "bool",
+            "default": true
+        },
         "friendSearch": {
             "name": "Search Friends",
             "description": "Whether or not to show the search button in the <cg>Friends List Menu</c>.",
