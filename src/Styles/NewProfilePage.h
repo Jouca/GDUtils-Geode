@@ -12,6 +12,7 @@ class NewProfilePage : public CCLayer {
         void onGDUtilsContributorBadgePressed(CCObject* pSender);
         void onGDUtilsArtistBadgePressed(CCObject* pSender);
         void onGDUtilsGDAwards2023BadgePressed(CCObject* pSender);
+        void onGDUtilsGDAwards2024BadgePressed(CCObject* pSender);
         void onGDUtilsSupporterBadgePressed(CCObject* pSender);
         void onULDevBadgePressed(CCObject* pSender);
         void onULOfficerBadgePressed(CCObject* pSender);

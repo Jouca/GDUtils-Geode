@@ -1,18 +1,9 @@
 #pragma once
 #include <Geode/Geode.hpp>
 #include <Geode/loader/Mod.hpp>
+#include "../../include/RateEvent.hpp"
 #include "../includes.h"
 using namespace geode::prelude;
-enum EventType {
-    Rate,
-    Daily,
-    Weekly,
-    Event,
-    smallChest,
-    largeChest,
-    List,
-    NA
-};
 
 class EventsPush : public CCLayer {
     protected:

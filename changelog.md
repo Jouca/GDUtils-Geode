@@ -1,6 +1,10 @@
 # Changelog
+## <cj>v1.4.0-beta.6</c> <cb>(2025-01-24)</c>
+* <cg>Added</c> an <cp>API</c> for GDUtils events and notifications!
+* <cy>Fixed</c> scale for demon placement if too large.
+
 ## <cj>v1.4.0-beta.5</c> <cb>(2024-12-09)</c>
-* <cg>Added</c> <cj>Force</c>gauntlet designs.
+* <cg>Added</c> <cj>Force</c> gauntlet designs.
 * <cy>Updated</c> preview icons button position.
 * <cy>Fixed</c> gauntlets positions where they are less than 3.
 

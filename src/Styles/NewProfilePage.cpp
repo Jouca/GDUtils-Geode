@@ -177,6 +177,19 @@ void NewProfilePage::onGDUtilsGDAwards2023BadgePressed(CCObject* pSender) {
         nullptr,
         300.0f
     )->show();
+}
+
+void NewProfilePage::onGDUtilsGDAwards2024BadgePressed(CCObject* pSender) {
+    FLAlertLayer::create(
+        nullptr,
+        "GD Awards 2024 Winner",
+        R"text(
+<cy>GD Awards 2024 Winner</c> is a user that won the <cg>GD Award 2024 Edition</c> published on <cy>RobTopGames YouTube channel</c>.
+        )text",
+        "OK",
+        nullptr,
+        300.0f
+    )->show();
 } 
 
 void NewProfilePage::onULDevBadgePressed(CCObject* pSender) {
@@ -338,10 +351,10 @@ class $modify(ProfilePage) {
                             username_menu->updateLayout();
                         }
                     } else if (badge == 4) {
-                        if (!layer->getChildByIDRecursive("gdutils-gdawards-badge")) {
+                        if (!layer->getChildByIDRecursive("gdutils-gdawards2023-badge")) {
                             CCMenu* username_menu = typeinfo_cast<CCMenu*>(layer->getChildByIDRecursive("username-menu"));
 
-                            auto badgeGDUtil = CCSprite::createWithSpriteFrameName("gdAwardsBadge.png"_spr);
+                            auto badgeGDUtil = CCSprite::createWithSpriteFrameName("gdAwards2023Badge.png"_spr);
                             badgeGDUtil->setScale(1);
                             auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
                                 badgeGDUtil,
@@ -349,7 +362,7 @@ class $modify(ProfilePage) {
                                 menu_selector(NewProfilePage::onGDUtilsGDAwards2023BadgePressed)
                             );
 
-                            badgeGDUtilBtn->setID("gdutils-gdawards-badge");
+                            badgeGDUtilBtn->setID("gdutils-gdawards2023-badge");
                             username_menu->addChild(badgeGDUtilBtn);
                             username_menu->updateLayout();
                         }
@@ -414,6 +427,22 @@ class $modify(ProfilePage) {
                             );
 
                             badgeGDUtilBtn->setID("gdutils-supporter-badge");
+                            username_menu->addChild(badgeGDUtilBtn);
+                            username_menu->updateLayout();
+                        }
+                    } else if (badge == 9) {
+                        if (!layer->getChildByIDRecursive("gdutils-gdawards2024-badge")) {
+                            CCMenu* username_menu = typeinfo_cast<CCMenu*>(layer->getChildByIDRecursive("username-menu"));
+
+                            auto badgeGDUtil = CCSprite::createWithSpriteFrameName("gdAwards2024Badge.png"_spr);
+                            badgeGDUtil->setScale(1);
+                            auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
+                                badgeGDUtil,
+                                layer,
+                                menu_selector(NewProfilePage::onGDUtilsGDAwards2024BadgePressed)
+                            );
+
+                            badgeGDUtilBtn->setID("gdutils-gdawards2024-badge");
                             username_menu->addChild(badgeGDUtilBtn);
                             username_menu->updateLayout();
                         }

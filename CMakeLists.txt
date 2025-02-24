@@ -35,6 +35,7 @@ file(GLOB SOURCES
     src/Settings/*.cpp
     src/Utils/*.cpp
     src/Styles/*.cpp
+    include/*.cpp
 )
 
 # Set up the mod binary
@@ -69,6 +70,10 @@ if (CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux" AND WIN32)
   target_link_libraries(${PROJECT_NAME} opengl32 ws2_32 crypt32 wldap32 normaliz advapi32)
 elseif(${GEODE_TARGET_PLATFORM} STREQUAL "Win32")
   target_link_libraries(${PROJECT_NAME} opengl32 ws2_32 Crypt32 Wldap32 Normaliz)
+endif()
+if (WIN32)
+  # Disable annoying warnings
+  target_compile_definitions(${PROJECT_NAME} PRIVATE _CRT_SECURE_NO_WARNINGS)
 endif()
 
 # Set up dependencies, resources, link Geode

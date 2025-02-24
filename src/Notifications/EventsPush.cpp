@@ -79,6 +79,47 @@ const char* getDifficultyIcon(int stars) {
     }
 }
 
+sio::message::ptr eventToSio(EventData eventData) {
+    sio::message::ptr data = sio::object_message::create();
+    data->get_map()["coins"] = sio::int_message::create(eventData.coins);
+    data->get_map()["verified_coins"] = sio::int_message::create(eventData.verified_coins);
+    data->get_map()["platformer"] = sio::int_message::create(eventData.platformer);
+    data->get_map()["title"] = sio::string_message::create(eventData.title);
+    data->get_map()["demon"] = sio::int_message::create(eventData.demon);
+    data->get_map()["type"] = sio::int_message::create(GDUtils::Events::RateEvent::typeToInt(eventData.type));
+    data->get_map()["stars"] = sio::int_message::create(eventData.stars);
+    data->get_map()["starsum"] = sio::int_message::create(eventData.starsum);
+    data->get_map()["level_name"] = sio::string_message::create(eventData.level_name);
+    data->get_map()["level_creator"] = sio::string_message::create(eventData.level_creator);
+    data->get_map()["sprite"] = sio::string_message::create(eventData.sprite);
+    data->get_map()["rate"] = sio::int_message::create(eventData.rate);
+    if (eventData.level_id != -1) {
+        data->get_map()["level_id"] = sio::int_message::create(eventData.level_id);
+    }
+    return data;
+}
+
+EventData sioToEvent(sio::message::ptr const& data) {
+    auto map = data->get_map();
+    EventData eventData;
+    eventData.coins = map["coins"]->get_int();
+    eventData.verified_coins = map["verified_coins"]->get_int() == 1;
+    eventData.platformer = map["platformer"]->get_int();
+    eventData.title = map["title"]->get_string();
+    eventData.demon = map["demon"]->get_int() == 1;
+    eventData.type = GDUtils::Events::RateEvent::intToType(map["type"]->get_int());
+    eventData.stars = map["stars"]->get_int();
+    eventData.starsum = map["starsum"]->get_int();
+    eventData.level_name = map["level_name"]->get_string();
+    eventData.level_creator = map["level_creator"]->get_string();
+    eventData.sprite = map["sprite"]->get_string();
+    eventData.rate = map["rate"]->get_int();
+    if (map.find("level_id") != map.end()) {
+        eventData.level_id = map["level_id"]->get_int();
+    }
+    return eventData;
+}
+
 void EventsPush::destroySelf() {
     auto scene = CCDirector::sharedDirector()->getRunningScene();
     auto layer = reinterpret_cast<CCLayer*>(scene->getChildByTag(1932));
@@ -426,29 +467,7 @@ bool EventsPush::init(sio::message::ptr const& data) {
     bool smallChest = Mod::get()->template getSettingValue<bool>("smallChest");
     bool largeChest = Mod::get()->template getSettingValue<bool>("largeChest");
     bool list = Mod::get()->template getSettingValue<bool>("newListRate");
-    switch (type) {
-        case 0: // Rate
-            eventType = EventType::Rate;
-            break;
-        case 1: // Daily
-            eventType = EventType::Daily;
-            break;
-        case 2: // Weekly
-            eventType = EventType::Weekly;
-            break;
-        case 3: // Small chest
-            eventType = EventType::smallChest;
-            break;
-        case 4: // Large chest
-            eventType = EventType::largeChest;
-            break;
-        case 5: // List
-            eventType = EventType::List;
-            break;
-        case 6: // Event
-            eventType = EventType::Event;
-            break;
-    }
+    eventType = GDUtils::Events::RateEvent::intToType(type);
     if (type == 0 && !newRate) {
         EventsPush::eventCompletedCallback(scene);
         return true;
@@ -909,6 +928,7 @@ void EventsPush::processNextEvent(CCScene* self) {
         processingEvents = true;
         
         auto layer = EventsPush::create(data);
+        GDUtils::Events::OnRate(sioToEvent(data)).post();
         // Set a callback function that will be called when the event is completed
         //layer->setEventCompletedCallback(std::bind(&EventsPush::eventCompletedCallback, this));
         self->addChild(layer);
@@ -921,4 +941,13 @@ void EventsPush::eventCompletedCallback(CCScene* self) {
     
     // Process the next event (if any)
     EventsPush::processNextEvent(self);
+}
+
+$execute {
+    new EventListener<EventFilter<GDUtils::Events::RateEvent>>(+[](GDUtils::Events::RateEvent* e) {
+        if (auto scene = CCScene::get()) {
+            EventsPush::pushRateLevel(scene, eventToSio(e->getData()));
+        }
+        return ListenerResult::Stop;
+    });
 }
