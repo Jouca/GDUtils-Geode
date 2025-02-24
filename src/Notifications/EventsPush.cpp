@@ -931,7 +931,7 @@ void EventsPush::processNextEvent(CCScene* self) {
         GDUtils::Events::OnRate(sioToEvent(data)).post();
         // Set a callback function that will be called when the event is completed
         //layer->setEventCompletedCallback(std::bind(&EventsPush::eventCompletedCallback, this));
-        self->addChild(layer);
+        if (layer && self) self->addChild(layer);
     }
 }
 
