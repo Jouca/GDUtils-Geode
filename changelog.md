@@ -1,4 +1,10 @@
 # Changelog
+## <cj>v1.4.0-beta.7</c> <cb>(2025-02-24)</c>
+* <cg>Added</c> scrollbar for friend & blocked list.
+* <cg>Added</c> option for removing custom badges.
+* <cg>Added</c> 2024 GD Awards badge.
+* <cy>Fixed</c> notification crash for some devices.
+
 ## <cj>v1.4.0-beta.6</c> <cb>(2025-01-24)</c>
 * <cg>Added</c> an <cp>API</c> for GDUtils events and notifications!
 * <cy>Fixed</c> scale for demon placement if too large.
