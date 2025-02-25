@@ -272,8 +272,18 @@ class $modify(CommentCell) {
                     menu_selector(NewProfilePage::onRobTopBadgePressed)
                 );
             } else {
+                CCSprite* modSprite;
+                if (comment->m_modBadge == 1) {
+                    modSprite = CCSprite::createWithSpriteFrameName("modBadge_01_001.png");
+                } else if (comment->m_modBadge == 2) {
+                    modSprite = CCSprite::createWithSpriteFrameName("modBadge_02_001.png");
+                } else if (comment->m_modBadge == 3) {
+                    modSprite = CCSprite::createWithSpriteFrameName("modBadge_03_001.png");
+                }
+                modSprite->setScale(0.6f);
+
                 badgeBtn = CCMenuItemSpriteExtra::create(
-                    modbadge,
+                    modSprite,
                     this,
                     menu_selector(NewProfilePage::onBadgePressed)
                 );

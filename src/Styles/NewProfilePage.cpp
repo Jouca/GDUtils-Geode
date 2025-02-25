@@ -493,8 +493,17 @@ class $modify(ProfilePage) {
                         menu_selector(NewProfilePage::onRobTopBadgePressed)
                     );
                 } else {
+                    CCSprite* modSprite;
+                    if (a2->m_modBadge == 1) {
+                        modSprite = CCSprite::createWithSpriteFrameName("modBadge_01_001.png");
+                    } else if (a2->m_modBadge == 2) {
+                        modSprite = CCSprite::createWithSpriteFrameName("modBadge_02_001.png");
+                    } else if (a2->m_modBadge == 3) {
+                        modSprite = CCSprite::createWithSpriteFrameName("modBadge_03_001.png");
+                    }
+
                     badgeBtn = CCMenuItemSpriteExtra::create(
-                        modbadge,
+                        modSprite,
                         this,
                         menu_selector(NewProfilePage::onBadgePressed)
                     );
