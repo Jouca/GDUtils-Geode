@@ -1,4 +1,9 @@
 # Changelog
+## <cj>v1.4.0-beta.8</c> <cb>(2025-02-24)</c>
+* <cg>Added</c> possibility to disable notifications inside platformer levels.
+* <cy>Fixed</c> RobTop & other badges rendering even when custom badge option is desactivated.
+* <cy>Fixed</c> display mod badges when refreshing page.
+
 ## <cj>v1.4.0-beta.7</c> <cb>(2025-02-24)</c>
 * <cg>Added</c> scrollbar for friend & blocked list.
 * <cg>Added</c> option for removing custom badges.
