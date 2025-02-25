@@ -14,52 +14,20 @@ class $modify(CommentCell) {
     };
 
     void badgeHandle(std::string result, CCLayer* layer, int commentID) {
-        CCArray* badges_to_put = CCArray::create();
+        if (this->m_accountComment) return;
+
+        CommentCell* cell = this;
+        int accountID = cell->m_comment->m_accountID;
+
+        // Part for handling GDUtils badges
+        if (!Mod::get()->template getSettingValue<bool>("customBadges")) return;
 
         if (result.empty()) return;
-        if (this->m_accountComment) return;
 
         std::string data = result;
         std::vector<std::string> data_user = MoreLeaderboards::getWords(data, "|");
-        CommentCell* cell = this;
 
-        int accountID = cell->m_comment->m_accountID;
-        std::string username = cell->m_comment->m_userName;
-
-        CCMenuItemSpriteExtra* badgeBtn = nullptr;
-        CCSprite* modbadge = typeinfo_cast<CCSprite*>(cell->getChildByIDRecursive("mod-badge"));
         CCMenu* username_menu = typeinfo_cast<CCMenu*>(cell->getChildByIDRecursive("username-menu"));
-        if (modbadge != nullptr) {
-            modbadge->removeFromParentAndCleanup(true);
-
-            if (username == "RobTop") {
-                auto robtopSpr = CCSprite::createWithSpriteFrameName("robtop_badge.png"_spr);
-                robtopSpr->setScale(0.75f);
-                badgeBtn = CCMenuItemSpriteExtra::create(
-                    robtopSpr,
-                    this,
-                    menu_selector(NewProfilePage::onRobTopBadgePressed)
-                );
-            } else {
-                badgeBtn = CCMenuItemSpriteExtra::create(
-                    modbadge,
-                    this,
-                    menu_selector(NewProfilePage::onBadgePressed)
-                );
-            }
-
-            badgeBtn->setID("mod-badge");
-            GJUserScore* us = GJUserScore::create();
-            us->m_modBadge = cell->m_comment->m_modBadge;
-            badgeBtn->setUserObject(us);
-            if (cell->getChildByIDRecursive("percentage-label")) {
-                username_menu->insertBefore(badgeBtn, cell->getChildByIDRecursive("percentage-label"));
-            } else {
-                username_menu->addChild(badgeBtn);
-            }
-        }
-
-        if (username_menu != nullptr) username_menu->updateLayout();
 
         while (data_user.size() > 0) {
             std::vector<std::string> data = MoreLeaderboards::getWords(data_user[0], "?");
@@ -281,15 +249,46 @@ class $modify(CommentCell) {
         }
     }
 
-    void requestGDUtilsBadges(CCLayer* layer, int commentID) {
-        badgeHandle(result_global, layer, commentID);
-    }
-
     void loadFromComment(GJComment* comment) {
         CommentCell::loadFromComment(comment);
-        auto layer = m_mainLayer;
 
         if (comment->m_commentDeleted) return;
+
+        CCMenuItemSpriteExtra* badgeBtn = nullptr;
+        CommentCell* cell = this;
+        CCSprite* modbadge = typeinfo_cast<CCSprite*>(cell->getChildByIDRecursive("mod-badge"));
+        std::string username = cell->m_comment->m_userName;
+        CCMenu* username_menu = typeinfo_cast<CCMenu*>(cell->getChildByIDRecursive("username-menu"));
+
+        if (modbadge != nullptr) {
+            modbadge->removeFromParentAndCleanup(true);
+
+            if (username == "RobTop" && Mod::get()->template getSettingValue<bool>("customBadges")) {
+                auto robtopSpr = CCSprite::createWithSpriteFrameName("robtop_badge.png"_spr);
+                robtopSpr->setScale(0.75f);
+                badgeBtn = CCMenuItemSpriteExtra::create(
+                    robtopSpr,
+                    this,
+                    menu_selector(NewProfilePage::onRobTopBadgePressed)
+                );
+            } else {
+                badgeBtn = CCMenuItemSpriteExtra::create(
+                    modbadge,
+                    this,
+                    menu_selector(NewProfilePage::onBadgePressed)
+                );
+            }
+
+            badgeBtn->setID("mod-badge");
+            badgeBtn->setUserObject(CCInteger::create(comment->m_modBadge));
+            if (cell->getChildByIDRecursive("percentage-label")) {
+                username_menu->insertBefore(badgeBtn, cell->getChildByIDRecursive("percentage-label"));
+            } else {
+                username_menu->addChild(badgeBtn);
+            }
+        }
+
+        if (username_menu != nullptr) username_menu->updateLayout();
 
         if (result_global.empty()) {
             m_fields->m_listener.bind([] (web::WebTask::Event* e) {
@@ -304,8 +303,6 @@ class $modify(CommentCell) {
             m_fields->m_listener.setFilter(req.get("https://clarifygdps.com/gdutils/gdutils_roles.php"));
         }
 
-        if (layer && Mod::get()->template getSettingValue<bool>("customBadges")) {
-            requestGDUtilsBadges(layer, comment->m_commentID);
-        }
+        badgeHandle(result_global, cell, cell->m_comment->m_commentID);
     }
 };
