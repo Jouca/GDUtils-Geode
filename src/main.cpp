@@ -189,10 +189,17 @@ class $modify(CCScheduler) { // used to be GameManager
         bool everywhereElse = Mod::get()->template getSettingValue<bool>("everywhereElse");
         bool inLevels = Mod::get()->template getSettingValue<bool>("inLevels");
         bool inEditor = Mod::get()->template getSettingValue<bool>("inEditor");
+        bool inPlatformers = Mod::get()->template getSettingValue<bool>("inPlatformers");
         
         bool pushEvent = true;
-        if (layerName == "PlayLayer" && !inLevels) {
-            pushEvent = false;
+        if (layerName == "PlayLayer") {
+            if (!inLevels) pushEvent = false;
+            
+            PlayLayer* playLayer = reinterpret_cast<PlayLayer*>(layer);
+            GJGameLevel* level = playLayer->m_level;
+            if (level->isPlatformer() && !inPlatformers) {
+                pushEvent = false;
+            }
         }
         if (layerName == "LevelEditorLayer" && !inEditor) {
             pushEvent = false;

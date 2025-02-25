@@ -79,6 +79,12 @@
             "type": "bool",
             "default": true
         },
+        "inPlatformers": {
+            "name": "In Platformers",
+            "description": "If notifications should be shown when playing platformers levels.",
+            "type": "bool",
+            "default": true
+        },
         "newRate": {
             "name": "New Rates",
             "description": "Whether or not to notify about new <cy>Rated Levels</c>",
