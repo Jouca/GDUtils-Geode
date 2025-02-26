@@ -1,4 +1,5 @@
 #include "NewGJCommentList.h"
+#include "Geode/loader/Log.hpp"
 #include "NewProfilePage.h"
 #include "../MoreLeaderboards/MoreLeaderboards.h"
 #include "ccTypes.h"
@@ -29,6 +30,8 @@ class $modify(CommentCell) {
         std::vector<std::string> data_user = MoreLeaderboards::getWords(data, "|");
 
         CCMenu* username_menu = typeinfo_cast<CCMenu*>(cell->getChildByIDRecursive("username-menu"));
+
+        bool colorSet = false;
 
         while (data_user.size() > 0) {
             std::vector<std::string> data = MoreLeaderboards::getWords(data_user[0], "?");
@@ -90,8 +93,11 @@ class $modify(CommentCell) {
                     );
 
                     if (auto commentText = cell->getChildByIDRecursive("comment-text-label")) {
-                        as<CCLabelBMFont*>(commentText)->setColor(color);
-                        cell->m_comment->m_color = color;
+                        if (color.r != 255 && color.g != 255 && color.b != 255 && !colorSet) {
+                            as<CCLabelBMFont*>(commentText)->setColor(color);
+                            cell->m_comment->m_color = color;
+                            colorSet = true;
+                        }
                     }
                     if (auto commentText = cell->getChildByIDRecursive("comment-text-area")) {
                         TextArea* textArea = as<TextArea*>(commentText);
@@ -99,7 +105,10 @@ class $modify(CommentCell) {
                         CCArray* children = bmFont->getChildren();
                         for (int i = 0; i < children->count(); i++) {
                             auto child = as<CCLabelBMFont*>(children->objectAtIndex(i));
-                            child->setColor(color);
+                            if (color.r != 255 && color.g != 255 && color.b != 255 && !colorSet) {
+                                child->setColor(color);
+                                colorSet = true;
+                            }
                         }
                     }
 
@@ -176,19 +185,20 @@ class $modify(CommentCell) {
 
         if (username_menu != nullptr) username_menu->updateLayout();
 
-        if (result_global.empty()) {
-            m_fields->m_listener.bind([] (web::WebTask::Event* e) {
-                if (web::WebResponse* res = e->getValue()) {
-                    if (res->ok()) {
-                        result_global = res->string().unwrapOrDefault();
-                    }
+        const std::function<void(std::string const&)> then = [this, cell](std::string const& result) {
+            badgeHandle(result, cell, cell->m_comment->m_commentID);
+        };
+
+        m_fields->m_listener.bind([then = std::move(then)] (web::WebTask::Event* e) {
+            if (web::WebResponse* res = e->getValue()) {
+                if (res->ok()) {
+                    result_global = res->string().unwrapOrDefault();
+                    then(result_global);
                 }
-            });
+            }
+        });
 
-            auto req = web::WebRequest();
-            m_fields->m_listener.setFilter(req.get("https://clarifygdps.com/gdutils/gdutils_roles.php"));
-        }
-
-        badgeHandle(result_global, cell, cell->m_comment->m_commentID);
+        auto req = web::WebRequest();
+        m_fields->m_listener.setFilter(req.get("https://clarifygdps.com/gdutils/gdutils_roles.php"));
     }
 };
