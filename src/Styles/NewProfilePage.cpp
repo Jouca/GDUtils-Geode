@@ -127,118 +127,6 @@ There's currently <cp>no way</c> to become a <cb>Leaderboard Moderator</c> by ap
     }
 }
 
-void NewProfilePage::onGDUtilsDevBadgePressed(CCObject* pSender) {
-    FLAlertLayer::create(
-        nullptr,
-        "GDUtils Developer",
-        R"text(
-You found a <co>GDUtils developer</c>! :O
-        )text",
-        "OK",
-        nullptr,
-        250.0f
-    )->show();
-}
-
-void NewProfilePage::onGDUtilsContributorBadgePressed(CCObject* pSender) {
-    FLAlertLayer::create(
-        nullptr,
-        "GDUtils Contributor",
-        R"text(
-<cg>GDUtils Contributor</c> is a user that has contributed to the <cl>GDUtils</c> project by <cy>writing code</c>, <cy>adding new features</c> on GitHub.
-
-This badge is given to users that have contributed to the project by having merged <cy>pull requests</c> and have been recognized by the <cl>GDUtils</c> team.
-        )text",
-        "OK",
-        nullptr,
-        350.0f
-    )->show();
-}
-
-void NewProfilePage::onGDUtilsArtistBadgePressed(CCObject* pSender) {
-    FLAlertLayer::create(
-        nullptr,
-        "GDUtils Artist",
-        R"text(
-<cg>GDUtils Artist</c> is a user that has contributed to the <cl>GDUtils</c> project by <cy>creating art</c> and <cy>designs</c> for the project.
-        )text",
-        "OK",
-        nullptr,
-        250.0f
-    )->show();
-}
-
-void NewProfilePage::onGDUtilsGDAwards2023BadgePressed(CCObject* pSender) {
-    FLAlertLayer::create(
-        nullptr,
-        "GD Awards 2023 Winner",
-        R"text(
-<cy>GD Awards 2023 Winner</c> is a user that won the <cg>GD Award 2023 Edition</c> published on <cy>RobTopGames YouTube channel</c>.
-        )text",
-        "OK",
-        nullptr,
-        300.0f
-    )->show();
-}
-
-void NewProfilePage::onGDUtilsGDAwards2024BadgePressed(CCObject* pSender) {
-    FLAlertLayer::create(
-        nullptr,
-        "GD Awards 2024 Winner",
-        R"text(
-<cy>GD Awards 2024 Winner</c> is a user that won the <cg>GD Award 2024 Edition</c> published on <cy>RobTopGames YouTube channel</c>.
-        )text",
-        "OK",
-        nullptr,
-        300.0f
-    )->show();
-} 
-
-void NewProfilePage::onULDevBadgePressed(CCObject* pSender) {
-    FLAlertLayer::create(
-        nullptr,
-        "UL Developer",
-        R"text(
-<cg>Updated Leaderboard Developer</c> is a user that has contributed to the <cl>Updated Leaderboard</c> project by <cy>writing code</c> and <cy>managing the project</c>.
-
-They are responsible for <cy>all the updates and content</c> that is added to the <cl>Updated Leaderboard</c> project.
-        )text",
-        "OK",
-        nullptr,
-        350.0f
-    )->show();
-}
-
-void NewProfilePage::onULOfficerBadgePressed(CCObject* pSender) {
-    FLAlertLayer::create(
-        nullptr,
-        "UL Manager",
-        R"text(
-<cg>Updated Leaderboard Manager</c> is a user that is handling the <cl>Updated Leaderboard</c> project by <cy>managing the project</c> with others <cy>UL Helpers</c>.
-
-They are responsible of the <cy>management</c> and the <cy>Helper team</c> of the <cl>Updated Leaderboard</c> project and they have the same permissions as the <cy>UL Helpers</c>.
-        )text",
-        "OK",
-        nullptr,
-        350.0f
-    )->show();
-}
-
-void NewProfilePage::onULHelperBadgePressed(CCObject* pSender) {
-    FLAlertLayer::create(
-        nullptr,
-        "UL Helper",
-        R"text(
-<cg>Updated Leaderboard Helper</c> is a user that is helping the <cl>Updated Leaderboard</c> project by <cy>managing the project</c> with others <cy>UL Managers</c>.
-
-They are responsible of the <cy>management</c> of the leaderboards by <cy>adding new users</c>, <cy>checking for cheaters</c> and <cy>managing the leaderboards</c> with the <cy>UL Managers</c>.
-        )text",
-        "OK",
-        nullptr,
-        350.0f
-    )->show();
-}
-
 void NewProfilePage::onRobTopBadgePressed(CCObject* pSender) {
     FLAlertLayer::create(
         nullptr,
@@ -254,23 +142,43 @@ He is the <cy>only developer of the game</c> and is responsible for <cy>all the 
     )->show();
 }
 
-void NewProfilePage::onGDUtilsSupporterBadgePressed(CCObject* pSender) {
-    geode::createQuickPopup(
-        "GDUtils Supporter",
-        R"text(
-<cp>GDUtils Supporter</c> is a user that has took a membership on the <cl>GDUtils</c> project by <cy>donating</c> via <cp>Ko-Fi</c>.
+void NewProfilePage::badgeFactoryAlert(CCObject* pSender) {
+    CCArray* children = static_cast<CCArray*>(static_cast<CCNode*>(pSender)->getUserObject());
 
-<cy>You can also get this badge and support the project by donating on the following link:</c>
-        )text",
-        "OK", "Ko-Fi",
-        [](auto, bool btn2) {
-            if (btn2) {
-                geode::utils::web::openLinkInBrowser("https://ko-fi.com/gdutils");
-            }
+    std::string alertTitle = static_cast<CCString*>(children->objectAtIndex(0))->getCString();
+    std::string alertDesc = static_cast<CCString*>(children->objectAtIndex(1))->getCString();
+    float alertWidth = static_cast<CCFloat*>(children->objectAtIndex(2))->getValue();
+    bool isKofi = strcmp(static_cast<CCString*>(children->objectAtIndex(3))->getCString(), "1") == 0;
 
-            
-        }
-    );
+    // Fix \n in alertDesc
+    std::string::size_type n = 0;
+    while ((n = alertDesc.find("\\n", n)) != std::string::npos) {
+        alertDesc.replace(n, 2, "\n");
+        n += 1;
+    }
+
+    if (isKofi) {
+        geode::createQuickPopup(
+            alertTitle.c_str(),
+            alertDesc.c_str(),
+            "OK", "Ko-Fi",
+            [](auto, bool btn2) {
+                if (btn2) {
+                    geode::utils::web::openLinkInBrowser("https://ko-fi.com/gdutils");
+                }
+            },
+            alertWidth
+        );
+    } else {
+        FLAlertLayer::create(
+            nullptr,
+            alertTitle.c_str(),
+            alertDesc.c_str(),
+            "OK",
+            nullptr,
+            alertWidth
+        )->show();
+    }
 }
 
 // Mod badges descriptions & GDUtils dev badge
@@ -288,6 +196,13 @@ class $modify(ProfilePage) {
 
                 int badge = 0;
                 int accountID_data = 0;
+                std::string badge_id = "";
+                std::string badge_sprite = "";
+                float badge_scale = 1.0f;
+                std::string alertTitle = "";
+                std::string alertDesc = "";
+                float alertWidth = 300.0f;
+                bool isKofi = false;
 
                 while (data.size() > 0) {
                     std::string id = data[0];
@@ -297,6 +212,20 @@ class $modify(ProfilePage) {
                         accountID_data = std::stoi(name);
                     } else if (id == "3") {
                         badge = std::stoi(name);
+                    } else if (id == "4") {
+                        badge_sprite = name;
+                    } else if (id == "5") {
+                        badge_id = name;
+                    } else if (id == "6") {
+                        badge_scale = std::stof(name);
+                    } else if (id == "8") {
+                        alertTitle = name;
+                    } else if (id == "9") {
+                        alertDesc = name;
+                    } else if (id == "10") {
+                        alertWidth = std::stof(name);
+                    } else if (id == "11") {
+                        isKofi = name == "1";
                     }
 
                     data.erase(data.begin());
@@ -304,150 +233,29 @@ class $modify(ProfilePage) {
                 }
 
                 if (accountID_data == accountID) {
-                    if (badge == 1) {
-                        if (!layer->getChildByIDRecursive("gdutils-dev-badge")) {
-                            CCMenu* username_menu = typeinfo_cast<CCMenu*>(layer->getChildByIDRecursive("username-menu"));
+                    if (!layer->getChildByIDRecursive(badge_id)) {
+                        CCMenu* username_menu = typeinfo_cast<CCMenu*>(layer->getChildByIDRecursive("username-menu"));
 
-                            auto badgeGDUtil = CCSprite::createWithSpriteFrameName("gdutils_badge.png"_spr);
-                            badgeGDUtil->setScale(1);
-                            auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
-                                badgeGDUtil,
-                                layer,
-                                menu_selector(NewProfilePage::onGDUtilsDevBadgePressed)
-                            );
+                        auto badgeGDUtil = CCSprite::createWithSpriteFrameName(fmt::format("{}"_spr, badge_sprite).c_str());
+                        badgeGDUtil->setScale(badge_scale);
 
-                            badgeGDUtilBtn->setID("gdutils-dev-badge");
-                            username_menu->addChild(badgeGDUtilBtn);
-                            username_menu->updateLayout();
-                        }
-                    } else if (badge == 2) {
-                        if (!layer->getChildByIDRecursive("gdutils-contributor-badge")) {
-                            CCMenu* username_menu = typeinfo_cast<CCMenu*>(layer->getChildByIDRecursive("username-menu"));
+                        auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
+                            badgeGDUtil,
+                            layer,
+                            menu_selector(NewProfilePage::badgeFactoryAlert)
+                        );
 
-                            auto badgeGDUtil = CCSprite::createWithSpriteFrameName("contributorBadge.png"_spr);
-                            badgeGDUtil->setScale(1);
-                            auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
-                                badgeGDUtil,
-                                layer,
-                                menu_selector(NewProfilePage::onGDUtilsContributorBadgePressed)
-                            );
+                        badgeGDUtilBtn->setID(badge_id);
 
-                            badgeGDUtilBtn->setID("gdutils-contributor-badge");
-                            username_menu->addChild(badgeGDUtilBtn);
-                            username_menu->updateLayout();
-                        }
-                    } else if (badge == 3) {
-                        if (!layer->getChildByIDRecursive("gdutils-artist-badge")) {
-                            CCMenu* username_menu = typeinfo_cast<CCMenu*>(layer->getChildByIDRecursive("username-menu"));
+                        auto array = CCArray::create();
+                        array->addObject(CCString::create(alertTitle));
+                        array->addObject(CCString::create(alertDesc));
+                        array->addObject(CCFloat::create(alertWidth));
+                        array->addObject(CCString::create(isKofi ? "1" : "0"));
+                        badgeGDUtilBtn->setUserObject(array);
 
-                            auto badgeGDUtil = CCSprite::createWithSpriteFrameName("artistBadge.png"_spr);
-                            badgeGDUtil->setScale(1);
-                            auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
-                                badgeGDUtil,
-                                layer,
-                                menu_selector(NewProfilePage::onGDUtilsArtistBadgePressed)
-                            );
-
-                            badgeGDUtilBtn->setID("gdutils-artist-badge");
-                            username_menu->addChild(badgeGDUtilBtn);
-                            username_menu->updateLayout();
-                        }
-                    } else if (badge == 4) {
-                        if (!layer->getChildByIDRecursive("gdutils-gdawards2023-badge")) {
-                            CCMenu* username_menu = typeinfo_cast<CCMenu*>(layer->getChildByIDRecursive("username-menu"));
-
-                            auto badgeGDUtil = CCSprite::createWithSpriteFrameName("gdAwards2023Badge.png"_spr);
-                            badgeGDUtil->setScale(1);
-                            auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
-                                badgeGDUtil,
-                                layer,
-                                menu_selector(NewProfilePage::onGDUtilsGDAwards2023BadgePressed)
-                            );
-
-                            badgeGDUtilBtn->setID("gdutils-gdawards2023-badge");
-                            username_menu->addChild(badgeGDUtilBtn);
-                            username_menu->updateLayout();
-                        }
-                    } else if (badge == 5) {
-                        if (!layer->getChildByIDRecursive("gdutils-ul-developer-badge")) {
-                            CCMenu* username_menu = typeinfo_cast<CCMenu*>(layer->getChildByIDRecursive("username-menu"));
-
-                            auto badgeGDUtil = CCSprite::createWithSpriteFrameName("ul_dev_badge.png"_spr);
-                            badgeGDUtil->setScale(1);
-                            auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
-                                badgeGDUtil,
-                                layer,
-                                menu_selector(NewProfilePage::onULDevBadgePressed)
-                            );
-
-                            badgeGDUtilBtn->setID("gdutils-ul-developer-badge");
-                            username_menu->addChild(badgeGDUtilBtn);
-                            username_menu->updateLayout();
-                        }
-                    } else if (badge == 6) {
-                        if (!layer->getChildByIDRecursive("gdutils-ul-officer-badge")) {
-                            CCMenu* username_menu = typeinfo_cast<CCMenu*>(layer->getChildByIDRecursive("username-menu"));
-
-                            auto badgeGDUtil = CCSprite::createWithSpriteFrameName("ul_officer_badge.png"_spr);
-                            badgeGDUtil->setScale(1);
-                            auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
-                                badgeGDUtil,
-                                layer,
-                                menu_selector(NewProfilePage::onULOfficerBadgePressed)
-                            );
-
-                            badgeGDUtilBtn->setID("gdutils-ul-officer-badge");
-                            username_menu->addChild(badgeGDUtilBtn);
-                            username_menu->updateLayout();
-                        }
-                    } else if (badge == 7) {
-                        if (!layer->getChildByIDRecursive("gdutils-ul-helper-badge")) {
-                            CCMenu* username_menu = typeinfo_cast<CCMenu*>(layer->getChildByIDRecursive("username-menu"));
-
-                            auto badgeGDUtil = CCSprite::createWithSpriteFrameName("ul_helper_badge.png"_spr);
-                            badgeGDUtil->setScale(1);
-                            auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
-                                badgeGDUtil,
-                                layer,
-                                menu_selector(NewProfilePage::onULHelperBadgePressed)
-                            );
-
-                            badgeGDUtilBtn->setID("gdutils-ul-helper-badge");
-                            username_menu->addChild(badgeGDUtilBtn);
-                            username_menu->updateLayout();
-                        }
-                    } else if (badge == 8) {
-                        if (!layer->getChildByIDRecursive("gdutils-supporter-badge")) {
-                            CCMenu* username_menu = typeinfo_cast<CCMenu*>(layer->getChildByIDRecursive("username-menu"));
-
-                            auto badgeGDUtil = CCSprite::createWithSpriteFrameName("supporter_badge.png"_spr);
-                            badgeGDUtil->setScale(1);
-                            auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
-                                badgeGDUtil,
-                                layer,
-                                menu_selector(NewProfilePage::onGDUtilsSupporterBadgePressed)
-                            );
-
-                            badgeGDUtilBtn->setID("gdutils-supporter-badge");
-                            username_menu->addChild(badgeGDUtilBtn);
-                            username_menu->updateLayout();
-                        }
-                    } else if (badge == 9) {
-                        if (!layer->getChildByIDRecursive("gdutils-gdawards2024-badge")) {
-                            CCMenu* username_menu = typeinfo_cast<CCMenu*>(layer->getChildByIDRecursive("username-menu"));
-
-                            auto badgeGDUtil = CCSprite::createWithSpriteFrameName("gdAwards2024Badge.png"_spr);
-                            badgeGDUtil->setScale(1);
-                            auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
-                                badgeGDUtil,
-                                layer,
-                                menu_selector(NewProfilePage::onGDUtilsGDAwards2024BadgePressed)
-                            );
-
-                            badgeGDUtilBtn->setID("gdutils-gdawards2024-badge");
-                            username_menu->addChild(badgeGDUtilBtn);
-                            username_menu->updateLayout();
-                        }
+                        username_menu->addChild(badgeGDUtilBtn);
+                        username_menu->updateLayout();
                     }
                 }
 

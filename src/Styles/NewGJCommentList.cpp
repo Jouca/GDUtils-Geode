@@ -1,6 +1,7 @@
 #include "NewGJCommentList.h"
 #include "NewProfilePage.h"
 #include "../MoreLeaderboards/MoreLeaderboards.h"
+#include "ccTypes.h"
 #include <Geode/modify/InfoLayer.hpp>
 #include <Geode/modify/CommentCell.hpp>
 #include <Geode/utils/web.hpp>
@@ -34,6 +35,14 @@ class $modify(CommentCell) {
 
             int badge = 0;
             int accountID_data = 0;
+            std::string badge_id = "";
+            std::string badge_sprite = "";
+            float badge_scale = 1.0f;
+            std::string alertTitle = "";
+            std::string alertDesc = "";
+            float alertWidth = 300.0f;
+            bool isKofi = false;
+            ccColor3B color = { 255, 255, 255 };
 
             while (data.size() > 0) {
                 std::string id = data[0];
@@ -43,6 +52,27 @@ class $modify(CommentCell) {
                     accountID_data = std::stoi(name);
                 } else if (id == "3") {
                     badge = std::stoi(name);
+                } else if (id == "4") {
+                    badge_sprite = name;
+                } else if (id == "5") {
+                    badge_id = name;
+                } else if (id == "7") {
+                    badge_scale = std::stof(name);
+                } else if (id == "8") {
+                    alertTitle = name;
+                } else if (id == "9") {
+                    alertDesc = name;
+                } else if (id == "10") {
+                    alertWidth = std::stof(name);
+                } else if (id == "11") {
+                    isKofi = name == "1";
+                } else if (id == "12") {
+                    // Get color from HEX
+                    color = ccc3(
+                        std::stoi(name.substr(0, 2), nullptr, 16),
+                        std::stoi(name.substr(2, 2), nullptr, 16),
+                        std::stoi(name.substr(4, 2), nullptr, 16)
+                    );
                 }
 
                 data.erase(data.begin());
@@ -50,198 +80,44 @@ class $modify(CommentCell) {
             }
 
             if (accountID_data == accountID) {
-                if (badge == 1) {
-                    if (!cell->getChildByIDRecursive("gdutils-dev-badge")) {
-                        auto badgeGDUtil = CCSprite::createWithSpriteFrameName("gdutils_badge.png"_spr);
-                        badgeGDUtil->setScale(0.70f);
-                        auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
-                            badgeGDUtil,
-                            cell,
-                            menu_selector(NewProfilePage::onGDUtilsDevBadgePressed)
-                        );
+                if (!cell->getChildByIDRecursive(badge_id)) {
+                    auto badgeGDUtil = CCSprite::createWithSpriteFrameName(fmt::format("{}"_spr, badge_sprite).c_str());
+                    badgeGDUtil->setScale(badge_scale);
+                    auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
+                        badgeGDUtil,
+                        cell,
+                        menu_selector(NewProfilePage::badgeFactoryAlert)
+                    );
 
-                        ccColor3B color = { 218, 181, 35 };
-                        if (auto commentText = cell->getChildByIDRecursive("comment-text-label")) {
-                            as<CCLabelBMFont*>(commentText)->setColor(color);
-                            cell->m_comment->m_color = color;
-                        }
-                        if (auto commentText = cell->getChildByIDRecursive("comment-text-area")) {
-                            TextArea* textArea = as<TextArea*>(commentText);
-                            MultilineBitmapFont* bmFont = as<MultilineBitmapFont*>(textArea->getChildren()->objectAtIndex(0));
-                            CCArray* children = bmFont->getChildren();
-                            for (int i = 0; i < children->count(); i++) {
-                                auto child = as<CCLabelBMFont*>(children->objectAtIndex(i));
-                                child->setColor(color);
-                            }
-                        }
-                        
-                        badgeGDUtilBtn->setID("gdutils-dev-badge");
-                        if (cell->getChildByIDRecursive("percentage-label")) {
-                            username_menu->insertBefore(badgeGDUtilBtn, cell->getChildByIDRecursive("percentage-label"));
-                        } else {
-                            username_menu->addChild(badgeGDUtilBtn);
-                        }
-                        username_menu->updateLayout();
+                    if (auto commentText = cell->getChildByIDRecursive("comment-text-label")) {
+                        as<CCLabelBMFont*>(commentText)->setColor(color);
+                        cell->m_comment->m_color = color;
                     }
-                } else if (badge == 2) {
-                    if (!cell->getChildByIDRecursive("gdutils-contributor-badge")) {
-                        auto badgeGDUtil = CCSprite::createWithSpriteFrameName("contributorBadge.png"_spr);
-                        badgeGDUtil->setScale(0.70f);
-                        auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
-                            badgeGDUtil,
-                            cell,
-                            menu_selector(NewProfilePage::onGDUtilsContributorBadgePressed)
-                        );
-
-                        badgeGDUtilBtn->setID("gdutils-contributor-badge");
-                        if (cell->getChildByIDRecursive("percentage-label")) {
-                            username_menu->insertBefore(badgeGDUtilBtn, cell->getChildByIDRecursive("percentage-label"));
-                        } else {
-                            username_menu->addChild(badgeGDUtilBtn);
+                    if (auto commentText = cell->getChildByIDRecursive("comment-text-area")) {
+                        TextArea* textArea = as<TextArea*>(commentText);
+                        MultilineBitmapFont* bmFont = as<MultilineBitmapFont*>(textArea->getChildren()->objectAtIndex(0));
+                        CCArray* children = bmFont->getChildren();
+                        for (int i = 0; i < children->count(); i++) {
+                            auto child = as<CCLabelBMFont*>(children->objectAtIndex(i));
+                            child->setColor(color);
                         }
-                        username_menu->updateLayout();
                     }
-                } else if (badge == 3) {
-                    if (!cell->getChildByIDRecursive("gdutils-artist-badge")) {
-                        auto badgeGDUtil = CCSprite::createWithSpriteFrameName("artistBadge.png"_spr);
-                        badgeGDUtil->setScale(0.70f);
-                        auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
-                            badgeGDUtil,
-                            cell,
-                            menu_selector(NewProfilePage::onGDUtilsArtistBadgePressed)
-                        );
 
-                        badgeGDUtilBtn->setID("gdutils-artist-badge");
-                        if (cell->getChildByIDRecursive("percentage-label")) {
-                            username_menu->insertBefore(badgeGDUtilBtn, cell->getChildByIDRecursive("percentage-label"));
-                        } else {
-                            username_menu->addChild(badgeGDUtilBtn);
-                        }
-                        username_menu->updateLayout();
+                    badgeGDUtilBtn->setID(badge_id);
+
+                    auto array = CCArray::create();
+                    array->addObject(CCString::create(alertTitle));
+                    array->addObject(CCString::create(alertDesc));
+                    array->addObject(CCFloat::create(alertWidth));
+                    array->addObject(CCString::create(isKofi ? "1" : "0"));
+                    badgeGDUtilBtn->setUserObject(array);
+
+                    if (cell->getChildByIDRecursive("percentage-label")) {
+                        username_menu->insertBefore(badgeGDUtilBtn, cell->getChildByIDRecursive("percentage-label"));
+                    } else {
+                        username_menu->addChild(badgeGDUtilBtn);
                     }
-                } else if (badge == 4) {
-                    if (!cell->getChildByIDRecursive("gdutils-gdawards2023-badge")) {
-                        auto badgeGDUtil = CCSprite::createWithSpriteFrameName("gdAwards2023Badge.png"_spr);
-                        badgeGDUtil->setScale(0.70f);
-                        auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
-                            badgeGDUtil,
-                            cell,
-                            menu_selector(NewProfilePage::onGDUtilsGDAwards2023BadgePressed)
-                        );
-
-                        badgeGDUtilBtn->setID("gdutils-gdawards2023-badge");
-                        if (cell->getChildByIDRecursive("percentage-label")) {
-                            username_menu->insertBefore(badgeGDUtilBtn, cell->getChildByIDRecursive("percentage-label"));
-                        } else {
-                            username_menu->addChild(badgeGDUtilBtn);
-                        }
-                        username_menu->updateLayout();
-                    }
-                } else if (badge == 5) {
-                    if (!cell->getChildByIDRecursive("gdutils-ul-developer-badge")) {
-                        auto badgeGDUtil = CCSprite::createWithSpriteFrameName("ul_dev_badge.png"_spr);
-                        badgeGDUtil->setScale(0.70f);
-                        auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
-                            badgeGDUtil,
-                            cell,
-                            menu_selector(NewProfilePage::onULDevBadgePressed)
-                        );
-
-                        badgeGDUtilBtn->setID("gdutils-ul-developer-badge");
-                        if (cell->getChildByIDRecursive("percentage-label")) {
-                            username_menu->insertBefore(badgeGDUtilBtn, cell->getChildByIDRecursive("percentage-label"));
-                        } else {
-                            username_menu->addChild(badgeGDUtilBtn);
-                        }
-                        username_menu->updateLayout();
-                    }
-                } else if (badge == 6) {
-                    if (!cell->getChildByIDRecursive("gdutils-ul-officer-badge")) {
-                        auto badgeGDUtil = CCSprite::createWithSpriteFrameName("ul_officer_badge.png"_spr);
-                        badgeGDUtil->setScale(0.70f);
-                        auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
-                            badgeGDUtil,
-                            cell,
-                            menu_selector(NewProfilePage::onULOfficerBadgePressed)
-                        );
-
-                        badgeGDUtilBtn->setID("gdutils-ul-officer-badge");
-                        if (cell->getChildByIDRecursive("percentage-label")) {
-                            username_menu->insertBefore(badgeGDUtilBtn, cell->getChildByIDRecursive("percentage-label"));
-                        } else {
-                            username_menu->addChild(badgeGDUtilBtn);
-                        }
-                        username_menu->updateLayout();
-                    }
-                } else if (badge == 7) {
-                    if (!cell->getChildByIDRecursive("gdutils-ul-helper-badge")) {
-                        auto badgeGDUtil = CCSprite::createWithSpriteFrameName("ul_helper_badge.png"_spr);
-                        badgeGDUtil->setScale(0.70f);
-                        auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
-                            badgeGDUtil,
-                            cell,
-                            menu_selector(NewProfilePage::onULHelperBadgePressed)
-                        );
-
-                        badgeGDUtilBtn->setID("gdutils-ul-helper-badge");
-                        if (cell->getChildByIDRecursive("percentage-label")) {
-                            username_menu->insertBefore(badgeGDUtilBtn, cell->getChildByIDRecursive("percentage-label"));
-                        } else {
-                            username_menu->addChild(badgeGDUtilBtn);
-                        }
-                        username_menu->updateLayout();
-                    }
-                } else if (badge == 8) {
-                    if (!cell->getChildByIDRecursive("gdutils-supporter-badge")) {
-                        auto badgeGDUtil = CCSprite::createWithSpriteFrameName("supporter_badge.png"_spr);
-                        badgeGDUtil->setScale(0.70f);
-                        auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
-                            badgeGDUtil,
-                            cell,
-                            menu_selector(NewProfilePage::onGDUtilsSupporterBadgePressed)
-                        );
-
-                        ccColor3B color = { 218, 35, 212 };
-                        if (auto commentText = cell->getChildByIDRecursive("comment-text-label")) {
-                            as<CCLabelBMFont*>(commentText)->setColor(color);
-                            cell->m_comment->m_color = color;
-                        }
-                        if (auto commentText = cell->getChildByIDRecursive("comment-text-area")) {
-                            TextArea* textArea = as<TextArea*>(commentText);
-                            MultilineBitmapFont* bmFont = as<MultilineBitmapFont*>(textArea->getChildren()->objectAtIndex(0));
-                            CCArray* children = bmFont->getChildren();
-                            for (int i = 0; i < children->count(); i++) {
-                                auto child = as<CCLabelBMFont*>(children->objectAtIndex(i));
-                                child->setColor(color);
-                            }
-                        }
-
-                        badgeGDUtilBtn->setID("gdutils-supporter-badge");
-                        if (cell->getChildByIDRecursive("percentage-label")) {
-                            username_menu->insertBefore(badgeGDUtilBtn, cell->getChildByIDRecursive("percentage-label"));
-                        } else {
-                            username_menu->addChild(badgeGDUtilBtn);
-                        }
-                        username_menu->updateLayout();
-                    }
-                } else if (badge == 9) {
-                    if (!cell->getChildByIDRecursive("gdutils-gdawards2024-badge")) {
-                        auto badgeGDUtil = CCSprite::createWithSpriteFrameName("gdAwards2024Badge.png"_spr);
-                        badgeGDUtil->setScale(0.70f);
-                        auto badgeGDUtilBtn = CCMenuItemSpriteExtra::create(
-                            badgeGDUtil,
-                            cell,
-                            menu_selector(NewProfilePage::onGDUtilsGDAwards2024BadgePressed)
-                        );
-
-                        badgeGDUtilBtn->setID("gdutils-gdawards2024-badge");
-                        if (cell->getChildByIDRecursive("percentage-label")) {
-                            username_menu->insertBefore(badgeGDUtilBtn, cell->getChildByIDRecursive("percentage-label"));
-                        } else {
-                            username_menu->addChild(badgeGDUtilBtn);
-                        }
-                        username_menu->updateLayout();
-                    }
+                    username_menu->updateLayout();
                 }
             }
 
