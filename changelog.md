@@ -1,37 +1,58 @@
 # Changelog
-## <cj>v1.4.0-beta.8</c> <cb>(2025-02-24)</c>
+## <cj>v1.4.0</c> <cb>(2025-02-26)</c>
+* <cg>Added</c> Event levels notifications.
+* <cg>Added</c> an <cp>API</c> for GDUtils events and notifications!
+* <cg>Added</c> <cj>Force</c> gauntlet designs.
+* <cg>Added</c> new The Vault design.
+* <cg>Added</c> Event levels informations.
+* <cg>Added</c> possibility to disable notifications inside platformer levels.
+* <cg>Added</c> option for removing custom badges.
+* <cg>Added</c> scrollbar for friend & blocked list.
+* <cg>Added</c> 2024 GD Awards badge.
+* <cg>Added</c> UL Trainee badge.
+* <cy>Updated</c> badge system.
+* <cy>Updated</c> preview icons button position.
+* <cy>Updated</c> Updated Leaderboard badges textures.
+* <cy>Fixed</c> RobTop & other badges rendering even when custom badge option is desactivated.
+* <cy>Fixed</c> display mod badges when refreshing page.
+* <cy>Fixed</c> notification crash for some devices.
+* <cy>Fixed</c> scale for demon placement if too large.
+* <cy>Fixed</c> gauntlets positions where they are less than 3.
+* <cy>Fixed</c> crash on Event Page.
+
+## <co>v1.4.0-beta.8</c> <cb>(2025-02-24)</c>
 * <cg>Added</c> possibility to disable notifications inside platformer levels.
 * <cy>Fixed</c> RobTop & other badges rendering even when custom badge option is desactivated.
 * <cy>Fixed</c> display mod badges when refreshing page.
 
-## <cj>v1.4.0-beta.7</c> <cb>(2025-02-24)</c>
+## <co>v1.4.0-beta.7</c> <cb>(2025-02-24)</c>
 * <cg>Added</c> scrollbar for friend & blocked list.
 * <cg>Added</c> option for removing custom badges.
 * <cg>Added</c> 2024 GD Awards badge.
 * <cy>Fixed</c> notification crash for some devices.
 
-## <cj>v1.4.0-beta.6</c> <cb>(2025-01-24)</c>
+## <co>v1.4.0-beta.6</c> <cb>(2025-01-24)</c>
 * <cg>Added</c> an <cp>API</c> for GDUtils events and notifications!
 * <cy>Fixed</c> scale for demon placement if too large.
 
-## <cj>v1.4.0-beta.5</c> <cb>(2024-12-09)</c>
+## <co>v1.4.0-beta.5</c> <cb>(2024-12-09)</c>
 * <cg>Added</c> <cj>Force</c> gauntlet designs.
 * <cy>Updated</c> preview icons button position.
 * <cy>Fixed</c> gauntlets positions where they are less than 3.
 
-## <cj>v1.4.0-beta.4</c> <cb>(2024-11-21)</c>
+## <co>v1.4.0-beta.4</c> <cb>(2024-11-21)</c>
 * <cy>Fixed</c> crash on Event Page.
 
-## <cj>v1.4.0-beta.3</c> <cb>(2024-11-21)</c>
+## <co>v1.4.0-beta.3</c> <cb>(2024-11-21)</c>
 * <cg>Added</c> Event levels informations.
 * <cy>Updated</c> Updated Leaderboard badges textures.
 
-## <cj>v1.4.0-beta.2</c> <cb>(2024-11-20)</c>
+## <co>v1.4.0-beta.2</c> <cb>(2024-11-20)</c>
 * <cg>Added</c> Event levels notifications.
 * <cg>Added</c> new The Vault design.
 * <cy>Updated</c> badges textures.
 
-## <cj>v1.4.0-beta.1</c> <cb>(2024-11-18)</c>
+## <co>v1.4.0-beta.1</c> <cb>(2024-11-18)</c>
 * <cp>GDUtils ported to Geode 4.0.0 (GD 2.2074)</c>
 
 ## <cj>v1.3.12</c> <cb>(2024-10-21)</c>
@@ -117,84 +138,84 @@
 * <cy>Updated</c> content for changelog, about & README
 * <cr>MAJOR bug fixes</c>
 
-## <cl>v1.3.0-beta.4</c> <cb>(2024-06-22)</c>
+## <co>v1.3.0-beta.4</c> <cb>(2024-06-22)</c>
 * <co>Bump to Geode beta 5</c>
 
-## <cl>v1.3.0-beta.3</c> <cb>(2024-06-21)</c>
+## <co>v1.3.0-beta.3</c> <cb>(2024-06-21)</c>
 * <co>Bump to Geode beta 4</c>
 
-## <cl>v1.3.0-beta.2</c> <cb>(2024-06-20)</c>
+## <co>v1.3.0-beta.2</c> <cb>(2024-06-20)</c>
 * <cy>Fixed</c> more leaderboards tab not changing when clicked
 
-## <cl>v1.3.0-beta.1</c> <cb>(2024-06-20)</c>
+## <co>v1.3.0-beta.1</c> <cb>(2024-06-20)</c>
 * <cg>Added</c> user search for more leaderboards
 * <cg>Added</c> RobTop in credits (thanks!)
 * <cy>Fixed</c> random crashes when doing HTTP requests
 * <cy>Fixed</c> buttons not removing after selecting country
 
-## <cl>v1.3.0-alpha.16</c> <cb>(2024-06-20)</c>
+## <co>v1.3.0-alpha.16</c> <cb>(2024-06-20)</c>
 * <cg>Added</c> Better Progression leaderboard
 * <cg>Added</c> Classic/Platformer demons leaderboards
 * <cg>Added</c> RobTop badge in Moderators list
 * <cy>Fixed</c> lists progression bar that were not showing correctly the real progression of the user
 
-## <cl>v1.3.0-alpha.15</c> <cb>(2024-06-18)</c>
+## <co>v1.3.0-alpha.15</c> <cb>(2024-06-18)</c>
 * <cg>Added</c> user progression when receiving a list rate notification
 
-## <cl>v1.3.0-alpha.14</c> <cb>(2024-06-17)</c>
+## <co>v1.3.0-alpha.14</c> <cb>(2024-06-17)</c>
 * <cy>Fixed</c> country flags not showing everytime
 * <cy>Fixed</c> loading circle superposition when loading More Leaderboards & Moderators List TOO FAST <cl>(speedy guy...)</c>
 * <cy>Updated</c> content for changelog, about & README
 
-## <cl>v1.3.0-alpha.13</c> <cb>(2024-06-17)</c>
+## <co>v1.3.0-alpha.13</c> <cb>(2024-06-17)</c>
 * <cg>Added</c> Monster gauntlet new design
 * <cy>Fixed</c> crashes when returning to profile when viewing for lists/levels
 
-## <cl>v1.3.0-alpha.12</c> <cb>(2024-06-16)</c>
+## <co>v1.3.0-alpha.12</c> <cb>(2024-06-16)</c>
 * <cg>Added</c> list rate notifications
 * <cy>Fixed</c> crashes with cosmetics
 * <cy>Fixed</c> notifications clicking during in-game situations
 
-## <cl>v1.3.0-alpha.11</c> <cb>(2024-06-15)</c>
+## <co>v1.3.0-alpha.11</c> <cb>(2024-06-15)</c>
 * <cy>Fixed</c> flags sprites to be more sweet
 * <cy>Changed</c> sprites for new TAB buttons for More Leaderboards
 * <cy>Changed</c> More Leaderboards HTTP POST requests to GET (increase performance!)
 
-## <cl>v1.3.0-alpha.10</c> <cb>(2024-06-14)</c>
+## <co>v1.3.0-alpha.10</c> <cb>(2024-06-14)</c>
 * <cy>Changed</c> sprites for new TAB buttons for More Leaderboards (in preparation)
 
-## <cl>v1.3.0-alpha.9</c> <cb>(2024-06-14)</c>
+## <co>v1.3.0-alpha.9</c> <cb>(2024-06-14)</c>
 * <cg>Added</c> flags on usernames in More Leaderboards
 * <cy>Fixed</c> NodeIDs stuffs with More Leaderboards
 
-## <cl>v1.3.0-alpha.8</c> <cb>(2024-06-12)</c>
+## <co>v1.3.0-alpha.8</c> <cb>(2024-06-12)</c>
 * <cy>Adapted</c> regions HTTP requests to make it only one
 
-## <cl>v1.3.0-alpha.7</c> <cb>(2024-06-11)</c>
+## <co>v1.3.0-alpha.7</c> <cb>(2024-06-11)</c>
 * <cg>Added</c> selection for leaderboards by countries
 
-## <cl>v1.3.0-alpha.6</c> <cb>(2024-06-10)</c>
+## <co>v1.3.0-alpha.6</c> <cb>(2024-06-10)</c>
 * <cg>Added</c> Doom & Split gauntlets new design
 * <cg>Added</c> UI settings for gauntlets & share URL button
 * <cy>Fixed</c> bug making in double the GDUtils badge for developers
 
-## <cl>v1.3.0-alpha.5</c> <cb>(2024-06-09)</c>
+## <co>v1.3.0-alpha.5</c> <cb>(2024-06-09)</c>
 * <cg>Added</c> NCS gauntlets new design
 * <cy>Fixed</c> some crashes with daily chest notifications
 
-## <cl>v1.3.0-alpha.4</c> <cb>(2024-06-08)</c>
+## <co>v1.3.0-alpha.4</c> <cb>(2024-06-08)</c>
 * <cy>Fixed</c> some informations with changelog, about & README
 
-## <cl>v1.3.0-alpha.3</c> <cb>(2024-06-08)</c>
+## <co>v1.3.0-alpha.3</c> <cb>(2024-06-08)</c>
 * <cy>Fixed</c> some internal crashes
 
-## <cl>v1.3.0-alpha.2</c> <cb>(2024-06-08)</c>
+## <co>v1.3.0-alpha.2</c> <cb>(2024-06-08)</c>
 * <cg>Added</c> daily chest notifications
 * <cg>Added</c> previews for locked icons with colors
 * <cg>Added</c> some epic gauntlet redesigns
 * <cy>Fixed</c> some dependencies
 
-## <cl>v1.3.0-alpha.1</c> <cb>(2024-06-07)</c>
+## <co>v1.3.0-alpha.1</c> <cb>(2024-06-07)</c>
 * <co>Preparing support for GD 2.206</c>
 
 ## <cj>v1.2.20</c> <cb>(2024-05-03)</c>
