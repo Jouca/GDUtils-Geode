@@ -114,7 +114,9 @@ Their first task is to moderate the <co>Top 100 / Global leaderboard</c> (as wel
 
 <cr>How to become a Geometry Dash Leaderboard Moderator?</c>
 
-There's currently <cp>no way</c> to become a <cb>Leaderboard Moderator</c> by applying. <cj>RobTop</c> and the <cy>Leaderboard Moderators</c> will choose users that they think are qualified to become a <cb>Leaderboard Moderator</c> and will suggest them to <cj>RobTop</c>.
+If you are interested, you can apply to join the team using our application form. Make sure you read the information in it clearly before submitting. Here is the link:
+
+<cl>https://docs.google.com/forms/d/e/1FAIpQLSfrJyIVM7KzPyTgzGZ0CSuGBPv40160W9I6bPiMgLRawjJJBg/viewform</c>
                 )text",
                 "OK",
                 nullptr,
