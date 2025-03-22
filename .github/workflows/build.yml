@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - "**"
+      - main
 jobs:
   build:
     strategy:
@@ -13,7 +13,6 @@ jobs:
         config:
         - name: Windows
           os: windows-latest
-        # will uncomment mac only when it releases
         - name: macOS
           os: macos-latest
         - name: Android32
@@ -39,9 +38,11 @@ jobs:
         uses: geode-sdk/build-geode-mod@main
         with:
           #sdk: 'nightly'
-          cli: 'v3.0.0-beta.1'
-          combine: true
+          #cli: 'v3.0.0-beta.1'
+          bindings: geode-sdk/bindings
           export-pdb: true
+          bindings-ref: main
+          combine: true
           target: ${{ matrix.config.target }}
 
   package:
