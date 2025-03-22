@@ -203,61 +203,49 @@ GJGameLevel* EventsPush::convertLevelToJSON(std::string& data) {
         auto_level = "0";
     }
 
-    std::string levelIDStr = level_data_list[1];
-    level->m_levelID = std::stoi(levelIDStr);
+    level->m_levelID = numFromString<int>(level_data_list[1]).unwrapOrDefault();
 
     level->m_levelName = level_data_list[3];
     level->m_levelDesc = level_data_list[35];
-    std::string levelVersionStr = level_data_list[5];
-    level->m_levelVersion = std::stoi(levelVersionStr);
-    std::string levelUserIDStr = level_data_list[7];
-    level->m_userID = std::stoi(levelUserIDStr);
+    level->m_levelVersion = numFromString<int>(level_data_list[5]).unwrapOrDefault();
+    level->m_userID = numFromString<int>(level_data_list[7]).unwrapOrDefault();
 
-    std::string levelDifficultyDenominatorStr = level_data_list[9];
-    level->m_ratings = std::stoi(levelDifficultyDenominatorStr);
-    std::string levelDifficultyNumeratorStr = level_data_list[11];
-    level->m_ratingsSum = std::stoi(levelDifficultyNumeratorStr);
+    level->m_ratings = numFromString<int>(level_data_list[9]).unwrapOrDefault();
+    level->m_ratingsSum = numFromString<int>(level_data_list[11]).unwrapOrDefault();
 
     if (level_data_list[9] == "10") {
         if (demon == "1") {
             std::string levelDemonDifficultyStr = level_data_list[23];
-            level->m_difficulty = getDemonDifficulty(std::stoi(levelDemonDifficultyStr));
+            level->m_difficulty = getDemonDifficulty(numFromString<int>(levelDemonDifficultyStr).unwrapOrDefault());
         } else {
             if (auto_level == "1") {
                 level->m_difficulty = getDifficulty(0);
             } else {
-                std::string numeratorDifstr = level_data_list[11];
-                level->m_difficulty = getDifficulty(std::stoi(numeratorDifstr));
+                level->m_difficulty = getDifficulty(numFromString<int>(level_data_list[11]).unwrapOrDefault());
             }
         }
     }
-    std::string levelDownloadsStr = level_data_list[13];
-    level->m_downloads = std::stoi(levelDownloadsStr);
+    level->m_downloads = numFromString<int>(level_data_list[13]).unwrapOrDefault();
     if (level_data_list[53] == "0") {
-        std::string levelAudioTrackStr = level_data_list[15];
-        level->m_audioTrack = std::stoi(levelAudioTrackStr);
+        level->m_audioTrack = numFromString<int>(level_data_list[15]).unwrapOrDefault();
     } else {
-        std::string levelSongIDStr = level_data_list[53];
-        level->m_songID = std::stoi(levelSongIDStr);
+        level->m_songID = numFromString<int>(level_data_list[53]).unwrapOrDefault();
     }
 
     std::string levelGameVersionStr = level_data_list[17];
-    level->m_gameVersion = std::stoi(levelGameVersionStr);
-    std::string levelLikesStr = level_data_list[19];
-    if (std::stoi(level_data_list[19]) >= 0) {
-        level->m_likes = std::stoi(levelLikesStr);
+    level->m_gameVersion = numFromString<int>(levelGameVersionStr).unwrapOrDefault();
+    int levelLikes = numFromString<int>(level_data_list[19]).unwrapOrDefault();
+    if (levelLikes >= 0) {
+        level->m_likes = levelLikes;
         level->m_dislikes = 0;
     } else {
         level->m_likes = 0;
-        level->m_dislikes = 0 - std::stoi(levelLikesStr);
+        level->m_dislikes = 0 - levelLikes;
     }
-    std::string levelLengthStr = level_data_list[37];
-    level->m_levelLength = std::stoi(levelLengthStr);
+    level->m_levelLength = numFromString<int>(level_data_list[37]).unwrapOrDefault();
     
-    std::string levelDemonStr = demon;
-    level->m_demon = std::stoi(levelDemonStr);
-    std::string levelStarsStr = level_data_list[27];
-    level->m_stars = std::stoi(levelStarsStr);
+    level->m_demon = numFromString<int>(demon).unwrapOrDefault();
+    level->m_stars = numFromString<int>(level_data_list[27]).unwrapOrDefault();
     
     if (auto_level == "1") {
         level->m_autoLevel = true;
@@ -265,43 +253,35 @@ GJGameLevel* EventsPush::convertLevelToJSON(std::string& data) {
         level->m_autoLevel = false;
     }
     
-    std::string levelOriginalStr = level_data_list[39];
-    level->m_originalLevel = std::stoi(levelOriginalStr);
+    level->m_originalLevel = numFromString<int>(level_data_list[39]).unwrapOrDefault();
     if (level_data_list[41] == "1") {
         level->m_twoPlayerMode = true;
     } else {
         level->m_twoPlayerMode = false;
     }
 
-    std::string levelCoinsStr = level_data_list[43];
-    level->m_coins = std::stoi(levelCoinsStr);
-    std::string levelCoinsVerifiedStr = level_data_list[45];
-    level->m_coinsVerified = std::stoi(levelCoinsVerifiedStr);
-    std::string levelStarsRequestedStr = level_data_list[47];
-    level->m_starsRequested = std::stoi(levelStarsRequestedStr);
-    std::string levelFeaturedStr = level_data_list[29];
-    level->m_featured = std::stoi(levelFeaturedStr);
+    level->m_coins = numFromString<int>(level_data_list[43]).unwrapOrDefault();
+    level->m_coinsVerified = numFromString<int>(level_data_list[45]).unwrapOrDefault();
+    level->m_starsRequested = numFromString<int>(level_data_list[47]).unwrapOrDefault();
+    level->m_featured = numFromString<int>(level_data_list[29]).unwrapOrDefault();
     if (level_data_list[31] == "1") {
         level->m_isEpic = true;
     } else {
         level->m_isEpic = false;
     }
-    std::string levelDemonDifficultyStr = level_data_list[23];
-    level->m_demonDifficulty = std::stoi(levelDemonDifficultyStr);
+    level->m_demonDifficulty = numFromString<int>(level_data_list[23]).unwrapOrDefault();
 
-    std::string levelObjectCountStr = level_data_list[33];
-    level->m_objectCount = std::stoi(levelObjectCountStr);
+    level->m_objectCount = numFromString<int>(level_data_list[33]).unwrapOrDefault();
 
     level->m_levelNotDownloaded = true;
 
-    std::string levelWorkingTimeStr = level_data_list[49];
-    level->m_workingTime = std::stoi(levelWorkingTimeStr);
+    level->m_workingTime = numFromString<int>(level_data_list[49]).unwrapOrDefault();
 
     CCArray* levelids = gamelevelmanager->m_onlineLevels->allKeys();
     CCObject* obj;
     CCARRAY_FOREACH(levelids, obj) {
         std::string levelid = (static_cast<CCString*>(obj))->getCString();
-        if (std::stoi(levelid) == level->m_levelID) {
+        if (numFromString<int>(levelid).unwrapOrDefault() == level->m_levelID) {
             auto levelFromSaved = static_cast<GJGameLevel*>(gamelevelmanager->m_onlineLevels->objectForKey(levelid));
             level->m_normalPercent = levelFromSaved->m_normalPercent;
             level->m_newNormalPercent2 = levelFromSaved->m_newNormalPercent2;
@@ -325,8 +305,7 @@ GJGameLevel* EventsPush::convertLevelToJSON(std::string& data) {
     // Creator data
     auto creator_data_list = split_str(creator_data, ':');
     level->m_creatorName = creator_data_list[1];
-    std::string levelAccountIDStr = creator_data_list[2];
-    level->m_accountID = std::stoi(levelAccountIDStr);
+    level->m_accountID = numFromString<int>(creator_data_list[2]).unwrapOrDefault();
 #endif
     return level;
 }

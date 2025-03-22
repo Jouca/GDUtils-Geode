@@ -146,13 +146,14 @@ void MoreLeaderboardsCell::callback_user(CCObject* pSender) {
     GameLevelManager* glm = GameLevelManager::sharedState();
 
     auto data = static_cast<CCDictionary*>(static_cast<CCNode*>(pSender)->getUserObject());
-    auto accountID = data->valueForKey("accountID")->getCString();
-    auto playerID = data->valueForKey("playerID")->getCString();
+    auto accountID = numFromString<int>(data->valueForKey("accountID")->getCString()).unwrapOrDefault();
+    auto playerID = numFromString<int>(data->valueForKey("playerID")->getCString()).unwrapOrDefault();
     auto username = data->valueForKey("username")->getCString();
 
-    glm->storeUserName(std::stoi(playerID), std::stoi(accountID), username);
 
-    ProfilePage::create(std::stoi(accountID), true)->show();
+    glm->storeUserName(playerID, accountID, username);
+
+    ProfilePage::create(accountID, true)->show();
 }
 
 void MoreLeaderboardsCell::callback_link(CCObject* pSender) {

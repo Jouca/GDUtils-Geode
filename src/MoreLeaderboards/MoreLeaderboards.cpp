@@ -158,7 +158,7 @@ CCDictionary* MoreLeaderboards::responseToDict(const std::string& response){
         i++;
     }
     if (playerID.length() > 0 && username.length() > 0 && accountID.length() > 0) {
-        glm->storeUserName(std::stoi(playerID), std::stoi(accountID), username);
+        glm->storeUserName(numFromString<int>(playerID).unwrapOrDefault(), numFromString<int>(accountID).unwrapOrDefault(), username);
     }
     return dict;
 }
@@ -683,19 +683,19 @@ void MoreLeaderboards::handle_request_more(std::string const& data) {
 
         int id = 0;
         while (data_page.size() > 0) {
-            std::string page_test = data_page[0];
+            int page_test = numFromString<int>(data_page[0]).unwrapOrDefault();
 
             if (id == 0) {
-                start_count = std::stoi(page_test);
+                start_count = page_test;
             } else if (id == 1) {
-                end_count = std::stoi(page_test);
+                end_count = page_test;
             } else if (id == 2) {
-                total_count = std::stoi(page_test);
+                total_count = page_test;
             } else if (id == 3) {
-                page = std::stoi(page_test);
+                page = page_test;
             } else if (id == 4) {
-                if (std::stoi(page_test) != 0) {
-                    MoreLeaderboards::scroll_int = std::stoi(page_test);
+                if (page_test != 0) {
+                    MoreLeaderboards::scroll_int = page_test;
                 }
             }
 

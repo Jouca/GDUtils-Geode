@@ -9,6 +9,13 @@
 
 std::string result_global = "";
 
+int hexStringToInt(const std::string& hexStr) {
+    int value;
+    std::istringstream iss(hexStr);
+    iss >> std::hex >> value;
+    return value;
+}
+
 // Mod badges descriptions & GDUtils dev badge
 class $modify(CommentCell) {
     struct Fields {
@@ -52,29 +59,29 @@ class $modify(CommentCell) {
                 std::string name = data[1];
 
                 if (id == "1") {
-                    accountID_data = std::stoi(name);
+                    accountID_data = geode::utils::numFromString<int>(name).unwrapOrDefault();
                 } else if (id == "3") {
-                    badge = std::stoi(name);
+                    badge = geode::utils::numFromString<int>(name).unwrapOrDefault();
                 } else if (id == "4") {
                     badge_sprite = name;
                 } else if (id == "5") {
                     badge_id = name;
                 } else if (id == "7") {
-                    badge_scale = std::stof(name);
+                    badge_scale = geode::utils::numFromString<float>(name).unwrapOrDefault();
                 } else if (id == "8") {
                     alertTitle = name;
                 } else if (id == "9") {
                     alertDesc = name;
                 } else if (id == "10") {
-                    alertWidth = std::stof(name);
+                    alertWidth = geode::utils::numFromString<float>(name).unwrapOrDefault();
                 } else if (id == "11") {
                     isKofi = name == "1";
                 } else if (id == "12") {
                     // Get color from HEX
                     color = ccc3(
-                        std::stoi(name.substr(0, 2), nullptr, 16),
-                        std::stoi(name.substr(2, 2), nullptr, 16),
-                        std::stoi(name.substr(4, 2), nullptr, 16)
+                        hexStringToInt(name.substr(0, 2)),
+                        hexStringToInt(name.substr(2, 2)),
+                        hexStringToInt(name.substr(4, 2))
                     );
                 }
 

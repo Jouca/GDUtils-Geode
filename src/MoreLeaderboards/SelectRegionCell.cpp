@@ -40,7 +40,7 @@ bool SelectRegionCell::init(std::string mod) {
             nbPlayers->setScale(.375f);
             addChild(nbPlayers);
         } else if (id == "4") {
-            id_ctr = std::stoi(name);
+            id_ctr = numFromString<int>(name).unwrapOrDefault();
         }
 
         data.erase(data.begin());

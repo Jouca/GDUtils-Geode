@@ -1,5 +1,6 @@
 #include "NewProfilePage.h"
 #include "../includes.h"
+#include "Geode/utils/general.hpp"
 #include <Geode/modify/ProfilePage.hpp>
 #include <Geode/utils/web.hpp>
 
@@ -211,21 +212,21 @@ class $modify(ProfilePage) {
                     std::string name = data[1];
 
                     if (id == "1") {
-                        accountID_data = std::stoi(name);
+                        accountID_data = numFromString<int>(name).unwrapOrDefault();
                     } else if (id == "3") {
-                        badge = std::stoi(name);
+                        badge = numFromString<int>(name).unwrapOrDefault();
                     } else if (id == "4") {
                         badge_sprite = name;
                     } else if (id == "5") {
                         badge_id = name;
                     } else if (id == "6") {
-                        badge_scale = std::stof(name);
+                        badge_scale = numFromString<float>(name).unwrapOrDefault();
                     } else if (id == "8") {
                         alertTitle = name;
                     } else if (id == "9") {
                         alertDesc = name;
                     } else if (id == "10") {
-                        alertWidth = std::stof(name);
+                        alertWidth = numFromString<float>(name).unwrapOrDefault();
                     } else if (id == "11") {
                         isKofi = name == "1";
                     }
