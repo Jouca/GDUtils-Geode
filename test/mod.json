@@ -1,5 +1,5 @@
 {
-	"geode": "4.2.0",
+	"geode": "4.3.1",
 	"gd": {
 		"win": "2.2074",
 		"android": "2.2074",
@@ -11,8 +11,8 @@
 	"version": "v1.0.0",
 	"developer": "Firee",
 	"description": "",
-    "dependencies": [
-        {
+	"dependencies": [
+	{
             "id": "gdutilsdevs.gdutils",
             "version": ">=v1.4.0-beta.6",
             "importance": "required"
