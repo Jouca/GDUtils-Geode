@@ -1,4 +1,8 @@
 # Changelog
+## <cj>v1.4.1</c> <cb>(2025-03-24)</c>
+* <cg>Added</c> past notifications + setting.
+* <cy>Updated</c> notifications system.
+
 ## <cj>v1.4.0</c> <cb>(2025-02-26)</c>
 * <cg>Added</c> Event levels notifications.
 * <cg>Added</c> an <cp>API</c> for GDUtils events and notifications!
