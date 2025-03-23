@@ -81,7 +81,7 @@ void DownloadManager::setup() {
 
     const std::function<void(geode::ByteVector const&)> then = [this](geode::ByteVector const& data) {
         // Save the file
-        geode::utils::file::writeBinary(this->m_sDestination, data);
+        (void)geode::utils::file::writeBinary(this->m_sDestination, data);
 
         ProcessLambdas::callMenuHandler(this, this->m_pSelector);
         this->onClose(CCNode::create());

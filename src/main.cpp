@@ -31,7 +31,7 @@ bool show_connected = false;
 std::queue<mqtt::const_message_ptr> dataQueue;
 std::queue<int> chestQueue;
 
-std::queue<mqtt::const_message_ptr> eventQueue;
+std::queue<mqtt::const_message_ptr> msgQueue;
 
 class MQTT {
     private:
@@ -81,7 +81,7 @@ class MQTT {
 
             void message_arrived(mqtt::const_message_ptr data) override {
                 log::info("call rate event");
-                eventQueue.push(data);
+                msgQueue.push(data);
             }
 
             void delivery_complete(mqtt::delivery_token_ptr token) override {}
@@ -217,7 +217,7 @@ class EventHandler : public CCObject {
                     processEvent(scene);
                 }
             }
-            if (eventQueue.empty()) return;
+            if (msgQueue.empty()) return;
             bool everywhereElse = Mod::get()->template getSettingValue<bool>("everywhereElse");
             bool inLevels = Mod::get()->template getSettingValue<bool>("inLevels");
             bool inEditor = Mod::get()->template getSettingValue<bool>("inEditor");
@@ -239,8 +239,8 @@ class EventHandler : public CCObject {
             if ((layerName != "LevelEditorLayer" && layerName != "PlayLayer") && !everywhereElse) {
                 pushEvent = false;
             }
-            dataQueue.push(eventQueue.front());
-            eventQueue.pop();
+            dataQueue.push(msgQueue.front());
+            msgQueue.pop();
             if (pushEvent) processEvent(scene);
         }
         void checkForFiles() {
