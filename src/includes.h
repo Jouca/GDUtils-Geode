@@ -1,8 +1,9 @@
 #pragma once
 #include <Geode/Geode.hpp>
+#include <random>
 using namespace geode::prelude;
 
-#include <sio_client.h>
+#include <mqtt/async_client.h>
 #include <variant>
 #include <mutex>
 #include <thread>
@@ -48,5 +49,35 @@ class misc {
             }
         }
         return nullptr;
+    }
+
+    static std::string genClientID() {
+        // this is just for statistics ok
+        #ifdef GEODE_IS_WINDOWS 
+        std::string platform = "Windows";
+        #elif defined(GEODE_IS_ANDROID)
+        std::string platform = "Android";
+        #elif defined(GEODE_IS_MACOS)
+        std::string platform = "Mac";
+        #elif defined(GEODE_IS_IOS)
+        std::string platform = "iOS";
+        #else 
+        std::string platform = "Unknown";
+        #endif
+
+        const std::string charset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> dist(0, charset.size() - 1);
+
+        std::string randomStr;
+        for (size_t i = 0; i < 8; ++i) {
+            randomStr.push_back(charset[dist(gen)]);
+        }
+
+        auto now = std::chrono::system_clock::now();
+        auto now_ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
+
+        return fmt::format("gdutils-{}-{}-{}", platform, now_ms, randomStr);
     }
 };

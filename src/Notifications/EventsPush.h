@@ -12,12 +12,13 @@ class EventsPush : public CCLayer {
         int levelId = 0; // because for some reason GJGameLevel doesnt even work :(
         #endif
         EventType eventType = EventType::NA;
-        virtual bool init(sio::message::ptr const& data);
+        virtual bool init(EventData data);
     public:
         void destroySelf();
         void onClickBtn(CCObject*);
-        static EventsPush* create(sio::message::ptr const& data);
-        static void pushRateLevel(CCScene* self, sio::message::ptr const& data);
+        static EventsPush* create(EventData data);
+        static void pushRateLevel(CCScene* self, mqtt::const_message_ptr data);
+        static void pushRateLevel(CCScene* self, EventData data);
         static void processNextEvent(CCScene* self);
         static void eventCompletedCallback(CCScene* self);
         static void stopNow(CCScene* scene);
