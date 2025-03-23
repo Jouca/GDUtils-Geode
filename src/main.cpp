@@ -101,7 +101,9 @@ class MQTT {
         );
         // false = retain, true = dies after disconnect
         //m_connOpts.set_clean_session(true);
-        m_connOpts.set_clean_session(false); 
+        //m_connOpts.set_clean_session(false); 
+        bool showPastNotifs = Mod::get()->template getSettingValue<bool>("past-notifications");
+        m_connOpts.set_clean_session(!showPastNotifs);
         m_connOpts.set_connect_timeout(10);
     }
     void connect() {

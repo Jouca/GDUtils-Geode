@@ -61,6 +61,12 @@
             "name": "Test",
             "type": "custom:test-notification"
         },
+        "past-notifications": {
+            "name": "Show Past Notifications",
+            "description": "If notifications that were supposed to be shown while you weren't playing Geometry Dash should be shown. A maximum of <cy>2 days</c> while you weren't playing Geometry Dash will be shown.",
+            "type": "bool",
+            "default": true
+        },
         "everywhereElse": {
             "name": "Everywhere Else",
             "description": "If notifications should show on any screen.",
