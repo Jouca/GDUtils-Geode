@@ -77,7 +77,10 @@ class misc {
 
         auto now = std::chrono::system_clock::now();
         auto now_ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
-
-        return fmt::format("gdutils-{}-{}-{}", platform, now_ms, randomStr);
+        int accountID = 0;
+        if (auto gjam = GJAccountManager::get()) {
+            accountID = gjam->m_accountID;
+        }
+        return fmt::format("gdutils-{}-{}-{}-{}", accountID, platform, now_ms, randomStr);
     }
 };
