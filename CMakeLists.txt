@@ -55,7 +55,23 @@ FetchContent_Declare(
     GIT_TAG 71f78aafc3246c05d624098b8438129f5e0a70e5
 )
 
-FetchContent_MakeAvailable(paho-mqttpp3-static)
+#FetchContent_MakeAvailable(paho-mqttpp3-static)
+FetchContent_GetProperties(paho-mqttpp3-static)
+# patch it because apparently stl doesnt like basic_string
+if(NOT paho-mqttpp3-static_POPULATED)
+    FetchContent_Populate(paho-mqttpp3-static)
+    configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/patch/ssl_options.h
+        ${paho-mqttpp3-static_SOURCE_DIR}/include/mqtt/ssl_options.h
+        COPYONLY
+    )
+    configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/patch/ssl_options.cpp
+        ${paho-mqttpp3-static_SOURCE_DIR}/src/ssl_options.cpp
+        COPYONLY
+    )
+    add_subdirectory(${paho-mqttpp3-static_SOURCE_DIR} ${paho-mqttpp3-static_BINARY_DIR})
+endif()
 
 target_include_directories(${PROJECT_NAME} PRIVATE
   libs/filesystem
