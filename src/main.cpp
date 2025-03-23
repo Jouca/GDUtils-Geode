@@ -14,6 +14,7 @@
 #include "ProcessLambdas.h"
 #include <fmt/format.h>
 #include <chrono>
+#include <random>
 #include <thread>
 #include <queue>
 #include <unordered_map>
@@ -21,29 +22,126 @@
 #include "Notifications/DailyChest.h"
 #include <codecvt>
 
-static std::unordered_map<std::string, web::WebTask> RUNNING_REQUESTS {};
-static std::mutex lock_var;
-
 int reconnectionDelay = 1000;
 int reconnectionDelayMax = 5000;
-int reconnectionAttempts = 1000;
+int reconnectionAttempts = 100;
 
-std::atomic<bool> connect_finish(false);
-std::atomic<bool> still_connected(false);
+bool show_connected = false;
 
-bool event_fired = false;
-
-
-std::queue<sio::message::ptr> dataQueue;
+std::queue<mqtt::const_message_ptr> dataQueue;
 std::queue<int> chestQueue;
 
-sio::message::ptr event_data = nullptr;
-/*std::mutex lock;
-std::unique_lock<std::mutex> unique_lock(lock);
-std::condition_variable cond;*/ 
-sio::socket::ptr current_socket;
+std::queue<mqtt::const_message_ptr> msgQueue;
 
-// for some reason log and fmt dont work together on android
+class MQTT {
+    private:
+    mqtt::async_client* m_client;
+    mqtt::connect_options m_connOpts;
+    std::string client_id;
+    //const std::string topic("#");
+    std::atomic<bool> connect_finish{false};
+    std::atomic<bool> still_connected{false};
+
+    class Callback : public virtual mqtt::callback, public virtual mqtt::iaction_listener {
+        private:
+            MQTT* handler;
+        public:
+            Callback(MQTT* handler) : handler(handler) {}
+
+            void reconnect() {
+                if (reconnectionAttempts-- <= 0) {
+                    log::error("Maximum reconnection attempts reached, cannot reconnect. Restart the game to reconnect to the MQTT server.");
+                    return;
+                }
+                log::warn("Disconnected from server. Attempting to reconnect... ({} left)", reconnectionAttempts);
+                std::this_thread::sleep_for(std::chrono::milliseconds(reconnectionDelay));
+                handler->connect_finish = true;
+                handler->still_connected = false;
+                //handler->m_client->connect(handler->m_connOpts, nullptr, *this);
+            }
+
+            void connected(const std::string& reason) override {
+                log::info("MQTT Connection successful!");
+                show_connected = true;
+                handler->connect_finish = true;
+                handler->still_connected = true;
+                handler->m_client->subscribe("rate", 1);
+            }
+            void connection_lost(const std::string& reason) override {
+                log::info("Connection closed: {}", reason);
+                reconnect();
+                handler->still_connected = false;
+            }
+            void on_success(const mqtt::token& tok) override {}
+            void on_failure(const mqtt::token& tok) override {
+                log::error("Connection failed: {}", tok.get_error_message());
+                reconnect();
+            }
+            
+
+            void message_arrived(mqtt::const_message_ptr data) override {
+                log::info("call rate event");
+                msgQueue.push(data);
+            }
+
+            void delivery_complete(mqtt::delivery_token_ptr token) override {}
+    };
+    std::unique_ptr<Callback> cb;
+    bool m_calledConnect = false;
+
+    public:
+    MQTT(const std::string& client_id) : client_id(client_id) {
+        m_connOpts.v5();
+        m_connOpts.set_user_name("gd");
+        m_connOpts.set_password("GeometryDashisahorizontalrunnerstylegamedevelopedandpublishedbyRobTopGames");
+        m_connOpts.set_automatic_reconnect(true);
+        m_connOpts.set_automatic_reconnect(
+            reconnectionDelay / 1000,
+            reconnectionDelayMax / 1000
+        );
+        // false = retain, true = dies after disconnect
+        //m_connOpts.set_clean_session(true);
+        m_connOpts.set_clean_session(false); 
+        m_connOpts.set_connect_timeout(10);
+    }
+    void connect() {
+        // https://github.com/eclipse-paho/paho.mqtt.cpp/blob/master/examples/async_subscribe.cpp
+        if (m_calledConnect) return; // just so we don't cause any unnecessary problems...
+        m_calledConnect = true;
+        while (true) {
+            log::info("Starting MQTT...");
+            m_client = new mqtt::async_client("mqtt://gdutils.clarifygdps.com:1883", client_id);
+            cb.reset(new Callback(this));
+            m_client->set_callback(*cb);
+            connect_finish = false;
+            m_client->connect(m_connOpts, nullptr, *cb);
+            auto start_time = std::chrono::steady_clock::now();
+            while (!connect_finish) {
+                /*if (std::chrono::steady_clock::now() - start_time > std::chrono::seconds(10)) {
+                    log::error("Connection timeout");
+                    break;
+                }*/
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            }
+            if (connect_finish) {
+                while (still_connected) {
+                    std::this_thread::sleep_for(std::chrono::seconds(1));
+                }
+            }
+            if (reconnectionAttempts <= 0) {
+                log::error("Maximum reconnection attempts reached, stopping to prevent any crashes.");
+                break;
+            }
+            if (m_client && connect_finish) {
+                delete m_client;
+                m_client = nullptr;
+            }
+        }
+    }
+};
+
+static std::unordered_map<std::string, web::WebTask> RUNNING_REQUESTS {};
+static std::mutex lock_var;
 
 std::string xorEncrypt(const std::string& input, const std::string& key) {
     std::string result;
@@ -53,43 +151,6 @@ std::string xorEncrypt(const std::string& input, const std::string& key) {
     return result;
 }
 
-namespace ConnectionHandler {
-    void onSuccess() {
-        log::info("Socket Connection successful!");
-        connect_finish = true;
-        still_connected = true;
-        //cond.notify_all();
-    }
-
-    void onClose(sio::client::close_reason const& reason) {
-        log::warn("Connection closed: {}", std::to_string(reason));
-        still_connected = false;
-    }
-
-    void onFail() {
-        log::error("Connection failed.");
-        still_connected = false;
-    }
-
-    void onError(sio::message::ptr const& message) {
-        log::error("Sock Error: {}", message->get_string());
-    }
-}
-bool setSocket(sio::socket::ptr sock) {
-    current_socket = sock;
-    current_socket->emit(fmt::format("geode-{}", Mod::get()->getVersion()));
-    current_socket->on("rate", sio::socket::event_listener_aux([&](std::string const& user, sio::message::ptr const& data, bool isAck, sio::message::list &ack_resp) {
-        log::info("call rate event");
-        event_fired = true;
-        event_data = data;
-    }));
-
-    current_socket->on("connect", sio::socket::event_listener_aux([&](std::string const& user, sio::message::ptr const& data, bool isAck, sio::message::list &ack_resp) {
-        log::info("Connect Event");
-    }));
-    return true;
-}
-
 // Daily chests notifications
 /*void dailyChestThread() {
     while (true) {
@@ -97,45 +158,6 @@ bool setSocket(sio::socket::ptr sock) {
         std::this_thread::sleep_for(std::chrono::minutes(1));
     }
 }*/
-
-void start_socket_func() {
-    while (true) {
-        log::info("Starting socket...");
-        sio::client sock;
-        connect_finish = false;
-        sock.set_reconnect_delay(reconnectionDelay);
-        sock.set_reconnect_delay_max(reconnectionDelayMax);
-        sock.set_reconnect_attempts(reconnectionAttempts);
-        sock.set_open_listener(&ConnectionHandler::onSuccess);
-        sock.set_close_listener(&ConnectionHandler::onClose);
-        sock.set_fail_listener(&ConnectionHandler::onFail);
-        sock.set_logs_quiet();
-        sock.connect("http://gdutils.clarifygdps.com:13573");
-        auto start_time = std::chrono::steady_clock::now();
-        while (!connect_finish) {
-            if (std::chrono::steady_clock::now() - start_time > std::chrono::seconds(10)) {
-                log::error("Connection timeout");
-                break;
-            }
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
-        }
-        if (connect_finish) {
-            sock.socket()->on_error(ConnectionHandler::onError);
-            setSocket(sock.socket());
-            while (still_connected) {
-                std::this_thread::sleep_for(std::chrono::seconds(1));
-            }
-        }
-        if (!still_connected) {
-            log::warn("Disconnected from server. Attempting to reconnect...");
-            std::this_thread::sleep_for(std::chrono::seconds(reconnectionDelay));
-        }
-        if (reconnectionAttempts-- <= 0) {
-            log::error("Maximum reconnection attempts reached, stopping to prevent any crashes.");
-            break;
-        }
-    }
-}
 
 void processEvent(CCScene* self) {
     if (!dataQueue.empty()) {
@@ -174,6 +196,10 @@ class EventHandler : public CCObject {
             auto scene = CCDirector::sharedDirector()->getRunningScene();
             if (!scene) return;
             if (scene->getChildrenCount() == 0) return;
+            if (show_connected) {
+                show_connected = false;
+                Notification::create("Connected to Rate Server!", NotificationIcon::Success)->show();
+            }
             auto layer = scene->getChildren()->objectAtIndex(0);
             if (ProcessLambdas::shouldProcessMenuHandler()) {
                 ProcessLambdas::processMenuHandler();
@@ -191,9 +217,7 @@ class EventHandler : public CCObject {
                     processEvent(scene);
                 }
             }
-            if (!event_fired) return;
-            if (event_data == nullptr) return;
-            event_fired = false;
+            if (msgQueue.empty()) return;
             bool everywhereElse = Mod::get()->template getSettingValue<bool>("everywhereElse");
             bool inLevels = Mod::get()->template getSettingValue<bool>("inLevels");
             bool inEditor = Mod::get()->template getSettingValue<bool>("inEditor");
@@ -215,8 +239,8 @@ class EventHandler : public CCObject {
             if ((layerName != "LevelEditorLayer" && layerName != "PlayLayer") && !everywhereElse) {
                 pushEvent = false;
             }
-            dataQueue.push(event_data);
-            event_data = nullptr;
+            dataQueue.push(msgQueue.front());
+            msgQueue.pop();
             if (pushEvent) processEvent(scene);
         }
         void checkForFiles() {
@@ -441,8 +465,17 @@ class $modify(MenuLayer) {
         if (!is_socketserver_started) {
             bool startSocketServer = Mod::get()->template getSettingValue<bool>("socketServer");
             if (startSocketServer) {
-                current_socket = sio::socket::ptr();
-                std::thread hThread(start_socket_func);
+                if (!Mod::get()->hasSavedValue("clientId")) {
+                    Mod::get()->setSavedValue("clientId", misc::genClientID());
+                }
+                if (!Mod::get()->hasSavedValue("clientId")) {
+                    Notification::create("Couldn't connect to server, invalid Client ID", NotificationIcon::Error)->show();
+                    return true;
+                }
+                std::thread hThread([]() {
+                    MQTT handler(Mod::get()->getSavedValue<std::string>("clientId"));
+                    handler.connect();
+                });
                 hThread.detach();
             }
             is_socketserver_started = true;

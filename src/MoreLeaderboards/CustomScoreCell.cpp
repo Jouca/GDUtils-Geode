@@ -423,6 +423,8 @@ class $modify(CustomScoreCell, GJScoreCell) {
                     demon_label->setLayoutOptions(demon_label_layout);
                     statsMenu->addChild(demon_label);
                     break;
+                default:
+                    break;
             }
 
             statsMenu->updateLayout();

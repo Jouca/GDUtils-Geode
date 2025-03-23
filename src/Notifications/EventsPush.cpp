@@ -32,10 +32,10 @@ std::vector<std::string> EventsPush::getWords(std::string s, std::string delim) 
     return res;
 }
 
-std::queue<sio::message::ptr> eventQueue;
+std::queue<EventData> eventQueue;
 bool processingEvents = false;
 int zOrder = 200;
-EventsPush* EventsPush::create(sio::message::ptr const& data) {
+EventsPush* EventsPush::create(EventData data) {
     auto ret = new EventsPush();
     if (ret && ret->init(data)) {
         ret->autorelease();
@@ -77,47 +77,6 @@ const char* getDifficultyIcon(int stars) {
         default:
             return "difficulty_00_btn_001.png";
     }
-}
-
-sio::message::ptr eventToSio(EventData eventData) {
-    sio::message::ptr data = sio::object_message::create();
-    data->get_map()["coins"] = sio::int_message::create(eventData.coins);
-    data->get_map()["verified_coins"] = sio::int_message::create(eventData.verified_coins);
-    data->get_map()["platformer"] = sio::int_message::create(eventData.platformer);
-    data->get_map()["title"] = sio::string_message::create(eventData.title);
-    data->get_map()["demon"] = sio::int_message::create(eventData.demon);
-    data->get_map()["type"] = sio::int_message::create(GDUtils::Events::RateEvent::typeToInt(eventData.type));
-    data->get_map()["stars"] = sio::int_message::create(eventData.stars);
-    data->get_map()["starsum"] = sio::int_message::create(eventData.starsum);
-    data->get_map()["level_name"] = sio::string_message::create(eventData.level_name);
-    data->get_map()["level_creator"] = sio::string_message::create(eventData.level_creator);
-    data->get_map()["sprite"] = sio::string_message::create(eventData.sprite);
-    data->get_map()["rate"] = sio::int_message::create(eventData.rate);
-    if (eventData.level_id != -1) {
-        data->get_map()["level_id"] = sio::int_message::create(eventData.level_id);
-    }
-    return data;
-}
-
-EventData sioToEvent(sio::message::ptr const& data) {
-    auto map = data->get_map();
-    EventData eventData;
-    eventData.coins = map["coins"]->get_int();
-    eventData.verified_coins = map["verified_coins"]->get_int() == 1;
-    eventData.platformer = map["platformer"]->get_int();
-    eventData.title = map["title"]->get_string();
-    eventData.demon = map["demon"]->get_int() == 1;
-    eventData.type = GDUtils::Events::RateEvent::intToType(map["type"]->get_int());
-    eventData.stars = map["stars"]->get_int();
-    eventData.starsum = map["starsum"]->get_int();
-    eventData.level_name = map["level_name"]->get_string();
-    eventData.level_creator = map["level_creator"]->get_string();
-    eventData.sprite = map["sprite"]->get_string();
-    eventData.rate = map["rate"]->get_int();
-    if (map.find("level_id") != map.end()) {
-        eventData.level_id = map["level_id"]->get_int();
-    }
-    return eventData;
 }
 
 void EventsPush::destroySelf() {
@@ -399,7 +358,7 @@ void EventsPush::onClickBtn(CCObject* ret) {
     }
 }
 
-bool EventsPush::init(sio::message::ptr const& data) {
+bool EventsPush::init(EventData data) {
     auto scene = CCDirector::sharedDirector()->getRunningScene();
     // type
     // 0 = new rate
@@ -411,23 +370,15 @@ bool EventsPush::init(sio::message::ptr const& data) {
     // 1 = featured
     // 2 = epic
     // {'demon': 0, 'type': 0, 'starsum': 20, 'stars': 2, 'rate': 2, 'title': 'New Rated Level !', 'level_name': 'Pourquoi', 'level_creator': 'by Jouca', 'sprite': 'GJ_square01.png'}
-    auto dataMap = data->get_map();
-    std::string sprite_name = dataMap["sprite"]->get_string();
-    std::string label_title = dataMap["title"]->get_string();
-    std::string level_name_label = dataMap["level_name"]->get_string();
-    std::string level_by_label = dataMap["level_creator"]->get_string();
-    int isDemon = dataMap["demon"]->get_int();
-    int type = dataMap["type"]->get_int();
-    int starsum = dataMap["starsum"]->get_int();
-    int stars = dataMap["stars"]->get_int();
-    int rateType = dataMap["rate"]->get_int();
-    int coins = dataMap["coins"]->get_int();
-    int areCoinsVerified = dataMap["verified_coins"]->get_int();
-    int isPlatformer = dataMap["platformer"]->get_int();
+    int starsum = data.starsum;
+    int stars = data.stars;
+    int rateType = data.rate;
+    int coins = data.coins;
+    int areCoinsVerified = data.verified_coins;
     int level_id = 0;
-    if (dataMap.find("level_id") != dataMap.end()) {
-        level_id = dataMap["level_id"]->get_int();
-        level->m_levelName = level_name_label;
+    if (data.level_id != -1) {
+        level_id = data.level_id;
+        level->m_levelName = data.level_name;
         level->m_coins = coins;
         level->m_coinsVerified = areCoinsVerified;
         level->m_levelID = level_id;
@@ -446,40 +397,40 @@ bool EventsPush::init(sio::message::ptr const& data) {
     bool smallChest = Mod::get()->template getSettingValue<bool>("smallChest");
     bool largeChest = Mod::get()->template getSettingValue<bool>("largeChest");
     bool list = Mod::get()->template getSettingValue<bool>("newListRate");
-    eventType = GDUtils::Events::RateEvent::intToType(type);
-    if (type == 0 && !newRate) {
+    eventType = data.type;
+    if (eventType == EventType::Rate && !newRate) {
         EventsPush::eventCompletedCallback(scene);
         return true;
     }
-    if (type == 1 && !daily) {
+    if (eventType == EventType::Daily && !daily) {
         EventsPush::eventCompletedCallback(scene);
         return true;
     }
-    if (type == 2 && !weekly) {
+    if (eventType == EventType::Weekly && !weekly) {
         EventsPush::eventCompletedCallback(scene);
         return true;
     }
-    if (type == 3 && !smallChest) {
+    if (eventType == EventType::smallChest && !smallChest) {
         EventsPush::eventCompletedCallback(scene);
         return true;
     }
-    if (type == 4 && !largeChest) {
+    if (eventType == EventType::largeChest && !largeChest) {
         EventsPush::eventCompletedCallback(scene);
         return true;
     }
-    if (type == 5 && !list) {
+    if (eventType == EventType::List && !list) {
         EventsPush::eventCompletedCallback(scene);
         return true;
     }
-    if (type == 6 && !event) {
+    if (eventType == EventType::Event && !event) {
         EventsPush::eventCompletedCallback(scene);
         return true;
     }
 
     auto director = CCDirector::sharedDirector();
     auto winSize = director->getWinSize();
-    auto bg = cocos2d::extension::CCScale9Sprite::create(sprite_name.c_str(), { .0f, .0f, 80.0f, 80.0f, });
-    auto bg_click_spr = cocos2d::extension::CCScale9Sprite::create(sprite_name.c_str(), { .0f, .0f, 80.0f, 80.0f, });
+    auto bg = cocos2d::extension::CCScale9Sprite::create(data.sprite.c_str(), { .0f, .0f, 80.0f, 80.0f, });
+    auto bg_click_spr = cocos2d::extension::CCScale9Sprite::create(data.sprite.c_str(), { .0f, .0f, 80.0f, 80.0f, });
     float lrScale = (float)Mod::get()->template getSettingValue<double>("size");
     auto LrSize = CCSize{ 240, 70 }; // * lrScale for both
     bg->setScale(lrScale);
@@ -505,10 +456,10 @@ bool EventsPush::init(sio::message::ptr const& data) {
 
     auto node = CCNode::create();
 
-    if (type != 3 && type != 4) {
+    if (eventType != EventType::smallChest && eventType != EventType::largeChest) {
         CCSprite* diffFace;
         GJDifficultySprite* mythic = nullptr;
-        if (isDemon == 0) {
+        if (!data.demon) {
             diffFace = cocos2d::CCSprite::createWithSpriteFrameName(getDifficultyIcon(starsum));
             mythic = GJDifficultySprite::create(static_cast<int>(getDifficulty(starsum)), static_cast<GJDifficultyName>(0));
         } else {
@@ -531,7 +482,7 @@ bool EventsPush::init(sio::message::ptr const& data) {
         starcount->setScale(0.35f);
         bg->addChild(starcount);
         CCSprite* star;
-        if (type == 5) {
+        if (eventType == EventType::List) {
             star = cocos2d::CCSprite::createWithSpriteFrameName("diamond_small01_001.png");
         } else {
             star = cocos2d::CCSprite::createWithSpriteFrameName("star_small01_001.png");
@@ -541,7 +492,7 @@ bool EventsPush::init(sio::message::ptr const& data) {
         moon->setPosition({31, 18});
         moon->setScale(.775F);
 
-        if (isPlatformer == 1) bg->addChild(moon);
+        if (data.platformer) bg->addChild(moon);
         else bg->addChild(star);
 
         featured->setPosition({26.f, 43.f});
@@ -571,7 +522,7 @@ bool EventsPush::init(sio::message::ptr const& data) {
 
                 if (Mod::get()->template getSettingValue<bool>("customDifficultyFaces")) {
                     CCSprite* legendaryFace = nullptr;
-                    if (isDemon == 0) {
+                    if (!data.demon) {
                         if (starsum >= 10) {
                             std::string diffStr = std::to_string(static_cast<int>(getDifficulty(starsum)));
                             auto name = "difficulty_0" + diffStr + "_legendaryIcon.png";
@@ -602,7 +553,7 @@ bool EventsPush::init(sio::message::ptr const& data) {
 
                 if (Mod::get()->template getSettingValue<bool>("customDifficultyFaces")) {
                     CCSprite* mythicFace = nullptr;
-                    if (isDemon == 0) {
+                    if (!data.demon) {
                         if (starsum >= 10) {
                             std::string diffStr = std::to_string(static_cast<int>(getDifficulty(starsum)));
                             auto name = "difficulty_0" + diffStr + "_mythicIcon.png";
@@ -663,7 +614,7 @@ bool EventsPush::init(sio::message::ptr const& data) {
         }
 
         // Progress Bar for lists
-        if (type == 5) {
+        if (eventType == EventType::List) {
             auto barSpriteBack = CCSprite::create("GJ_progressBar_001.png");
             barSpriteBack->setScaleX(0.38f);
             barSpriteBack->setScaleY(0.45f);
@@ -700,10 +651,8 @@ bool EventsPush::init(sio::message::ptr const& data) {
             barSpriteTop->setPositionX(-666);
 
             // Get datas for levels
-            std::string levels_list = dataMap["levels_list"]->get_string();
-            int maxToCompleteList = dataMap["maxToCompleteList"]->get_int();
-
-            std::vector<std::string> levels = split_str(levels_list, ',');
+            int maxToCompleteList = data.maxToCompleteList;
+            std::vector<std::string> levels = split_str(data.levels_list, ',');
 
             // Get client data for levels
             GameLevelManager* gameLevelManager = GameLevelManager::sharedState();
@@ -765,12 +714,12 @@ bool EventsPush::init(sio::message::ptr const& data) {
         }
     }
     
-    auto title = cocos2d::CCLabelBMFont::create(label_title.c_str(), "goldFont.fnt");
-    if (type == 3) {
+    auto title = cocos2d::CCLabelBMFont::create(data.title.c_str(), "goldFont.fnt");
+    if (eventType == EventType::smallChest) {
         title->setPosition({ -65, 26 });
-    } else if (type == 4) {
+    } else if (eventType == EventType::largeChest) {
         title->setPosition({ -54, 26 });
-    } else if (type == 5) {
+    } else if (eventType == EventType::List) {
         title->setPosition({ -27, 27 });
     } else {
         title->setPosition({ -27, 23 });
@@ -779,8 +728,8 @@ bool EventsPush::init(sio::message::ptr const& data) {
     title->setAnchorPoint({ 0, 0.5 });
     node->addChild(title);
 
-    auto level_title = cocos2d::CCLabelBMFont::create(level_name_label.c_str(), "bigFont.fnt");
-    if (type == 5) {
+    auto level_title = cocos2d::CCLabelBMFont::create(data.level_name.c_str(), "bigFont.fnt");
+    if (eventType == EventType::List) {
         level_title->setPosition({ -27, 11 });
     } else {
         level_title->setPosition({ -27, 3 });
@@ -789,8 +738,8 @@ bool EventsPush::init(sio::message::ptr const& data) {
     
     level_title->setAnchorPoint({ 0, 0.5 });
 
-    auto level_by = cocos2d::CCLabelBMFont::create(level_by_label.c_str(), "goldFont.fnt");
-    if (type == 5) {
+    auto level_by = cocos2d::CCLabelBMFont::create(data.level_creator.c_str(), "goldFont.fnt");
+    if (eventType == EventType::List) {
         level_by->setPosition({ -27, -2 });
     } else {
         level_by->setPosition({ -27, -11 });
@@ -802,11 +751,11 @@ bool EventsPush::init(sio::message::ptr const& data) {
     level_title->limitLabelWidth(120, 0.46f, 0.1f);
     node->addChild(level_title);
 
-    if ((type > 0 && type < 3) || type == 6) {
+    if (eventType == EventType::Daily || eventType == EventType::Weekly || eventType == EventType::Event) {
         CCSprite* crown;
-        if (type == 1) {
+        if (eventType == EventType::Daily) {
             crown = cocos2d::CCSprite::createWithSpriteFrameName("gj_dailyCrown_001.png");
-        } else if (type == 6) {
+        } else if (eventType == EventType::Event) {
             crown = cocos2d::CCSprite::createWithSpriteFrameName("gj_eventCrown_001.png");
         } else {
             crown = cocos2d::CCSprite::createWithSpriteFrameName("gj_weeklyCrown_001.png");
@@ -814,18 +763,18 @@ bool EventsPush::init(sio::message::ptr const& data) {
         crown->setScale(.45F);
         crown->setPosition({ 45, 45 });
         node->addChild(crown);
-    } else if (type == 3) {
+    } else if (eventType == EventType::smallChest) {
         auto chest = cocos2d::CCSprite::createWithSpriteFrameName("chest_01_02_001.png");
         chest->setScale(.45F);
         chest->setPosition({ 45, -3 });
         node->addChild(chest);
-    } else if (type == 4) {
+    } else if (eventType == EventType::largeChest) {
         auto chest = cocos2d::CCSprite::createWithSpriteFrameName("chest_02_02_001.png");
         chest->setScale(.4F);
         chest->setPosition({ 45, -3 });
         node->addChild(chest);
 
-    } else if (type == 5) {
+    } else if (eventType == EventType::List) {
         auto list = cocos2d::CCSprite::createWithSpriteFrameName("GJ_listAddBtn_001.png");
         list->setPosition({ 139, -8 });
         node->addChild(list);
@@ -880,9 +829,8 @@ bool EventsPush::init(sio::message::ptr const& data) {
         volume = Mod::get()->template getSettingValue<double>("sfx-volume");
     }
     
-    if (Mod::get()->template getSettingValue<bool>("sfx") && type != 3 && type != 4) FMODAudioEngine::sharedEngine()->playEffect("crystal01.ogg", 1, 1, volume);
-    if (Mod::get()->template getSettingValue<bool>("sfx") && (type == 3 || type == 4)) FMODAudioEngine::sharedEngine()->playEffect("reward01.ogg", 1, 1, volume);
-
+    if (Mod::get()->template getSettingValue<bool>("sfx") && (eventType != EventType::smallChest && eventType != EventType::largeChest)) FMODAudioEngine::sharedEngine()->playEffect("crystal01.ogg", 1, 1, volume);
+    if (Mod::get()->template getSettingValue<bool>("sfx") && (eventType == EventType::smallChest || eventType == EventType::largeChest)) FMODAudioEngine::sharedEngine()->playEffect("reward01.ogg", 1, 1, volume);
     return true;
 }
 
@@ -890,7 +838,30 @@ void EventsPush::stopNow(CCScene* scene) {
     EventsPush::eventCompletedCallback(scene);
 }
 
-void EventsPush::pushRateLevel(CCScene* self, sio::message::ptr const& data) {
+void EventsPush::pushRateLevel(CCScene* self, mqtt::const_message_ptr data) {
+    EventData eventData = matjson::Serialize<EventData>::fromJson(matjson::parse(data->to_string()).unwrapOrDefault()).unwrapOrDefault();
+    /*log::info(
+        "EventData [\ndemon = {};\nstarsum = {};\nstars = {};\nrate = {};\ntype = {};\ntitle = {};\nsprite = {};\nlevel_name = {};\nlevel_creator = {};\ncoins = {};\nverified_coins = {};\nplatformer = {};\nlevel_id = {};\nlevels_list = {};\nmaxToCompleteList = {};\n]",
+        eventData.demon,
+        eventData.starsum,
+        eventData.stars,
+        eventData.rate,
+        GDUtils::Events::RateEvent::typeToInt(eventData.type),
+        eventData.title,
+        eventData.sprite,
+        eventData.level_name,
+        eventData.level_creator,
+        eventData.coins,
+        eventData.verified_coins,
+        eventData.platformer,
+        eventData.level_id,
+        eventData.levels_list,
+        eventData.maxToCompleteList
+    );*/
+    pushRateLevel(self, eventData);
+}
+
+void EventsPush::pushRateLevel(CCScene* self, EventData data) {
     // Enqueue the event
     eventQueue.push(data);
     
@@ -907,7 +878,7 @@ void EventsPush::processNextEvent(CCScene* self) {
         processingEvents = true;
         
         auto layer = EventsPush::create(data);
-        GDUtils::Events::OnRate(sioToEvent(data)).post();
+        GDUtils::Events::OnRate(data).post();
         // Set a callback function that will be called when the event is completed
         //layer->setEventCompletedCallback(std::bind(&EventsPush::eventCompletedCallback, this));
         if (layer && self) self->addChild(layer);
@@ -925,7 +896,7 @@ void EventsPush::eventCompletedCallback(CCScene* self) {
 $execute {
     new EventListener<EventFilter<GDUtils::Events::RateEvent>>(+[](GDUtils::Events::RateEvent* e) {
         if (auto scene = CCScene::get()) {
-            EventsPush::pushRateLevel(scene, eventToSio(e->getData()));
+            EventsPush::pushRateLevel(scene, e->getData());
         }
         return ListenerResult::Stop;
     });
