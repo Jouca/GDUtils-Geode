@@ -22,7 +22,7 @@ struct EventData {
     std::string level_name;
     std::string level_creator;
     uint8_t coins = 0;
-    bool verified_coins = false;
+    uint8_t verified_coins = 0;
     bool platformer = false;
     int level_id = -1;
     std::string levels_list;
@@ -34,10 +34,10 @@ struct matjson::Serialize<EventData> {
     static geode::Result<EventData> fromJson(matjson::Value const& value) {
         EventData data;
         if (value.contains("demon")) {
-            if (value["demon"].asInt().isErr()) {
+            if (value["demon"].asUInt().isErr()) {
                 GEODE_UNWRAP_INTO(data.demon, value["demon"].asBool());
             } else {
-                GEODE_UNWRAP_INTO(auto demon, value["demon"].asInt());
+                GEODE_UNWRAP_INTO(auto demon, value["demon"].asUInt());
                 data.demon = demon == 1;
             }
         }
@@ -77,19 +77,13 @@ struct matjson::Serialize<EventData> {
         GEODE_UNWRAP_INTO(data.level_name, value["level_name"].asString());
         GEODE_UNWRAP_INTO(data.level_creator, value["level_creator"].asString());
         GEODE_UNWRAP_INTO(data.rate, value["rate"].asUInt());
-        if (value.contains("verified_coins")) {
-            if (value["verified_coins"].asInt().isErr()) {
-                GEODE_UNWRAP_INTO(data.verified_coins, value["verified_coins"].asBool());
-            } else {
-                GEODE_UNWRAP_INTO(auto verified_coins, value["verified_coins"].asInt());
-                data.verified_coins = verified_coins == 1;
-            }
-        }
+        GEODE_UNWRAP_INTO(data.coins, value["coins"].asUInt());
+        GEODE_UNWRAP_INTO(data.verified_coins, value["verified_coins"].asUInt());
         if (value.contains("platformer")) {
-            if (value["platformer"].asInt().isErr()) {
+            if (value["platformer"].asUInt().isErr()) {
                 GEODE_UNWRAP_INTO(data.platformer, value["platformer"].asBool());
             } else {
-                GEODE_UNWRAP_INTO(auto platformer, value["platformer"].asInt());
+                GEODE_UNWRAP_INTO(auto platformer, value["platformer"].asUInt());
                 data.platformer = platformer == 1;
             }
         }
