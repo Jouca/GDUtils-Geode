@@ -1,4 +1,8 @@
 # Changelog
+## <cj>v1.4.2</c> <cb>(2025-03-25)</c>
+* <cg>Added</c> notification announcements.
+* <cy>Fixed</c> random crash with notifications upon reconnecting.
+
 ## <cj>v1.4.1</c> <cb>(2025-03-24)</c>
 * <cg>Added</c> past notifications + setting.
 * <cy>Updated</c> notifications system.

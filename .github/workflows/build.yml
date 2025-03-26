@@ -41,8 +41,7 @@ jobs:
       - name: Build the mod
         uses: geode-sdk/build-geode-mod@main
         with:
-          #sdk: 'nightly'
-          #cli: 'v3.0.0-beta.1'
+          build-config: 'RelWithDebInfo'
           bindings: geode-sdk/bindings
           export-pdb: true
           bindings-ref: main

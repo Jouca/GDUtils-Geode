@@ -397,6 +397,7 @@ bool EventsPush::init(EventData data) {
     bool smallChest = Mod::get()->template getSettingValue<bool>("smallChest");
     bool largeChest = Mod::get()->template getSettingValue<bool>("largeChest");
     bool list = Mod::get()->template getSettingValue<bool>("newListRate");
+    bool announcement = Mod::get()->template getSettingValue<bool>("announcement");
     eventType = data.type;
     if (eventType == EventType::Rate && !newRate) {
         EventsPush::eventCompletedCallback(scene);
@@ -426,7 +427,10 @@ bool EventsPush::init(EventData data) {
         EventsPush::eventCompletedCallback(scene);
         return true;
     }
-
+    if (eventType == EventType::Announcement && !announcement) {
+        EventsPush::eventCompletedCallback(scene);
+        return true;
+    }
     auto director = CCDirector::sharedDirector();
     auto winSize = director->getWinSize();
     auto bg = cocos2d::extension::CCScale9Sprite::create(data.sprite.c_str(), { .0f, .0f, 80.0f, 80.0f, });
@@ -456,7 +460,7 @@ bool EventsPush::init(EventData data) {
 
     auto node = CCNode::create();
 
-    if (eventType != EventType::smallChest && eventType != EventType::largeChest) {
+    if (eventType != EventType::smallChest && eventType != EventType::largeChest && eventType != EventType::Announcement) {
         CCSprite* diffFace;
         GJDifficultySprite* mythic = nullptr;
         if (!data.demon) {
@@ -721,35 +725,44 @@ bool EventsPush::init(EventData data) {
         title->setPosition({ -54, 26 });
     } else if (eventType == EventType::List) {
         title->setPosition({ -27, 27 });
+    } else if (eventType == EventType::Announcement) {
+        title->setString("Announcement");
+        title->setPosition({ -65, 26 });
+        auto subtitle = cocos2d::CCLabelBMFont::create(data.title.c_str(), "bigFont.fnt");
+        subtitle->limitLabelWidth(200, 0.46f, 0.1f);
+        subtitle->setAnchorPoint({ 0, 0.5 });
+        subtitle->setPosition({ -65, 10 });
+        node->addChild(subtitle);
     } else {
         title->setPosition({ -27, 23 });
     }
     title->setScale(.575F);
     title->setAnchorPoint({ 0, 0.5 });
     node->addChild(title);
+    if (eventType != EventType::Announcement) {
+        auto level_title = cocos2d::CCLabelBMFont::create(data.level_name.c_str(), "bigFont.fnt");
+        if (eventType == EventType::List) {
+            level_title->setPosition({ -27, 11 });
+        } else {
+            level_title->setPosition({ -27, 3 });
+        }
+        level_title->setScale(.46F);
+        
+        level_title->setAnchorPoint({ 0, 0.5 });
 
-    auto level_title = cocos2d::CCLabelBMFont::create(data.level_name.c_str(), "bigFont.fnt");
-    if (eventType == EventType::List) {
-        level_title->setPosition({ -27, 11 });
-    } else {
-        level_title->setPosition({ -27, 3 });
+        auto level_by = cocos2d::CCLabelBMFont::create(data.level_creator.c_str(), "goldFont.fnt");
+        if (eventType == EventType::List) {
+            level_by->setPosition({ -27, -2 });
+        } else {
+            level_by->setPosition({ -27, -11 });
+        }
+        level_by->setScale(.46F);
+        level_by->limitLabelWidth(120, 0.46f, 0.1f);
+        level_by->setAnchorPoint({ 0, 0.5 });
+        node->addChild(level_by);
+        level_title->limitLabelWidth(120, 0.46f, 0.1f);
+        node->addChild(level_title);
     }
-    level_title->setScale(.46F);
-    
-    level_title->setAnchorPoint({ 0, 0.5 });
-
-    auto level_by = cocos2d::CCLabelBMFont::create(data.level_creator.c_str(), "goldFont.fnt");
-    if (eventType == EventType::List) {
-        level_by->setPosition({ -27, -2 });
-    } else {
-        level_by->setPosition({ -27, -11 });
-    }
-    level_by->setScale(.46F);
-    level_by->limitLabelWidth(120, 0.46f, 0.1f);
-    level_by->setAnchorPoint({ 0, 0.5 });
-    node->addChild(level_by);
-    level_title->limitLabelWidth(120, 0.46f, 0.1f);
-    node->addChild(level_title);
 
     if (eventType == EventType::Daily || eventType == EventType::Weekly || eventType == EventType::Event) {
         CCSprite* crown;

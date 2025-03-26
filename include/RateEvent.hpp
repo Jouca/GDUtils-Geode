@@ -35,6 +35,8 @@ namespace GDUtils::Events {
                     return EventType::List;
                 case 6: // Event
                     return EventType::Event;
+                case 7: // Announcement
+                    return EventType::Announcement;
             }
         }
         static int typeToInt(EventType type) {
@@ -55,6 +57,8 @@ namespace GDUtils::Events {
                     return 5;
                 case EventType::Event: // Event
                     return 6;
+                case EventType::Announcement: // Announcement 
+                    return 7;
             }
         }
     };

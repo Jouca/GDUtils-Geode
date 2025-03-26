@@ -22,10 +22,6 @@
 #include "Notifications/DailyChest.h"
 #include <codecvt>
 
-int reconnectionDelay = 1000;
-int reconnectionDelayMax = 5000;
-int reconnectionAttempts = 100;
-
 bool show_connected = false;
 
 std::queue<mqtt::const_message_ptr> dataQueue;
@@ -35,47 +31,52 @@ std::queue<mqtt::const_message_ptr> msgQueue;
 
 class MQTT {
     private:
-    mqtt::async_client* m_client;
+    std::unique_ptr<mqtt::async_client> m_client;
     mqtt::connect_options m_connOpts;
     std::string client_id;
-    //const std::string topic("#");
-    std::atomic<bool> connect_finish{false};
-    std::atomic<bool> still_connected{false};
+
+    std::atomic<int> m_remainingAttempts = {10};
+
+    std::mutex m_mutex;
+    std::condition_variable m_cv;
 
     class Callback : public virtual mqtt::callback, public virtual mqtt::iaction_listener {
         private:
-            MQTT* handler;
-        public:
-            Callback(MQTT* handler) : handler(handler) {}
+            MQTT* m_handler;
 
+        public:
+            Callback(MQTT* handler) : m_handler(handler) {}
+/*
             void reconnect() {
-                if (reconnectionAttempts-- <= 0) {
+                if (m_handler->m_remainingAttempts-- > 0) {
+                    int delayMs = reconnectionDelay * (10 - m_handler->m_remainingAttempts);
+                    log::warn("Disconnected from server. Attempting to reconnect... ({} left, reconnecting in {:.2f} seconds)", m_handler->reconnectionAttempts, (float)((delayMs / 1000.F)));
+                    std::this_thread::sleep_for(std::chrono::milliseconds(delayMs));
+                    m_handler->m_client->connect();
+                } else {
                     log::error("Maximum reconnection attempts reached, cannot reconnect. Restart the game to reconnect to the MQTT server.");
-                    return;
                 }
-                log::warn("Disconnected from server. Attempting to reconnect... ({} left)", reconnectionAttempts);
-                std::this_thread::sleep_for(std::chrono::milliseconds(reconnectionDelay));
-                handler->connect_finish = true;
-                handler->still_connected = false;
-                //handler->m_client->connect(handler->m_connOpts, nullptr, *this);
-            }
+            }*/
 
             void connected(const std::string& reason) override {
+                std::unique_lock<std::mutex> lock(m_handler->m_mutex);
                 log::info("MQTT Connection successful!");
                 show_connected = true;
-                handler->connect_finish = true;
-                handler->still_connected = true;
-                handler->m_client->subscribe("rate", 1);
+                if (m_handler->m_client) {
+                    log::info("Subscribed to Rate Notifications");
+                    m_handler->m_client->subscribe("rate", 1);
+                }
+                m_handler->m_cv.notify_all();
             }
             void connection_lost(const std::string& reason) override {
+                std::lock_guard<std::mutex> lock(m_handler->m_mutex);
                 log::info("Connection closed: {}", reason);
-                reconnect();
-                handler->still_connected = false;
+                m_handler->m_cv.notify_all();
             }
             void on_success(const mqtt::token& tok) override {}
             void on_failure(const mqtt::token& tok) override {
                 log::error("Connection failed: {}", tok.get_error_message());
-                reconnect();
+                connection_lost(fmt::format("{} (Code: {})", tok.get_error_message(), tok.get_return_code()));
             }
             
 
@@ -86,19 +87,12 @@ class MQTT {
 
             void delivery_complete(mqtt::delivery_token_ptr token) override {}
     };
-    std::unique_ptr<Callback> cb;
-    bool m_calledConnect = false;
 
     public:
     MQTT(const std::string& client_id) : client_id(client_id) {
-        m_connOpts.v5();
         m_connOpts.set_user_name("gd");
         m_connOpts.set_password("GeometryDashisahorizontalrunnerstylegamedevelopedandpublishedbyRobTopGames");
         m_connOpts.set_automatic_reconnect(true);
-        m_connOpts.set_automatic_reconnect(
-            reconnectionDelay / 1000,
-            reconnectionDelayMax / 1000
-        );
         // false = retain, true = dies after disconnect
         //m_connOpts.set_clean_session(true);
         //m_connOpts.set_clean_session(false); 
@@ -108,35 +102,38 @@ class MQTT {
     }
     void connect() {
         // https://github.com/eclipse-paho/paho.mqtt.cpp/blob/master/examples/async_subscribe.cpp
-        if (m_calledConnect) return; // just so we don't cause any unnecessary problems...
-        m_calledConnect = true;
+        Callback cb(this);
         while (true) {
             log::info("Starting MQTT...");
-            m_client = new mqtt::async_client("mqtt://gdutils.clarifygdps.com:1883", client_id);
-            cb.reset(new Callback(this));
-            m_client->set_callback(*cb);
-            connect_finish = false;
-            m_client->connect(m_connOpts, nullptr, *cb);
-            auto start_time = std::chrono::steady_clock::now();
-            while (!connect_finish) {
-                /*if (std::chrono::steady_clock::now() - start_time > std::chrono::seconds(10)) {
-                    log::error("Connection timeout");
-                    break;
-                }*/
-                std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            int delayMs = 3000 * ((m_remainingAttempts + 1) - m_remainingAttempts);
+            if (m_remainingAttempts != 10) {
+                std::this_thread::sleep_for(std::chrono::seconds(delayMs / 1000));
             }
-            if (connect_finish) {
-                while (still_connected) {
-                    std::this_thread::sleep_for(std::chrono::seconds(1));
+            if (!m_client) {
+                m_client = std::make_unique<mqtt::async_client>("mqtt://gdutils.clarifygdps.com:1883", client_id);
+                m_client->set_callback(cb);
+            }
+            if (m_client) {
+                std::unique_lock<std::mutex> lock(m_mutex);
+                m_client->connect(m_connOpts, nullptr, cb);
+                if (!m_cv.wait_for(lock, std::chrono::seconds(10), [this]{ 
+                    return m_client->is_connected(); 
+                })) {
+                    log::error("Connection timeout, assuming I can't connect!");
                 }
-            }
-            if (reconnectionAttempts <= 0) {
-                log::error("Maximum reconnection attempts reached, stopping to prevent any crashes.");
-                break;
-            }
-            if (m_client && connect_finish) {
-                delete m_client;
-                m_client = nullptr;
+                while (m_client->is_connected()) {
+                    m_cv.wait_for(lock, std::chrono::seconds(1), [this] { return !m_client->is_connected(); });
+                }
+                if (m_remainingAttempts-- > 0) {
+                    log::warn("Disconnected from server. Attempting to reconnect... ({} left, reconnecting in {} seconds)", m_remainingAttempts, (float)((delayMs / 1000.F)));
+                    if (m_client->is_connected()) {
+                        m_client->disconnect();
+                    }
+                    m_client.reset();
+                } else {
+                    log::error("Maximum reconnection attempts reached, cannot reconnect. Restart the game to reconnect to the MQTT server.");
+                    break;
+                }
             }
         }
     }
