@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.21)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-if ("${GEODE_TARGET_PLATFORM}" STREQUAL "iOS" OR IOS)
+if ("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS" OR IOS)
     set(CMAKE_OSX_ARCHITECTURES "arm64")
     add_definitions(-DGLES_SILENCE_DEPRECATION)
 else()
@@ -95,7 +95,7 @@ endif()
 
 add_subdirectory($ENV{GEODE_SDK} ${CMAKE_CURRENT_BINARY_DIR}/geode)
 
-if (APPLE) # AND NOT (${GEODE_TARGET_PLATFORM} STREQUAL "iOS" OR IOS)
+if (APPLE AND NOT (${CMAKE_SYSTEM_NAME} STREQUAL "iOS" OR IOS)
   target_link_libraries(${PROJECT_NAME} paho-mqttpp3-static "-framework OpenGL")
 else()
   target_link_libraries(${PROJECT_NAME} paho-mqttpp3-static)
