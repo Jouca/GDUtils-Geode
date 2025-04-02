@@ -95,7 +95,7 @@ endif()
 
 add_subdirectory($ENV{GEODE_SDK} ${CMAKE_CURRENT_BINARY_DIR}/geode)
 
-if (APPLE AND NOT (${CMAKE_SYSTEM_NAME} STREQUAL "iOS" OR IOS)
+if (APPLE AND NOT (${CMAKE_SYSTEM_NAME} STREQUAL "iOS" OR IOS))
   target_link_libraries(${PROJECT_NAME} paho-mqttpp3-static "-framework OpenGL")
 else()
   target_link_libraries(${PROJECT_NAME} paho-mqttpp3-static)
