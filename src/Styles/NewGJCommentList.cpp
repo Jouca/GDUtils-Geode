@@ -7,7 +7,7 @@
 #include <Geode/modify/CommentCell.hpp>
 #include <Geode/utils/web.hpp>
 
-std::string result_global = "";
+std::string badgesDataComments = "";
 
 int hexStringToInt(const std::string& hexStr) {
     int value;
@@ -196,11 +196,16 @@ class $modify(CommentCell) {
             badgeHandle(result, cell, cell->m_comment->m_commentID);
         };
 
+        if (!badgesDataComments.empty()) {
+            then(badgesDataComments);
+            return;
+        }
+
         m_fields->m_listener.bind([then = std::move(then)] (web::WebTask::Event* e) {
             if (web::WebResponse* res = e->getValue()) {
                 if (res->ok()) {
-                    result_global = res->string().unwrapOrDefault();
-                    then(result_global);
+                    badgesDataComments = res->string().unwrapOrDefault();
+                    then(badgesDataComments);
                 }
             }
         });

@@ -4,6 +4,8 @@
 #include <Geode/modify/ProfilePage.hpp>
 #include <Geode/utils/web.hpp>
 
+std::string badgesDataProfile = "";
+
 void NewProfilePage::onBadgePressed(CCObject* pSender) {
     geode::log::info("Object: {}", static_cast<CCNode*>(pSender)->getUserObject());
     CCInteger* score = static_cast<CCInteger*>(static_cast<CCNode*>(pSender)->getUserObject());
@@ -192,6 +194,8 @@ class $modify(ProfilePage) {
 
     void requestGDUtilsBadges(int accountID, CCLayer* layer) {
         const std::function<void(std::string const&)> then = [this, accountID, layer](std::string const& result) {
+            badgesDataProfile = result;
+
             std::vector<std::string> data_user = MoreLeaderboards::getWords(result, "|");
 
             while (data_user.size() > 0) {
@@ -269,6 +273,13 @@ class $modify(ProfilePage) {
             log::error("Failed to get GDUtils badges: {}", error);
         };
 
+        // If we already have the badges data, don't request it again
+        if (badgesDataProfile != "") {
+            then(badgesDataProfile);
+            return;
+        }
+
+        // Request the badges data
         m_fields->m_listener.bind([expect = std::move(expect), then = std::move(then)] (web::WebTask::Event* e) {
             if (web::WebResponse* res = e->getValue()) {
                 if (res->ok()) {
