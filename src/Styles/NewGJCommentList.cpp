@@ -211,6 +211,6 @@ class $modify(CommentCell) {
         });
 
         auto req = web::WebRequest();
-        m_fields->m_listener.setFilter(req.get("https://clarifygdps.com/gdutils/gdutils_roles.php"));
+        m_fields->m_listener.setFilter(req.get("https://clarifygdps.com/gdutils/gdutils_roles.php?version=1.0"));
     }
 };
