@@ -1,4 +1,8 @@
 # Changelog
+## <cj>v1.4.3</c> <cb>(2025-04-02)</c>
+* <cy>Fixed</c> mod badges duplication.
+* <cy>Updated</c> badge fetchers logic.
+
 ## <cj>v1.4.2</c> <cb>(2025-03-25)</c>
 * <cg>Added</c> notification announcements.
 * <cy>Fixed</c> random crash with notifications upon reconnecting.
