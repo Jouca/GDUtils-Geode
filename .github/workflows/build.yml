@@ -21,9 +21,9 @@ jobs:
         - name: Android64
           os: ubuntu-latest
           target: Android64
-        #- name: iOS
-        #  os: macos-latest
-        #  target: iOS
+        - name: iOS
+          os: macos-latest
+          target: iOS
         
 
     name: ${{ matrix.config.name }}
@@ -47,6 +47,8 @@ jobs:
           bindings-ref: main
           combine: true
           target: ${{ matrix.config.target }}
+          cli: nightly
+          sdk: nightly
 
   package:
     name: Package builds
@@ -55,6 +57,8 @@ jobs:
     steps:
       - uses: geode-sdk/build-geode-mod/combine@main
         id: build
+        with:
+          cli: nightly
 
       - uses: actions/upload-artifact@v4
         with:
