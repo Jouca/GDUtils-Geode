@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.21)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+
 if ("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS" OR IOS)
     set(CMAKE_OSX_ARCHITECTURES "arm64")
     add_definitions(-DGLES_SILENCE_DEPRECATION)
@@ -49,42 +51,31 @@ file(GLOB SOURCES
 # Set up the mod binary
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
 
-set(PAHO_BUILD_SHARED OFF CACHE INTERNAL "")
-set(PAHO_BUILD_STATIC ON CACHE INTERNAL "")
-set(PAHO_ENABLE_TESTING OFF CACHE INTERNAL "")
-set(PAHO_BUILD_TESTS OFF CACHE INTERNAL "")
-set(PAHO_WITH_MQTT_C ON CACHE INTERNAL "")
-set(PAHO_WITH_SSL OFF CACHE INTERNAL "")
+set(ENABLE_SSL_SUPPORT OFF)
+set(BUILD_EXAMPLES OFF)
+set(BUILD_SHARED_LIBS OFF)
+set(BUILD_TESTING OFF)
+set(BUILD_TOOLS OFF)
+set(BUILD_TOOLS_DOCS OFF)
+#set(INSTALL_STATIC_LIBS OFF)
+CPMAddPackage("gh:alanxz/rabbitmq-c#035eaa8")
 
-FetchContent_Declare(
-    paho-mqttpp3-static
-    GIT_REPOSITORY https://github.com/eclipse-paho/paho.mqtt.cpp.git
-    GIT_TAG 71f78aafc3246c05d624098b8438129f5e0a70e5
-)
+set(BUILD_TESTING OFF)
+set(BUILD_BENCH OFF)
+set(BUILD_SHARED_LIBS OFF)
 
-#FetchContent_MakeAvailable(paho-mqttpp3-static)
-FetchContent_GetProperties(paho-mqttpp3-static)
-# patch it because apparently stl doesnt like basic_string
-if(NOT paho-mqttpp3-static_POPULATED)
-    FetchContent_Populate(paho-mqttpp3-static)
-    configure_file(
-        ${CMAKE_CURRENT_SOURCE_DIR}/patch/ssl_options.h
-        ${paho-mqttpp3-static_SOURCE_DIR}/include/mqtt/ssl_options.h
-        COPYONLY
-    )
-    configure_file(
-        ${CMAKE_CURRENT_SOURCE_DIR}/patch/ssl_options.cpp
-        ${paho-mqttpp3-static_SOURCE_DIR}/src/ssl_options.cpp
-        COPYONLY
-    )
-    add_subdirectory(${paho-mqttpp3-static_SOURCE_DIR} ${paho-mqttpp3-static_BINARY_DIR})
-endif()
+#CPMAddPackage("gh:libuv/libuv#c1a9f01")
+#CPMAddPackage("gh:CopernicaMarketingSoftware/AMQP-CPP#ca49382")
+
 
 target_include_directories(${PROJECT_NAME} PRIVATE
   libs/filesystem
   libs/pl_mpeg/
   libs/glew/
-  ${paho-mqttpp3-static_SOURCE_DIR}/src
+  ${rabbitmq-c_SOURCE_DIR}/include
+  #${amqpcpp_SOURCE_DIR}/src
+  #${amqpcpp_SOURCE_DIR}/include
+  #${libuv_SOURCE_DIR}/include
 )
 
 if (NOT DEFINED ENV{GEODE_SDK})
@@ -96,9 +87,11 @@ endif()
 add_subdirectory($ENV{GEODE_SDK} ${CMAKE_CURRENT_BINARY_DIR}/geode)
 
 if (APPLE AND NOT (${CMAKE_SYSTEM_NAME} STREQUAL "iOS" OR IOS))
-  target_link_libraries(${PROJECT_NAME} paho-mqttpp3-static "-framework OpenGL")
+    target_link_libraries(${PROJECT_NAME} rabbitmq::rabbitmq-static "-framework OpenGL")
+    #target_link_libraries(${PROJECT_NAME} uv_a amqpcpp "-framework OpenGL")
 else()
-  target_link_libraries(${PROJECT_NAME} paho-mqttpp3-static)
+    target_link_libraries(${PROJECT_NAME} rabbitmq::rabbitmq-static)
+    #target_link_libraries(${PROJECT_NAME} uv_a amqpcpp)
 endif()
 if (CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux" AND WIN32)
   message("compiling on linux!!")
@@ -108,6 +101,7 @@ elseif(${GEODE_TARGET_PLATFORM} STREQUAL "Win32")
   target_link_libraries(${PROJECT_NAME} opengl32 ws2_32 Crypt32 Wldap32 Normaliz)
 endif()
 if (WIN32)
+  add_compile_definitions(WIN32_LEAN_AND_MEAN _WIN32_WINNT=0x0601)
   # Disable annoying warnings
   target_compile_definitions(${PROJECT_NAME} PRIVATE _CRT_SECURE_NO_WARNINGS)
 endif()

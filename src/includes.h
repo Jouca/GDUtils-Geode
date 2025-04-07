@@ -3,14 +3,10 @@
 #include <random>
 using namespace geode::prelude;
 
-#include <mqtt/async_client.h>
 #include <variant>
 #include <mutex>
 #include <thread>
 #include <algorithm>
-#ifdef GEODE_IS_WINDOWS
-#include <synchapi.h>
-#endif
 
 #define OPT(expr) if (auto __opt__ = expr) __opt__
 

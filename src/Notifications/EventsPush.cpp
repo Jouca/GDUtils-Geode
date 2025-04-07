@@ -851,8 +851,8 @@ void EventsPush::stopNow(CCScene* scene) {
     EventsPush::eventCompletedCallback(scene);
 }
 
-void EventsPush::pushRateLevel(CCScene* self, mqtt::const_message_ptr data) {
-    EventData eventData = matjson::Serialize<EventData>::fromJson(matjson::parse(data->to_string()).unwrapOrDefault()).unwrapOrDefault();
+void EventsPush::pushRateLevel(CCScene* self, std::string data) {
+    EventData eventData = matjson::Serialize<EventData>::fromJson(matjson::parse(data).unwrapOrDefault()).unwrapOrDefault();
     /*log::info(
         "EventData [\ndemon = {};\nstarsum = {};\nstars = {};\nrate = {};\ntype = {};\ntitle = {};\nsprite = {};\nlevel_name = {};\nlevel_creator = {};\ncoins = {};\nverified_coins = {};\nplatformer = {};\nlevel_id = {};\nlevels_list = {};\nmaxToCompleteList = {};\n]",
         eventData.demon,

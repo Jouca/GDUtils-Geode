@@ -12,8 +12,10 @@
 #include "Settings/CustomSettings.hpp"
 #include "Notifications/EventsPush.h"
 #include "ProcessLambdas.h"
+#include <cstdint>
 #include <fmt/format.h>
 #include <chrono>
+#include <memory>
 #include <random>
 #include <thread>
 #include <queue>
@@ -24,11 +26,366 @@
 
 bool show_connected = false;
 
-std::queue<mqtt::const_message_ptr> dataQueue;
+#ifdef GEODE_IS_WINDOWS // stop the dumb compiler errors!
+#include <WinSock2.h>
+#include <WS2tcpip.h>
+//#include <synchapi.h>
+#endif
+
+//#include <uv.h>
+//#include <amqpcpp.h>
+//#include <amqpcpp/libuv.h>
+
+// ah yes, lets use the raw version of the library instead of the c++ one because IT DOESNT IMPLEMENT SOCKETS
+#include <rabbitmq-c/amqp.h>
+#include <rabbitmq-c/tcp_socket.h>
+
+//#include <amqpcpp/connectionimpl.h>
+
+std::queue<std::string> dataQueue;
 std::queue<int> chestQueue;
 
-std::queue<mqtt::const_message_ptr> msgQueue;
+std::queue<std::string> msgQueue;
 
+std::string AMQReplyToString(amqp_response_type_enum val) {
+    switch (val) {
+        case AMQP_RESPONSE_NONE:
+        default:
+            return "AMQP_RESPONSE_NONE";
+        case AMQP_RESPONSE_NORMAL:
+            return "AMQP_RESPONSE_NORMAL";
+        case AMQP_RESPONSE_LIBRARY_EXCEPTION:
+            return "AMQP_RESPONSE_LIBRARY_EXCEPTION";
+        case AMQP_RESPONSE_SERVER_EXCEPTION:
+            return "AMQP_RESPONSE_SERVER_EXCEPTION";
+    }
+}
+std::string AMQErrorToString(amqp_rpc_reply_t reply) {
+    std::string errorStr;
+    switch (reply.reply_type) {
+        case AMQP_RESPONSE_NONE: errorStr = "No response"; break;
+        case AMQP_RESPONSE_LIBRARY_EXCEPTION: errorStr = amqp_error_string2(reply.library_error); break;
+        case AMQP_RESPONSE_SERVER_EXCEPTION:
+            if (reply.reply.id == AMQP_CONNECTION_CLOSE_METHOD) {
+                amqp_connection_close_t* m = (amqp_connection_close_t*) reply.reply.decoded;
+                errorStr = (char*)m->reply_text.bytes;
+            } else {
+                errorStr = "Unknown Error";
+            }
+            break;
+    }
+    return fmt::format("{} ({})", errorStr, AMQReplyToString(reply.reply_type));
+}
+
+class AMQT {
+    private:
+    amqp_connection_state_t m_connection;
+    //std::unique_ptr<amqp_socket_t> m_socket;
+    amqp_socket_t* m_socket;
+    std::string client_id;
+
+    std::atomic<int> m_remainingAttempts = {10};
+    std::atomic<bool> m_connected{false};
+
+    std::mutex m_mutex;
+    std::condition_variable m_cv;
+
+    public:
+    AMQT(const std::string& client_id) : client_id(client_id) {};
+    bool isConnected() {
+        return m_connected.load();
+    }
+    void setupChannel() {
+        bool showPastNotifs = Mod::get()->template getSettingValue<bool>("past-notifications");
+        std::string queueName = fmt::format("amqp-queue-{}", client_id);
+        {
+            amqp_channel_open(m_connection, 1);
+            auto reply = amqp_get_rpc_reply(m_connection);
+            if (reply.reply_type != AMQP_RESPONSE_NORMAL) {
+                log::error("Error opening channel: {}", AMQErrorToString(reply));
+                return;
+            }
+        }
+        // https://stackoverflow.com/questions/72237234/declare-a-queue-with-x-max-length-programmatically-using-rabbitmq-c
+        amqp_queue_declare_ok_t *r;
+        if (showPastNotifs) {
+            // this is absolutely cursed
+            /*amqp_table_entry_t q_arg_n_entries[2];
+            q_arg_n_entries[0] = (amqp_table_entry_t) {
+                .key = amqp_cstring_bytes("x-queue-type"),
+                .value = {.kind = AMQP_FIELD_KIND_UTF8, .value = {.bytes = amqp_cstring_bytes("classic")}}
+            };
+
+            //86400000
+            // 2 days
+            q_arg_n_entries[1] = (amqp_table_entry_t) {
+                .key = amqp_cstring_bytes("x-expires"),
+                .value = {.kind = AMQP_FIELD_KIND_I32, .value = {.i32 = 172800000}}
+            };
+            amqp_table_t q_arg_table = {.num_entries = 2, .entries = q_arg_n_entries};*/
+
+            amqp_table_entry_t q_arg_n_entries[1];
+            // 1 day
+            q_arg_n_entries[0] = (amqp_table_entry_t) {
+                .key = amqp_cstring_bytes("x-expires"),
+                .value = {.kind = AMQP_FIELD_KIND_I32, .value = {.i32 = 86400000}}
+            };
+            amqp_table_t q_arg_table = {.num_entries = 1, .entries = q_arg_n_entries};
+            r = amqp_queue_declare(
+                m_connection, 1,
+                amqp_cstring_bytes(queueName.c_str()),
+                0, 1, 0, 0,
+                q_arg_table
+            );
+        } else {
+            r = amqp_queue_declare(
+                m_connection, 1,
+                amqp_cstring_bytes(queueName.c_str()),
+                0, 0, 0, 0,
+                amqp_empty_table
+            );
+        }
+        {
+            auto reply = amqp_get_rpc_reply(m_connection);
+            if (reply.reply_type != AMQP_RESPONSE_NORMAL) {
+                log::error("Error declaring queue: {}", AMQErrorToString(reply));
+                return;
+            }
+        }
+        amqp_bytes_t queueBytes = amqp_bytes_malloc_dup(r->queue);
+        if (queueBytes.bytes == NULL) {
+            log::error("Couldn't copy queue name (Out of memory?)");
+            return;
+        }
+        {
+            amqp_queue_bind(m_connection, 1,
+                queueBytes, amqp_cstring_bytes("amq.topic"),
+                amqp_cstring_bytes("rate.#"), amqp_empty_table
+            );
+            auto reply = amqp_get_rpc_reply(m_connection);
+            if (reply.reply_type != AMQP_RESPONSE_NORMAL) {
+                log::error("Error binding queue: {}", AMQErrorToString(reply));
+                return;
+            }
+        }
+        {
+            auto res = amqp_basic_consume(m_connection, 1, queueBytes, amqp_empty_bytes, 0, 1, 0, amqp_empty_table);
+            auto reply = amqp_get_rpc_reply(m_connection);
+            
+            if (reply.reply_type != AMQP_RESPONSE_NORMAL) {
+                log::error("Error consuming in queue: {}", AMQErrorToString(reply));
+                return;
+            }
+            if (res) {
+                std::string data((char*)res->consumer_tag.bytes, res->consumer_tag.len);
+                log::info("Subscribed to Rate Notifications! (Consumer Tag: {})", data);
+            }
+        }
+
+        while (isConnected()) {
+            amqp_maybe_release_buffers(m_connection);
+            amqp_envelope_t envelope;
+            auto ret = amqp_consume_message(m_connection, &envelope, NULL, 0);
+            if (AMQP_RESPONSE_NORMAL != ret.reply_type) {
+                log::error("Error consuming message: {}", AMQErrorToString(ret));
+                break;
+            }
+            log::info("call rate event");
+            std::string data((char*)envelope.message.body.bytes, envelope.message.body.len);
+            msgQueue.push(data);
+
+            amqp_destroy_envelope(&envelope);
+        }
+        m_connected = false;
+        m_cv.notify_all();
+    }
+    void connect() {
+        m_remainingAttempts++;
+        while (m_remainingAttempts-- > 0) {
+            log::info("Starting AMQP...");
+            if (m_remainingAttempts != 10) {
+                if (m_connection) {
+                    amqp_destroy_connection(m_connection);
+                    m_connection = nullptr;
+                }
+                int delayMs = 3000 * ((m_remainingAttempts + 1) - m_remainingAttempts);
+                //TODO: fix it being stuck on 3 seconds
+                log::warn("Disconnected from server. Attempting to reconnect... ({} left, reconnecting in {} seconds)", m_remainingAttempts, (float)((delayMs / 1000.F)));
+                std::this_thread::sleep_for(std::chrono::seconds(delayMs / 1000));
+            }
+            m_connection = amqp_new_connection();
+            amqp_socket_t* socket = amqp_tcp_socket_new(m_connection);
+            if (!socket) {
+                log::error("Couldn't create TCP connection");
+                continue;
+            }
+            int status;
+            status = amqp_socket_open(socket, "gdutils.clarifygdps.com", 5672);
+            if (status != AMQP_STATUS_OK) {
+                log::error("Error opening socket! {}", amqp_error_string2(status));
+                continue;
+            }
+            if (socket && m_connection) {
+                amqp_rpc_reply_t reply = amqp_login(m_connection, "/", 0, 131072, 0, AMQP_SASL_METHOD_PLAIN, "gd", "GeometryDashisahorizontalrunnerstylegamedevelopedandpublishedbyRobTopGames");
+                if (reply.reply_type != AMQP_RESPONSE_NORMAL) {
+                    const char* errorStr = nullptr;
+                    log::error("Couldn't login to AMQP server! {}", AMQErrorToString(reply));
+                    continue;
+                }
+                m_connected = true;
+                setupChannel();
+                std::unique_lock<std::mutex> lock(m_mutex);
+                if (!m_cv.wait_for(lock, std::chrono::seconds(10), [this]{
+                    return m_connection; // change thispls
+                })) {
+                    log::error("Connection timeout, assuming I can't connect!");
+                }
+                while (isConnected()) {
+                    m_cv.wait_for(lock, std::chrono::seconds(1), [this] { return !isConnected(); });
+                }
+                
+            }
+        }
+        log::error("Maximum reconnection attempts reached, cannot reconnect. Restart the game to reconnect to the MQTT server.");
+    }
+
+};
+
+/*
+class AMQT {
+    private:
+    std::unique_ptr<AMQP::Connection> m_connection;
+    std::unique_ptr<AMQP::Channel> m_channel;
+    std::string client_id;
+
+    std::atomic<int> m_remainingAttempts = {10};
+    std::atomic<bool> m_connected{false};
+
+    std::mutex m_mutex;
+    std::condition_variable m_cv;
+
+    class QConnectionHandler : public AMQP::ConnectionHandler {
+        AMQT* m_handler;
+        virtual void onReady(AMQP::Connection *connection) override {
+            std::unique_lock<std::mutex> lock(m_handler->m_mutex);
+            log::info("AMQP Connection successful!");
+            m_handler->m_connected = true;
+            show_connected = true;
+            if (m_handler->m_connection) {
+                //m_handler->setupChannel();
+            }
+            m_handler->m_cv.notify_all();
+        }
+        virtual void onClosed(AMQP::Connection *connection) override {
+            m_handler->m_connected = false;
+            std::lock_guard<std::mutex> lock(m_handler->m_mutex);
+            log::info("Connection closed");
+            m_handler->m_cv.notify_all();
+        }
+        virtual void onError(AMQP::Connection *connection, const char *message) override {
+            m_handler->m_connected = false;
+            std::lock_guard<std::mutex> lock(m_handler->m_mutex);
+            log::info("Connection failed: {}", message);
+            m_handler->m_cv.notify_all();
+        }
+        virtual void onData(AMQP::Connection *connection, const char *data, size_t size) override {
+            log::info("Data {}", data);
+        }
+        public:
+            QConnectionHandler(AMQT* handler) : m_handler(handler) {}
+    };
+    std::unique_ptr<QConnectionHandler> m_handler;
+    public:
+    AMQT(const std::string& client_id) : client_id(client_id) {
+        m_handler = std::make_unique<QConnectionHandler>(this);
+    };
+    bool isConnected() {
+        return m_connected || m_connection.get()->ready();
+    }
+    void setupChannel() {
+        m_channel = std::make_unique<AMQP::Channel>(m_connection.get());
+        int flags = AMQP::durable;
+        bool showPastNotifs = Mod::get()->template getSettingValue<bool>("past-notifications");
+        if (!showPastNotifs) {
+            flags = 0;
+        }
+        m_channel->declareExchange("amq.topic", AMQP::topic, AMQP::durable).onSuccess([this, showPastNotifs, flags]() {
+            log::info("amq.topic exchange declared");
+            std::string queueName = fmt::format("amqp-queue", client_id);
+            AMQP::Table arguments;
+            if (showPastNotifs) {
+                arguments["x-queue-type"] = "quorum";
+                arguments["x-expires"] = 172800000; // 2 days
+            }
+            m_channel->declareQueue(queueName, flags, arguments).onSuccess([this](const std::string &name, uint32_t messageCount, uint32_t consumerCount) {
+                log::info("queue with name {} declared ({} msgs, {} consumers)", name, messageCount, consumerCount);
+                m_channel->bindQueue("amq.topic", name, "rate.#").onSuccess([this, name]() {
+                    m_channel->consume(name, AMQP::noack).onReceived([this](const AMQP::Message &msg, uint64_t tag, bool redelivered) {
+                        std::string data(msg.body(), msg.bodySize());
+                        log::info("call rate event");
+                        msgQueue.push(data);
+                    }).onSuccess([this](const std::string &consumerTag) {
+                        log::info("Subscribed to Rate Notifications (Consumer Tag {})", consumerTag);
+                    }).onError([](const char *message) {
+                        log::error("Error consuming: {}", message);
+                    });
+                }).onError([](const char *message) {
+                    log::error("Error binding queue: {}", message);
+                });
+            }).onError([](const char *message) {
+                log::error("Error declaring queue: {}", message);
+            });
+
+        }).onError([](const char *message) {
+            log::error("Error declaring exchange: {}", message);
+        });
+    }
+    void connect() {
+
+        // https://github.com/eclipse-paho/paho.mqtt.cpp/blob/master/examples/async_subscribe.cpp
+        while (true) {
+            log::info("Starting AMQP...");
+            int delayMs = 3000 * ((m_remainingAttempts + 1) - m_remainingAttempts);
+            if (m_remainingAttempts != 10) {
+                std::this_thread::sleep_for(std::chrono::seconds(delayMs / 1000));
+            }
+            if (!m_connection) {
+                AMQP::Address address("gdutils.clarifygdps.com", 5672, AMQP::Login("gd", "GeometryDashisahorizontalrunnerstylegamedevelopedandpublishedbyRobTopGames"), "/");
+                m_connection = std::make_unique<AMQP::Connection>(m_handler.get(), address);
+                log::info("s1 {}", m_connection.get()->heartbeat());
+            }
+            log::info("s2");
+            if (m_connection) {
+                log::info("s3");
+                if (m_connection.get()->heartbeat()) {
+                    setupChannel();
+                }
+                std::unique_lock<std::mutex> lock(m_mutex);
+                if (!m_cv.wait_for(lock, std::chrono::seconds(10), [this]{
+                    return m_connection.get()->initialized();
+                })) {
+                    log::error("Connection timeout, assuming I can't connect!");
+                }
+                while (isConnected()) {
+                    m_cv.wait_for(lock, std::chrono::seconds(1), [this] { return !isConnected(); });
+                }
+                if (m_remainingAttempts-- > 0) {
+                    log::warn("Disconnected from server. Attempting to reconnect... ({} left, reconnecting in {} seconds)", m_remainingAttempts, (float)((delayMs / 1000.F)));
+                    if (isConnected()) {
+                        m_connection.get()->close();
+                    }
+                    m_connection.reset();
+                } else {
+                    log::error("Maximum reconnection attempts reached, cannot reconnect. Restart the game to reconnect to the MQTT server.");
+                    break;
+                }
+            }
+        }
+    }
+
+};*/
+
+/*
 class MQTT {
     private:
     std::unique_ptr<mqtt::async_client> m_client;
@@ -46,18 +403,6 @@ class MQTT {
 
         public:
             Callback(MQTT* handler) : m_handler(handler) {}
-/*
-            void reconnect() {
-                if (m_handler->m_remainingAttempts-- > 0) {
-                    int delayMs = reconnectionDelay * (10 - m_handler->m_remainingAttempts);
-                    log::warn("Disconnected from server. Attempting to reconnect... ({} left, reconnecting in {:.2f} seconds)", m_handler->reconnectionAttempts, (float)((delayMs / 1000.F)));
-                    std::this_thread::sleep_for(std::chrono::milliseconds(delayMs));
-                    m_handler->m_client->connect();
-                } else {
-                    log::error("Maximum reconnection attempts reached, cannot reconnect. Restart the game to reconnect to the MQTT server.");
-                }
-            }*/
-
             void connected(const std::string& reason) override {
                 std::unique_lock<std::mutex> lock(m_handler->m_mutex);
                 log::info("MQTT Connection successful!");
@@ -78,7 +423,7 @@ class MQTT {
                 log::error("Connection failed: {}", tok.get_error_message());
                 connection_lost(fmt::format("{} (Code: {})", tok.get_error_message(), tok.get_return_code()));
             }
-            
+
 
             void message_arrived(mqtt::const_message_ptr data) override {
                 log::info("call rate event");
@@ -95,7 +440,7 @@ class MQTT {
         m_connOpts.set_automatic_reconnect(true);
         // false = retain, true = dies after disconnect
         //m_connOpts.set_clean_session(true);
-        //m_connOpts.set_clean_session(false); 
+        //m_connOpts.set_clean_session(false);
         bool showPastNotifs = Mod::get()->template getSettingValue<bool>("past-notifications");
         m_connOpts.set_clean_session(!showPastNotifs);
         m_connOpts.set_connect_timeout(10);
@@ -116,8 +461,8 @@ class MQTT {
             if (m_client) {
                 std::unique_lock<std::mutex> lock(m_mutex);
                 m_client->connect(m_connOpts, nullptr, cb);
-                if (!m_cv.wait_for(lock, std::chrono::seconds(10), [this]{ 
-                    return m_client->is_connected(); 
+                if (!m_cv.wait_for(lock, std::chrono::seconds(10), [this]{
+                    return m_client->is_connected();
                 })) {
                     log::error("Connection timeout, assuming I can't connect!");
                 }
@@ -138,7 +483,7 @@ class MQTT {
         }
     }
 };
-
+*/
 static std::unordered_map<std::string, web::WebTask> RUNNING_REQUESTS {};
 static std::mutex lock_var;
 
@@ -221,11 +566,11 @@ class EventHandler : public CCObject {
             bool inLevels = Mod::get()->template getSettingValue<bool>("inLevels");
             bool inEditor = Mod::get()->template getSettingValue<bool>("inEditor");
             bool inPlatformers = Mod::get()->template getSettingValue<bool>("inPlatformers");
-            
+
             bool pushEvent = true;
             if (layerName == "PlayLayer") {
                 if (!inLevels) pushEvent = false;
-                
+
                 PlayLayer* playLayer = reinterpret_cast<PlayLayer*>(layer);
                 GJGameLevel* level = playLayer->m_level;
                 if (level->isPlatformer() && !inPlatformers) {
@@ -270,7 +615,7 @@ class EventHandler : public CCObject {
                         } catch (const std::exception& e) {
                             break;
                         }
-                        
+
                         std::string url = "https://www.boomlings.com/database/getGJLevels21.php";
                         std::string fields = fmt::format("secret=Wmfd2893gb7&type=0&str={}", levelName);
 
@@ -455,7 +800,7 @@ bool is_socketserver_started = false;
 class $modify(MenuLayer) {
     bool init() {
         if (!MenuLayer::init()) return false;
-        
+
         /*if (!is_dailychest_ready) {
             std::thread hThread(dailyChestThread);
             hThread.detach();
@@ -472,7 +817,7 @@ class $modify(MenuLayer) {
                     return true;
                 }
                 std::thread hThread([]() {
-                    MQTT handler(Mod::get()->getSavedValue<std::string>("clientId"));
+                    AMQT handler(Mod::get()->getSavedValue<std::string>("clientId"));
                     handler.connect();
                 });
                 hThread.detach();

@@ -17,7 +17,7 @@ class EventsPush : public CCLayer {
         void destroySelf();
         void onClickBtn(CCObject*);
         static EventsPush* create(EventData data);
-        static void pushRateLevel(CCScene* self, mqtt::const_message_ptr data);
+        static void pushRateLevel(CCScene* self, std::string data);
         static void pushRateLevel(CCScene* self, EventData data);
         static void processNextEvent(CCScene* self);
         static void eventCompletedCallback(CCScene* self);
