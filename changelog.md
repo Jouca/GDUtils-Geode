@@ -1,4 +1,7 @@
 # Changelog
+## <cj>v1.4.5</c> <cb>(2025-04-07)</c>
+* <cy>Updated</c> MQTT notification system to AMQP.
+
 ## <cj>v1.4.3</c> <cb>(2025-04-02)</c>
 * <cy>Fixed</c> mod badges duplication.
 * <cy>Updated</c> badge fetchers logic.
