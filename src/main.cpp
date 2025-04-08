@@ -138,23 +138,8 @@ class AMQT {
                 q_arg_table
             );
         } else {
-            auto r_check = amqp_queue_declare(
-                m_connection, 1,
-                amqp_cstring_bytes(queueName.c_str()),
-                1, 0, 0, 0,
-                amqp_empty_table
-            );
-            {
-                auto reply = amqp_get_rpc_reply(m_connection);
-                if (reply.reply_type == AMQP_RESPONSE_NORMAL) {
-                    amqp_queue_delete(m_connection, 1, amqp_cstring_bytes(queueName.c_str()), 0, 0);
-                    auto replyDelete = amqp_get_rpc_reply(m_connection);
-                    if (replyDelete.reply_type != AMQP_RESPONSE_NORMAL) {
-                        log::error("Error deleting queue: {}", AMQErrorToString(replyDelete));
-                        return;
-                    }
-                }
-            }
+            amqp_queue_delete(m_connection, 1, amqp_cstring_bytes(queueName.c_str()), 0, 0);
+            amqp_get_rpc_reply(m_connection);
             r = amqp_queue_declare(
                 m_connection, 1,
                 amqp_cstring_bytes(queueName.c_str()),
