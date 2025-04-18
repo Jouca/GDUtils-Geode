@@ -889,6 +889,22 @@ class $modify(CustomGauntletSelectLayer, GauntletSelectLayer) {
                     item->setZOrder(1);
                     sprite->setID("gauntlet-background"_spr);
                     node->addChild(sprite);
+                } else if (gauntletName == "Space") {
+                    CCSprite* sprite = CCSprite::create("space_gauntlet.png"_spr);
+                    sprite->setPosition({bg->getPositionX(), bg->getPositionY() + 3});
+                    sprite->setScale(1.245f/scaleFactor);
+                    sprite->setZOrder(0);
+                    item->setZOrder(1);
+                    sprite->setID("gauntlet-background"_spr);
+                    node->addChild(sprite);
+                } else if (gauntletName == "Cosmos") {
+                    CCSprite* sprite = CCSprite::create("cosmos_gauntlet.png"_spr);
+                    sprite->setPosition({bg->getPositionX(), bg->getPositionY() + 3});
+                    sprite->setScale(1.245f/scaleFactor);
+                    sprite->setZOrder(0);
+                    item->setZOrder(1);
+                    sprite->setID("gauntlet-background"_spr);
+                    node->addChild(sprite);
                 } else {
                     bg->setVisible(true);
                     label->setVisible(true);
