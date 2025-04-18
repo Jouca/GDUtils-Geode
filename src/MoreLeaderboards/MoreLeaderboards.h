@@ -88,6 +88,8 @@ class MoreLeaderboards : public CCLayer {
         static int modFilterType;
         bool loading = false;
 
+        EventListener<web::WebTask> m_listener;
+
         void onMoreLeaderboards(CCObject*);
         void onModsList(CCObject*);
         void onRegion(CCObject*);

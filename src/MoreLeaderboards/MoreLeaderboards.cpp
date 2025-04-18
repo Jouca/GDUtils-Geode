@@ -14,8 +14,6 @@ static int start_count = 0;
 static int end_count = 0;
 static int total_count = 0;
 std::string MoreLeaderboards::data_response_moreLB = "";
-static std::unordered_map<std::string, web::WebTask> RUNNING_REQUESTS {};
-static std::mutex lock_var;
 
 EventListener<web::WebTask> m_listener;
 
@@ -429,24 +427,17 @@ void MoreLeaderboards::startLoadingMods() {
         fadeLoadingCircle();
     };
 
-    const std::lock_guard<std::mutex> lock(lock_var);
     geode::utils::web::WebRequest request = web::WebRequest();
-    RUNNING_REQUESTS.emplace(
-        "@loaderModListCheck",
-        request.get("https://clarifygdps.com/gdutils/modslist.php").map(
-            [expect = std::move(expect), then = std::move(then)](web::WebResponse* response) {
-                const std::lock_guard<std::mutex> lock(lock_var);
-                if (response->ok()) {
-                    then(response->string().unwrapOrDefault());
-                } else {
-                    expect("An error occured while sending a request on our server. Please try again later.");
-                }
-
-                RUNNING_REQUESTS.erase("@loaderModListCheck");
-                return *response;
+    m_listener.bind([expect = std::move(expect), then = std::move(then)](web::WebTask::Event* e) {
+        if (web::WebResponse* res = e->getValue()) {
+            if (res->ok()) {
+                then(res->string().unwrapOrDefault());
+            } else {
+                expect("An error occured while sending a request on our server. Please try again later.");
             }
-        )
-    );
+        }
+    });
+    m_listener.setFilter(request.get("https://clarifygdps.com/gdutils/modslist.php"));
 };
 
 void MoreLeaderboards::loadPageMods() {
@@ -580,7 +571,6 @@ void MoreLeaderboards::startLoadingMore() {
         const std::function<void(std::string const&)> then = [this](std::string const& data) {
             loading = false;
 
-            const std::lock_guard<std::mutex> lock(lock_var);
             auto scene = CCDirector::sharedDirector()->getRunningScene();
             auto layer = scene->getChildren()->objectAtIndex(0);
             if (layer == nullptr) return this->release();
@@ -625,21 +615,24 @@ void MoreLeaderboards::startLoadingMore() {
             this->release();
         };
 
-        const std::lock_guard<std::mutex> lock(lock_var);
-        RUNNING_REQUESTS.emplace(
-            "@loaderMoreLeaderboardCheck",
-            request.param("type", type).param("page", page).param("country", country_id).param("username", username).param("mod", (modFilter ? "1" : "0")).param("modFilter", modFilterType).get("https://clarifygdps.com/gdutils/moreleaderboards.php").map(
-                [expect = std::move(expect), then = std::move(then)](web::WebResponse* response) {
-                    if (response->ok()) {
-                        then(response->string().unwrap());
-                    } else {
-                        expect("An error occured while sending a request on our server. Please try again later.");
-                    }
-
-                    RUNNING_REQUESTS.erase("@loaderMoreLeaderboardCheck");
-                    return *response;
+        m_listener.bind([expect = std::move(expect), then = std::move(then)](web::WebTask::Event* e) {
+            if (web::WebResponse* response = e->getValue()) {
+                if (response->ok()) {
+                    then(response->string().unwrap());
+                } else {
+                    expect("An error occurred while sending a request on our server. Please try again later.");
                 }
-            )
+            }
+        });
+
+        m_listener.setFilter(
+            request.param("type", type)
+                .param("page", page)
+                .param("country", country_id)
+                .param("username", username)
+                .param("mod", (modFilter ? "1" : "0"))
+                .param("modFilter", modFilterType)
+                .get("https://clarifygdps.com/gdutils/moreleaderboards.php")
         );
     };
 
