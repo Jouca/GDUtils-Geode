@@ -1,6 +1,6 @@
 {
     "geode": "4.3.1",
-    "version": "v1.4.6",
+    "version": "v1.5.0",
     "gd": {
         "win": "2.2074",
         "mac": "2.2074",
@@ -15,18 +15,10 @@
         "community": "https://discord.gg/MU4Rpc6xbJ",
         "source": "https://github.com/Jouca/GDUtils-Geode"
     },
-    "dependencies": [
-        {
-            "id": "geode.node-ids",
-            "version": ">=v1.20.1",
-            "importance": "required"
-        },
-        {
-            "id": "jouca.badgesapi",
-            "version": ">=v1.2.2",
-            "importance": "required"
-        }
-    ],
+    "dependencies": {
+        "geode.node-ids": ">=v1.20.1",
+        "jouca.badgesapi": ">=v1.2.3"
+    },
     "api": {
         "include": [ "include/*.hpp" ]
     },

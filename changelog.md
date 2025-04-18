@@ -1,4 +1,8 @@
 # Changelog
+## <cj>v1.5.0</c> <cb>(2025-04-18)</c>
+* <cg>Added</c> <cj>Space</c> & <co>Cosmos</c> gauntlet designs.
+* <cg>Added</c> <co>Fire</c>, <cj>Ice</c>, <cg>Poison</c>, <cp>Shadow</c> & <cr>Lava</c> gauntlet particles.
+
 ## <cj>v1.4.5</c> <cb>(2025-04-07)</c>
 * <cy>Updated</c> MQTT notification system to AMQP.
 
