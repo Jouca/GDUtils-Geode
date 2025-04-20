@@ -96,7 +96,8 @@ class AMQT {
         return m_connected.load();
     }
     void setupChannel() {
-        bool showPastNotifs = Mod::get()->template getSettingValue<bool>("past-notifications");
+        //bool showPastNotifs = Mod::get()->template getSettingValue<bool>("past-notifications");
+        bool showPastNotifs = false;
         std::string queueName = fmt::format("amqp-queue-{}", client_id);
         {
             amqp_channel_open(m_connection, 1);

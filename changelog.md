@@ -1,4 +1,7 @@
 # Changelog
+## <cj>v1.5.1</c> <cb>(2025-04-20)</c>
+* <cy>Temporarily removed</c> showing past notifications.
+
 ## <cj>v1.5.0</c> <cb>(2025-04-18)</c>
 * <cg>Added</c> <cj>Space</c> & <co>Cosmos</c> gauntlet designs.
 * <cg>Added</c> <co>Fire</c>, <cj>Ice</c>, <cg>Poison</c>, <cp>Shadow</c> & <cr>Lava</c> gauntlet particles.
