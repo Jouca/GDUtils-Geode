@@ -187,18 +187,45 @@ class AMQT {
         }
 
         while (isConnected()) {
-            amqp_maybe_release_buffers(m_connection);
             amqp_envelope_t envelope;
+            amqp_maybe_release_buffers(m_connection);
+            //struct timeval timeout = {1, 0};
             auto ret = amqp_consume_message(m_connection, &envelope, NULL, 0);
             if (AMQP_RESPONSE_NORMAL != ret.reply_type) {
-                log::error("Error consuming message: {}", AMQErrorToString(ret));
-                break;
+                if (AMQP_RESPONSE_LIBRARY_EXCEPTION == ret.reply_type && AMQP_STATUS_UNEXPECTED_STATE == ret.library_error) {
+                    amqp_frame_t frame;
+                    if (AMQP_STATUS_OK != amqp_simple_wait_frame(m_connection, &frame)) {
+                        log::error("Failed to wait for frame after unexpected state: {}", AMQErrorToString(ret));
+                        break;
+                    }
+                    if (AMQP_FRAME_METHOD == frame.frame_type) {
+                        if (frame.payload.method.id == AMQP_BASIC_ACK_METHOD) continue;
+                        if (frame.payload.method.id == AMQP_BASIC_RETURN_METHOD) {
+                            {
+                                amqp_message_t message;
+                                ret = amqp_read_message(m_connection, frame.channel, &message, 0);
+                                if (AMQP_RESPONSE_NORMAL != ret.reply_type) {
+                                    log::error("Error reading returned message: {}", AMQErrorToString(ret));
+                                    break;
+                                }
+                                amqp_destroy_message(&message);
+                            }
+                            continue;
+                        } else {
+                            log::error("(Frame ID: {}) Error consuming message: {}", frame.payload.method.id, AMQErrorToString(ret));
+                            break;
+                        }
+                    }
+                } else {
+                    log::error("Error consuming message: {}", AMQErrorToString(ret));
+                    break;
+                }
+            } else {
+                log::info("call rate event");
+                std::string data((char*)envelope.message.body.bytes, envelope.message.body.len);
+                msgQueue.push(data);
+                amqp_destroy_envelope(&envelope);
             }
-            log::info("call rate event");
-            std::string data((char*)envelope.message.body.bytes, envelope.message.body.len);
-            msgQueue.push(data);
-
-            amqp_destroy_envelope(&envelope);
         }
         m_connected = false;
         m_cv.notify_all();
