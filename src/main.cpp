@@ -312,7 +312,9 @@ class EventHandler : public CCObject {
             if (scene->getChildrenCount() == 0) return;
             if (show_connected) {
                 show_connected = false;
-                Notification::create("Connected to Rate Server!", NotificationIcon::Success)->show();
+                if (Mod::get()->template getSettingValue<bool>("server-notification")) {
+                    Notification::create("Connected to Rate Server!", NotificationIcon::Success)->show();
+                }
             }
             auto layer = scene->getChildren()->objectAtIndex(0);
             if (ProcessLambdas::shouldProcessMenuHandler()) {

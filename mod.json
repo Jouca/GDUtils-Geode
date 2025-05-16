@@ -1,5 +1,5 @@
 {
-    "geode": "4.3.1",
+    "geode": "4.4.0",
     "version": "v1.5.1",
     "gd": {
         "win": "2.2074",
@@ -309,6 +309,12 @@
             "description": "Allows you to <cg>receive rate notifications.</c> (Recommended to keep enabled)\n\nRestart the game to apply changes.",
             "type": "bool",
             "default": true
+        },
+        "server-notification": {
+            "name": "Server Notification",
+            "description": "Whether or not to notify when you <cy>connect or reconnect</c> to the GDUtils notification servers.",
+            "type": "bool",
+            "default": false
         },
         "previewIcons": {
             "name": "Preview Icons",
