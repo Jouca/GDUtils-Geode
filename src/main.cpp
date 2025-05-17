@@ -192,6 +192,7 @@ class AMQT {
             //struct timeval timeout = {1, 0};
             auto ret = amqp_consume_message(m_connection, &envelope, NULL, 0);
             if (AMQP_RESPONSE_NORMAL != ret.reply_type) {
+                log::error("Response wasn't normal! {}", AMQErrorToString(ret));
                 if (AMQP_RESPONSE_LIBRARY_EXCEPTION == ret.reply_type && AMQP_STATUS_UNEXPECTED_STATE == ret.library_error) {
                     amqp_frame_t frame;
                     if (AMQP_STATUS_OK != amqp_simple_wait_frame(m_connection, &frame)) {
@@ -202,12 +203,15 @@ class AMQT {
                         if (frame.payload.method.id == AMQP_BASIC_ACK_METHOD) continue;
                         if (frame.payload.method.id == AMQP_BASIC_RETURN_METHOD) {
                             {
+                                log::info("Got frame payload, re-reading message based on channel...");
                                 amqp_message_t message;
                                 ret = amqp_read_message(m_connection, frame.channel, &message, 0);
                                 if (AMQP_RESPONSE_NORMAL != ret.reply_type) {
                                     log::error("Error reading returned message: {}", AMQErrorToString(ret));
                                     break;
                                 }
+                                std::string data((char*)message.body.bytes, message.body.len);
+                                msgQueue.push(data);
                                 amqp_destroy_message(&message);
                             }
                             continue;

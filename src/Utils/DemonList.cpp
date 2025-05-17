@@ -161,13 +161,13 @@ class $modify(LevelInfoLayer) {
                     loading_circle->fadeAndRemove();
                 }
                 log::error("Error while sending a request to Demon List: {}", error);
-                FLAlertLayer::create(nullptr,
+                /*FLAlertLayer::create(nullptr,
                     "Error",
                     "Failed to make a request to <cy>Demon List</c>. Please either <cg>try again later</c>, look at the error logs to see what might have happened, or report this to the developers.",
                     "OK",
                     nullptr,
                     350.0F
-                )->show();
+                )->show();*/
                 this->release();
             };
 
