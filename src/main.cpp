@@ -186,14 +186,17 @@ class AMQT {
             }
         }
 
-        while (isConnected()) {
+        for (;;) {
             amqp_envelope_t envelope;
             amqp_maybe_release_buffers(m_connection);
             //struct timeval timeout = {1, 0};
             auto ret = amqp_consume_message(m_connection, &envelope, NULL, 0);
             if (AMQP_RESPONSE_NORMAL != ret.reply_type) {
                 log::error("Response wasn't normal! {}", AMQErrorToString(ret));
-                if (AMQP_RESPONSE_LIBRARY_EXCEPTION == ret.reply_type && AMQP_STATUS_UNEXPECTED_STATE == ret.library_error) {
+                if (AMQP_RESPONSE_LIBRARY_EXCEPTION == ret.reply_type && AMQP_STATUS_HEARTBEAT_TIMEOUT == ret.library_error) {
+                    log::error("Heartbeat failed, initiating a reconnection!");
+                    break;
+                } else if (AMQP_RESPONSE_LIBRARY_EXCEPTION == ret.reply_type && AMQP_STATUS_UNEXPECTED_STATE == ret.library_error) {
                     amqp_frame_t frame;
                     if (AMQP_STATUS_OK != amqp_simple_wait_frame(m_connection, &frame)) {
                         log::error("Failed to wait for frame after unexpected state: {}", AMQErrorToString(ret));
@@ -246,7 +249,7 @@ class AMQT {
                 int delayMs = 3000 * ((m_remainingAttempts + 1) - m_remainingAttempts);
                 //TODO: fix it being stuck on 3 seconds
                 log::warn("Disconnected from server. Attempting to reconnect... ({} left, reconnecting in {} seconds)", m_remainingAttempts, (float)((delayMs / 1000.F)));
-                std::this_thread::sleep_for(std::chrono::seconds(delayMs / 1000));
+                std::this_thread::sleep_for(std::chrono::milliseconds(delayMs));
             }
             m_connection = amqp_new_connection();
             amqp_socket_t* socket = amqp_tcp_socket_new(m_connection);
@@ -261,7 +264,8 @@ class AMQT {
                 continue;
             }
             if (socket && m_connection) {
-                amqp_rpc_reply_t reply = amqp_login(m_connection, "/", 0, 131072, 0, AMQP_SASL_METHOD_PLAIN, "gd", "GeometryDashisahorizontalrunnerstylegamedevelopedandpublishedbyRobTopGames");
+                // heartbeat every 10 seconds!
+                amqp_rpc_reply_t reply = amqp_login(m_connection, "/", 0, 131072, 10, AMQP_SASL_METHOD_PLAIN, "gd", "GeometryDashisahorizontalrunnerstylegamedevelopedandpublishedbyRobTopGames");
                 if (reply.reply_type != AMQP_RESPONSE_NORMAL) {
                     const char* errorStr = nullptr;
                     log::error("Couldn't login to AMQP server! {}", AMQErrorToString(reply));
