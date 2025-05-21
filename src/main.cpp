@@ -4,7 +4,7 @@
 
 #include <Geode/modify/CreatorLayer.hpp>
 #include <Geode/modify/CCSprite.hpp>
-#include <Geode/modify/CCScale9Sprite.hpp>
+//#include <Geode/modify/CCScale9Sprite.hpp>
 #include <Geode/modify/MenuLayer.hpp>
 #include <Geode/loader/Log.hpp>
 #include <Geode/utils/web.hpp>
@@ -558,7 +558,7 @@ class EventHandler : public CCObject {
 };
 
 // Backgrounds
-class $modify(CCSprite) {
+class $modify(UtilCCSprite, CCSprite) {
     static CCSprite* create(char const* name) {
         auto ret = CCSprite::create(name);
         if (ret == nullptr) return ret;
@@ -582,9 +582,9 @@ class $modify(CCSprite) {
         return ret;
     }
 };
-
+/*
 // Child background
-class $modify(cocos2d::extension::CCScale9Sprite) {
+class $modify(UtilCCScale9, cocos2d::extension::CCScale9Sprite) {
     static cocos2d::extension::CCScale9Sprite* create(char const* name, CCRect rect) {
         auto ret = cocos2d::extension::CCScale9Sprite::create(name, rect);
         if (ret == nullptr) return ret;
@@ -667,6 +667,7 @@ class $modify(cocos2d::extension::CCScale9Sprite) {
         return ret;
     }
 };
+*/
 //bool is_dailychest_ready = false;
 bool is_socketserver_started = false;
 class $modify(MenuLayer) {
@@ -700,6 +701,18 @@ class $modify(MenuLayer) {
     }
 };
 
+void toggleSpriteHooks(bool value) {
+    for (auto& hook : geode::Mod::get()->getHooks()) {
+        if (hook->getDisplayName() == "cocos2d::CCSprite::create" || hook->getDisplayName() == "cocos2d::extension::CCScale9Sprite::create") {
+            if (value) {
+                (void)hook->enable();
+            } else {
+                (void)hook->disable();
+            }
+        }
+    }
+}
+
 $execute {
     (void)Mod::get()->registerCustomSettingType("credit-buttons", &SettingCreditsValue::parse);
     //(void)Mod::get()->registerCustomSettingType("notificationPlacement", &SettingPosValue::parse);
@@ -711,12 +724,19 @@ $execute {
         CCScheduler::get()->scheduleSelector(schedule_selector(EventHandler::check), EventHandler::create(), 1.0F, false);
         //CCScheduler::get()->scheduleUpdateForTarget(EventHandler::create(), Priority::Last, false);
     });
+    listenForSettingChanges("activate-background", [](bool value) {
+        log::info("Activate Background changed to {}", value);
+        toggleSpriteHooks(value);
+    });
 }
 
 // When the socket connection is made
 $on_mod(Loaded) {
     log::info("GDUtils Mod Loaded");
 
+    if (!Mod::get()->getSettingValue<bool>("activate-background")) {
+        toggleSpriteHooks(false);
+    }
     chestQueue.push(1);
 
     //Discord::init(); for next update ;)
