@@ -77,6 +77,8 @@ std::string AMQErrorToString(amqp_rpc_reply_t reply) {
     return fmt::format("{} ({})", errorStr, AMQReplyToString(reply.reply_type));
 }
 
+#define MAX_RECONNECT_ATTEMPTS 20
+
 class AMQT {
     private:
     amqp_connection_state_t m_connection;
@@ -84,14 +86,48 @@ class AMQT {
     amqp_socket_t* m_socket;
     std::string client_id;
 
-    std::atomic<int> m_remainingAttempts = {10};
+    std::atomic<int> m_remainingAttempts = {MAX_RECONNECT_ATTEMPTS};
     std::atomic<bool> m_connected{false};
 
     std::mutex m_mutex;
     std::condition_variable m_cv;
 
+    std::chrono::steady_clock::time_point m_lastActivityTime;
+    std::chrono::steady_clock::time_point m_lastHeartbeatTime;
+
     public:
-    AMQT(const std::string& client_id) : client_id(client_id) {};
+    AMQT(const std::string& client_id) : client_id(client_id) {
+        m_lastActivityTime = std::chrono::steady_clock::now();
+        m_lastHeartbeatTime = m_lastActivityTime;
+    };
+    void updateActivity() {
+        m_lastActivityTime = std::chrono::steady_clock::now();
+    }
+    // since the current heartbeat does NOT work!!
+    bool sendHeartbeat() {
+        auto now = std::chrono::steady_clock::now();
+        auto lastDuration = std::chrono::duration_cast<std::chrono::seconds>(now - m_lastHeartbeatTime).count();
+        // every 10 seconds
+        if (lastDuration >= 10) {
+            std::lock_guard<std::mutex> lock(m_mutex);
+            if (isConnected()) {
+                // because WHY CANT I USE amqp_heartbeat_send!?!? we will decide to manually construct it...
+                amqp_frame_t frame;
+                frame.channel = 0; // or 1? idk... amqp_socket.c says 0
+                frame.frame_type = AMQP_FRAME_HEARTBEAT;
+                auto res = amqp_send_frame(m_connection, &frame);
+                if (AMQP_STATUS_OK != res) {
+                    log::warn("Failed to send heartbeat: {}", amqp_error_string2(res));
+                    return false;
+                } else {
+                    //log::debug("Sent heartbeat!");
+                    m_lastHeartbeatTime = now;
+                    return true;
+                }
+            }
+        }
+        return true;
+    }
     bool isConnected() {
         return m_connected.load();
     }
@@ -186,13 +222,32 @@ class AMQT {
             }
         }
 
-        for (;;) {
+        bool forceReconnection = false;
+        auto lastReconnectTime = std::chrono::steady_clock::now();
+
+        struct timeval timeout = {10, 0};
+
+        while (isConnected()) {
+            // this is just an extra so we're sure that we're always connected
+            if (!sendHeartbeat()) {
+                log::error("Couldn't send heartbeat, disconnecting...");
+                break;
+            }
+
+            if (forceReconnection) {
+                auto now = std::chrono::steady_clock::now();
+                auto lastDuration = std::chrono::duration_cast<std::chrono::seconds>(now - lastReconnectTime).count();
+                if (lastDuration >= 600) {
+                    log::info("Forcing a reconnection...");
+                    break;
+                }
+            }
+
             amqp_envelope_t envelope;
             amqp_maybe_release_buffers(m_connection);
-            //struct timeval timeout = {1, 0};
-            auto ret = amqp_consume_message(m_connection, &envelope, NULL, 0);
+
+            auto ret = amqp_consume_message(m_connection, &envelope, &timeout, 0);
             if (AMQP_RESPONSE_NORMAL != ret.reply_type) {
-                log::error("Response wasn't normal! {}", AMQErrorToString(ret));
                 if (AMQP_RESPONSE_LIBRARY_EXCEPTION == ret.reply_type && AMQP_STATUS_HEARTBEAT_TIMEOUT == ret.library_error) {
                     log::error("Heartbeat failed, initiating a reconnection!");
                     break;
@@ -222,7 +277,12 @@ class AMQT {
                             log::error("(Frame ID: {}) Error consuming message: {}", frame.payload.method.id, AMQErrorToString(ret));
                             break;
                         }
+                    } else {
+                        log::error("Response wasn't normal! {}", AMQErrorToString(ret));
                     }
+                } else if (AMQP_RESPONSE_LIBRARY_EXCEPTION == ret.reply_type && AMQP_STATUS_TIMEOUT == ret.library_error) {
+                    // honestly how has no one gotten this issue!?
+                    continue;
                 } else {
                     log::error("Error consuming message: {}", AMQErrorToString(ret));
                     break;
@@ -241,12 +301,9 @@ class AMQT {
         m_remainingAttempts++;
         while (m_remainingAttempts-- > 0) {
             log::info("Starting AMQP...");
-            if (m_remainingAttempts != 10) {
-                if (m_connection) {
-                    amqp_destroy_connection(m_connection);
-                    m_connection = nullptr;
-                }
-                int delayMs = 3000 * ((m_remainingAttempts + 1) - m_remainingAttempts);
+            if (m_remainingAttempts != MAX_RECONNECT_ATTEMPTS) {
+                int currentAttempt = MAX_RECONNECT_ATTEMPTS - m_remainingAttempts + 1;
+                int delayMs = 3000 * std::pow(2, currentAttempt - 1);
                 //TODO: fix it being stuck on 3 seconds
                 log::warn("Disconnected from server. Attempting to reconnect... ({} left, reconnecting in {} seconds)", m_remainingAttempts, (float)((delayMs / 1000.F)));
                 std::this_thread::sleep_for(std::chrono::milliseconds(delayMs));
@@ -273,6 +330,7 @@ class AMQT {
                 }
                 m_connected = true;
                 setupChannel();
+                /*
                 std::unique_lock<std::mutex> lock(m_mutex);
                 if (!m_cv.wait_for(lock, std::chrono::seconds(10), [this]{
                     return m_connection; // change thispls
@@ -281,11 +339,19 @@ class AMQT {
                 }
                 while (isConnected()) {
                     m_cv.wait_for(lock, std::chrono::seconds(1), [this] { return !isConnected(); });
-                }
-                
+                }*/
+                //amqp_connection_close(m_connection, AMQP_REPLY_SUCCESS);
+                disconnect();
             }
         }
         log::error("Maximum reconnection attempts reached, cannot reconnect. Restart the game to reconnect to the MQTT server.");
+    }
+    void disconnect() {
+        if (m_connection) {
+            m_connected = false;
+            amqp_destroy_connection(m_connection);
+            m_connection = nullptr;
+        }
     }
 };
 
@@ -518,7 +584,7 @@ class $modify(CCSprite) {
 };
 
 // Child background
-class $modify(CCScale9Sprite) {
+class $modify(cocos2d::extension::CCScale9Sprite) {
     static cocos2d::extension::CCScale9Sprite* create(char const* name, CCRect rect) {
         auto ret = cocos2d::extension::CCScale9Sprite::create(name, rect);
         if (ret == nullptr) return ret;
@@ -601,7 +667,6 @@ class $modify(CCScale9Sprite) {
         return ret;
     }
 };
-
 //bool is_dailychest_ready = false;
 bool is_socketserver_started = false;
 class $modify(MenuLayer) {

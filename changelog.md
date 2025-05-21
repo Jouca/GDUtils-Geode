@@ -1,4 +1,11 @@
 # Changelog
+## <cj>v1.5.2</c> <cb>(2025-05-21)</c>
+* <cg>Added</c> option to hide the connected notification.
+* <cr>Removed</c> demon list warning if the level wasn't found on the demon list.
+* <cy>Fixed</c> notifications sometimes not being received.
+* <cy>Fixed</c> notifications sometimes not being received.
+* <cy>Fixed</c> reconnection times not being exponential.
+
 ## <cj>v1.5.1</c> <cb>(2025-04-20)</c>
 * <cy>Temporarily removed</c> showing past notifications.
 
