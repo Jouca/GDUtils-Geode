@@ -25,7 +25,6 @@ jobs:
           os: macos-latest
           target: iOS
         
-
     name: ${{ matrix.config.name }}
     runs-on: ${{ matrix.config.os }}
 
@@ -42,11 +41,10 @@ jobs:
         uses: geode-sdk/build-geode-mod@main
         with:
           build-config: 'RelWithDebInfo'
-          bindings: geode-sdk/bindings
           export-pdb: true
-          bindings-ref: main
           combine: true
           target: ${{ matrix.config.target }}
+          sdk: 'given'
           #sdk: nightly
 
   package:
@@ -56,8 +54,6 @@ jobs:
     steps:
       - uses: geode-sdk/build-geode-mod/combine@main
         id: build
-        with:
-          cli: nightly
 
       - uses: actions/upload-artifact@v4
         with:
