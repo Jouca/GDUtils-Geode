@@ -4,7 +4,7 @@
 
 #include <Geode/modify/CreatorLayer.hpp>
 #include <Geode/modify/CCSprite.hpp>
-//#include <Geode/modify/CCScale9Sprite.hpp>
+#include <Geode/modify/CCScale9Sprite.hpp>
 #include <Geode/modify/MenuLayer.hpp>
 #include <Geode/loader/Log.hpp>
 #include <Geode/utils/web.hpp>
@@ -582,7 +582,7 @@ class $modify(UtilCCSprite, CCSprite) {
         return ret;
     }
 };
-/*
+
 // Child background
 class $modify(UtilCCScale9, cocos2d::extension::CCScale9Sprite) {
     static cocos2d::extension::CCScale9Sprite* create(char const* name, CCRect rect) {
@@ -667,7 +667,7 @@ class $modify(UtilCCScale9, cocos2d::extension::CCScale9Sprite) {
         return ret;
     }
 };
-*/
+
 //bool is_dailychest_ready = false;
 bool is_socketserver_started = false;
 class $modify(MenuLayer) {

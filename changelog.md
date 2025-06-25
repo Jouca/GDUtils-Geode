@@ -1,4 +1,8 @@
 # Changelog
+## <cj>v1.5.3</c> <cb>(2025-06-25)</c>
+* <cg>Updated</c> geode to support iOS JIT-less.
+* <cy>Fixed</c> background colors not working for some backgrounds.
+
 ## <cj>v1.5.2</c> <cb>(2025-05-21)</c>
 * <cg>Added</c> option to hide the connected notification.
 * <cr>Removed</c> demon list warning if the level wasn't found on the demon list.
