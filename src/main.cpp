@@ -558,6 +558,8 @@ class EventHandler : public CCObject {
 };
 
 // Backgrounds
+// i dont like ios
+#ifndef GEODE_IS_IOS
 class $modify(UtilCCSprite, CCSprite) {
     static CCSprite* create(char const* name) {
         auto ret = CCSprite::create(name);
@@ -667,6 +669,7 @@ class $modify(UtilCCScale9, cocos2d::extension::CCScale9Sprite) {
         return ret;
     }
 };
+#endif
 
 //bool is_dailychest_ready = false;
 bool is_socketserver_started = false;
