@@ -1,3 +1,4 @@
+#ifndef GEODE_IS_IOS
 #include "../includes.h"
 #include <Geode/modify/SecretLayer.hpp>
 
@@ -25,3 +26,4 @@ class $modify(SecretLayer) {
         return true;
     }
 };
+#endif
