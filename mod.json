@@ -16,8 +16,8 @@
         "source": "https://github.com/Jouca/GDUtils-Geode"
     },
     "dependencies": {
-        "geode.node-ids": ">=v1.20.1",
-        "jouca.badgesapi": ">=v1.2.3"
+        "geode.node-ids": ">=v1.21.1",
+        "jouca.badgesapi": ">=v1.2.4"
     },
     "api": {
         "include": [ "include/*.hpp" ]
