@@ -1,4 +1,8 @@
 # Changelog
+## <cj>v1.5.4</c> <cb>(2025-09-09)</c>
+* <cg>Added</c> coloured container animation when searching a friend on the friend list.
+* <cg>Updated</c> more leaderboards API country parameter to take now country codes ("FR" = France, "US" = United States, "BR" = Brazil, ...)
+
 ## <cj>v1.5.3</c> <cb>(2025-06-25)</c>
 * <cg>Updated</c> geode to support iOS JIT-less.
 * <cy>Fixed</c> background colors not working for some backgrounds.
