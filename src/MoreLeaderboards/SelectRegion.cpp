@@ -25,7 +25,7 @@ std::vector<std::string> SelectRegion::getWords(std::string s, std::string delim
     return res;
 }
 
-void SelectRegion::scene(const std::function<void(int)>& callback) {
+void SelectRegion::scene(const std::function<void(std::string)>& callback) {
     auto popup = new SelectRegion(callback);
 
     if (popup && popup->initAnchored(250.0f, 210.0f)) {
@@ -52,7 +52,7 @@ void SelectRegion::loadPage() {
     CCArray* data = CCArray::create();
 
     for (std::string const& mod : SelectRegion::displayedData) {
-        auto cell = SelectRegionCell::create(mod, [this](int id) {
+        auto cell = SelectRegionCell::create(mod, [this](std::string id) {
             selectedRegion(id);
             removeFromParent();
         });

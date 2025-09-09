@@ -6,7 +6,7 @@
 
 class SelectRegion : public Popup<> {
     LoadingCircle* loading_circle;
-    std::function<void(int)> selectedRegion;
+    std::function<void(std::string)> selectedRegion;
 
     protected:
         bool setup() override;
@@ -16,9 +16,9 @@ class SelectRegion : public Popup<> {
     public:
         static std::vector<std::string> displayedData;
 
-        SelectRegion(const std::function<void(int)>& callback) : selectedRegion(callback) {}
+        SelectRegion(const std::function<void(std::string)>& callback) : selectedRegion(callback) {}
         
-        static void scene(const std::function<void(int)>& callback);
+        static void scene(const std::function<void(std::string)>& callback);
 
         static std::vector<std::string> getWords(std::string s, std::string delim);
 };

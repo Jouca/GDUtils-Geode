@@ -178,7 +178,7 @@ void MoreLeaderboards::onModsList(CCObject* pSender) {
 }
 
 void MoreLeaderboards::onRegion(CCObject* pSender) {
-    SelectRegion::scene([this](int id) {
+    SelectRegion::scene([this](std::string id) {
         country_id = id;
         
         if (loading) return;
@@ -253,7 +253,7 @@ You can submit your <cy>user stats</c> to the <cj>Updated Leaderboards</c> team 
 
 MoreLeaderboards* MoreLeaderboards::create(std::string type) {
     auto pRet = new MoreLeaderboards();
-    SelectRegionCell::country_id = 0;
+    SelectRegionCell::country_id = "NAN";
     if (pRet && pRet->init(type)) {
         pRet->autorelease();
         return pRet;
@@ -632,6 +632,7 @@ void MoreLeaderboards::startLoadingMore() {
                 .param("username", username)
                 .param("mod", (modFilter ? "1" : "0"))
                 .param("modFilter", modFilterType)
+                .param("version", "1.0")
                 .get("https://clarifygdps.com/gdutils/moreleaderboards.php")
         );
     };

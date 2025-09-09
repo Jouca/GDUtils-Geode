@@ -48,7 +48,7 @@ class MoreLeaderboards : public CCLayer {
     CCString* datas = nullptr;
     std::string data_region = "";
 
-    int country_id = 0;
+    std::string country_id = "NAN";
 
     CCMenu* m_menu;
     CCMenuItemToggler* m_tab1;

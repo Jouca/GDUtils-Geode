@@ -1,6 +1,6 @@
 #include "SelectRegionCell.h"
 
-int SelectRegionCell::country_id = 0;
+std::string SelectRegionCell::country_id = "NAN";
 
 bool SelectRegionCell::init(std::string mod) {
     std::vector<std::string> data = SelectRegion::getWords(mod, ":");
@@ -33,14 +33,14 @@ bool SelectRegionCell::init(std::string mod) {
                 earthSpr->setPosition({ 20, 14 });
                 addChild(earthSpr);
             }
+
+            id_ctr = name;
         } else if (id == "5") {
             auto nbPlayers = cocos2d::CCLabelBMFont::create((name + " players").c_str(), "goldFont.fnt");
             nbPlayers->setPosition({ 38, 8 });
             nbPlayers->setAnchorPoint({ 0, 0.5 });
             nbPlayers->setScale(.375f);
             addChild(nbPlayers);
-        } else if (id == "4") {
-            id_ctr = numFromString<int>(name).unwrapOrDefault();
         }
 
         data.erase(data.begin());
@@ -81,7 +81,7 @@ void SelectRegionCell::onClick(cocos2d::CCObject* pSender) {
     selectedRegion(country_id = id_ctr);
 }
 
-SelectRegionCell* SelectRegionCell::create(std::string mod, const std::function<void(int)>& callback) {
+SelectRegionCell* SelectRegionCell::create(std::string mod, const std::function<void(std::string)>& callback) {
     auto ret = new SelectRegionCell(callback);
     if (ret && ret->init(mod)) {
         ret->retain();
