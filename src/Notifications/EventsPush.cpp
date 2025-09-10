@@ -450,8 +450,8 @@ bool EventsPush::init(EventData data) {
     auto layer = scene->getChildren()->objectAtIndex(0);
     std::string layerName = typeid(*layer).name() + 6;
     if (layerName != "PlayLayer" && layerName != "PauseLayer" && layerName != "LevelEditorLayer") {
-        auto bg_btn = CCMenuItemSpriteExtra::create(bg_click_spr, this, menu_selector(EventsPush::onClickBtn));
-        menu->addChild(bg_btn);
+        //auto bg_btn = CCMenuItemSpriteExtra::create(bg_click_spr, this, menu_selector(EventsPush::onClickBtn));
+        menu->addChild(bg_click_spr);
     }
     
     menu->setPosition({ bg->getContentSize().width / 2, bg->getContentSize().height / 2 });
