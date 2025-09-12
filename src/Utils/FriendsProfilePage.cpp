@@ -39,7 +39,7 @@ class SearchUserLayer : public Popup<> {
         TextInput* input_username = TextInput::create(200.0F, "Username", "bigFont.fnt");
         static SearchUserLayer* create() {
             auto ret = new SearchUserLayer();
-            if (ret->initAnchored(260.f, 120.f)) {
+            if (ret->initAnchored(260.f, 60.f)) {
                 ret->autorelease();
                 return ret;
             }

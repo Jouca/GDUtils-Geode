@@ -79,7 +79,7 @@ class SearchUserLBLayer : public Popup<MoreLeaderboards*> {
         TextInput* input_username = TextInput::create(200.0F, "Username", "bigFont.fnt");
         static SearchUserLBLayer* create(MoreLeaderboards* layer) {
             auto ret = new SearchUserLBLayer();
-            if (ret->initAnchored(260.f, 120.f, layer)) {
+            if (ret->initAnchored(260.f, 60.f, layer)) {
                 ret->autorelease();
                 return ret;
             }
