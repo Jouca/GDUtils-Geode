@@ -1,7 +1,6 @@
 #pragma once
 #include "../includes.h"
 #include <Geode/utils/web.hpp>
-#include "../BrownAlertDelegate.hpp"
 #include "MoreLeaderboardsListView.h"
 #include "SelectRegion.h"
 

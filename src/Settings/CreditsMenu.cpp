@@ -1,18 +1,12 @@
 #include "CreditsMenu.h"
 #include "Geode/utils/web.hpp"
-#include <cstdlib>
+using namespace geode::prelude;
 
-void CreditsMenu::onFireeBtn(CCObject*) {
-    web::openLinkInBrowser("https://www.youtube.com/@gdfiree");
-}
-void CreditsMenu::onJoucaBtn(CCObject*) {
-    web::openLinkInBrowser("https://twitter.com/JoucaJouca"); // nitter.net if youre not signed in ok
-}
-void CreditsMenu::onMaverickBtn(CCObject*) {
-    web::openLinkInBrowser("https://www.youtube.com/channel/UCoFBsXJ-6o6l6ZYP-k6DE_g");
-}
+bool CreditsMenu::setup() {
+    auto title = CCLabelBMFont::create("Credits", "bigFont.fnt");
+    title->setScale(0.8f);
+    m_mainLayer->addChildAtPosition(title, Anchor::Top, {0, -25});
 
-void CreditsMenu::setup() {
     auto fireeIcon = SimplePlayer::create(98);
     auto firstColorFiree = ccColor3B {125,0,255};
     auto secondColorFiree = ccColor3B {255,255,255};
@@ -50,38 +44,25 @@ void CreditsMenu::setup() {
     fireeLabel->setScale(.8F);
     joucaLabel->setScale(.8F);
     maverickLabel->setScale(.8F);
-    auto fireeBtn = CCMenuItemSpriteExtra::create(fireeLabel, this, menu_selector(CreditsMenu::onFireeBtn));
-    auto joucaBtn = CCMenuItemSpriteExtra::create(joucaLabel, this, menu_selector(CreditsMenu::onJoucaBtn));
-    auto maverickBtn = CCMenuItemSpriteExtra::create(maverickLabel, this, menu_selector(CreditsMenu::onMaverickBtn));
     auto thankRob1 = CCLabelBMFont::create("Thanks to RobTopGames", "bigFont.fnt");
     auto thankRob2 = CCLabelBMFont::create("for his trust on this project!", "bigFont.fnt");
 
-    
-    fireeBtn->setPosition({ 0, 34 });
-    joucaBtn->setPosition({ -90, 34 });
-    maverickBtn->setPosition({ 90, 34 });
     thankRob1->setScale(0.5F);
     thankRob2->setScale(0.5F);
-    thankRob1->setPositionY(-44);
-    thankRob2->setPositionY(-58);
 
-    this->m_buttonMenu->addChild(fireeBtn);
-    this->m_buttonMenu->addChild(joucaBtn);
-    this->m_buttonMenu->addChild(maverickBtn);
-    this->m_buttonMenu->addChild(thankRob1);
-    this->m_buttonMenu->addChild(thankRob2);
-    this->m_buttonMenu->addChild(fireeIcon);
-    this->m_buttonMenu->addChild(joucaIcon);
-    this->m_buttonMenu->addChild(maverickIcon);
-    setTouchEnabled(true);
+    m_buttonMenu->addChildAtPosition(CCMenuItemExt::createSpriteExtra(fireeLabel, [](CCObject*) {
+        web::openLinkInBrowser("https://www.youtube.com/@gdfiree");
+    }), Anchor::Center, {0, 34});
+    m_buttonMenu->addChildAtPosition(CCMenuItemExt::createSpriteExtra(joucaLabel, [](CCObject*) {
+        web::openLinkInBrowser("https://twitter.com/JoucaJouca"); // nitter.net if youre not signed in ok
+    }), Anchor::Center, {-90, 34});
+    m_buttonMenu->addChildAtPosition(CCMenuItemExt::createSpriteExtra(maverickLabel, [](CCObject*) {
+        web::openLinkInBrowser("https://www.youtube.com/channel/UCoFBsXJ-6o6l6ZYP-k6DE_g");
+    }), Anchor::Center, {90, 34});
+    m_mainLayer->addChildAtPosition(thankRob1, Anchor::Center, {0, -44});
+    m_mainLayer->addChildAtPosition(thankRob2, Anchor::Center, {0, -58});
+    m_mainLayer->addChildAtPosition(fireeIcon, Anchor::Center);
+    m_mainLayer->addChildAtPosition(joucaIcon, Anchor::Center, {-90, 0});
+    m_mainLayer->addChildAtPosition(maverickIcon, Anchor::Center, {90, 0});
+    return true;
 }
-
-CreditsMenu* CreditsMenu::create() {
-    auto pRet = new CreditsMenu();
-    if (pRet && pRet->init(CreditsMenu::s_defWidth, CreditsMenu::s_defHeight, "GJ_square01.png", "Credits")) {
-        pRet->autorelease();
-        return pRet;
-    }
-    CC_SAFE_DELETE(pRet);
-    return nullptr;
-};

@@ -1,16 +1,15 @@
 #pragma once
-#include "../BrownAlertDelegate.hpp"
-class CreditsMenu : public BrownAlertDelegate {
+class CreditsMenu : public geode::Popup<> {
     protected:
-        virtual void setup();
-        cocos2d::CCSize m_sScrLayerSize;
-        float m_fWidth = s_defWidth;
-        float m_fHeight = s_defHeight;
+        bool setup() override;
     public:
-        static constexpr const float s_defWidth = 300.0f;
-        static constexpr const float s_defHeight = 200.0f;
-        static CreditsMenu* create();
-        void onFireeBtn(CCObject*);
-        void onJoucaBtn(CCObject*);
-        void onMaverickBtn(CCObject*);
+        static CreditsMenu* create() {
+            auto ret = new CreditsMenu();
+            if (ret->initAnchored(300.f, 200.f)) {
+                ret->autorelease();
+                return ret;
+            }
+            delete ret;
+            return nullptr;
+        }
 };

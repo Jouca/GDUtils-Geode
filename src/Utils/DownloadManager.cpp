@@ -45,46 +45,37 @@ int DownloadManager::progress_func(void*, double totalDownload, std::optional<fl
     if (totalDownload <= 0.0 || !downloadAmount) return 0;
     float amountDownloaded = round((downloadAmount.value() / totalDownload) * 100);
     auto scene = CCDirector::sharedDirector()->getRunningScene();
-    auto layer = reinterpret_cast<ProgressBar*>(reinterpret_cast<CCLayer*>(reinterpret_cast<CCLayer*>(scene->getChildByTag(6942084))->getChildren()->objectAtIndex(0))->getChildByTag(4592));
-    if (layer != nullptr) {
-        layer->setProgress(amountDownloaded);
+    if (m_progressBar != nullptr) {
+        m_progressBar->setProgress(amountDownloaded);
     }
     return 0;
 }
 
-void DownloadManager::setup() {
+bool DownloadManager::setup(const char* url, const char* destination, cocos2d::SEL_MenuHandler selector) {
+    auto title = CCLabelBMFont::create("Downloading...", "bigFont.fnt");
+    title->setScale(0.8f);
+    m_mainLayer->addChildAtPosition(title, Anchor::Top, {0, -25});
+
     auto winSize = cocos2d::CCDirector::sharedDirector()->getWinSize();
     loading_circle->setParentLayer(this);
     loading_circle->setScale(0.675f);
-    loading_circle->setPositionY(20);
     loading_circle->show();
-    auto progressBar = ProgressBar::create();
-    progressBar->setPosition({ 280, 130 });
-    progressBar->setProgress(0.0F);
-    progressBar->setTag(4592);
-    this->setTag(6942084);
-    this->m_mainLayer->addChild(progressBar);
-
+    m_progressBar = ProgressBar::create();
+    m_progressBar->setProgress(0.0F);
+    m_mainLayer->addChildAtPosition(m_progressBar, Anchor::Center, {0, -30});
 
     auto text = cocos2d::CCLabelBMFont::create("Do not close this menu while the file is being downloaded.", "chatFont.fnt");
-    text->setPosition(
-        winSize.width / 2,
-        winSize.height / 2 - 18
-    ); // needs to be 100
     text->setAlignment(cocos2d::kCCTextAlignmentCenter);
-    text->setTag(39);
     text->setScale(.5F);
-    this->m_mainLayer->addChild(text);
-    setTouchEnabled(true);
+    m_mainLayer->addChildAtPosition(text, Anchor::Bottom, {0, 18});
 
     // def not copied from geode hahahaha
-
-    const std::function<void(geode::ByteVector const&)> then = [this](geode::ByteVector const& data) {
+    const std::function<void(geode::ByteVector const&)> then = [this, destination, selector](geode::ByteVector const& data) {
         // Save the file
-        (void)geode::utils::file::writeBinary(this->m_sDestination, data);
+        (void)geode::utils::file::writeBinary(destination, data);
 
-        ProcessLambdas::callMenuHandler(this, this->m_pSelector);
-        this->onClose(CCNode::create());
+        ProcessLambdas::callMenuHandler(this, selector);
+        this->onClose(nullptr);
     };
     const std::function<void(int const&)> expect = [this](int const& error) {
         FLAlertLayer::create(nullptr, "Error!", "An error occured while trying to send a request to the servers. Check <cy>logs</c> for more information.", "OK", nullptr, 200.0F)->show();
@@ -92,8 +83,7 @@ void DownloadManager::setup() {
     };
 
     geode::utils::web::WebRequest request = web::WebRequest();
-
-    m_listener_dl.bind([expect = std::move(expect), then = std::move(then)] (web::WebTask::Event* e) {
+    m_listener_dl.bind([this, expect = std::move(expect), then = std::move(then)] (web::WebTask::Event* e) {
         if (web::WebProgress* progress = e->getProgress()) {
             progress_func(NULL, 100, progress->downloadProgress(), progress->uploadTotal(), progress->uploaded());
         } else if (web::WebResponse* result = e->getValue()) {
@@ -105,22 +95,18 @@ void DownloadManager::setup() {
         }
     });
 
-    m_listener_dl.setFilter(request.get(this->m_sUrl));
+    m_listener_dl.setFilter(request.get(url));
+    return true;
 }
 
 DownloadManager* DownloadManager::create(const char* url, const char* destination, cocos2d::SEL_MenuHandler selector) {
-    auto pRet = new DownloadManager();
-    if (pRet) {
-        pRet->m_pSelector = selector;
-        pRet->m_sUrl = url;
-        pRet->m_sDestination = destination;
-        if (pRet->init(DownloadManager::s_defWidth, DownloadManager::s_defHeight, "GJ_square01.png", "Downloading...")) {
-            pRet->autorelease();
-            return pRet;
-        }
+    auto ret = new DownloadManager();
+    if (ret->initAnchored(300.f, 150.f, url, destination, selector)) {
+        ret->autorelease();
+        return ret;
     }
-    CC_SAFE_DELETE(pRet);
+    delete ret;
     return nullptr;
-};
+}
 // below is copied from the gdr mod lol
 #endif

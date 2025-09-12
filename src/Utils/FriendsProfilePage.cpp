@@ -1,5 +1,4 @@
 #include "../includes.h"
-#include "../BrownAlertDelegate.hpp"
 #include <Geode/modify/FriendsProfilePage.hpp>
 // Utils
 
@@ -17,55 +16,34 @@ const char* toLowerCase(const char* str) {
     return result;
 }
 
-class SearchUserLayer : public BrownAlertDelegate {
+class SearchUserLayer : public Popup<> {
     protected:
-        virtual void setup() {
-            // Set up the alert layer
+        bool setup() {
             input_username->setMaxCharCount(20);
             input_username->setPlaceholder("");
             input_username->setPositionY(10);
 
-            this->m_buttonMenu->addChild(input_username);
-
+            m_buttonMenu->addChildAtPosition(input_username, Anchor::Center);
             auto winSize = cocos2d::CCDirector::sharedDirector()->getWinSize();
-
-            // Add search button
             auto validate_spr = ButtonSprite::create("Search", 60, true, "bigFont.fnt", "GJ_button_01.png", 30, .5F);
             auto validate_btn = CCMenuItemSpriteExtra::create(
                 validate_spr,
                 this,
                 menu_selector(SearchUserLayer::onValidate)
             );
-            validate_btn->setPosition({
-                0,
-                -35
-            });
-            this->m_buttonMenu->addChild(validate_btn, 1);
-            
-            // Add the menu to the layer
-            this->m_mainLayer->addChild(this->m_buttonMenu);
-
-            // Enable touch
-            setTouchEnabled(true);
-        }
-        cocos2d::CCSize m_sScrLayerSize;
-        void onClose(cocos2d::CCObject* pSender) {
-            BrownAlertDelegate::onClose(pSender);
+            m_buttonMenu->addChildAtPosition(validate_btn, Anchor::Center, {0, -35});
+            return true;
         }
         void onValidate(cocos2d::CCObject*);
-        float m_fWidth = s_defWidth;
-        float m_fHeight = s_defHeight;
     public:
         TextInput* input_username = TextInput::create(200.0F, "Username", "bigFont.fnt");
-        static constexpr const float s_defWidth = 260.0f;
-        static constexpr const float s_defHeight = 120.0f;
         static SearchUserLayer* create() {
-            auto pRet = new SearchUserLayer();
-            if (pRet && pRet->init(SearchUserLayer::s_defWidth, SearchUserLayer::s_defHeight, "GJ_square01.png")) {
-                pRet->autorelease();
-                return pRet;
+            auto ret = new SearchUserLayer();
+            if (ret->initAnchored(260.f, 120.f)) {
+                ret->autorelease();
+                return ret;
             }
-            CC_SAFE_DELETE(pRet);
+            delete ret;
             return nullptr;
         }
 };
@@ -234,5 +212,5 @@ class $modify(FriendPage, FriendsProfilePage) {
 
 void SearchUserLayer::onValidate(CCObject* pSender) {
     FriendPage::searchUser(input_username->getString().c_str());
-    BrownAlertDelegate::onClose(pSender);
+    Popup::onClose(pSender);
 }

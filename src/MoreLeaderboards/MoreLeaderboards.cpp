@@ -39,29 +39,24 @@ std::vector<std::string> MoreLeaderboards::getWords(std::string s, std::string d
     return res;
 }
 
-class SearchUserLBLayer : public BrownAlertDelegate {
-    protected:
-        MoreLeaderboards* m_layer;
-        TextInput* input_username = TextInput::create(200.0F, "Username", "bigFont.fnt");
 
-        virtual void setup() {
-            auto winSize = cocos2d::CCDirector::sharedDirector()->getWinSize();
+class SearchUserLBLayer : public Popup<MoreLeaderboards*> {
+    protected:
+        bool setup(MoreLeaderboards* layer) {
+            m_layer = layer;
             input_username->setMaxCharCount(20);
             input_username->setPlaceholder("");
             input_username->setPositionY(10);
-            this->m_buttonMenu->addChild(input_username);
+
+            m_buttonMenu->addChildAtPosition(input_username, Anchor::Center);
+            auto winSize = cocos2d::CCDirector::sharedDirector()->getWinSize();
             auto validate_spr = ButtonSprite::create("Search", 60, true, "bigFont.fnt", "GJ_button_01.png", 30, .5F);
             auto validate_btn = CCMenuItemSpriteExtra::create(
                 validate_spr,
                 this,
                 menu_selector(SearchUserLBLayer::onValidate)
             );
-
-            validate_btn->setPosition({
-                0,
-                -35
-            });
-            this->m_buttonMenu->addChild(validate_btn, 1);
+            m_buttonMenu->addChildAtPosition(validate_btn, Anchor::Center, {0, -35});
 
             if (MoreLeaderboards::username != "") {
                 input_username->setString(MoreLeaderboards::username);
@@ -73,35 +68,22 @@ class SearchUserLBLayer : public BrownAlertDelegate {
                     this,
                     menu_selector(SearchUserLBLayer::onRemoveUsername)
                 );
-                delete_btn->setPosition({
-                    113,
-                    11
-                });
-                this->m_buttonMenu->addChild(delete_btn, 1);
+                m_buttonMenu->addChildAtPosition(delete_btn, Anchor::Right, {-17, 0});
             }
-
-            this->m_mainLayer->addChild(this->m_buttonMenu);
-            this->setTouchEnabled(true);
-        }
-        cocos2d::CCSize m_sScrLayerSize;
-        void onClose(cocos2d::CCObject* pSender) {
-            BrownAlertDelegate::onClose(pSender);
+            return true;
         }
         void onValidate(cocos2d::CCObject*);
         void onRemoveUsername(cocos2d::CCObject*);
-        float m_fWidth = s_defWidth;
-        float m_fHeight = s_defHeight;
     public:
-        static constexpr const float s_defWidth = 260.0f;
-        static constexpr const float s_defHeight = 120.0f;
+        MoreLeaderboards* m_layer;
+        TextInput* input_username = TextInput::create(200.0F, "Username", "bigFont.fnt");
         static SearchUserLBLayer* create(MoreLeaderboards* layer) {
-            auto pRet = new SearchUserLBLayer();
-            if (pRet && pRet->init(SearchUserLBLayer::s_defWidth, SearchUserLBLayer::s_defHeight, "GJ_square01.png")) {
-                pRet->autorelease();
-                pRet->m_layer = layer;
-                return pRet;
+            auto ret = new SearchUserLBLayer();
+            if (ret->initAnchored(260.f, 120.f, layer)) {
+                ret->autorelease();
+                return ret;
             }
-            CC_SAFE_DELETE(pRet);
+            delete ret;
             return nullptr;
         }
 };
@@ -115,7 +97,7 @@ void SearchUserLBLayer::onValidate(CCObject* pSender) {
 
     this->m_layer->onTab(nullptr);
 
-    BrownAlertDelegate::onClose(pSender);
+    Popup::onClose(pSender);
 }
 
 void SearchUserLBLayer::onRemoveUsername(CCObject* pSender) {
@@ -126,7 +108,7 @@ void SearchUserLBLayer::onRemoveUsername(CCObject* pSender) {
     this->m_layer->changeTabPage();
     this->m_layer->onTab(nullptr);
 
-    BrownAlertDelegate::onClose(pSender);
+    Popup::onClose(pSender);
 }
 
 CCDictionary* MoreLeaderboards::responseToDict(const std::string& response){

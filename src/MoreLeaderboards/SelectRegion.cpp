@@ -40,7 +40,6 @@ bool SelectRegion::setup() {
     auto winSize = cocos2d::CCDirector::sharedDirector()->getWinSize();
     auto director = cocos2d::CCDirector::sharedDirector();
 
-    registerWithTouchDispatcher();
     setTouchEnabled(true);
     setKeypadEnabled(true);
 
