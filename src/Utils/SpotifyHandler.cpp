@@ -3,6 +3,7 @@ bool is_muted = false;
 #include "../includes.h"
 #include <Geode/modify/EditorUI.hpp>
 #include <Geode/modify/PlayLayer.hpp>
+#include <Geode/modify/PauseLayer.hpp>
 #include "../Settings/CustomSettings.hpp"
 #ifdef GEODE_IS_WINDOWS
 #include <commdlg.h>
@@ -161,7 +162,7 @@ void toggleSpotifyMute(bool automatic = false, bool muted = false) {
 bool isApplicationRunning(const std::string& appName) {
     // Construct the osascript command
     std::string script = "osascript -e 'tell application \"System Events\" to (name of processes) contains \"" + appName + "\"'";
-    
+
     // Open a pipe to execute the command and capture its output
     FILE* pipe = popen(script.c_str(), "r");
     if (!pipe) {
@@ -225,14 +226,14 @@ void toggleSpotifyMute(bool automatic = false, bool muted = false) {
     // nothing because im not sure!
 }
 #endif
-#ifdef GEODE_IS_DESKTOP 
+#ifdef GEODE_IS_DESKTOP
 class $modify(PlayLayer) {
     bool init(GJGameLevel* level, bool p1, bool p2) {
         if (!PlayLayer::init(level, p1, p2)) return false;
         if (!Mod::get()->getSettingValue<bool>("inLevelsSpotify")) return true;
         //auto gm = FMODAudioEngine::sharedEngine();
         //if (gm->m_backgroundMusicVolume > 0.0f) {
-        // uncomment when fmod gets these fields 
+        // uncomment when fmod gets these fields
         if (1.0F > 0.0F) {
             toggleSpotifyMute(true, true);
         }
@@ -243,6 +244,19 @@ class $modify(PlayLayer) {
         if (!Mod::get()->getSettingValue<bool>("inLevelsSpotify")) return;
         if (is_muted) {
             toggleSpotifyMute(true, false);
+        }
+    }
+};
+
+class $modify(PauseLayer) {
+    // onEdit is called when the editor button is clicked, but goEdit is what actually does the transition to the editor
+    // from the pause menu, so it makes more sense to make sure muting only happens on transition
+    void goEdit() {
+        PauseLayer::goEdit();
+        if (!Mod::get()->getSettingValue<bool>("inLevelsSpotify")) return;
+        //if (gm->m_backgroundMusicVolume > 0.0f) {
+        if (1 > 0.0F) { // temp until someone adds fields
+            toggleSpotifyMute();
         }
     }
 };
@@ -258,6 +272,14 @@ class $modify(EditorUI) {
     }
     void onStopPlaytest(CCObject* sender) {
         EditorUI::onStopPlaytest(sender);
+        if (!Mod::get()->getSettingValue<bool>("inEditorSpotify")) return;
+
+        if (is_muted) {
+            toggleSpotifyMute(true, false);
+        }
+    }
+    void playtestStopped() {
+        EditorUI::playtestStopped();
         if (!Mod::get()->getSettingValue<bool>("inEditorSpotify")) return;
 
         if (is_muted) {
