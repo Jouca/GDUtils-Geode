@@ -1,4 +1,7 @@
 # Changelog
+## <cj>v...</c> <cb>(---)</c>
+* <cy>Fixed</c> Spotify feature not unmuting when playtesting in Editor.
+
 ## <cj>v1.5.4</c> <cb>(2025-09-09)</c>
 * <cg>Added</c> coloured container animation when searching a friend on the friend list.
 * <cg>Updated</c> more leaderboards API country parameter to take now country codes ("FR" = France, "US" = United States, "BR" = Brazil, ...)
