@@ -28,6 +28,10 @@ struct EventData {
     int level_id = -1;
     std::string levels_list;
     int maxToCompleteList = 0;
+    std::string getTitle() const { return title; };
+    EventType getEventType() const { return type; };
+    std::string getLevelName() const { return level_name; };
+    int getLevelID() const { return level_id; };
 };
 
 template<>
@@ -109,5 +113,24 @@ struct matjson::Serialize<EventData> {
             }
         }
         return geode::Ok(data);
+    }
+    static matjson::Value toJson(EventData const& value) {
+        auto val = Value::object();
+        val.set("demon", value.demon);
+        val.set("starsum", value.starsum);
+        val.set("starsum", value.starsum);
+        val.set("stars", value.stars);
+        val.set("rate", value.rate);
+        val.set("type", (int)value.type);
+        val.set("title", value.title);
+        val.set("level_name", value.level_name);
+        val.set("level_creator", value.level_creator);
+        val.set("coins", value.coins);
+        val.set("verified_coins", value.verified_coins);
+        val.set("platformer", value.platformer);
+        val.set("level_id", value.level_id);
+        val.set("levels_list", value.levels_list);
+        val.set("maxToCompleteList", value.maxToCompleteList);
+        return val;
     }
 };

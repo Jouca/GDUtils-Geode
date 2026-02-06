@@ -4,19 +4,12 @@
 #include "Types.hpp"
 
 namespace GDUtils::Events {
-    class RateEvent : public geode::Event {
-    protected:
-        EventData m_eventData;
+    class RateEvent : public geode::SimpleEvent<RateEvent, EventData> {
     public:
-        RateEvent(EventData data) : m_eventData(data) {};
-
-        EventType getEventType() const { return m_eventData.type; };
-        std::string getLevelName() const { return m_eventData.level_name; };
-        int getLevelID() const { return m_eventData.level_id; };
+        using SimpleEvent::SimpleEvent;
         static void emit(EventData data) {
-            RateEvent(data).post();
+            RateEvent().send(data);
         };
-        EventData getData() const { return m_eventData; };
         static EventType intToType(int type) {
             switch (type) {
                 default:
@@ -62,17 +55,7 @@ namespace GDUtils::Events {
             }
         }
     };
-
-    class OnRate : public geode::Event {
-    protected:
-        EventData m_eventData;
-    public:
-        OnRate(EventData data) : m_eventData(data) {};
-
-        std::string getTitle() const { return m_eventData.title; };
-        EventType getEventType() const { return m_eventData.type; };
-        std::string getLevelName() const { return m_eventData.level_name; };
-        int getLevelID() const { return m_eventData.level_id; };
-        EventData getData() const { return m_eventData; };
+    struct OnRate final : geode::GlobalEvent<OnRate, bool(EventData&), bool(EventData&), EventType> {
+        using GlobalEvent::GlobalEvent;
     };
 }
