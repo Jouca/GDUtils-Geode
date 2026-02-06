@@ -14,39 +14,10 @@ endif()
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 include(cmake/CPM.cmake)
 
-if(NOT DEFINED GEODE_TARGET_PLATFORM)
-    set(GEODE_TARGET_PLATFORM "Win64")
-    set(GEODE_GD_VERSION 2.2074)
-    set(GEODE_COMP_GD_VERSION 22074)
-endif()
-
-if (${GEODE_TARGET_PLATFORM} STREQUAL "Win64")
-    set(GEODE_COMPILER "clang-cl")
-    set(GEODE_CCACHE_VARIANT "sccache")
-    #set(GEODE_TRIPLE "x86_64-unknown-windows-msvc")
-    if(WIN32) # force it!
-      set(CMAKE_SYSTEM_PROCESSOR x86_64)
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m64")
-      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64")
-    endif()
-endif()
-
 set(PROJECT_NAME GDUtils)
 project(${PROJECT_NAME} VERSION 1.0.0)
 
-# Use GLOB_RECURSE instead of GLOB
-# to recursively add all source files 
-# under src/ 
-file(GLOB SOURCES
-    src/*.cpp
-    src/MoreLeaderboards/*.cpp
-    src/Notifications/*.cpp
-    src/Secret/*.cpp
-    src/Settings/*.cpp
-    src/Utils/*.cpp
-    src/Styles/*.cpp
-    include/*.cpp
-)
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS src/*.cpp)
 
 # Set up the mod binary
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
@@ -66,13 +37,14 @@ set(BUILD_SHARED_LIBS OFF)
 
 #CPMAddPackage("gh:libuv/libuv#c1a9f01")
 #CPMAddPackage("gh:CopernicaMarketingSoftware/AMQP-CPP#ca49382")
-
+CPMAddPackage("gh:camila314/uibuilder#main") # i love it
 
 target_include_directories(${PROJECT_NAME} PRIVATE
   libs/filesystem
   libs/pl_mpeg/
   libs/glew/
   ${rabbitmq-c_SOURCE_DIR}/include
+  src/
   #${amqpcpp_SOURCE_DIR}/src
   #${amqpcpp_SOURCE_DIR}/include
   #${libuv_SOURCE_DIR}/include
@@ -87,10 +59,10 @@ endif()
 add_subdirectory($ENV{GEODE_SDK} ${CMAKE_CURRENT_BINARY_DIR}/geode)
 
 if (APPLE AND NOT (${CMAKE_SYSTEM_NAME} STREQUAL "iOS" OR IOS))
-    target_link_libraries(${PROJECT_NAME} rabbitmq::rabbitmq-static "-framework OpenGL")
+    target_link_libraries(${PROJECT_NAME} UIBuilder rabbitmq::rabbitmq-static "-framework OpenGL")
     #target_link_libraries(${PROJECT_NAME} uv_a amqpcpp "-framework OpenGL")
 else()
-    target_link_libraries(${PROJECT_NAME} rabbitmq::rabbitmq-static)
+    target_link_libraries(${PROJECT_NAME} UIBuilder rabbitmq::rabbitmq-static)
     #target_link_libraries(${PROJECT_NAME} uv_a amqpcpp)
 endif()
 if (CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux" AND WIN32)
