@@ -1,21 +1,17 @@
 {
-	"geode": "4.9.0",
+	"geode": "5.0.0",
 	"gd": {
-		"win": "2.2074",
-		"android": "2.2074",
-		"mac": "2.2074",
-		"ios": "2.2074"
+		"win": "2.2081",
+		"android": "2.2081",
+		"mac": "2.2081",
+		"ios": "2.2081"
 	},
 	"id": "gdutilsdevs.test",
 	"name": "GDUtils Test Mod",
 	"version": "v1.0.0",
 	"developer": "Firee",
 	"description": "",
-	"dependencies": [
-	{
-            "id": "gdutilsdevs.gdutils",
-            "version": ">=v1.4.0-beta.6",
-            "importance": "required"
-        }
-    ]
+	"dependencies": {
+		"gdutilsdevs.gdutils": ">=v1.6.0"
+	}
 }

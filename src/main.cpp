@@ -2,11 +2,8 @@
 // Ported with help by Firee
 // Mod made by Jouca & Firee
 
+#include "modules/events/DailyChest.hpp"
 $execute {
-    // Loader::get()->queueInMainThread([]{
-    //     CCScheduler::get()->scheduleSelector(schedule_selector(EventHandler::check), EventHandler::create(), 1.0F, false);
-    //     //CCScheduler::get()->scheduleUpdateForTarget(EventHandler::create(), Priority::Last, false);
-    // });
     // listenForSettingChanges("activate-background", [](bool value) {
     //     log::info("Activate Background changed to {}", value);
     //     toggleSpriteHooks(value);
@@ -23,6 +20,60 @@ $execute {
 #include <modules/events/EventsPush.hpp>
 
 bool g_socket_server_ran = false;
+
+$execute {
+    if (Mod::get()->getSettingValue<bool>("server-notification")) {
+        GDUtils::Events::OnServerConnect().listen([](bool const& connected) {
+            Loader::get()->queueInMainThread([connected]() {
+                if (connected) {
+                    Notification::create("Connected to Rate Server!", NotificationIcon::Success)->show();
+                }
+            });
+            return ListenerResult::Stop;
+        }).leak();
+    }
+    auto [tx, rx] = arc::mpsc::channel<std::string>(1024); // i mean why would robtop ever rate that many levels
+    auto [etx, erx] = arc::mpsc::channel<EventData>(1024); // ditto
+    auto [ctx, crx] = arc::mpsc::channel<bool>(64);
+    AMQT::setTx(std::move(tx));
+    EventsPush::setTx(std::move(ctx));
+    //auto interval = arc::interval(Duration::fromMillis(250));
+    async::runtime().spawn([rx = std::move(rx), crx = std::move(crx), erx = std::move(erx)]() mutable -> arc::Future<> {
+        bool running = true;
+        while (running) {
+            co_await arc::select(
+                arc::selectee(rx.recv(), [&](auto req) {
+                    if (req) {
+                        std::string msg = std::move(req).unwrap();
+                        Loader::get()->queueInMainThread([m = std::move(msg)]() mutable {
+                            auto director = CCDirector::sharedDirector();
+                            if (!director) return;
+                            auto scene = CCDirector::sharedDirector()->getRunningScene();
+                            if (!scene) return;
+                            if (scene->getChildrenCount() == 0) return;
+                            if (EventsPush::canSendEvent(scene)) {
+                                EventsPush::pushRateLevel(scene, m);
+                            }
+                        });
+                    }
+                }),
+                arc::selectee(crx.recv(), [&](auto req) {
+                    if (req) {
+                        bool b = std::move(req).unwrap();
+                        log::debug("Cancelled (Code = {})", b);
+                    } else {
+                        log::debug("Cancelled (Code = Unknown)");
+                    }
+                    Loader::get()->queueInMainThread([]() {
+                        if (auto scene = CCScene::get()) {
+                            EventsPush::eventCompletedCallback(scene);
+                        }
+                    });
+                })
+            );
+        }
+    });
+}
 
 $on_game(Loaded) {
     if (g_socket_server_ran) return;
@@ -61,46 +112,6 @@ $on_game(Loaded) {
             Notification::create("Couldn't connect to server, invalid Client ID", NotificationIcon::Error)->show();
             return;
         }
-        auto [tx, rx] = arc::mpsc::channel<std::string>(1024); // i mean why would robtop ever rate that many levels
-        auto [etx, erx] = arc::mpsc::channel<EventData>(1024); // ditto
-        auto [ctx, crx] = arc::mpsc::channel<bool>(64);
-        AMQT::setTx(std::move(tx));
-        EventsPush::setTx(std::move(ctx));
-        async::runtime().spawn([rx = std::move(rx), crx = std::move(crx), erx = std::move(erx)]() mutable -> arc::Future<> {
-            bool running = true;
-            while (running) {
-                co_await arc::select(
-                    arc::selectee(rx.recv(), [&](auto req) {
-                        if (req) {
-                            std::string msg = std::move(req).unwrap();
-                            Loader::get()->queueInMainThread([m = std::move(msg)]() mutable {
-                                auto director = CCDirector::sharedDirector();
-                                if (!director) return;
-                                auto scene = CCDirector::sharedDirector()->getRunningScene();
-                                if (!scene) return;
-                                if (scene->getChildrenCount() == 0) return;
-                                if (EventsPush::canSendEvent(scene)) {
-                                    EventsPush::pushRateLevel(scene, m);
-                                }
-                            });
-                        }
-                    }),
-                    arc::selectee(crx.recv(), [&](auto req) {
-                        if (req) {
-                            bool b = std::move(req).unwrap();
-                            log::debug("Cancelled (Code = {})", b);
-                        } else {
-                            log::debug("Cancelled (Code = Unknown)");
-                        }
-                        Loader::get()->queueInMainThread([]() {
-                            if (auto scene = CCScene::get()) {
-                                EventsPush::eventCompletedCallback(scene);
-                            }
-                        });
-                    })
-                );
-            }
-        });
         std::thread hThread([]() mutable {
             AMQT handler(Mod::get()->getSavedValue<std::string>("clientId"));
             handler.connect();

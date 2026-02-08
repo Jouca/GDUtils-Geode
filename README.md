@@ -92,11 +92,28 @@ EventData data = {
 GDUtils::Events::RateEvent::emit(data);
 ```
 
-### Example Code (Listening for notification events from GDUtils)
+### Example Code (Listening for notification events from GDUtils, and checking if the server is online)
 ```cpp
 $execute {
-    new EventListener<EventFilter<GDUtils::Events::OnRate>>(+[](GDUtils::Events::OnRate* e) {
-        log::info("A rate event with the title {}", e->getTitle()); // A rate event with the title Small Daily Chest available!
+    // Listening for *any* rate event.
+    GDUtils::Events::OnRate().listen([](EventData const& e) {
+        log::info("A rate event with the title {}", e.getTitle()); // A rate event with the title Small Daily Chest available!
+        return ListenerResult::Propagate;
+    });
+
+    // Listening for rate events, filtering only by daily
+    GDUtils::Events::OnRate(EventType::Daily).listen([](EventData const& e) {
+        log::info("A daily event with the level name {}", e.getLevelName()); // A daily event with the level name Cycles
+        return ListenerResult::Propagate;
+    });
+
+    // Checking when we connected.
+    GDUtils::Events::OnServerConnect().listen([](bool const& connected) {
+        Loader::get()->queueInMainThread([connected]() {
+            if (connected) {
+                log::info("I am connected to the notifiaction servers!");
+            }
+        });
         return ListenerResult::Propagate;
     });
 }
@@ -105,7 +122,7 @@ View the `test` directory if you want to view an example mod using the API.
 
 ## Libraries Used
 - [Geode](https://github.com/geode-sdk/geode)
-- [socket.io-client-cpp](https://github.com/socketio/socket.io-client-cpp)
+- [rabbitmq-c](https://github.com/alanxz/rabbitmq-c)
 - [pl_mpeg](https://github.com/phoboslab/pl_mpeg)
 
 ## Credits

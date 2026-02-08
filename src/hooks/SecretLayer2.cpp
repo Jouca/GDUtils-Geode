@@ -34,7 +34,6 @@ class $modify(SecretVault, SecretLayer2) {
         if (!vault_text) {
             vault_text = this->getChildByType<CCLabelBMFont*>(1);
         }
-        log::debug("what are you {}", input);
         if (!strcmp(input.c_str(), "bad apple")) {
             if (m_fields->m_currentState != States::BadApple) {
                 m_fields->m_currentState = States::BadApple;
