@@ -26,8 +26,22 @@ class $modify(MenuLayer) {
 };
 
 $execute {
-    new EventListener<EventFilter<GDUtils::Events::OnRate>>(+[](GDUtils::Events::OnRate* e) {
-        log::info("A rate event with the title {}", e->getTitle());
+    GDUtils::Events::OnRate().listen([](EventData const& e) {
+        log::info("A rate event with the title {}", e.getTitle());
+        return ListenerResult::Propagate;
+    });
+
+    GDUtils::Events::OnRate(EventType::Daily).listen([](EventData const& e) {
+        log::info("A daily event with the level name {}", e.getLevelName());
+        return ListenerResult::Propagate;
+    });
+
+    GDUtils::Events::OnServerConnect().listen([](bool const& connected) {
+        Loader::get()->queueInMainThread([connected]() {
+            if (connected) {
+                log::info("I am connected to the notifiaction servers!");
+            }
+        });
         return ListenerResult::Propagate;
     });
 }

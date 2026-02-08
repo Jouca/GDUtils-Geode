@@ -1,4 +1,5 @@
 #include "AMQClient.hpp"
+#include "../../include/RateEvent.hpp"
 
 bool show_connected = false;
 std::queue<std::string> dataQueue;
@@ -147,7 +148,7 @@ void AMQT::setupChannel() {
         }
         if (res) {
             std::string data((char*)res->consumer_tag.bytes, res->consumer_tag.len);
-            show_connected = true;
+            GDUtils::Events::OnServerConnect().send(true);
             log::info("Subscribed to Rate Notifications! (Consumer Tag: {})", data);
         }
     }
@@ -163,7 +164,6 @@ void AMQT::setupChannel() {
             log::error("Couldn't send heartbeat, disconnecting...");
             break;
         }
-
         if (forceReconnection) {
             auto now = std::chrono::steady_clock::now();
             auto lastDuration = std::chrono::duration_cast<std::chrono::seconds>(now - lastReconnectTime).count();
@@ -172,10 +172,8 @@ void AMQT::setupChannel() {
                 break;
             }
         }
-
         amqp_envelope_t envelope;
         amqp_maybe_release_buffers(m_connection);
-
         auto ret = amqp_consume_message(m_connection, &envelope, &timeout, 0);
         if (AMQP_RESPONSE_NORMAL != ret.reply_type) {
             if (AMQP_RESPONSE_LIBRARY_EXCEPTION == ret.reply_type && AMQP_STATUS_HEARTBEAT_TIMEOUT == ret.library_error) {
@@ -228,6 +226,7 @@ void AMQT::setupChannel() {
             amqp_destroy_envelope(&envelope);
         }
     }
+    GDUtils::Events::OnServerConnect().send(false);
     m_connected = false;
     m_cv.notify_all();
 }

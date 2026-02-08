@@ -58,4 +58,7 @@ namespace GDUtils::Events {
     struct OnRate final : geode::GlobalEvent<OnRate, bool(EventData&), bool(EventData&), EventType> {
         using GlobalEvent::GlobalEvent;
     };
+    struct OnServerConnect final : geode::ThreadSafeEvent<OnServerConnect, bool(bool)> {
+        using ThreadSafeEvent::ThreadSafeEvent;
+    };
 }

@@ -114,6 +114,5 @@ class EventHandler : public CCObject {
             checkForEvent();
             //checkForFiles();
         }
-        static void consumer(arc::mpsc::Receiver<std::string> rx, CCScene* scene);
 };
 
