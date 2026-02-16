@@ -6,7 +6,7 @@
 // demon list
 std::unordered_map<int, int> demonListCache; // Will clear after game exit, or if user deletes level
 
-class $modify(LevelInfoLayer) {
+class $modify(CustomLevelInfoLayer, LevelInfoLayer) {
     struct Fields {
         async::TaskHolder<web::WebResponse> m_listener;
     };
@@ -149,7 +149,7 @@ class $modify(LevelInfoLayer) {
 };
 // demon list
 
-void toggleHook(bool value) {
+static void toggleHook(bool value) {
     for (auto& hook : geode::Mod::get()->getHooks()) {
         if (hook->getDisplayName() == "LevelInfoLayer::init") {
             if (value) {

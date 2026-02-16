@@ -27,12 +27,12 @@ void RobProgressBar::setProgress(float percentage) {
 }
 
 RobProgressBar* RobProgressBar::create() {
-    auto pRet = new RobProgressBar();
-    if (pRet && pRet->init()) {
-        pRet->autorelease();
-        return pRet;
+    auto ret = new RobProgressBar();
+    if (ret && ret->init()) {
+        ret->autorelease();
+        return ret;
     }
-    CC_SAFE_DELETE(pRet);
+    delete ret;
     return nullptr;
 }
 
