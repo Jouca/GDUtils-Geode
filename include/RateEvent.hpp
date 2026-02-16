@@ -4,9 +4,9 @@
 #include "Types.hpp"
 
 namespace GDUtils::Events {
-    class RateEvent : public geode::SimpleEvent<RateEvent, EventData> {
+    class RateEvent : public geode::Event<RateEvent, bool(EventData&)> {
     public:
-        using SimpleEvent::SimpleEvent;
+        using Event::Event;
         static void emit(EventData data) {
             RateEvent().send(data);
         };

@@ -1,0 +1,1154 @@
+{
+  "World": {
+    "background": {
+      "sprite": "world_gauntlet.png",
+      "scale": 1.27
+    },
+    "gauntlet": {
+      "position": [
+        1.0,
+        16.0
+      ],
+      "scale": 1.0
+    },
+    "particles": [
+      {
+        "string": "22a-1a3a0a20a90a0a29a0a0a0a0a0a0a0a0a0a7a0a0a0a0.729412a0a0.352941a0a0.796078a0a1a0a7a0a0a0a0.729412a0a0.352941a0a0.796078a0a1a0a0.4a0a0.4a0a35a0a35a0a-50a0a1a2a1a0a0a0a159a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          10.0,
+          24.0
+        ],
+        "scale": [
+          1.31,
+          2.61
+        ]
+      },
+      {
+        "string": "22a-1a3a0a20a90a0a29a0a0a0a0a0a0a0a0a0a7a0a0a0a0.34902a0a0.466667a0a0.792157a0a1a0a7a0a0a0a0.34902a0a0.466667a0a0.792157a0a1a0a0.4a0a0.4a0a35a0a35a0a-50a0a1a2a1a0a0a0a159a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          6.0,
+          24.0
+        ],
+        "scale": [
+          1.31,
+          2.61
+        ]
+      },
+      {
+        "string": "22a-1a3a0a20a90a0a29a0a0a0a0a0a0a0a0a0a7a0a0a0a0.360784a0a0.854902a0a0.368627a0a1a0a7a0a0a0a0.360784a0a0.854902a0a0.368627a0a1a0a0.4a0a0.4a0a35a0a35a0a-50a0a1a2a1a0a0a0a159a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          2.0,
+          24.0
+        ],
+        "scale": [
+          1.31,
+          2.61
+        ]
+      },
+      {
+        "string": "22a-1a3a0a20a90a0a29a0a0a0a0a0a0a0a0a0a7a0a0a0a0.866667a0a0.839216a0a0.247059a0a1a0a7a0a0a0a0.866667a0a0.839216a0a0.247059a0a1a0a0.4a0a0.4a0a35a0a35a0a-50a0a1a2a1a0a0a0a159a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          -2.0,
+          24.0
+        ],
+        "scale": [
+          1.31,
+          2.61
+        ]
+      },
+      {
+        "string": "22a-1a3a0a20a90a0a29a0a0a0a0a0a0a0a0a0a7a0a0a0a0.866667a0a0.294118a0a0.247059a0a1a0a7a0a0a0a0.866667a0a0.294118a0a0.247059a0a1a0a0.4a0a0.4a0a35a0a35a0a-50a0a1a2a1a0a0a0a159a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          -6.0,
+          24.0
+        ],
+        "scale": [
+          1.31,
+          2.61
+        ]
+      },
+      {
+        "string": "22a-1a3a0a20a90a0a29a0a0a0a0a0a0a0a0a0a7a0a0a0a0.729412a0a0.352941a0a0.796078a0a1a0a7a0a0a0a0.729412a0a0.352941a0a0.796078a0a1a0a0.4a0a0.4a0a35a0a35a0a-50a0a1a2a1a0a0a0a159a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          -9.0,
+          24.0
+        ],
+        "scale": [
+          -1.31,
+          2.61
+        ]
+      },
+      {
+        "string": "22a-1a3a0a20a90a0a29a0a0a0a0a0a0a0a0a0a7a0a0a0a0.34902a0a0.466667a0a0.792157a0a1a0a7a0a0a0a0.34902a0a0.466667a0a0.792157a0a1a0a0.4a0a0.4a0a35a0a35a0a-50a0a1a2a1a0a0a0a159a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          -5.0,
+          24.0
+        ],
+        "scale": [
+          -1.31,
+          2.61
+        ]
+      },
+      {
+        "string": "22a-1a3a0a20a90a0a29a0a0a0a0a0a0a0a0a0a7a0a0a0a0.360784a0a0.854902a0a0.368627a0a1a0a7a0a0a0a0.360784a0a0.854902a0a0.368627a0a1a0a0.4a0a0.4a0a35a0a35a0a-50a0a1a2a1a0a0a0a159a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          -1.0,
+          24.0
+        ],
+        "scale": [
+          -1.31,
+          2.61
+        ]
+      },
+      {
+        "string": "22a-1a3a0a20a90a0a29a0a0a0a0a0a0a0a0a0a7a0a0a0a0.866667a0a0.839216a0a0.247059a0a1a0a7a0a0a0a0.866667a0a0.839216a0a0.247059a0a1a0a0.4a0a0.4a0a35a0a35a0a-50a0a1a2a1a0a0a0a159a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          3.0,
+          24.0
+        ],
+        "scale": [
+          -1.31,
+          2.61
+        ]
+      },
+      {
+        "string": "22a-1a3a0a20a90a0a29a0a0a0a0a0a0a0a0a0a7a0a0a0a0.866667a0a0.294118a0a0.247059a0a1a0a7a0a0a0a0.866667a0a0.294118a0a0.247059a0a1a0a0.4a0a0.4a0a35a0a35a0a-50a0a1a2a1a0a0a0a159a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          7.0,
+          24.0
+        ],
+        "scale": [
+          -1.31,
+          2.61
+        ]
+      },
+      {
+        "string": "38a-1a1.5a0.3a21a90a90a0a0a31a69a0a0a0a0a0a0a2a1a65a57a1a0a1a0a1a0a1a0a5a1a0a0a1a0a1a0a1a0a1a0a0.2a0a0.4a0a0a0a0a0a0a0a0a2a1a0a0a0a169a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          1.0,
+          6.0
+        ],
+        "scale": [
+          1.71,
+          1.66
+        ]
+      },
+      {
+        "string": "11a-1a1.5a0.3a6a90a90a0a0a31a69a0a0a0a0a0a0a4a1a0a0a1a0a1a0a1a0a1a0a7a1a52a55a1a0a1a0a1a0a1a0a0.2a0a0.4a0a0a0a0a0a0a0a0a2a1a0a0a0a167a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          1.0,
+          16.0
+        ],
+        "scale": [
+          1.835,
+          1.485
+        ]
+      }
+    ]
+  },
+  "Fantasy": {
+    "background": {
+      "sprite": "fantasy_gauntlet.png",
+      "scale": 1.225
+    },
+    "gauntlet": {
+      "position": [
+        -2.0,
+        14.0
+      ],
+      "scale": 1.0
+    },
+    "particles": [
+      {
+        "string": "26a-1a5a0.3a4a-90a14a9a0a17a0a0a0a0a0a0a0a2a1a76a325a0.537255a0a0.898039a0a0.164706a0a1a0a2a1a148a149a0.537255a0a0.898039a0a0.164706a0a1a0a0a0a0.3a0a0a0a0a0a0a0a0a2a0a0a0a0a146a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": null,
+        "scale": [
+          2.88,
+          4.603
+        ]
+      }
+    ]
+  },
+  "Portal": {
+    "background": {
+      "sprite": "portal_gauntlet.png",
+      "scale": 1.225
+    },
+    "gauntlet": {
+      "position": [
+        -2.0,
+        14.0
+      ],
+      "scale": 1.0
+    },
+    "particles": [
+      {
+        "string": "13a-1a1a0.3a10a90a90a29a0a11a0a0a0a0a0a0a0a50a1a0a37a0.376471a0a0.109804a0a0.243137a0a1a0a32a1a142a96a0.376471a0a0.109804a0a0.243137a0a1a0a0.5a0a0.3a0a0a0a0a0a0a0a1a2a1a0a0a0a190a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": null,
+        "scale": [
+          2.88,
+          3.978
+        ]
+      },
+      {
+        "string": "13a-1a1a0.3a10a90a90a29a0a11a0a0a0a0a0a0a0a50a1a0a37a0.0705882a0a0.172549a0a0.203922a0a1a0a32a1a142a96a0.0705882a0a0.172549a0a0.203922a0a1a0a0.5a0a0.3a0a0a0a0a0a0a0a1a2a1a0a0a0a190a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": null,
+        "scale": [
+          2.88,
+          3.978
+        ]
+      },
+      {
+        "string": "38a-1a2a0.3a16a90a180a29a0a11a0a0a0a0a0a0a0a6a1a0a0a0.760784a0a0.380392a0a0.835294a0a1a0a3a1a0a0a0.760784a0a0.380392a0a0.835294a0a1a0a0.18a0a0.49a0a43a0a33a0a-34a0a1a2a1a0a0a0a28a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": null,
+        "scale": [
+          1.03,
+          1.03
+        ]
+      },
+      {
+        "string": "38a-1a2a0.3a16a90a180a29a0a11a0a0a0a0a0a0a0a6a1a0a0a0.376471a0a0.690196a0a0.831373a0a1a0a3a1a0a0a0.376471a0a0.690196a0a0.831373a0a1a0a0.18a0a0.49a0a43a0a33a0a-34a0a1a2a1a0a0a0a28a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": null,
+        "scale": [
+          1.155,
+          1.355
+        ]
+      },
+      {
+        "string": "30a-1a1a0.3a30a90a180a29a0a11a0a0a0a0a0a0a0a4a1a0a0a0.760784a0a0.380392a0a0.835294a0a1a0a2a1a0a0a0.760784a0a0.380392a0a0.835294a0a1a0a0.18a0a0.49a0a43a0a33a0a-41a0a1a2a1a0a0a0a28a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": null,
+        "scale": [
+          1.455,
+          1.655
+        ]
+      },
+      {
+        "string": "30a-1a1a0.3a30a90a180a29a0a11a0a0a0a0a0a0a0a4a1a0a0a0.376471a0a0.690196a0a0.831373a0a1a0a2a1a0a0a0.376471a0a0.690196a0a0.831373a0a1a0a0.18a0a0.49a0a43a0a33a0a-41a0a1a2a1a0a0a0a28a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": null,
+        "scale": [
+          1.355,
+          1.855
+        ]
+      }
+    ]
+  },
+  "Demon": {
+    "background": {
+      "sprite": "demon_gauntlet.png",
+      "scale": 1.275
+    },
+    "gauntlet": {
+      "position": [
+        -1.0,
+        22.0
+      ],
+      "scale": 1.0
+    },
+    "particles": [
+      {
+        "string": "66a-1a3a0.3a20a90a27a11a0a37a38a0a0a0a0a0a0a5a1a0a0a0.694118a0a0.45098a0a0.054902a0a1a0a2a1a0a0a0.509804a0a0.172549a0a0a0a1a0a0.5a0a1a0a0a0a0a0a0a0a0a2a1a0a0a0a28a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": null,
+        "scale": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "string": "29a-1a3a0.3a8a90a27a11a0a37a38a0a0a0a0a0a0a50a1a0a0a0.0509804a0a0.0392157a0a0.0352941a0a1a0a50a1a0a0a0.0509804a0a0.0392157a0a0.0352941a0a1a0a0.5a0a1a0a0a0a0a0a0a0a0a2a1a0a0a0a46a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": null,
+        "scale": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "string": "31a-1a1a0.3a23a90a90a29a0a11a0a0a0a0a0a0a0a33a1a89a149a0.454902a0a0.321569a0a0.152941a0a1a0a50a1a145a68a0.454902a0a0.321569a0a0.152941a0a1a0a0.5a0a0.5a0a0a0a0a0a0a0a1a2a1a0a0a0a192a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": null,
+        "scale": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "string": "30a-1a2a0.3a13a90a8a21a0a8a0a0a45a0a0a0a0a40a1a89a149a0.396078a0a0.27451a0a0.14902a0a1a0a24a1a145a68a0.141176a0a0.0352941a0a0.0313726a0a1a0a0.5a0a0.5a0a0a0a0a0a0a0a0a2a1a0a0a0a46a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": null,
+        "scale": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "string": "30a-1a1a0.3a13a90a8a21a0a0a0a0a45a0a0a0a0a21a1a89a149a0.894118a0a0.631373a0a0.345098a0a1a0a6a1a145a68a0.894118a0a0.631373a0a0.345098a0a1a0a0.5a0a0.5a0a0a0a0a0a0a0a0a2a1a0a0a0a183a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": null,
+        "scale": [
+          1.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "Castle": {
+    "background": {
+      "sprite": "castle_gauntlet.png",
+      "scale": 1.275
+    }
+  },
+  "Galaxy": {
+    "background": {
+      "sprite": "galaxy_gauntlet.png",
+      "scale": 1.695
+    },
+    "gauntlet": {
+      "position": [
+        0.0,
+        11.0
+      ],
+      "scale": 0.975
+    },
+    "particles": [
+      {
+        "string": "11a-1a1a0.3a8a90a90a0a0a0a0a0a0a0a0a0a0a50a3a0a0a0.627451a0a0.286275a0a0.470588a0a1a0a50a3a106a70a0.627451a0a0.286275a0a0.470588a0a1a0a0a0a0a0a0a0a0a0a0a0a0a2a1a0a0a0a176a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          0.0,
+          24.0
+        ],
+        "scale": [
+          1.61,
+          1.61
+        ]
+      },
+      {
+        "string": "14a-1a1.2a0.3a9a112a6a42a0a15a0a0a0a0a0a0a0a4a0a340a0a0.913725a0a0.72549a0a0.337255a0a1a0a4a0a340a0a0.913725a0a0.72549a0a0.337255a0a1a0a0.3a0a0.3a0a0a0a0a0a0a0a0a2a1a0a0a0a31a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          -25.0,
+          111.0
+        ],
+        "scale": [
+          2.66,
+          3.71
+        ]
+      },
+      {
+        "string": "38a-1a1.5a0.3a21a90a90a0a0a31a69a0a0a0a0a0a0a2a1a65a57a0.886275a0a0.866667a0a0.454902a0a1a0a5a1a0a0a0.886275a0a0.866667a0a0.454902a0a1a0a0.2a0a0.4a0a0a0a0a0a0a0a0a2a1a0a0a0a169a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          2.0,
+          6.0
+        ],
+        "scale": [
+          1.685,
+          1.485
+        ]
+      },
+      {
+        "string": "11a-1a1.5a0.3a6a90a90a0a0a31a69a0a0a0a0a0a0a4a1a0a0a0.890196a0a0.376471a0a0.65098a0a1a0a7a1a52a55a0.890196a0a0.376471a0a0.65098a0a1a0a0.2a0a0.4a0a0a0a0a0a0a0a0a2a1a0a0a0a167a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          2.0,
+          -2.0
+        ],
+        "scale": [
+          1.31,
+          1.635
+        ]
+      },
+      {
+        "string": "4a-1a1a0.3a3a90a90a0a0a0a0a0a0a0a0a0a0a50a3a0a0a0.862745a0a0.352941a0a0.623529a0a1a0a50a3a106a22a0.862745a0a0.352941a0a0.623529a0a1a0a0.3a0a0.3a0a0a0a0a0a0a0a0a2a1a0a0a0a164a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          0.0,
+          24.0
+        ],
+        "scale": [
+          1.785,
+          1.785
+        ]
+      }
+    ]
+  },
+  "Universe": {
+    "background": {
+      "sprite": "universe_gauntlet.png",
+      "scale": 1.27
+    },
+    "gauntlet": {
+      "position": [
+        0.0,
+        16.0
+      ],
+      "scale": 1.0
+    },
+    "particles": [
+      {
+        "string": "23a-1a3a0.3a6a90a180a29a0a11a0a0a0a0a0a0a0a38a1a0a0a0.0627451a0a0.0980392a0a0.105882a0a1a0a50a1a0a0a0.0627451a0a0.0980392a0a0.105882a0a1a0a0.1a0a0.5a0a10a0a28a0a0a0a1a2a1a0a1a0a46a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          0.0,
+          11.0
+        ],
+        "scale": [
+          1.485,
+          2.685
+        ]
+      },
+      {
+        "string": "20a-1a0.5a0a15a90a0a44a0a11a0a0a0a0a0a0a0a4a1a0a0a0.760784a0a0.447059a0a0.94902a0a1a0a4a1a0a0a0.760784a0a0.447059a0a0.94902a0a1a0a0.1a0a0.1a0a0a0a0a0a0a0a0a2a1a0a0a0a33a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          32.0,
+          -74.0
+        ],
+        "scale": [
+          3.685,
+          8.31
+        ]
+      },
+      {
+        "string": "19a-1a0.5a0a38a90a0a44a0a20a0a0a0a0a0a0a0a2a1a0a0a0.94902a0a0.67451a0a0.447059a0a1a0a2a1a0a0a0.94902a0a0.67451a0a0.447059a0a1a0a0.1a0a0.1a0a0a0a0a0a0a0a0a2a1a0a0a0a33a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          34.0,
+          -96.0
+        ],
+        "scale": [
+          2.135,
+          8.935
+        ]
+      },
+      {
+        "string": "20a-1a1a0a15a90a0a36a0a11a0a0a0a0a0a0a0a4a1a0a0a0.447059a0a0.654902a0a0.94902a0a1a0a4a1a0a0a0.447059a0a0.654902a0a0.94902a0a1a0a0.2a0a0.2a0a0a0a0a0a0a0a0a2a1a0a0a0a28a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          41.0,
+          -92.0
+        ],
+        "scale": [
+          3.235,
+          6.585
+        ]
+      },
+      {
+        "string": "11a-1a1a0.3a8a90a90a0a0a0a0a0a0a0a0a0a0a50a3a0a0a0.239216a0a0.403922a0a0.419608a0a1a0a50a3a106a70a0.239216a0a0.403922a0a0.419608a0a1a0a0a0a0a0a0a0a0a0a0a0a0a2a1a0a0a0a176a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          0.0,
+          24.0
+        ],
+        "scale": [
+          1.71,
+          1.71
+        ]
+      },
+      {
+        "string": "4a-1a1a0.3a3a90a90a0a0a0a0a0a0a0a0a0a0a50a3a0a0a0.32549a0a0.537255a0a0.560784a0a1a0a50a3a106a22a0.32549a0a0.537255a0a0.560784a0a1a0a0.3a0a0.3a0a0a0a0a0a0a0a0a2a1a0a0a0a190a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          -2.0,
+          24.0
+        ],
+        "scale": [
+          2.71,
+          2.71
+        ]
+      }
+    ]
+  },
+  "Cursed": {
+    "background": {
+      "sprite": "cursed_gauntlet.png",
+      "scale": 1.27
+    },
+    "gauntlet": {
+      "position": [
+        1.0,
+        16.0
+      ],
+      "scale": 1.0
+    },
+    "particles": [
+      {
+        "string": "5a-1a1a0.3a3a90a90a29a0a11a0a0a0a0a0a0a0a50a1a24a45a0.105882a0a0.380392a0a0.105882a0a1a0a44a1a48a28a0.105882a0a0.380392a0a0.105882a0a1a0a0a0a0a0a0a0a0a0a0a0a1a2a1a0a0a0a175a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": null,
+        "scale": [
+          2.035,
+          2.035
+        ]
+      },
+      {
+        "string": "5a-1a1a0.3a3a90a90a29a0a11a0a0a0a0a0a0a0a50a1a24a45a0.105882a0a0.380392a0a0.105882a0a1a0a44a1a48a28a0.105882a0a0.380392a0a0.105882a0a1a0a0a0a0a0a0a0a0a0a0a0a1a2a1a0a0a0a175a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": null,
+        "scale": [
+          2.035,
+          2.035
+        ]
+      },
+      {
+        "string": "93a-1a1a0.3a71a90a0a52a0a10a0a23a0a0a0a0a0a2a1a0a0a0.00392157a0a0.905882a0a0a0a1a0a2a1a30a0a0.00392157a0a0.905882a0a0a0a1a0a0.3a0a0.5a0a0a0a0a0a0a0a0a2a1a0a0a0a32a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          17.0,
+          94.0
+        ],
+        "scale": [
+          4.51,
+          3.335
+        ]
+      }
+    ]
+  },
+  "Doom": {
+    "background": {
+      "sprite": "doom_gauntlet.png",
+      "scale": 1.27
+    },
+    "gauntlet": {
+      "position": [
+        0.0,
+        19.0
+      ],
+      "scale": 1.0
+    },
+    "particles": [
+      {
+        "string": "66a-1a3a0.3a20a90a27a11a0a43a83a0a0a0a0a0a0a5a1a0a0a0.733333a0a0.607843a0a0.12549a0a1a0a3a1a0a0a0.733333a0a0.470588a0a0.12549a0a1a0a0.5a0a1a0a0a0a0a0a0a0a0a2a1a0a0a0a28a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          0.0,
+          -7.0
+        ],
+        "scale": [
+          1.235,
+          1.235
+        ]
+      },
+      {
+        "string": "44a-1a3a0.3a13a90a27a11a0a32a62a0a0a0a0a0a0a50a1a0a0a0.0666667a0a0.0509804a0a0.0470588a0a1a0a50a1a0a0a0.0666667a0a0.0509804a0a0.0470588a0a1a0a0.5a0a1a0a0a0a0a0a0a0a0a2a1a0a0a0a46a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          0.0,
+          -13.0
+        ],
+        "scale": [
+          1.31,
+          1.435
+        ]
+      },
+      {
+        "string": "6a-1a1.9a0a3a90a17a69a0a3a0a0a-102a0a0a0a0a4a1a57a105a1a0a1a0a1a0a1a0a4a1a0a0a1a0a1a0a1a0a1a0a0a0a0a0a0a0a0a0a0a0a0a2a1a0a0a0a145a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": null,
+        "scale": [
+          2.035,
+          2.035
+        ]
+      }
+    ]
+  },
+  "Split": {
+    "background": {
+      "sprite": "split_gauntlet.png",
+      "scale": 1.27
+    },
+    "gauntlet": {
+      "position": [
+        -1.0,
+        20.0
+      ],
+      "scale": 1.0
+    },
+    "particles": [
+      {
+        "string": "48a-1a2a0.3a20a90a2a19a0a10a20a0a0a0a0a0a0a4a1a0a0a0.666667a0a0.360784a0a0.603922a0a1a0a2a1a0a0a0.666667a0a0.360784a0a0.603922a0a1a0a0.5a0a0.5a0a0a0a0a0a0a0a0a2a1a0a0a0a31a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          -28.0,
+          -65.0
+        ],
+        "scale": [
+          2.18,
+          4.003
+        ]
+      },
+      {
+        "string": "48a-1a2a0.3a20a90a2a19a0a10a20a0a0a0a0a0a0a4a1a0a0a0.454902a0a0.215686a0a0.403922a0a1a0a2a1a0a0a0.454902a0a0.215686a0a0.403922a0a1a0a0.5a0a0.5a0a0a0a0a0a0a0a0a2a1a0a0a0a28a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          -28.0,
+          -65.0
+        ],
+        "scale": [
+          2.18,
+          4.003
+        ]
+      },
+      {
+        "string": "48a-1a2a0.3a20a90a2a19a0a10a20a0a0a0a0a0a0a4a1a0a0a0.243137a0a0.329412a0a0.341176a0a1a0a2a1a0a0a0.243137a0a0.329412a0a0.341176a0a1a0a0.5a0a0.5a0a0a0a0a0a0a0a0a2a1a0a0a0a31a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          25.0,
+          65.0
+        ],
+        "scale": [
+          2.18,
+          4.003
+        ]
+      },
+      {
+        "string": "48a-1a2a0.3a20a90a2a19a0a10a20a0a0a0a0a0a0a4a1a0a0a0.145098a0a0.203922a0a0.207843a0a1a0a2a1a0a0a0.145098a0a0.203922a0a0.207843a0a1a0a0.5a0a0.5a0a0a0a0a0a0a0a0a2a1a0a0a0a28a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          25.0,
+          65.0
+        ],
+        "scale": [
+          2.18,
+          4.003
+        ]
+      },
+      {
+        "string": "30a-1a2a0.3a13a90a90a29a0a11a0a0a0a0a0a0a0a6a1a0a0a0.705882a0a0.34902a0a0.698039a0a1a0a2a1a0a0a0.584314a0a0.34902a0a0.705882a0a1a0a0a0a0.5a0a6a0a34a0a0a0a1a2a1a0a0a0a159a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          0.0,
+          29.0
+        ],
+        "scale": [
+          1.955,
+          1.955
+        ]
+      },
+      {
+        "string": "30a-1a2a0.3a13a90a90a29a0a11a0a0a0a0a0a0a0a6a1a0a0a0.254902a0a0.333333a0a0.388235a0a1a0a2a1a0a0a0.254902a0a0.333333a0a0.388235a0a1a0a0a0a0.5a0a6a0a34a0a0a0a1a2a1a0a0a0a159a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          0.0,
+          29.0
+        ],
+        "scale": [
+          1.955,
+          1.955
+        ]
+      },
+      {
+        "string": "30a-1a2a0.3a13a90a90a29a0a11a0a0a0a0a0a0a0a6a1a0a0a0.705882a0a0.34902a0a0.698039a0a1a0a2a1a0a0a0.584314a0a0.34902a0a0.705882a0a1a0a0a0a0.5a0a6a0a34a0a0a0a1a2a1a0a0a0a28a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          0.0,
+          29.0
+        ],
+        "scale": [
+          1.955,
+          1.955
+        ]
+      },
+      {
+        "string": "30a-1a2a0.3a13a90a90a29a0a11a0a0a0a0a0a0a0a6a1a0a0a0.254902a0a0.333333a0a0.388235a0a1a0a2a1a0a0a0.254902a0a0.333333a0a0.388235a0a1a0a0a0a0.5a0a6a0a34a0a0a0a1a2a1a0a0a0a28a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          0.0,
+          29.0
+        ],
+        "scale": [
+          1.955,
+          1.955
+        ]
+      }
+    ]
+  },
+  "Monster": {
+    "background": {
+      "sprite": "monster_gauntlet.png",
+      "scale": 1.27
+    },
+    "gauntlet": {
+      "position": [
+        0.0,
+        22.0
+      ],
+      "scale": 1.0
+    },
+    "particles": [
+      {
+        "string": "30a-1a3a0.3a9a90a9a11a0a17a40a0a0a0a0a0a0a4a1a0a0a0.0509804a0a0.929412a0a0a0a1a0a2a1a0a0a0.360784a0a0.486275a0a0.352941a0a1a0a0.1a0a0.5a0a0a0a0a0a0a0a0a2a1a0a0a0a165a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": null,
+        "scale": [
+          2.51,
+          1.985
+        ]
+      },
+      {
+        "string": "66a-1a3a0.3a20a90a27a11a0a37a38a0a0a0a0a0a0a5a1a0a0a0.0156863a0a0.866667a0a0.027451a0a1a0a3a1a0a0a0.164706a0a0.509804a0a0a0a1a0a0.5a0a1a0a0a0a0a0a0a0a0a2a1a0a0a0a28a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": null,
+        "scale": [
+          1.072,
+          2.475
+        ]
+      },
+      {
+        "string": "18a-1a3a0.3a5a90a9a11a0a32a28a0a0a0a0a0a0a50a1a0a0a0.0352941a0a0.0901961a0a0.0313726a0a1a0a50a1a0a0a0.0352941a0a0.0901961a0a0.0313726a0a1a0a1a0a1a0a0a0a0a0a0a0a0a2a1a0a0a0a46a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": null,
+        "scale": [
+          1.47,
+          1.957
+        ]
+      }
+    ]
+  },
+  "Mystery": {
+    "background": {
+      "sprite": "mystery_gauntlet.png",
+      "scale": 1.27
+    },
+    "gauntlet": {
+      "position": [
+        3.0,
+        13.0
+      ],
+      "scale": 1.0
+    },
+    "particles": [
+      {
+        "string": "30a-1a3a0.3a9a90a180a29a0a11a0a0a0a0a0a0a0a2a1a0a0a1a0a0.8a0a0.258824a0a1a0a8a1a0a0a1a0a0.8a0a0.258824a0a1a0a0.5a0a0.5a0a6a0a30a0a0a0a1a2a0a0a0a0a11a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": null,
+        "scale": [
+          2.035,
+          2.035
+        ]
+      },
+      {
+        "string": "31a-1a3a0.3a9a90a180a0a0a29a82a0a0a0a0a0a0a4a1a0a0a0.388235a0a0.741176a0a1a0a1a0a15a1a0a0a0.388235a0a0.741176a0a1a0a1a0a1a0a1a0a6a0a30a0a0a0a0a2a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.435,
+          1.435
+        ]
+      }
+    ]
+  },
+  "Strange": {
+    "background": {
+      "sprite": "strange_gauntlet.png",
+      "scale": 1.27
+    },
+    "gauntlet": {
+      "position": [
+        2.0,
+        -18.0
+      ],
+      "scale": 1.0
+    },
+    "particles": [
+      {
+        "string": "36a-1a3a0.3a6a-90a24a9a0a11a0a0a-7a0a0a0a0a2a1a76a325a0.592157a0a0.294118a0a0.658824a0a1a0a2a1a201a149a0.592157a0a0.294118a0a0.658824a0a1a0a0.3a0a0.3a0a0a0a0a0a0a0a0a2a0a0a0a0a96a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          2.0,
+          -65.0
+        ],
+        "scale": [
+          2.48,
+          2.728
+        ]
+      },
+      {
+        "string": "17a-1a4a0.3a3a180a0a8a0a47a34a0a0a0a0a0a0a50a1a0a0a0.243137a0a0.239216a0a0.239216a0a1a0a50a1a0a0a0.454902a0a0.447059a0a0.447059a0a1a0a1a0a1a0a0a0a0a0a0a0a0a2a1a0a0a0a46a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          17.0,
+          60.0
+        ],
+        "scale": [
+          0.805,
+          1.155
+        ]
+      }
+    ]
+  },
+  "Water": {
+    "background": {
+      "sprite": "water_gauntlet.png",
+      "scale": 1.27
+    }
+  },
+  "Fire": {
+    "background": {
+      "sprite": "fire_gauntlet.png",
+      "scale": 1.27
+    },
+    "gauntlet": {
+      "position": [
+        0.0,
+        15.0
+      ],
+      "scale": 1.0
+    },
+    "particles": [
+      {
+        "string": "30a-1a2a0.3a13a90a8a21a0a8a0a0a45a0a0a0a0a50a1a89a149a0.396078a0a0.27451a0a0.14902a0a1a0a31a1a145a68a0.141176a0a0.0352941a0a0.0313726a0a1a0a0.5a0a0.5a0a0a0a0a0a0a0a0a2a1a0a0a0a46a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          -1.0,
+          0.0
+        ],
+        "scale": [
+          1.435,
+          0.935
+        ]
+      },
+      {
+        "string": "30a-1a1a0.3a13a90a8a21a0a0a0a0a45a0a0a0a0a21a1a89a149a0.894118a0a0.631373a0a0.345098a0a1a0a13a1a145a68a0.894118a0a0.631373a0a0.345098a0a1a0a0.5a0a0.5a0a0a0a0a0a0a0a0a2a1a0a0a0a183a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": null,
+        "scale": [
+          2.322,
+          1.347
+        ]
+      },
+      {
+        "string": "19a-1a2a0.3a8a90a0a29a0a5a0a0a0a0a0a0a0a50a1a50a33a0.12549a0a0.0862745a0a0a0a1a0a30a1a50a30a0.12549a0a0.0862745a0a0a0a1a0a0.1a0a0.5a0a0a0a0a0a0a0a0a2a1a0a0a0a181a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": null,
+        "scale": [
+          1.145,
+          1.795
+        ]
+      },
+      {
+        "string": "31a-1a3a0.3a9a90a27a11a0a37a38a0a0a0a0a0a0a50a1a0a0a0.133333a0a0.0862745a0a0.0588235a0a1a0a50a1a0a0a0.0666667a0a0.0470588a0a0.0352941a0a1a0a0.5a0a1a0a0a0a0a0a0a0a0a2a1a0a0a0a46a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          1.0,
+          -23.0
+        ],
+        "scale": [
+          1.27,
+          1.832
+        ]
+      },
+      {
+        "string": "40a-1a3a0.3a12a90a13a11a0a48a78a0a0a0a0a0a0a5a3a0a0a0.439216a0a0.309804a0a0.129412a0a1a0a3a3a0a0a0.439216a0a0.309804a0a0.129412a0a1a0a0.1a0a0.3a0a0a0a0a0a0a0a0a2a1a0a0a0a28a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          2.0,
+          -20.0
+        ],
+        "scale": [
+          1.205,
+          1.28
+        ]
+      }
+    ]
+  },
+  "Ice": {
+    "background": {
+      "sprite": "ice_gauntlet.png",
+      "scale": 1.27
+    },
+    "gauntlet": {
+      "position": [
+        0.0,
+        15.0
+      ],
+      "scale": 1.0
+    },
+    "particles": [
+      {
+        "string": "25a-1a1a0.3a19a90a90a0a0a0a0a0a0a0a0a0a0a12a1a0a98a0.0980392a0a0.176471a0a0.219608a0a1a0a36a1a0a0a0.0980392a0a0.176471a0a0.219608a0a1a0a0a0a0a0a0a0a0a0a0a0a0a2a1a0a0a0a191a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          0.0,
+          17.0
+        ],
+        "scale": [
+          3.76,
+          3.76
+        ]
+      },
+      {
+        "string": "200a-1a4a0.3a46a90a0a18a0a24a0a0a0a0a0a0a0a1a1a0a39a0.980392a0a1a0a0.980392a0a1a0a1a1a98a41a0.980392a0a1a0a0.980392a0a1a0a0.3a0a0.5a0a0a0a0a0a0a0a0a2a1a0a0a0a14a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          11.0,
+          112.0
+        ],
+        "scale": [
+          2.322,
+          3.097
+        ]
+      },
+      {
+        "string": "44a-1a3a0.3a13a90a27a11a0a40a62a0a0a0a0a0a0a50a1a0a0a0.0431373a0a0.0627451a0a0.0666667a0a1a0a50a1a0a0a0.0431373a0a0.0627451a0a0.0666667a0a1a0a0.5a0a1a0a0a0a0a0a0a0a0a2a1a0a0a0a46a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          0.0,
+          -11.0
+        ],
+        "scale": [
+          1.145,
+          1.795
+        ]
+      },
+      {
+        "string": "38a-1a1.5a0.3a21a90a90a0a0a31a69a0a0a0a0a0a0a2a1a65a57a1a0a1a0a1a0a1a0a5a1a0a0a1a0a1a0a1a0a1a0a0.2a0a0.4a0a0a0a0a0a0a0a0a2a1a0a0a0a169a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": null,
+        "scale": [
+          1.47,
+          1.957
+        ]
+      }
+    ]
+  },
+  "Poison": {
+    "background": {
+      "sprite": "poison_gauntlet.png",
+      "scale": 1.27
+    },
+    "particles": [
+      {
+        "string": "31a-1a3a0.3a9a90a27a11a0a37a64a0a0a0a0a0a0a50a1a0a0a0.054902a0a0.129412a0a0.0627451a0a1a0a50a1a0a0a0.054902a0a0.129412a0a0.0627451a0a1a0a0.5a0a1a0a0a0a0a0a0a0a0a2a1a0a0a0a46a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          0.0,
+          11.0
+        ],
+        "scale": [
+          1.26,
+          1.485
+        ]
+      },
+      {
+        "string": "20a-1a3a0.3a6a90a22a11a0a33a55a0a0a0a0a0a0a1a1a0a0a0.137255a0a0.301961a0a0.133333a0a1a0a10a1a0a0a0.137255a0a0.301961a0a0.133333a0a1a0a0.1a0a0.5a0a0a0a0a0a0a0a0a2a1a0a0a0a40a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          -3.0,
+          -13.0
+        ],
+        "scale": [
+          1.722,
+          1.397
+        ]
+      },
+      {
+        "string": "4a-1a2.5a0.3a1a-90a0a0a10a35a0a0a-70a0a0a0a0a6a2a140a0a0.345098a0a0.690196a0a0.301961a0a1a0a4a2a140a0a0.345098a0a0.690196a0a0.301961a0a1a0a0a0a0a0a0a0a0a0a0a0a0a2a1a0a0a0a77a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          0.0,
+          109.0
+        ],
+        "scale": [
+          1.145,
+          1.795
+        ]
+      },
+      {
+        "string": "40a-1a3a0.3a12a90a13a11a0a48a78a0a0a0a0a0a0a3a1a0a0a0.129412a0a0.439216a0a0.168627a0a1a0a1a1a0a0a0.129412a0a0.439216a0a0.168627a0a1a0a0.1a0a0.3a0a0a0a0a0a0a0a0a2a1a0a0a0a192a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": null,
+        "scale": [
+          1.27,
+          1.632
+        ]
+      }
+    ]
+  },
+  "Shadow": {
+    "background": {
+      "sprite": "shadow_gauntlet.png",
+      "scale": 1.745
+    },
+    "gauntlet": {
+      "position": [
+        2.0,
+        26.0
+      ],
+      "scale": 1.0
+    },
+    "particles": [
+      {
+        "string": "48a-1a3a0.3a14a90a27a6a0a40a57a0a0a0a0a0a0a50a1a0a0a0.0509804a0a0.0235294a0a0.0666667a0a1a0a50a1a0a0a0.0509804a0a0.0235294a0a0.0666667a0a1a0a0.5a0a1a0a0a0a0a0a0a0a0a2a1a0a0a0a46a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          0.0,
+          -15.0
+        ],
+        "scale": [
+          1.31,
+          1.735
+        ]
+      },
+      {
+        "string": "62a-1a1a0.3a47a90a90a29a0a11a0a0a0a0a0a0a0a50a1a0a59a0.0784314a0a0.0235294a0a0.0941176a0a1a0a38a1a103a65a0.0784314a0a0.0235294a0a0.0941176a0a1a0a0.5a0a0.5a0a0a0a0a0a0a0a1a2a1a0a0a0a190a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          0.0,
+          25.0
+        ],
+        "scale": [
+          2.472,
+          2.472
+        ]
+      },
+      {
+        "string": "62a-1a1a0.3a47a90a180a29a0a11a0a0a0a0a0a0a0a50a1a0a0a0.0313726a0a0.00392157a0a0.0470588a0a1a0a38a1a0a0a0.0313726a0a0.00392157a0a0.0470588a0a1a0a0.5a0a0.5a0a38a0a9a0a-85a26a1a2a1a0a0a0a183a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          0.0,
+          25.0
+        ],
+        "scale": [
+          1.47,
+          1.47
+        ]
+      },
+      {
+        "string": "62a-1a1a0.3a47a90a180a29a0a11a0a0a0a0a0a0a0a50a1a0a0a0.0313726a0a0.00392157a0a0.0431373a0a1a0a38a1a0a0a0.0313726a0a0.00392157a0a0.0431373a0a1a0a0.5a0a0.5a0a38a0a9a0a-85a26a1a2a1a0a0a0a46a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          0.0,
+          25.0
+        ],
+        "scale": [
+          1.195,
+          1.195
+        ]
+      },
+      {
+        "string": "40a-1a3a0.3a12a90a13a11a0a48a78a0a0a0a0a0a0a5a3a0a0a0.129412a0a0.439216a0a0.133333a0a1a0a3a3a0a0a0.129412a0a0.439216a0a0.133333a0a1a0a0.1a0a0.3a0a0a0a0a0a0a0a0a2a1a0a0a0a28a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          0.0,
+          -16.0
+        ],
+        "scale": [
+          1.255,
+          1.43
+        ]
+      }
+    ]
+  },
+  "Lava": {
+    "background": {
+      "sprite": "lava_gauntlet.png",
+      "scale": 1.27
+    },
+    "gauntlet": {
+      "position": [
+        0.0,
+        16.0
+      ],
+      "scale": 1.0
+    },
+    "particles": [
+      {
+        "string": "40a-1a3a0.3a12a90a13a11a0a48a78a0a0a0a0a0a0a5a3a0a0a0.439216a0a0.309804a0a0.129412a0a1a0a3a3a0a0a0.439216a0a0.309804a0a0.129412a0a1a0a0.1a0a0.3a0a0a0a0a0a0a0a0a2a1a0a0a0a28a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          0.0,
+          -16.0
+        ],
+        "scale": [
+          1.36,
+          1.36
+        ]
+      },
+      {
+        "string": "59a-1a1a0.3a45a90a14a100a54a2a6a0a-135a0a46a0a0a20a8a0a0a1a0a0.756863a0a0.258824a0a1a0a1a1a0a0a1a0a0.694118a0a0.321569a0a1a0a0a0a0.1a0a0a0a0a0a0a0a0a2a1a0a0a1a28a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": null,
+        "scale": [
+          1.522,
+          1.547
+        ]
+      },
+      {
+        "string": "56a-1a1a0.3a43a90a16a103a81a2a6a0a-180a0a46a0a0a13a8a0a0a1a0a0.756863a0a0.258824a0a1a0a1a1a0a0a1a0a0.694118a0a0.321569a0a1a0a0a0a0.1a0a0a0a0a0a0a0a0a2a1a0a0a1a28a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": null,
+        "scale": [
+          1.47,
+          1.37
+        ]
+      },
+      {
+        "string": "56a-1a1a0.5a19a90a28a49a43a2a6a0a23a0a43a0a0a50a33a0a0a0.172549a0a0.160784a0a0.14902a0a0.47a0a50a38a0a0a0.247059a0a0.243137a0a0.239216a0a0.47a0a0a0a0.13a0a0a0a0a0a0a0a0a2a0a0a0a1a29a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": null,
+        "scale": [
+          1.095,
+          0.845
+        ]
+      },
+      {
+        "string": "59a-1a1a0.3a45a90a18a113a30a2a6a0a-192a0a46a0a0a20a8a0a0a1a0a0.505882a0a0.258824a0a1a0a1a1a0a0a1a0a0.505882a0a0.258824a0a1a0a0a0a0.1a0a0a0a0a0a0a0a0a2a1a0a0a1a158a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": null,
+        "scale": [
+          1.255,
+          1.43
+        ]
+      },
+      {
+        "string": "48a-1a3a0.3a14a90a27a6a0a40a57a0a0a0a0a0a0a50a1a0a0a0.0666667a0a0.0352941a0a0.0196078a0a1a0a50a1a0a0a0.0666667a0a0.0352941a0a0.0196078a0a1a0a0.5a0a1a0a0a0a0a0a0a0a0a2a1a0a0a0a46a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          0.0,
+          -18.0
+        ],
+        "scale": [
+          1.235,
+          1.835
+        ]
+      }
+    ]
+  },
+  "Time": {
+    "background": {
+      "sprite": "time_gauntlet.png",
+      "scale": 1.22
+    }
+  },
+  "Spike": {
+    "background": {
+      "sprite": "spike_gauntlet.png",
+      "scale": 1.92
+    }
+  },
+  "Cyborg": {
+    "background": {
+      "sprite": "cyborg_gauntlet.png",
+      "scale": 1.27
+    }
+  },
+  "Inferno": {
+    "background": {
+      "sprite": "inferno_gauntlet.png",
+      "scale": 1.27
+    }
+  },
+  "Death": {
+    "background": {
+      "sprite": "death_gauntlet.png",
+      "scale": 1.27
+    }
+  },
+  "Magic": {
+    "background": {
+      "sprite": "magic_gauntlet.png",
+      "scale": 1.27
+    }
+  },
+  "Chaos": {
+    "background": {
+      "sprite": "chaos_gauntlet.png",
+      "scale": 1.27
+    }
+  },
+  "Force": {
+    "background": {
+      "sprite": "force_gauntlet.png",
+      "scale": 1.27
+    }
+  },
+  "NCS I": {
+    "background": {
+      "sprite": "ncs_gauntlet_1.png",
+      "scale": 1.27
+    },
+    "gauntlet": {
+      "position": [
+        0.0,
+        16.0
+      ],
+      "scale": 1.0
+    },
+    "particles": [
+      {
+        "string": "25a-1a1a0.3a19a90a90a0a0a0a0a0a0a0a0a0a0a23a1a0a98a0.0980392a0a0.176471a0a0.219608a0a1a0a50a1a0a0a0.0980392a0a0.176471a0a0.219608a0a1a0a0a0a0a0a0a0a0a0a0a0a0a2a1a0a0a0a185a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          0.0,
+          20.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "string": "25a-1a1a0.3a19a90a90a0a0a0a0a0a0a0a0a0a0a12a1a0a98a0.0980392a0a0.176471a0a0.219608a0a1a0a36a1a0a0a0.0980392a0a0.176471a0a0.219608a0a1a0a0a0a0a0a0a0a0a0a0a0a0a2a1a0a0a0a167a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": null,
+        "scale": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "string": "30a-1a2.5a0.3a10a90a12a19a0a23a0a0a11a0a0a0a0a4a1a0a0a0.313726a0a0.458824a0a0.529412a0a1a0a2a1a0a0a0.313726a0a0.458824a0a0.529412a0a1a0a0a0a0.5a0a0a0a0a0a0a0a0a2a1a0a0a0a19a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+        "position": [
+          0.0,
+          -81.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ]
+      }
+    ]
+  }
+}
