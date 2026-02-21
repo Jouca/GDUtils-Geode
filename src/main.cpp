@@ -2,6 +2,7 @@
 // Ported with help by Firee
 // Mod made by Jouca & Firee
 
+//#include "defs/FileWatcher.hpp"
 #include "modules/events/DailyChest.hpp"
 $execute {
     // listenForSettingChanges("activate-background", [](bool value) {
@@ -16,10 +17,10 @@ $execute {
 #include <arc/sync/mpsc.hpp>
 #include <arc/sync/Mutex.hpp>
 #include <arc/future/Select.hpp>
-#include <modules/events/EventHandler.hpp>
 #include <modules/events/EventsPush.hpp>
 
-bool g_socket_server_ran = false;
+static bool g_socket_server_ran = false;
+//static FileWatcher* g_watcher;
 
 $execute {
     if (Mod::get()->getSettingValue<bool>("server-notification")) {
@@ -73,6 +74,12 @@ $execute {
             );
         }
     });
+    /*auto watcher = FileWatcher::getForDirectory("gdutils");
+    watcher->watch("gdutils.heartbeat", [] {
+    });
+    async::runtime().spawn([]() -> arc::Future<> {
+        co_return;
+    });*/
 }
 
 $on_game(Loaded) {
