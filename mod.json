@@ -1,11 +1,11 @@
 {
-    "geode": "4.9.0",
+    "geode": "5.0.0-beta.2",
     "version": "v1.5.4",
     "gd": {
-        "win": "2.2074",
-        "mac": "2.2074",
-        "android": "2.2074",
-        "ios": "2.2074"
+        "win": "2.2081",
+        "mac": "2.2081",
+        "android": "2.2081",
+        "ios": "2.2081"
     },
     "id": "gdutilsdevs.gdutils",
     "name": "GDUtils",
@@ -16,8 +16,7 @@
         "source": "https://github.com/Jouca/GDUtils-Geode"
     },
     "dependencies": {
-        "geode.node-ids": ">=v1.21.1",
-        "jouca.badgesapi": ">=v1.2.4"
+        "geode.node-ids": ">=v1.21.1"
     },
     "api": {
         "include": [ "include/*.hpp" ]
@@ -31,7 +30,8 @@
     ],
     "resources": {
         "files": [
-            "resources/gauntlets/*.png"
+            "resources/gauntlets/*.png",
+            "resources/gauntlets/particles.json"
         ],
         "sprites": [
             "resources/*.png"
@@ -267,11 +267,18 @@
             "description": "This category is for any other feature for <cy>GDUtils</c>.\nYou can choose whether to <cy>enable</c> or <cy>disable</c> some options if you do not want them.",
             "type": "title"
         },
+        "clickableBadges": {
+            "name": "Clickable Badges",
+            "description": "Makes badges in <cg>Profile</c>'s clickable, showing more information about them.",
+            "type": "bool",
+            "default": true
+        },
         "customBadges": {
             "name": "Custom Badges",
             "description": "Whether or not to show custom badges in <cg>Profile</c> and <cg>Comments</c>.",
             "type": "bool",
-            "default": true
+            "default": true,
+            "enable-if": "clickableBadges"
         },
         "friendSearch": {
             "name": "Search Friends",
