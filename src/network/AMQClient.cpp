@@ -60,6 +60,7 @@ std::string AMQErrorToString(amqp_rpc_reply_t reply) {
                 errorStr = "Unknown Error";
             }
             break;
+        case AMQP_RESPONSE_NORMAL: break;
     }
     return fmt::format("{} ({})", errorStr, AMQReplyToString(reply.reply_type));
 }

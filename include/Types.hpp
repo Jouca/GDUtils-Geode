@@ -1,5 +1,6 @@
 #pragma once 
 #include <Geode/Geode.hpp>
+#include "RateEvent.hpp"
 enum EventType {
     Rate,
     Daily,
@@ -32,6 +33,50 @@ struct EventData {
     EventType getEventType() const { return type; };
     std::string getLevelName() const { return level_name; };
     int getLevelID() const { return level_id; };
+    int typeToInt() const {
+        switch (type) {
+            case EventType::NA:
+                return -1;
+            case EventType::Rate: // Rate
+                return 0;
+            case EventType::Daily: // Daily
+                return 1;
+            case EventType::Weekly: // Weekly
+                return 2;
+            case EventType::smallChest: // Small chest
+                return 3;
+            case EventType::largeChest: // Large chest
+                return 4;
+            case EventType::List: // List
+                return 5;
+            case EventType::Event: // Event
+                return 6;
+            case EventType::Announcement: // Announcement 
+                return 7;
+        }
+    }
+    EventType intToType(int intType) const {
+        switch (intType) {
+            default:
+                return EventType::NA;
+            case 0: // Rate
+                return EventType::Rate;
+            case 1: // Daily
+                return EventType::Daily;
+            case 2: // Weekly
+                return EventType::Weekly;
+            case 3: // Small chest
+                return EventType::smallChest;
+            case 4: // Large chest
+                return EventType::largeChest;
+            case 5: // List
+                return EventType::List;
+            case 6: // Event
+                return EventType::Event;
+            case 7: // Announcement
+                return EventType::Announcement;
+        }
+    }
 };
 
 template<>
@@ -121,7 +166,7 @@ struct matjson::Serialize<EventData> {
         val.set("starsum", value.starsum);
         val.set("stars", value.stars);
         val.set("rate", value.rate);
-        val.set("type", (int)value.type);
+        val.set("type", value.typeToInt());
         val.set("title", value.title);
         val.set("level_name", value.level_name);
         val.set("level_creator", value.level_creator);

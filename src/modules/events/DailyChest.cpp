@@ -240,7 +240,7 @@ $on_game(Loaded) {
     });
     listenForSettingChanges<bool>("largeChest", [](bool value) {
         if (!value && !Mod::get()->getSettingValue<bool>("smallChest")) {
-            if (g_chestTx) {    
+            if (g_chestTx) {
                 (void)g_chestTx->trySend({ ChestMsg::Type::Stop });
             }
         }
