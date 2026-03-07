@@ -6,9 +6,9 @@
 class EventsPush : public CCLayer {
     protected:
         bool m_alreadyDead = false;
-        GJGameLevel* level = GJGameLevel::create();
         EventType eventType = EventType::NA;
-        virtual bool init(EventData data);
+        bool init(EventData data);
+        bool initold(EventData data);
         void destroySelf() {
             m_alreadyDead = true;
             auto scene = CCDirector::get()->getRunningScene();

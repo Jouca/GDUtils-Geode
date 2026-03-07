@@ -94,6 +94,415 @@ bool EventsPush::init(EventData data) {
     // {'demon': 0, 'type': 0, 'starsum': 20, 'stars': 2, 'rate': 2, 'title': 'New Rated Level !', 'level_name': 'Pourquoi', 'level_creator': 'by Jouca', 'sprite': 'GJ_square01.png'}
     int starsum = data.starsum;
     int stars = data.stars;
+    int rateType = data.rate;
+    int coins = data.coins;
+    std::unordered_map<EventType, std::string_view> sKeys {
+        { EventType::Rate, "newRate" },
+        { EventType::Daily, "daily" },
+        { EventType::Weekly, "weekly" },
+        { EventType::smallChest, "event" },
+        { EventType::largeChest, "smallChest" },
+        { EventType::List, "largeChest" },
+        { EventType::Event, "newListRate" },
+        { EventType::Announcement, "announcement" },
+    };
+    eventType = data.type;
+    auto it = sKeys.find(data.type);
+    if (it != sKeys.end()) {
+        if (!Mod::get()->getSettingValue<bool>(it->second)) {
+            EventsPush::eventCompletedCallback(scene);
+            return true;
+        }
+    }
+    float lrScale = (float)Mod::get()->template getSettingValue<double>("size");
+    auto bg = Build<NineSlice>::create(data.sprite.c_str()).scale(lrScale).contentSize(240, 70).collect();
+    // 0 / 0 = bottom left
+    // screen width / screen height = top right
+    // screen width divided by 2 / screen height divided by 2 = middle
+    this->addChild(bg);
+    auto node = CCNode::create();
+
+    if (eventType != EventType::smallChest && eventType != EventType::largeChest && eventType != EventType::Announcement) {
+        CCSprite* diffFace;
+        GJDifficultySprite* mythic = nullptr;
+        if (!data.demon) {
+            diffFace = cocos2d::CCSprite::createWithSpriteFrameName(getDifficultyIcon(starsum));
+            mythic = GJDifficultySprite::create(static_cast<int>(getDifficulty(starsum)), static_cast<GJDifficultyName>(0));
+        } else {
+            diffFace = cocos2d::CCSprite::createWithSpriteFrameName(getDemonDifficultyIcon(starsum));
+            mythic = GJDifficultySprite::create(static_cast<int>(getDemonDifficulty(starsum)), static_cast<GJDifficultyName>(0));
+        }
+        
+        diffFace->setPosition({26.f, 43.f});
+        diffFace->setScale(.8F);
+        CCSprite* moon = cocos2d::CCSprite::createWithSpriteFrameName("moon_small01_001.png");
+        mythic->updateFeatureState(static_cast<GJFeatureState>(4));
+
+        std::string starcountstr = std::to_string(stars);
+        auto starcount = cocos2d::CCLabelBMFont::create(starcountstr.c_str(), "bigFont.fnt");
+        starcount->setPosition({25, 18});
+        starcount->setAnchorPoint({1, 0.5});
+        starcount->setScale(0.35f);
+        bg->addChild(starcount);
+        CCSprite* star;
+        if (eventType == EventType::List) {
+            star = cocos2d::CCSprite::createWithSpriteFrameName("diamond_small01_001.png");
+        } else {
+            star = cocos2d::CCSprite::createWithSpriteFrameName("star_small01_001.png");
+        }
+        star->setPosition({31, 18});
+        star->setScale(.775F);
+        moon->setPosition({31, 18});
+        moon->setScale(.775F);
+
+        if (data.platformer) bg->addChild(moon);
+        else bg->addChild(star);
+
+        mythic->setPosition({26.f, 43.f});
+        mythic->setScale(.8F);
+
+        switch (rateType) {
+            default: // Rate
+                bg->addChild(diffFace);
+                break;
+            case 1: // Featured
+                Build<CCSprite>::createSpriteName("GJ_featuredCoin_001.png").pos(26,43).scale(.8f).parent(bg);
+                bg->addChild(diffFace);
+                break;
+            case 2: // Epic
+                Build<CCSprite>::createSpriteName("GJ_epicCoin_001.png").pos(26,43).scale(.8f).parent(bg);
+                bg->addChild(diffFace);
+                break;
+            case 3: // Legendary
+                Build<CCSprite>::createSpriteName("GJ_epicCoin2_001.png").pos(26,43).scale(.8f).parent(bg);
+                bg->addChild(diffFace);
+                if (Mod::get()->template getSettingValue<bool>("customDifficultyFaces")) {
+                    CCSprite* legendaryFace = nullptr;
+                    if (!data.demon) {
+                        if (starsum >= 10) {
+                            std::string diffStr = std::to_string(static_cast<int>(getDifficulty(starsum)));
+                            auto name = "difficulty_0" + diffStr + "_legendaryIcon.png";
+                            legendaryFace = CCSprite::create((""_spr+name).c_str());
+                        }
+                    } else {
+                        if (starsum < 6) {
+                            std::string diffStr = std::to_string(static_cast<int>(getDemonDifficulty(starsum)));
+                            auto name = "difficulty_0" + diffStr + "_legendaryIcon.png";
+                            legendaryFace = CCSprite::create((""_spr+name).c_str());
+                        } else {
+                            std::string diffStr = std::to_string(static_cast<int>(getDemonDifficulty(starsum)));
+                            auto name = "difficulty_" + diffStr + "_legendaryIcon.png";
+                            legendaryFace = CCSprite::create((""_spr+name).c_str());
+                        }
+                    }
+
+                    if (legendaryFace != nullptr) {
+                        legendaryFace->setPosition({26.f, 48.f});
+                        legendaryFace->setScale(.8F);
+                        bg->addChild(legendaryFace);
+                    }
+                }
+                break;
+            case 4: // Mythic
+                bg->addChild(mythic);
+                if (Mod::get()->template getSettingValue<bool>("customDifficultyFaces")) {
+                    CCSprite* mythicFace = nullptr;
+                    if (!data.demon) {
+                        if (starsum >= 10) {
+                            std::string diffStr = std::to_string(static_cast<int>(getDifficulty(starsum)));
+                            auto name = "difficulty_0" + diffStr + "_mythicIcon.png";
+                            mythicFace = CCSprite::create((""_spr+name).c_str());
+                        }
+                    } else {
+                        if (starsum < 6) {
+                            std::string diffStr = std::to_string(static_cast<int>(getDemonDifficulty(starsum)));
+                            auto name = "difficulty_0" + diffStr + "_mythicIcon.png";
+                            mythicFace = CCSprite::create((""_spr+name).c_str());
+                        } else {
+                            std::string diffStr = std::to_string(static_cast<int>(getDemonDifficulty(starsum)));
+                            auto name = "difficulty_" + diffStr + "_mythicIcon.png";
+                            mythicFace = CCSprite::create((""_spr+name).c_str());
+                        }
+                    }
+
+                    if (mythicFace != nullptr) {
+                        mythicFace->setPosition({26.f, 48.f});
+                        mythicFace->setScale(.8F);
+                        bg->addChild(mythicFace);
+                    }
+                }
+
+                break;
+        }
+
+        auto verifiedCoinSpr1 = cocos2d::CCSprite::createWithSpriteFrameName("GJ_coinsIcon2_001.png");
+        verifiedCoinSpr1->setScale(0.35f);
+        auto verifiedCoinSpr2 = cocos2d::CCSprite::createWithSpriteFrameName("GJ_coinsIcon2_001.png");
+        verifiedCoinSpr2->setScale(0.35f);
+        auto verifiedCoinSpr3 = cocos2d::CCSprite::createWithSpriteFrameName("GJ_coinsIcon2_001.png");
+        verifiedCoinSpr3->setScale(0.35f);
+
+        if (data.verified_coins == 0) {
+            verifiedCoinSpr1->setColor({255, 175, 75});
+            verifiedCoinSpr2->setColor({255, 175, 75});
+            verifiedCoinSpr3->setColor({255, 175, 75});
+        }
+
+        if (coins == 1 || coins == 3) {
+            verifiedCoinSpr2->setPosition({ -52, -22 });
+            node->addChild(verifiedCoinSpr2);
+
+            if (coins == 3) {
+                verifiedCoinSpr1->setPosition({ -60, -22 });
+                verifiedCoinSpr3->setPosition({ -44, -22 });
+
+                node->addChild(verifiedCoinSpr1);
+                node->addChild(verifiedCoinSpr3);
+            }
+        } else if (coins == 2) {
+            verifiedCoinSpr1->setPosition({ -55, -22 });
+            verifiedCoinSpr2->setPosition({ -48, -22 });
+
+            node->addChild(verifiedCoinSpr1);
+            node->addChild(verifiedCoinSpr2);
+        }
+
+        // Progress Bar for lists
+        if (eventType == EventType::List) {
+            auto barSpriteBack = CCSprite::create("GJ_progressBar_001.png");
+            barSpriteBack->setScaleX(0.38f);
+            barSpriteBack->setScaleY(0.45f);
+            barSpriteBack->setPosition({ 38, 3 });
+            barSpriteBack->setPositionY(3 - 19.f);
+            barSpriteBack->setPositionX(38);
+            barSpriteBack->setColor({0, 0, 0});
+            barSpriteBack->setOpacity(100);
+            barSpriteBack->setZOrder(10);
+            barSpriteBack->setID("progress-bar-list"_spr);
+            node->addChild(barSpriteBack);
+
+            auto barSpriteTop = CCSprite::create("GJ_progressBar_001.png");
+            barSpriteTop->setScaleY(0.4f);
+            barSpriteTop->setPosition({ 2, 10 });
+            barSpriteTop->setAnchorPoint({0, 0.5});
+            barSpriteTop->setOpacity(255);
+            barSpriteTop->setZOrder(11);
+
+            CCPoint rectangle[4] = {
+                CCPoint(0, 0),
+                CCPoint(0, 20),
+                CCPoint(barSpriteBack->getScaledContentSize().width * -2.5f, 20),
+                CCPoint(barSpriteBack->getScaledContentSize().width * -2.5f, 0)
+            };
+
+            auto clippingNode = CCClippingNode::create();
+            auto barMask = CCDrawNode::create();
+            barMask->drawPolygon(rectangle, 4, ccc4FFromccc3B({0, 0, 0}), 0, ccc4FFromccc3B({0, 0, 0}));
+            clippingNode->setStencil(barMask);
+            clippingNode->addChild(barSpriteTop);
+            clippingNode->setPositionX(330);
+            barSpriteBack->addChild(clippingNode);
+            barSpriteTop->setPositionX(-666);
+
+            // Get datas for levels
+            int maxToCompleteList = data.maxToCompleteList;
+            std::vector<std::string> levels = geode::utils::string::split(data.levels_list, ",");
+
+            // Get client data for levels
+            GameLevelManager* gameLevelManager = GameLevelManager::sharedState();
+            CCArray* levelsData = gameLevelManager->getCompletedLevels(false);
+
+            int completedLevels = 0;
+            int nbLevels = 0;
+
+            while (levels.size() > 0) {
+                std::string id = levels[0];
+                nbLevels++;
+
+                for (int i = 0; i < levelsData->count(); i++) {
+                    auto level = static_cast<GJGameLevel*>(levelsData->objectAtIndex(i));
+                    if (std::to_string(level->m_levelID) == id) {
+                        if (level->m_normalPercent == 100) completedLevels++;
+                    }
+                }
+
+                levels.erase(levels.begin());
+            }
+
+            // min -666 | max -337
+            // Calculate position for Progress Bar (between these values based on percentage)
+            float percentage;
+            CCLabelBMFont* progressText;
+
+            if (completedLevels >= maxToCompleteList) {
+                percentage = (float)completedLevels / (float)nbLevels;
+                progressText = CCLabelBMFont::create((std::to_string(completedLevels) + "/" + std::to_string(nbLevels)).c_str(), "bigFont.fnt");
+                barSpriteTop->setColor({ 100, 255, 255 });
+                starcount->setColor({ 100, 255, 255 });
+
+                auto listCompleted = CCSprite::createWithSpriteFrameName("GJ_completesIcon_001.png");
+                listCompleted->setPosition({ 94, -15 });
+                listCompleted->setScale(0.55f);
+                listCompleted->setZOrder(13);
+                node->addChild(listCompleted);
+            } else {
+                percentage = (float)completedLevels / (float)maxToCompleteList;
+                progressText = CCLabelBMFont::create((std::to_string(completedLevels) + "/" + std::to_string(maxToCompleteList)).c_str(), "bigFont.fnt");
+                barSpriteTop->setColor({ 255, 84, 50 });
+
+                auto listUncompleted = CCSprite::createWithSpriteFrameName("diamond_small01_001.png");
+                listUncompleted->setPosition({ 94, -15 });
+                listUncompleted->setScale(0.55f);
+                listUncompleted->setZOrder(13);
+                node->addChild(listUncompleted);
+            }
+            
+            auto moveAction = CCEaseSineOut::create(CCMoveBy::create(0.f, { (percentage * 337), 0 }));
+            barSpriteTop->runAction(moveAction);
+
+            // Add text for Progress Bar
+            progressText->setPosition({ 38, -15 });
+            progressText->setScale(0.35f);
+            progressText->setZOrder(13);
+            node->addChild(progressText);
+        }
+    }
+    
+    std::string titleStr = data.title;
+    CCPoint titlePos;
+    geode::Anchor titleAnchor = Anchor::Top;
+    switch (data.type) {
+        case EventType::smallChest:
+            titlePos = CCPoint(0, -14);
+            Build<CCSprite>::createSpriteName("chest_01_02_001.png").scale(0.45f).parentAtPos(bg, Anchor::Center, {0,-8});
+            break;
+        case EventType::largeChest:
+            titlePos = CCPoint(0, -14);
+            Build<CCSprite>::createSpriteName("chest_02_02_001.png").scale(0.4f).parentAtPos(bg, Anchor::Center, {0,-8});
+            break;
+        case EventType::List: // TEST
+            titlePos = CCPoint(-11, -15);
+            Build<CCSprite>::createSpriteName("GJ_listAddBtn_001.png").anchorPoint(1,0).parentAtPos(bg, Anchor::BottomLeft, {7,7});
+            break;
+        case EventType::Announcement: // TEST
+            titleStr = "Announcement";
+            titlePos = CCPoint(-56, -14);
+            Build<CCLabelBMFont>::create(data.title.c_str(), "bigFont.fnt").limitLabelWidth(200, 0.46f, 0.1f).anchorPoint(0, 0.5).parentAtPos(bg, Anchor::Left, {12,5});
+            break;
+        default:
+            titlePos = CCPoint(-6, -17);
+            break;
+    }
+    Build<CCLabelBMFont>::create(titleStr.c_str(), "goldFont.fnt").scale(0.575F).parentAtPos(bg, titleAnchor, titlePos);
+
+    if (eventType != EventType::Announcement) {
+        auto level_title = cocos2d::CCLabelBMFont::create(data.level_name.c_str(), "bigFont.fnt");
+        if (eventType == EventType::List) {
+            level_title->setPosition({ -27, 11 });
+        } else {
+            level_title->setPosition({ -27, 3 });
+        }
+        level_title->setScale(.46F);
+        
+        level_title->setAnchorPoint({ 0, 0.5 });
+
+        auto level_by = cocos2d::CCLabelBMFont::create(data.level_creator.c_str(), "goldFont.fnt");
+        if (eventType == EventType::List) {
+            level_by->setPosition({ -27, -2 });
+        } else {
+            level_by->setPosition({ -27, -11 });
+        }
+        level_by->setScale(.46F);
+        level_by->limitLabelWidth(120, 0.46f, 0.1f);
+        level_by->setAnchorPoint({ 0, 0.5 });
+        node->addChild(level_by);
+        level_title->limitLabelWidth(120, 0.46f, 0.1f);
+        node->addChild(level_title);
+    }
+
+    if (eventType == EventType::Daily || eventType == EventType::Weekly || eventType == EventType::Event) {
+        CCSprite* crown;
+        if (eventType == EventType::Daily) {
+            crown = cocos2d::CCSprite::createWithSpriteFrameName("gj_dailyCrown_001.png");
+        } else if (eventType == EventType::Event) {
+            crown = cocos2d::CCSprite::createWithSpriteFrameName("gj_eventCrown_001.png");
+        } else {
+            crown = cocos2d::CCSprite::createWithSpriteFrameName("gj_weeklyCrown_001.png");
+        }
+        crown->setScale(.45F);
+        crown->setPosition({ 45, 45 });
+        node->addChild(crown);
+    }
+
+    node->setAnchorPoint({ 0.5, 0.5 });
+    node->setPosition({ 77, 30 });
+
+    bg->addChild(node);
+
+    // Move action
+    
+    float delayTime = (float)Mod::get()->template getSettingValue<double>("time");
+
+    float moveX = .0F;
+    switch (Mod::get()->getSettingValue<PositionEnum>("notificationPlacement")) {
+        case PositionEnum::TopLeft: // top left
+            bg->setPosition((-(bg->getContentSize().width / 2)) * lrScale, ((winSize.height - (bg->getContentSize().height / 2)) - (20 * lrScale)));
+            moveX = (bg->getContentSize().width) * lrScale;
+            break;
+        case PositionEnum::TopRight: // top right
+            bg->setPosition(winSize.width + ((bg->getContentSize().width / 2) * lrScale), ((winSize.height - (bg->getContentSize().height / 2)) - (20 * lrScale)));
+            moveX = -(bg->getContentSize().width * lrScale);
+            break;
+        case PositionEnum::BottomLeft: // bottom left
+            bg->setPosition((-(bg->getContentSize().width / 2)) * lrScale, (bg->getContentSize().height / 2) * lrScale);
+            moveX = (bg->getContentSize().width) * lrScale;
+            break;
+        case PositionEnum::BottomRight: // bottom right
+            bg->setPosition({ winSize.width + ((bg->getContentSize().width / 2) * lrScale), (bg->getContentSize().height / 2) * lrScale});
+            moveX = -((bg->getContentSize().width) * lrScale);
+            break;
+    }
+
+    if (Mod::get()->getSettingValue<bool>("sfx")) {
+        float volume = (Mod::get()->getSettingValue<bool>("sfx-link")) ? GameManager::get()->m_sfxVolume : Mod::get()->getSettingValue<double>("sfx-volume");
+        if (data.type != EventType::smallChest && data.type != EventType::largeChest) {
+            FMODAudioEngine::get()->playEffect("crystal01.ogg", 1, 1, volume);
+        } else {
+            FMODAudioEngine::get()->playEffect("reward01.ogg", 1, 1, volume);
+        }
+    }
+
+    bg->runAction(CCSequence::create(
+        CCEaseOut::create(CCMoveBy::create(0.5f, { moveX, 0.0f }), 0.6f),
+        CCDelayTime::create(delayTime),
+        CCEaseIn::create(CCMoveBy::create(0.5f, { -moveX, 0.0f }), 0.6f),
+        CCDelayTime::create(0.5F),
+        CCCallFunc::create(this, callfunc_selector(EventsPush::destroySelf)),
+        nullptr
+    ));
+
+    this->setZOrder(scene->getHighestChildZ() + 10);
+    this->setID("EventsPush"_spr);
+    return true;
+}
+
+bool EventsPush::initold(EventData data) {
+    if (!CCLayer::init()) return false;
+    auto scene = CCDirector::sharedDirector()->getRunningScene();
+    auto director = CCDirector::sharedDirector();
+    auto winSize = director->getWinSize();
+    // type
+    // 0 = new rate
+    // 1 = daily
+    // 2 = weekly
+
+    // rate
+    // 0 = unrated / star rate
+    // 1 = featured
+    // 2 = epic
+    // {'demon': 0, 'type': 0, 'starsum': 20, 'stars': 2, 'rate': 2, 'title': 'New Rated Level !', 'level_name': 'Pourquoi', 'level_creator': 'by Jouca', 'sprite': 'GJ_square01.png'}
+    int starsum = data.starsum;
+    int stars = data.stars;
     int coins = data.coins;
     int areCoinsVerified = data.verified_coins;
     std::unordered_map<EventType, std::string_view> sKeys {
@@ -321,9 +730,9 @@ bool EventsPush::init(EventData data) {
     bg->runAction(CCSequence::create(
         CCEaseOut::create(CCMoveBy::create(0.5f, { moveX, 0.0f }), 0.6f),
         CCDelayTime::create(Mod::get()->getSettingValue<double>("time")),
-        CCEaseIn::create(CCMoveBy::create(0.5f, { -moveX, 0.0f }), 0.6f),
-        CCDelayTime::create(0.5F),
-        CCCallFunc::create(this, callfunc_selector(EventsPush::destroySelf)),
+        //CCEaseIn::create(CCMoveBy::create(0.5f, { -moveX, 0.0f }), 0.6f),
+        //CCDelayTime::create(0.5F),
+        //CCCallFunc::create(this, callfunc_selector(EventsPush::destroySelf)),
         nullptr
     ));
 
@@ -352,7 +761,7 @@ void EventsPush::pushRateLevel(CCScene *self, EventData data) {
         data.starsum,
         data.stars,
         data.rate,
-        GDUtils::Events::RateEvent::typeToInt(data.type),
+        data.typeToInt(),
         data.title,
         data.sprite,
         data.level_name,
