@@ -1,10 +1,14 @@
 # Changelog
+## <cj>v1.6.0-beta.2</c> <cb>(2026-03-08)</c>
+* <cy>Fixed</c> chests crashing upon opening for Android.
+
 ## <cj>v1.6.0-beta.1</c> <cb>(2026-03-08)</c>
 * <cp>GDUtils ported to Geode 5.0.0 (GD 2.2081)</c>
-* <cy>Changed</c> logic for chest notifications
+* <cy>Changed</c> logic for chest notifications.
+* <cy>Changed</c> locations for where GDUtils stores files.
 * <cy>Temporarily removed</c> leaderboards due to not being rewritten yet.
 * <cy>Fixed</c> Spotify feature not unmuting when playtesting in Editor.
-* <cy>Fixed</c> notification being clickable
+* <cy>Fixed</c> notification being clickable.
 
 ## <cj>v1.5.4</c> <cb>(2025-09-09)</c>
 * <cg>Added</c> coloured container animation when searching a friend on the friend list.

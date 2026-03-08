@@ -1,6 +1,5 @@
 build-linux/
-build-android/
-build-armv8/
+build-android*/
 test/build-linux
 test/compile_commands.json
 .cache/
