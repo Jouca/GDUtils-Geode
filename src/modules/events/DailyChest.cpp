@@ -46,7 +46,6 @@ static GJRewardItem* time1 = nullptr;
 static GJRewardItem* time2 = nullptr;
 static std::optional<arc::mpsc::Sender<ChestMsg>> g_chestTx;
 
-
 void DailyChest::getRewards() {
     auto glm = GameLevelManager::sharedState();
     if (glm) {
@@ -121,8 +120,40 @@ void giveChestNotify(bool large) {
     });
 }
 
+#include <Geode/modify/RewardUnlockLayer.hpp>
+class $modify(RULHook, RewardUnlockLayer) {
+    void step2() {
+        int tag = m_chestType;
+        if (g_chestTx) {
+            if (tag == 1) {
+                (void)g_chestTx->trySend({
+                    .type = ChestMsg::Type::Opened,
+                    .opened = ChestKind::Small
+                });
+            } else if (tag == 2) {
+                (void)g_chestTx->trySend({
+                    .type = ChestMsg::Type::Opened,
+                    .opened = ChestKind::Large
+                });
+            }
+        }
+        refreshRewards();
+        RewardUnlockLayer::step2();
+    }
+};
+
+static void toggleHook(bool value) {
+    for (auto& hook : geode::Mod::get()->getHooks()) {
+        if (hook->getDisplayName() == "RewardUnlockLayer::step2") {
+            (void)(value ? hook->enable() : hook->disable());
+        }
+    }
+}
 $on_game(Loaded) {
-    if (!Mod::get()->getSettingValue<bool>("largeChest") && !Mod::get()->getSettingValue<bool>("smallChest")) return;
+    if (!Mod::get()->getSettingValue<bool>("largeChest") && !Mod::get()->getSettingValue<bool>("smallChest")) {
+        toggleHook(false);
+        return;
+    }
     auto [tx, rx] = arc::mpsc::channel<ChestMsg>();
     g_chestTx = std::move(tx);
     // wait 5 seconds before
@@ -233,7 +264,8 @@ $on_game(Loaded) {
     });
     listenForSettingChanges<bool>("smallChest", [](bool value) {
         if (!value && !Mod::get()->getSettingValue<bool>("largeChest")) {
-            if (g_chestTx) {    
+            if (g_chestTx) {
+                toggleHook(false);
                 (void)g_chestTx->trySend({ ChestMsg::Type::Stop });
             }
         }
@@ -241,30 +273,10 @@ $on_game(Loaded) {
     listenForSettingChanges<bool>("largeChest", [](bool value) {
         if (!value && !Mod::get()->getSettingValue<bool>("smallChest")) {
             if (g_chestTx) {
+                toggleHook(false);
                 (void)g_chestTx->trySend({ ChestMsg::Type::Stop });
             }
         }
     });
     refreshRewards();
 }
-#include <Geode/modify/RewardUnlockLayer.hpp>
-class $modify(RULHook, RewardUnlockLayer) {
-    void step3() {
-        int tag = m_chestType;
-        if (g_chestTx) {
-            if (tag == 1) {
-                (void)g_chestTx->trySend({
-                    .type = ChestMsg::Type::Opened,
-                    .opened = ChestKind::Small
-                });
-            } else if (tag == 2) {
-                (void)g_chestTx->trySend({
-                    .type = ChestMsg::Type::Opened,
-                    .opened = ChestKind::Large
-                });
-            }
-        }
-        refreshRewards();
-        RewardUnlockLayer::step3();
-    }
-};
