@@ -39,7 +39,7 @@ $execute {
     GDUtils::Events::OnServerConnect().listen([](bool const& connected) {
         Loader::get()->queueInMainThread([connected]() {
             if (connected) {
-                log::info("I am connected to the notifiaction servers!");
+                log::info("I am connected to the notification servers!");
             }
         });
         return ListenerResult::Propagate;
