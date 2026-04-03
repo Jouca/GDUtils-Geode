@@ -88,7 +88,7 @@ class $modify(CustomLevelInfoLayer, LevelInfoLayer) {
                 url = fmt::format("https://api.aredl.net/api/aredl/levels/{}", levelID);
             }
             geode::utils::web::WebRequest request = web::WebRequest();
-            m_fields->m_listener.spawn("@loaderDemonListLevelInfo", request.get(url.c_str()), [this, loading_circle, positionLabel, demonSpr, level, levelID](web::WebResponse value) {
+            m_fields->m_listener.spawn("@loaderDemonListLevelInfo", request.get(url.c_str()), [this, loading_circle, positionLabel, demonSpr, levelID](web::WebResponse value) {
                 if (value.ok()) {
                     matjson::Value json = value.json().unwrapOrDefault();
 
@@ -112,7 +112,7 @@ class $modify(CustomLevelInfoLayer, LevelInfoLayer) {
                                     positionLabel->setVisible(true);
                                     demonSpr->setVisible(true);
                                     set(levelID, position);
-                                    log::info("Level found in Pointercrate! {} at #{}", level->m_levelName.c_str(), position);
+                                    log::info("Level found in Pointercrate! {} at #{}", levelID, position);
                                 }
                             }
 
@@ -132,7 +132,7 @@ class $modify(CustomLevelInfoLayer, LevelInfoLayer) {
                                 positionLabel->setVisible(true);
                                 demonSpr->setVisible(true);
                                 set(levelID, position);
-                                log::info("Level found in AREDL! {} at #{}", level->m_levelName.c_str(), position);
+                                log::info("Level found in AREDL! {} at #{}", levelID, position);
                             }
                         }
                     }
