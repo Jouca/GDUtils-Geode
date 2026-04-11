@@ -2,7 +2,7 @@
 **by [Jouca](user:7026949) and [Firee](user:6253758)**
 A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute, game fixes & more!
 
-![Mod Example](gdutilsdevs.gdutils/Screenshot_1.png&scale:0.8)
+![Mod Example](gdutilsdevs.gdutils/Screenshot_1.png?scale:0.8)
 
 # Need help?
 * You can join our [Discord server](https://discord.gg/MU4Rpc6xbJ) for **any assistance** or about **next updates**, **sneak peeks** & **more**!
