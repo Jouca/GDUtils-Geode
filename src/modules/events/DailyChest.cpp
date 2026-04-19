@@ -120,9 +120,10 @@ void giveChestNotify(bool large) {
     });
 }
 
+//TODO:TEST
 #include <Geode/modify/RewardUnlockLayer.hpp>
 class $modify(RULHook, RewardUnlockLayer) {
-    void step2() {
+    void playRewardEffect() {
         int tag = m_chestType;
         if (g_chestTx) {
             if (tag == 1) {
@@ -137,14 +138,13 @@ class $modify(RULHook, RewardUnlockLayer) {
                 });
             }
         }
-        refreshRewards();
-        RewardUnlockLayer::step2();
+        RewardUnlockLayer::playRewardEffect();
     }
 };
 
 static void toggleHook(bool value) {
     for (auto& hook : geode::Mod::get()->getHooks()) {
-        if (hook->getDisplayName() == "RewardUnlockLayer::step2") {
+        if (hook->getDisplayName() == "RewardUnlockLayer::playRewardEffect") {
             (void)(value ? hook->enable() : hook->disable());
         }
     }

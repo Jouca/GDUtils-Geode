@@ -6,6 +6,19 @@
 #include <ui/EventInfoPopup.hpp>
 
 std::string s_cachedBadgesResponse = "";
+struct BadgeInfo {
+    std::string title;
+    std::string desc;
+    bool isKofi;
+    float width;
+};
+std::unordered_map<std::string, BadgeInfo> s_cachedBadgeInfo;
+
+static void cacheBadgeInfo(std::string key, BadgeInfo info) {
+    if (!s_cachedBadgeInfo.contains(key)) {
+        s_cachedBadgeInfo[key] = info;
+    }
+}
 
 static void requestBadges(async::TaskHolder<web::WebResponse> listener, std::function<void(std::string const&)> callback) {
     if (!s_cachedBadgesResponse.empty()) {
@@ -288,10 +301,37 @@ int hexStringToInt(const std::string& hexStr) {
     return value;
 }
 
-class $modify(CommentCell) {
+class $modify(CustomBadgesCommentCell, CommentCell) {
     struct Fields {
         async::TaskHolder<web::WebResponse> m_listener;
     };
+
+    void onBadgeClick(CCObject* ret) {
+        if (!s_cachedBadgeInfo.contains(static_cast<CCMenuItemSpriteExtra*>(ret)->getID())) return;
+        auto info = s_cachedBadgeInfo[static_cast<CCMenuItemSpriteExtra*>(ret)->getID()];
+        if (info.isKofi) {
+            geode::createQuickPopup(
+                info.title.c_str(),
+                geode::utils::string::replace(info.desc, "\\n", "\n").c_str(),
+                "OK", "Ko-Fi",
+                [](auto, bool btn2) {
+                    if (btn2) {
+                        geode::utils::web::openLinkInBrowser("https://ko-fi.com/gdutils");
+                    }
+                },
+                info.width
+            );
+        } else {
+            FLAlertLayer::create(
+                nullptr,
+                info.title.c_str(),
+                info.desc.c_str(),
+                "OK",
+                nullptr,
+                info.width
+            )->show();
+        }
+    }
 
     void handleResponse(std::string result, int commentID) {
         auto menu = m_mainLayer->getChildByIDRecursive("username-menu");
@@ -353,31 +393,14 @@ class $modify(CommentCell) {
 
             if (accountID_data == accountID) {
                 if (!m_mainLayer->getChildByIDRecursive(badge_id)) {
-                    auto btn = Build<CCSprite>::createSpriteName(fmt::format("{}"_spr, badge_sprite).c_str()).scale(badge_scale).intoMenuItem([=]() {
-                        if (isKofi) {
-                            geode::createQuickPopup(
-                                alertTitle.c_str(),
-                                geode::utils::string::replace(alertDesc, "\\n", "\n").c_str(),
-                                "OK", "Ko-Fi",
-                                [](auto, bool btn2) {
-                                    if (btn2) {
-                                        geode::utils::web::openLinkInBrowser("https://ko-fi.com/gdutils");
-                                    }
-                                },
-                                alertWidth
-                            );
-                        } else {
-                            FLAlertLayer::create(
-                                nullptr,
-                                alertTitle.c_str(),
-                                alertDesc.c_str(),
-                                "OK",
-                                nullptr,
-                                alertWidth
-                            )->show();
-                        }
-                    }).id(badge_id).collect();
-
+                    // TODO: how to recreate (issue still happens with RobTop too), search Zoink, go through comments tab, tap badges (to show more badges) and tap on one of the badges in the menu, crash because apparently m_callback is null, probably because badges api issue
+                    cacheBadgeInfo(badge_id, {
+                        .title = alertTitle,
+                        .desc = alertDesc,
+                        .isKofi = isKofi,
+                        .width = alertWidth
+                    });
+                    auto btn = Build<CCSprite>::createSpriteName(fmt::format("{}"_spr, badge_sprite).c_str()).scale(badge_scale).intoMenuItem(this, menu_selector(CustomBadgesCommentCell::onBadgeClick)).id(badge_id).collect();
                     if (auto textArea = cell->getChildByType<TextArea*>(0)) {
                         CCArrayExt<CCLabelBMFont*> children = textArea->m_label->getChildren();
                         for (auto label : children) {
