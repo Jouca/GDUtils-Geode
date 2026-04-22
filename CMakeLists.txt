@@ -31,6 +31,10 @@ set(BUILD_TOOLS_DOCS OFF)
 #set(INSTALL_STATIC_LIBS OFF)
 CPMAddPackage("gh:alanxz/rabbitmq-c#035eaa8")
 
+if (WIN32)
+  target_compile_options(rabbitmq-static PRIVATE -Wno-incompatible-pointer-types)
+endif()
+
 set(BUILD_TESTING OFF)
 set(BUILD_BENCH OFF)
 set(BUILD_SHARED_LIBS OFF)

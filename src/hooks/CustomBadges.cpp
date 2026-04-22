@@ -6,18 +6,64 @@
 #include <ui/EventInfoPopup.hpp>
 
 std::string s_cachedBadgesResponse = "";
-struct BadgeInfo {
-    std::string title;
-    std::string desc;
-    bool isKofi;
-    float width;
-};
-std::unordered_map<std::string, BadgeInfo> s_cachedBadgeInfo;
 
-static void cacheBadgeInfo(std::string key, BadgeInfo info) {
-    if (!s_cachedBadgeInfo.contains(key)) {
-        s_cachedBadgeInfo[key] = info;
+// Primary dispatch: unique int tag -> callback.
+// Each call to makeBadgeButton gets a fresh tag stored directly on the button.
+// Tags are never copied by BadgesAPI (its CCMenuItemSpriteExtra::create starts with kCCNodeTagInvalid = -1).
+static int s_nextBadgeTag = 0;
+static std::unordered_map<int, std::function<void()>> s_tagToCallback;
+
+// Fallback dispatch: CCSpriteFrame* -> tag, used when BadgesAPI copies our button.
+// BadgesAPI does CCSprite::createWithSpriteFrame(originalFrame), so the new sprite
+// shares the same CCSpriteFrame object and the lookup resolves to the last registered tag.
+static std::unordered_map<CCSpriteFrame*, int> s_frameToTag;
+
+// Singleton target for all badge selectors.
+// IMPORTANT: BadgesAPI copies our buttons as:
+//   CCMenuItemSpriteExtra::create(child->getNormalImage(), this/*BadgesAPI*/, child->m_pfnSelector)
+// so `this` inside onBadgeClick may be the BadgesAPI object — NEVER dereference it.
+// Only touch `sender` and global/static state.
+class GDUtilsBadgeHandler : public CCObject {
+public:
+    static GDUtilsBadgeHandler* get() {
+        static auto* inst = [] {
+            auto* h = new GDUtilsBadgeHandler();
+            h->retain();
+            return h;
+        }();
+        return inst;
     }
+
+    void onBadgeClick(CCObject* sender) {
+        auto* btn = typeinfo_cast<CCMenuItemSpriteExtra*>(sender);
+        if (!btn) return;
+
+        // Primary: tag set directly on this button instance (original button click).
+        int tag = btn->getTag();
+        if (auto it = s_tagToCallback.find(tag); it != s_tagToCallback.end()) {
+            it->second();
+            return;
+        }
+
+        // Fallback: sprite frame lookup (BadgesAPI popup copy, tag is -1).
+        if (auto* spr = typeinfo_cast<CCSprite*>(btn->getNormalImage())) {
+            if (auto fit = s_frameToTag.find(spr->displayFrame()); fit != s_frameToTag.end()) {
+                if (auto it = s_tagToCallback.find(fit->second); it != s_tagToCallback.end())
+                    it->second();
+            }
+        }
+    }
+};
+
+static CCMenuItemSpriteExtra* makeBadgeButton(CCNode* normalSprite, std::string const& id, std::function<void()> callback) {
+    int tag = ++s_nextBadgeTag;
+    s_tagToCallback[tag] = std::move(callback);
+    if (auto* spr = typeinfo_cast<CCSprite*>(normalSprite))
+        s_frameToTag[spr->displayFrame()] = tag;
+    auto* btn = CCMenuItemSpriteExtra::create(normalSprite, GDUtilsBadgeHandler::get(), menu_selector(GDUtilsBadgeHandler::onBadgeClick));
+    btn->setID(id);
+    btn->setTag(tag);
+    return btn;
 }
 
 static void requestBadges(async::TaskHolder<web::WebResponse> listener, std::function<void(std::string const&)> callback) {
@@ -221,31 +267,19 @@ class $modify(GDUtilsProfilePage, ProfilePage) {
                 data.erase(data.begin());
             }
             if (accountID_data == accountID) {
-                if (!m_mainLayer->getChildByID(badge_id)) {
-                    Build<CCSprite>::createSpriteName(fmt::format("{}"_spr, badge_sprite).c_str()).scale(badge_scale).intoMenuItem([=]() {
+                if (!m_mainLayer->getChildByIDRecursive(badge_id)) {
+                    auto* sprite = Build<CCSprite>::createSpriteName(fmt::format("{}"_spr, badge_sprite).c_str())
+                        .scale(badge_scale)
+                        .collect();
+                    auto* btn = makeBadgeButton(sprite, badge_id, [title = alertTitle, desc = alertDesc, isKofi, width = alertWidth]() {
                         if (isKofi) {
-                            geode::createQuickPopup(
-                                alertTitle.c_str(),
-                                geode::utils::string::replace(alertDesc, "\\n", "\n").c_str(),
-                                "OK", "Ko-Fi",
-                                [](auto, bool btn2) {
-                                    if (btn2) {
-                                        geode::utils::web::openLinkInBrowser("https://ko-fi.com/gdutils");
-                                    }
-                                },
-                                alertWidth
-                            );
+                            geode::createQuickPopup(title.c_str(), geode::utils::string::replace(desc, "\\n", "\n").c_str(), "OK", "Ko-Fi",
+                                [](auto, bool btn2) { if (btn2) geode::utils::web::openLinkInBrowser("https://ko-fi.com/gdutils"); }, width);
                         } else {
-                            FLAlertLayer::create(
-                                nullptr,
-                                alertTitle.c_str(),
-                                alertDesc.c_str(),
-                                "OK",
-                                nullptr,
-                                alertWidth
-                            )->show();
+                            FLAlertLayer::create(nullptr, title.c_str(), desc.c_str(), "OK", nullptr, width)->show();
                         }
-                    }).id(badge_id).parent(menu);
+                    });
+                    menu->addChild(btn);
                     menu->updateLayout();
                 }
             }
@@ -260,14 +294,12 @@ class $modify(GDUtilsProfilePage, ProfilePage) {
             if (auto modBadge = menu->getChildByID("mod-badge")) {
                 modBadge->removeFromParentAndCleanup(true);
                 if (score->m_userName == "RobTop" && Mod::get()->getSettingValue<bool>("customBadges")) {
-                    Build<CCSprite>::createSpriteName("robtop_badge.png"_spr).intoMenuItem([]() {
-                        onRobTopBadgePressed();
-                    }).id("mod-badge").parent(menu);
+                    auto* spr = Build<CCSprite>::createSpriteName("robtop_badge.png"_spr).collect();
+                    menu->addChild(makeBadgeButton(spr, "mod-badge", []() { onRobTopBadgePressed(); }));
                 } else {
                     int badgeID = score->m_modBadge;
-                    Build<CCSprite>::createSpriteName(fmt::format("modBadge_0{}_001.png", badgeID).c_str()).intoMenuItem([badgeID]() {
-                        onModBadgePressed(badgeID);
-                    }).id("mod-badge").parent(menu);
+                    auto* spr = Build<CCSprite>::createSpriteName(fmt::format("modBadge_0{}_001.png", badgeID).c_str()).collect();
+                    menu->addChild(makeBadgeButton(spr, "mod-badge", [badgeID]() { onModBadgePressed(badgeID); }));
                 }
             }
             if (Mod::get()->getSettingValue<bool>("customBadges")) {
@@ -305,33 +337,6 @@ class $modify(CustomBadgesCommentCell, CommentCell) {
     struct Fields {
         async::TaskHolder<web::WebResponse> m_listener;
     };
-
-    void onBadgeClick(CCObject* ret) {
-        if (!s_cachedBadgeInfo.contains(static_cast<CCMenuItemSpriteExtra*>(ret)->getID())) return;
-        auto info = s_cachedBadgeInfo[static_cast<CCMenuItemSpriteExtra*>(ret)->getID()];
-        if (info.isKofi) {
-            geode::createQuickPopup(
-                info.title.c_str(),
-                geode::utils::string::replace(info.desc, "\\n", "\n").c_str(),
-                "OK", "Ko-Fi",
-                [](auto, bool btn2) {
-                    if (btn2) {
-                        geode::utils::web::openLinkInBrowser("https://ko-fi.com/gdutils");
-                    }
-                },
-                info.width
-            );
-        } else {
-            FLAlertLayer::create(
-                nullptr,
-                info.title.c_str(),
-                info.desc.c_str(),
-                "OK",
-                nullptr,
-                info.width
-            )->show();
-        }
-    }
 
     void handleResponse(std::string result, int commentID) {
         auto menu = m_mainLayer->getChildByIDRecursive("username-menu");
@@ -393,14 +398,17 @@ class $modify(CustomBadgesCommentCell, CommentCell) {
 
             if (accountID_data == accountID) {
                 if (!m_mainLayer->getChildByIDRecursive(badge_id)) {
-                    // TODO: how to recreate (issue still happens with RobTop too), search Zoink, go through comments tab, tap badges (to show more badges) and tap on one of the badges in the menu, crash because apparently m_callback is null, probably because badges api issue
-                    cacheBadgeInfo(badge_id, {
-                        .title = alertTitle,
-                        .desc = alertDesc,
-                        .isKofi = isKofi,
-                        .width = alertWidth
+                    auto* sprite = Build<CCSprite>::createSpriteName(fmt::format("{}"_spr, badge_sprite).c_str())
+                        .scale(badge_scale)
+                        .collect();
+                    auto* btn = makeBadgeButton(sprite, badge_id, [title = alertTitle, desc = alertDesc, isKofi, width = alertWidth]() {
+                        if (isKofi) {
+                            geode::createQuickPopup(title.c_str(), geode::utils::string::replace(desc, "\\n", "\n").c_str(), "OK", "Ko-Fi",
+                                [](auto, bool btn2) { if (btn2) geode::utils::web::openLinkInBrowser("https://ko-fi.com/gdutils"); }, width);
+                        } else {
+                            FLAlertLayer::create(nullptr, title.c_str(), desc.c_str(), "OK", nullptr, width)->show();
+                        }
                     });
-                    auto btn = Build<CCSprite>::createSpriteName(fmt::format("{}"_spr, badge_sprite).c_str()).scale(badge_scale).intoMenuItem(this, menu_selector(CustomBadgesCommentCell::onBadgeClick)).id(badge_id).collect();
                     if (auto textArea = cell->getChildByType<TextArea*>(0)) {
                         CCArrayExt<CCLabelBMFont*> children = textArea->m_label->getChildren();
                         for (auto label : children) {
@@ -437,14 +445,12 @@ class $modify(CustomBadgesCommentCell, CommentCell) {
             modBadge->removeFromParentAndCleanup(true);
             CCMenuItemSpriteExtra* badgeBtn;
             if (m_comment->m_userName == "RobTop" && Mod::get()->getSettingValue<bool>("customBadges")) {
-                Build<CCSprite>::createSpriteName("robtop_badge.png"_spr).scale(0.75f).intoMenuItem([]() {
-                    onRobTopBadgePressed();
-                }).id("mod-badge").store(badgeBtn);
+                auto* spr = Build<CCSprite>::createSpriteName("robtop_badge.png"_spr).scale(0.75f).collect();
+                badgeBtn = makeBadgeButton(spr, "mod-badge", []() { onRobTopBadgePressed(); });
             } else {
                 int badgeID = comment->m_modBadge;
-                Build<CCSprite>::createSpriteName(fmt::format("modBadge_0{}_001.png", badgeID).c_str()).scale(0.6f).intoMenuItem([badgeID]() {
-                    onModBadgePressed(badgeID);
-                }).id("mod-badge").store(badgeBtn);
+                auto* spr = Build<CCSprite>::createSpriteName(fmt::format("modBadge_0{}_001.png", badgeID).c_str()).scale(0.6f).collect();
+                badgeBtn = makeBadgeButton(spr, "mod-badge", [badgeID]() { onModBadgePressed(badgeID); });
             }
             if (getChildByIDRecursive("percentage-label")) {
                 menu->insertBefore(badgeBtn, getChildByIDRecursive("percentage-label"));
