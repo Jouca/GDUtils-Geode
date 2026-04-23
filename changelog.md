@@ -1,4 +1,10 @@
 # Changelog
+## <cj>v1.6.0-beta.3</c> <cb>(2026-04-24)</c>
+* <cg>Added</c> back leaderboards & moderator list.
+* <cg>Added</c> back custom backgrounds.
+* <cy>Fixed</c> daily chests being ignore on claiming.
+* <cy>Fixed</c> GDUtils badges crashing when clicking to view details.
+
 ## <cj>v1.6.0-beta.2</c> <cb>(2026-03-08)</c>
 * <cy>Fixed</c> chests crashing upon opening for Android.
 
