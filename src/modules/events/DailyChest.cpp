@@ -123,7 +123,7 @@ void giveChestNotify(bool large) {
 // TODO: test RewardUnlockLayer::playRewardEffect to fix mod menus from skipping step2
 #include <Geode/modify/RewardUnlockLayer.hpp>
 class $modify(RULHook, RewardUnlockLayer) {
-    void playRewardEffect() {
+    void step2() {
         int tag = m_chestType;
         if (g_chestTx) {
             if (tag == 1) {
@@ -139,7 +139,7 @@ class $modify(RULHook, RewardUnlockLayer) {
             }
         }
         refreshRewards();
-        RewardUnlockLayer::playRewardEffect();
+        RewardUnlockLayer::step2();
     }
 };
 
