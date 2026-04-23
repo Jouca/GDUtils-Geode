@@ -45,6 +45,7 @@ struct ChestMsg {
 static GJRewardItem* time1 = nullptr;
 static GJRewardItem* time2 = nullptr;
 static std::optional<arc::mpsc::Sender<ChestMsg>> g_chestTx;
+static DailyChest* g_pendingRefresh = nullptr;
 
 void DailyChest::getRewards() {
     auto glm = GameLevelManager::sharedState();
@@ -57,10 +58,10 @@ void DailyChest::getRewards() {
 #include <Geode/utils/general.hpp>
 void DailyChest::rewardsStatusFinished(int p0) {
     GameStatsManager* gsm;
-    // Check if rewards are loaded
     gsm = GameStatsManager::sharedState();
     if (gsm->m_rewardItems->count() == 0) {
         log::debug("[DailyChest] no reward items, aborting");
+        if (g_pendingRefresh == this) { g_pendingRefresh = nullptr; this->release(); }
         return;
     }
 
@@ -87,14 +88,21 @@ void DailyChest::rewardsStatusFinished(int p0) {
         };
         (void)g_chestTx->trySend(std::move(data));
     }
+    if (g_pendingRefresh == this) { g_pendingRefresh = nullptr; this->release(); }
 };
 
 void DailyChest::rewardsStatusFailed() {
     log::error("[DailyChest] Failed to get rewards");
+    if (g_pendingRefresh == this) { g_pendingRefresh = nullptr; this->release(); }
 };
 
 static void refreshRewards() {
+    if (g_pendingRefresh) {
+        g_pendingRefresh->release();
+        g_pendingRefresh = nullptr;
+    }
     auto dailyChest = new DailyChest();
+    g_pendingRefresh = dailyChest;
     dailyChest->getRewards();
 
     uint32_t t1 = 0;
@@ -138,8 +146,14 @@ class $modify(RULHook, RewardUnlockLayer) {
                 });
             }
         }
-        refreshRewards();
         RewardUnlockLayer::step2();
+        // Delay the refresh so it doesn't race with the chest UI's own getGJRewards request.
+        // GD only allows one getGJRewards request at a time.
+        // A typical request takes 1-3s; 5s gives enough margin even on slow connections.
+        async::runtime().spawn([]() -> arc::Future<> {
+            co_await arc::sleepFor(Duration::fromSecs(5));
+            Loader::get()->queueInMainThread(refreshRewards);
+        });
     }
 };
 
