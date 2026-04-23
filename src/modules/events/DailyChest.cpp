@@ -9,6 +9,7 @@ using namespace asp::time;
 #else
 #include <time.h>
 #endif
+
 inline double rob_seconds(int remaining) {
     if (remaining == 0) return 0;
 #ifdef GEODE_IS_WINDOWS
@@ -24,13 +25,12 @@ inline double rob_seconds(int remaining) {
 	if (remaining < 0) return result;
 	return remaining - result;
 }
-inline double rob_seconds() {
-	return rob_seconds(-1);
-}
+
 enum class ChestKind {
     Small,
     Large
 };
+
 struct ChestMsg {
     enum class Type {
         Refresh,
@@ -42,8 +42,7 @@ struct ChestMsg {
     uint32_t largeTime = 0;
     ChestKind opened{};
 };
-static GJRewardItem* time1 = nullptr;
-static GJRewardItem* time2 = nullptr;
+
 static std::optional<arc::mpsc::Sender<ChestMsg>> g_chestTx;
 static DailyChest* g_pendingRefresh = nullptr;
 
@@ -57,36 +56,26 @@ void DailyChest::getRewards() {
 
 #include <Geode/utils/general.hpp>
 void DailyChest::rewardsStatusFinished(int p0) {
-    GameStatsManager* gsm;
-    gsm = GameStatsManager::sharedState();
+    auto gsm = GameStatsManager::sharedState();
     if (gsm->m_rewardItems->count() == 0) {
         log::debug("[DailyChest] no reward items, aborting");
         if (g_pendingRefresh == this) { g_pendingRefresh = nullptr; this->release(); }
         return;
     }
 
-    // Get the rewards
-    time1 = typeinfo_cast<GJRewardItem*>(gsm->m_rewardItems->objectForKey(0x1));
-    time2 = typeinfo_cast<GJRewardItem*>(gsm->m_rewardItems->objectForKey(0x2));
-
-    uint32_t t1 = 0;
-    uint32_t t2 = 0;
-    if (time1) {
-        t1 = rob_seconds(time1->m_timeRemaining);
-    }
-    if (time2) {
-        t2 = rob_seconds(time2->m_timeRemaining);
-    }
+    auto item1 = typeinfo_cast<GJRewardItem*>(gsm->m_rewardItems->objectForKey(0x1));
+    auto item2 = typeinfo_cast<GJRewardItem*>(gsm->m_rewardItems->objectForKey(0x2));
+    uint32_t t1 = item1 ? (uint32_t)rob_seconds(item1->m_timeRemaining) : 0;
+    uint32_t t2 = item2 ? (uint32_t)rob_seconds(item2->m_timeRemaining) : 0;
 
     log::debug("[DailyChest] parsed timers: small={}s large={}s", t1, t2);
 
     if (g_chestTx) {
-        auto data = ChestMsg {
+        (void)g_chestTx->trySend(ChestMsg{
             .type = ChestMsg::Type::Refresh,
             .smallTime = t1,
             .largeTime = t2
-        };
-        (void)g_chestTx->trySend(std::move(data));
+        });
     }
     if (g_pendingRefresh == this) { g_pendingRefresh = nullptr; this->release(); }
 };
@@ -104,14 +93,9 @@ static void refreshRewards() {
     auto dailyChest = new DailyChest();
     g_pendingRefresh = dailyChest;
     dailyChest->getRewards();
-
-    uint32_t t1 = 0;
-    uint32_t t2 = 0;
-    if (time1) t1 = rob_seconds(time1->m_timeRemaining);
-    if (time2) t2 = rob_seconds(time2->m_timeRemaining);
 }
 
-void giveChestNotify(bool large) {
+static void giveChestNotify(bool large) {
     Loader::get()->queueInMainThread([large]() {
         EventData data;
         data.sprite = "GJ_square04.png";
@@ -164,14 +148,11 @@ static void toggleHook(bool value) {
         }
     }
 }
-$on_game(Loaded) {
-    if (!Mod::get()->getSettingValue<bool>("largeChest") && !Mod::get()->getSettingValue<bool>("smallChest")) {
-        toggleHook(false);
-        return;
-    }
+
+static void startChestWatcher() {
+    if (g_chestTx) return;
     auto [tx, rx] = arc::mpsc::channel<ChestMsg>();
     g_chestTx = std::move(tx);
-    // wait 5 seconds before
     async::runtime().spawn([rx = std::move(rx)]() mutable -> arc::Future<> {
         uint32_t smallRemaining = 0;
         uint32_t largeRemaining = 0;
@@ -225,10 +206,6 @@ $on_game(Loaded) {
                         switch (msg.type) {
                             case ChestMsg::Type::Opened:
                                 log::debug("[DailyChest] rx -> chest opened: {}", msg.opened == ChestKind::Small ? "small" : "large");
-                                // smallRemaining = msg.smallTime;
-                                // largeRemaining = msg.largeTime;
-                                // smallAwait = smallRemaining > 0;
-                                // largeAwait = largeRemaining > 0;
                                 if (msg.opened == ChestKind::Small) {
                                     smallAwait = false;
                                     smallNotified = false;
@@ -277,21 +254,34 @@ $on_game(Loaded) {
             );
         }
     });
+    refreshRewards();
+}
+
+static void stopChestWatcher() {
+    if (!g_chestTx) return;
+    toggleHook(false);
+    (void)g_chestTx->trySend({ ChestMsg::Type::Stop });
+    g_chestTx = std::nullopt;
+}
+
+$on_game(Loaded) {
+    if (Mod::get()->getSettingValue<bool>("largeChest") || Mod::get()->getSettingValue<bool>("smallChest")) {
+        startChestWatcher();
+    } else {
+        toggleHook(false);
+    }
     listenForSettingChanges<bool>("smallChest", [](bool value) {
-        if (!value && !Mod::get()->getSettingValue<bool>("largeChest")) {
-            if (g_chestTx) {
-                toggleHook(false);
-                (void)g_chestTx->trySend({ ChestMsg::Type::Stop });
-            }
+        if (value) {
+            startChestWatcher();
+        } else if (!Mod::get()->getSettingValue<bool>("largeChest")) {
+            stopChestWatcher();
         }
     });
     listenForSettingChanges<bool>("largeChest", [](bool value) {
-        if (!value && !Mod::get()->getSettingValue<bool>("smallChest")) {
-            if (g_chestTx) {
-                toggleHook(false);
-                (void)g_chestTx->trySend({ ChestMsg::Type::Stop });
-            }
+        if (value) {
+            startChestWatcher();
+        } else if (!Mod::get()->getSettingValue<bool>("smallChest")) {
+            stopChestWatcher();
         }
     });
-    refreshRewards();
 }
