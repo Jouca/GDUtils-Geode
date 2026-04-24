@@ -397,6 +397,18 @@ class $modify(CustomBadgesCommentCell, CommentCell) {
             }
 
             if (accountID_data == accountID) {
+                bool isCustomColor = (color.r != 255 || color.g != 255 || color.b != 255);
+                if (isCustomColor && !colorSet) {
+                    if (auto textArea = m_mainLayer->getChildByType<TextArea*>(0)) {
+                        CCArrayExt<CCLabelBMFont*> children = textArea->m_label->getChildren();
+                        for (auto label : children) label->setColor(color);
+                        colorSet = true;
+                    } else if (auto commentText = static_cast<CCLabelBMFont*>(m_mainLayer->getChildByID("comment-text-label"))) {
+                        commentText->setColor(color);
+                        cell->m_comment->m_color = color;
+                        colorSet = true;
+                    }
+                }
                 if (!m_mainLayer->getChildByIDRecursive(badge_id)) {
                     auto* sprite = Build<CCSprite>::createSpriteName(fmt::format("{}"_spr, badge_sprite).c_str())
                         .scale(badge_scale)
@@ -409,22 +421,6 @@ class $modify(CustomBadgesCommentCell, CommentCell) {
                             FLAlertLayer::create(nullptr, title.c_str(), desc.c_str(), "OK", nullptr, width)->show();
                         }
                     });
-                    if (auto textArea = cell->getChildByType<TextArea*>(0)) {
-                        CCArrayExt<CCLabelBMFont*> children = textArea->m_label->getChildren();
-                        for (auto label : children) {
-                            if (color.r != 255 && color.g != 255 && color.b != 255 && !colorSet) {
-                                label->setColor(color);
-                                colorSet = true;
-                            }
-                        }
-                    }
-                    if (auto commentText = static_cast<CCLabelBMFont*>(cell->getChildByID("comment-text-label"))) {
-                        if (color.r != 255 && color.g != 255 && color.b != 255 && !colorSet) {
-                            commentText->setColor(color);
-                            cell->m_comment->m_color = color;
-                            colorSet = true;
-                        }
-                    }
                     if (cell->getChildByIDRecursive("percentage-label")) {
                         menu->insertBefore(btn, cell->getChildByIDRecursive("percentage-label"));
                     } else {
