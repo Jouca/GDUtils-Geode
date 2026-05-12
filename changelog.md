@@ -1,4 +1,8 @@
 # Changelog
+## <cj>v1.6.0-beta.4</c> <cb>(2026-05-13)</c>
+* <cg>Added</c> 2025 GD Awards badge.
+* <cy>Fixed</c> daily chests crashing.
+
 ## <cj>v1.6.0-beta.3</c> <cb>(2026-04-24)</c>
 * <cg>Added</c> back leaderboards & moderator list.
 * <cg>Added</c> back custom backgrounds.
