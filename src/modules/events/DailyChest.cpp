@@ -46,6 +46,17 @@ struct ChestMsg {
 static std::optional<arc::mpsc::Sender<ChestMsg>> g_chestTx;
 static DailyChest* g_pendingRefresh = nullptr;
 
+static void clearDelegateIfSelf(DailyChest* self) {
+    auto glm = GameLevelManager::sharedState();
+    if (glm && glm->m_GJRewardDelegate == self) {
+        glm->m_GJRewardDelegate = nullptr;
+    }
+}
+
+DailyChest::~DailyChest() {
+    clearDelegateIfSelf(this);
+}
+
 void DailyChest::getRewards() {
     auto glm = GameLevelManager::sharedState();
     if (glm) {
@@ -59,6 +70,7 @@ void DailyChest::rewardsStatusFinished(int p0) {
     auto gsm = GameStatsManager::sharedState();
     if (gsm->m_rewardItems->count() == 0) {
         log::debug("[DailyChest] no reward items, aborting");
+        clearDelegateIfSelf(this);
         if (g_pendingRefresh == this) { g_pendingRefresh = nullptr; this->release(); }
         return;
     }
@@ -77,11 +89,13 @@ void DailyChest::rewardsStatusFinished(int p0) {
             .largeTime = t2
         });
     }
+    clearDelegateIfSelf(this);
     if (g_pendingRefresh == this) { g_pendingRefresh = nullptr; this->release(); }
 };
 
 void DailyChest::rewardsStatusFailed() {
     log::error("[DailyChest] Failed to get rewards");
+    clearDelegateIfSelf(this);
     if (g_pendingRefresh == this) { g_pendingRefresh = nullptr; this->release(); }
 };
 
