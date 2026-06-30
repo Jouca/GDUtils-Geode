@@ -1,4 +1,8 @@
 # Changelog
+## <cj>v1.6.0-beta.5</c> <cb>(2026-06-30)</c>
+* <cy>Adjusted</c> default parameters for the demon list to be <cb>AreDL</cy>
+* <cy>Fixed</c> AreDL demon placement not working.
+
 ## <cj>v1.6.0-beta.4</c> <cb>(2026-05-13)</c>
 * <cg>Added</c> 2025 GD Awards badge.
 * <cy>Fixed</c> daily chests crashing.
