@@ -1,6 +1,6 @@
 {
     "geode": "5.6.1",
-    "version": "v1.6.0-beta.4",
+    "version": "v1.6.0-beta.5",
     "gd": {
         "win": "2.2081",
         "mac": "2.2081",
@@ -297,7 +297,7 @@
             "name": "Demon List Selection",
             "description": "Whether or not to select between <cg>Pointercrate</c> or <cg>AreDL</c> for placements.",
             "type": "string",
-            "default": "Pointercrate",
+            "default": "AreDL",
             "one-of": ["Pointercrate", "AreDL"]
         },
         "socketServer": {

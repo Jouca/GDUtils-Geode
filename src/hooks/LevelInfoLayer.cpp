@@ -85,7 +85,7 @@ class $modify(CustomLevelInfoLayer, LevelInfoLayer) {
             if (listId == "Pointercrate") {
                 url = fmt::format("https://pointercrate.com/api/v2/demons/listed/?level_id={}", levelID);
             } else {
-                url = fmt::format("https://api.aredl.net/api/aredl/levels/{}", levelID);
+                url = fmt::format("https://api.aredl.net/v2/api/aredl/levels/{}", levelID);
             }
             geode::utils::web::WebRequest request = web::WebRequest();
             m_fields->m_listener.spawn("@loaderDemonListLevelInfo", request.get(url.c_str()), [this, loading_circle, positionLabel, demonSpr, levelID](web::WebResponse value) {
