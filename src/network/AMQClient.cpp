@@ -55,9 +55,12 @@ std::string AMQErrorToString(amqp_rpc_reply_t reply) {
         case AMQP_RESPONSE_SERVER_EXCEPTION:
             if (reply.reply.id == AMQP_CONNECTION_CLOSE_METHOD) {
                 amqp_connection_close_t* m = (amqp_connection_close_t*) reply.reply.decoded;
-                errorStr = (char*)m->reply_text.bytes;
+                errorStr = fmt::format("connection closed: {} (code {})", std::string((char*)m->reply_text.bytes, m->reply_text.len), m->reply_code);
+            } else if (reply.reply.id == AMQP_CHANNEL_CLOSE_METHOD) {
+                amqp_channel_close_t* m = (amqp_channel_close_t*) reply.reply.decoded;
+                errorStr = fmt::format("channel closed: {} (code {})", std::string((char*)m->reply_text.bytes, m->reply_text.len), m->reply_code);
             } else {
-                errorStr = "Unknown Error";
+                errorStr = fmt::format("Unknown Error (method id {})", reply.reply.id);
             }
             break;
         case AMQP_RESPONSE_NORMAL: break;
@@ -65,8 +68,6 @@ std::string AMQErrorToString(amqp_rpc_reply_t reply) {
     return fmt::format("{} ({})", errorStr, AMQReplyToString(reply.reply_type));
 }
 void AMQT::setupChannel() {
-    bool showPastNotifs = false;
-    std::string queueName = fmt::format("amqp-queue-{}", client_id);
     {
         amqp_channel_open(m_connection, 1);
         auto reply = amqp_get_rpc_reply(m_connection);
@@ -75,87 +76,39 @@ void AMQT::setupChannel() {
             return;
         }
     }
-    // https://stackoverflow.com/questions/72237234/declare-a-queue-with-x-max-length-programmatically-using-rabbitmq-c
-    amqp_queue_declare_ok_t *r;
-    if (showPastNotifs) {
-        // this is absolutely cursed
-        /*amqp_table_entry_t q_arg_n_entries[2];
-        q_arg_n_entries[0] = (amqp_table_entry_t) {
-            .key = amqp_cstring_bytes("x-queue-type"),
-            .value = {.kind = AMQP_FIELD_KIND_UTF8, .value = {.bytes = amqp_cstring_bytes("classic")}}
-        };
-
-        //86400000
-        // 2 days
-        q_arg_n_entries[1] = (amqp_table_entry_t) {
-            .key = amqp_cstring_bytes("x-expires"),
-            .value = {.kind = AMQP_FIELD_KIND_I32, .value = {.i32 = 172800000}}
-        };
-        amqp_table_t q_arg_table = {.num_entries = 2, .entries = q_arg_n_entries};*/
-
-        amqp_table_entry_t q_arg_n_entries[1];
-        // 1 day
-        q_arg_n_entries[0] = (amqp_table_entry_t) {
-            .key = amqp_cstring_bytes("x-expires"),
-            .value = {.kind = AMQP_FIELD_KIND_I32, .value = {.i32 = 86400000}}
-        };
-        amqp_table_t q_arg_table = {.num_entries = 1, .entries = q_arg_n_entries};
-        r = amqp_queue_declare(
-            m_connection, 1,
-            amqp_cstring_bytes(queueName.c_str()),
-            0, 1, 0, 0,
-            q_arg_table
-        );
-    } else {
-        amqp_queue_delete(m_connection, 1, amqp_cstring_bytes(queueName.c_str()), 0, 0);
-        amqp_get_rpc_reply(m_connection);
-
-        // server-side safety net: if the TCP connection ever fails to close cleanly
-        // (so exclusive doesn't trigger deletion), the queue expires anyway.
-        // 1 hour, well above the heartbeat (10s), so this should never trigger in normal usage.
-        amqp_table_entry_t q_arg_entries[1];
-        q_arg_entries[0] = (amqp_table_entry_t) {
-            .key = amqp_cstring_bytes("x-expires"),
-            .value = {.kind = AMQP_FIELD_KIND_I32, .value = {.i32 = 3600000}}
-        };
-        amqp_table_t q_arg_table = {.num_entries = 1, .entries = q_arg_entries};
-
-        r = amqp_queue_declare(
-            m_connection, 1,
-            amqp_cstring_bytes(queueName.c_str()),
-            0, 0, 1, 1,
-            q_arg_table
-        );
-    }
+    // Shared stream (one append-only log for every client) instead of a queue
+    // per client: no more fanout duplication per rate event, and no per-client
+    // queue left behind on unclean disconnects. Consumed over plain AMQP 0-9-1
+    // via x-stream-offset -- there's no mature Stream-protocol C client that's
+    // proven to build on Android/iOS, so we keep using rabbitmq-c.
+    //
+    // The stream, and its binding to amq.topic/rate.#, are created and owned
+    // server-side (management UI), not here: the gd user only has read on this
+    // queue, so we go straight to consume instead of declare/bind.
     {
+        // required for streams over AMQP 0-9-1: without a prefetch, no messages are delivered
+        amqp_basic_qos(m_connection, 1, 0, 100, 0);
         auto reply = amqp_get_rpc_reply(m_connection);
         if (reply.reply_type != AMQP_RESPONSE_NORMAL) {
-            log::error("Error declaring queue: {}", AMQErrorToString(reply));
-            return;
-        }
-    }
-    amqp_bytes_t queueBytes = amqp_bytes_malloc_dup(r->queue);
-    if (queueBytes.bytes == NULL) {
-        log::error("Couldn't copy queue name (Out of memory?)");
-        return;
-    }
-    {
-        amqp_queue_bind(m_connection, 1,
-            queueBytes, amqp_cstring_bytes("amq.topic"),
-            amqp_cstring_bytes("rate.#"), amqp_empty_table
-        );
-        auto reply = amqp_get_rpc_reply(m_connection);
-        if (reply.reply_type != AMQP_RESPONSE_NORMAL) {
-            log::error("Error binding queue: {}", AMQErrorToString(reply));
+            log::error("Error setting QoS: {}", AMQErrorToString(reply));
             return;
         }
     }
     {
-        auto res = amqp_basic_consume(m_connection, 1, queueBytes, amqp_empty_bytes, 0, 1, 0, amqp_empty_table);
+        // only events published after we connect, never replay stream history
+        amqp_table_entry_t consume_arg_entries[1];
+        consume_arg_entries[0] = (amqp_table_entry_t) {
+            .key = amqp_cstring_bytes("x-stream-offset"),
+            .value = {.kind = AMQP_FIELD_KIND_UTF8, .value = {.bytes = amqp_cstring_bytes("next")}}
+        };
+        amqp_table_t consume_arg_table = {.num_entries = 1, .entries = consume_arg_entries};
+
+        // stream queues don't support auto-ack (no_ack=1): messages must be acked manually below
+        auto res = amqp_basic_consume(m_connection, 1, amqp_cstring_bytes(AMQ_STREAM_NAME), amqp_empty_bytes, 0, 0, 0, consume_arg_table);
         auto reply = amqp_get_rpc_reply(m_connection);
-        
+
         if (reply.reply_type != AMQP_RESPONSE_NORMAL) {
-            log::error("Error consuming in queue: {}", AMQErrorToString(reply));
+            log::error("Error consuming from stream: {}", AMQErrorToString(reply));
             return;
         }
         if (res) {
@@ -235,6 +188,7 @@ void AMQT::setupChannel() {
             if (s_tx) {
                 (void)s_tx->trySend(std::move(data));
             }
+            amqp_basic_ack(m_connection, envelope.channel, envelope.delivery_tag, 0);
             amqp_destroy_envelope(&envelope);
         }
     }

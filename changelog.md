@@ -1,4 +1,7 @@
 # Changelog
+## <cj>v1.6.1</c> <cb>(2026-08-03)</c>
+* <cy>Changed</c> rate notifications to use a single shared RabbitMQ stream instead of a dedicated queue per client.
+
 ## <cj>v1.6.0</c> <cb>(2026-08-03)</c>
 * <cp>GDUtils ported & rewritten for Geode v5 (GD 2.2081)</c>
 * <cg>Added</c> 2025 GD Awards badge.
