@@ -1,6 +1,6 @@
 {
-    "geode": "5.6.1",
-    "version": "v1.6.0-beta.5",
+    "geode": "5.8.2",
+    "version": "v1.6.0-beta.6",
     "gd": {
         "win": "2.2081",
         "mac": "2.2081",
@@ -16,8 +16,8 @@
         "source": "https://github.com/Jouca/GDUtils-Geode"
     },
     "dependencies": {
-        "geode.node-ids": ">=v1.21.1",
-        "jouca.badgesapi": ">=v1.4.1"
+        "geode.node-ids": ">=v1.23.3",
+        "jouca.badgesapi": ">=v1.5.0"
     },
     "api": {
         "include": [ "include/*.hpp" ]

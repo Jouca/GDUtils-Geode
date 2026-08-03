@@ -109,11 +109,22 @@ void AMQT::setupChannel() {
     } else {
         amqp_queue_delete(m_connection, 1, amqp_cstring_bytes(queueName.c_str()), 0, 0);
         amqp_get_rpc_reply(m_connection);
+
+        // server-side safety net: if the TCP connection ever fails to close cleanly
+        // (so exclusive doesn't trigger deletion), the queue expires anyway.
+        // 1 hour, well above the heartbeat (10s), so this should never trigger in normal usage.
+        amqp_table_entry_t q_arg_entries[1];
+        q_arg_entries[0] = (amqp_table_entry_t) {
+            .key = amqp_cstring_bytes("x-expires"),
+            .value = {.kind = AMQP_FIELD_KIND_I32, .value = {.i32 = 3600000}}
+        };
+        amqp_table_t q_arg_table = {.num_entries = 1, .entries = q_arg_entries};
+
         r = amqp_queue_declare(
             m_connection, 1,
             amqp_cstring_bytes(queueName.c_str()),
-            0, 0, 0, 1,
-            amqp_empty_table
+            0, 0, 1, 1,
+            q_arg_table
         );
     }
     {
