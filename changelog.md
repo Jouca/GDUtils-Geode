@@ -1,22 +1,38 @@
 # Changelog
-## <cj>v1.6.0-beta.5</c> <cb>(2026-06-30)</c>
+## <cj>v1.6.0</c> <cb>(2026-08-03)</c>
+* <cp>GDUtils ported & rewritten for Geode v5 (GD 2.2081)</c>
+* <cg>Added</c> 2025 GD Awards badge.
+* <cy>Changed</c> logic for chest notifications.
+* <cy>Changed</c> locations for where GDUtils stores files.
+* <cy>Adjusted</c> default parameters for the demon list to be <cb>AreDL</cy>
+* <cy>Updated</c> UL staff badges textures.
+* <cy>Fixed</c> Spotify feature not unmuting when playtesting in Editor.
+* <cy>Fixed</c> notification being clickable.
+* <cy>Fixed</c> chests crashing upon opening for Android.
+* <cy>Fixed</c> daily chests being ignore on claiming.
+* <cy>Fixed</c> GDUtils badges crashing when clicking to view details.
+* <cy>Fixed</c> daily chests crashing.
+* <cy>Fixed</c> AreDL demon placement not working.
+* <cy>Fixed</c> notifications queue potentially staying open if the connection didn't close properly.
+
+## <co>v1.6.0-beta.5</c> <cb>(2026-06-30)</c>
 * <cy>Adjusted</c> default parameters for the demon list to be <cb>AreDL</cy>
 * <cy>Fixed</c> AreDL demon placement not working.
 
-## <cj>v1.6.0-beta.4</c> <cb>(2026-05-13)</c>
+## <co>v1.6.0-beta.4</c> <cb>(2026-05-13)</c>
 * <cg>Added</c> 2025 GD Awards badge.
 * <cy>Fixed</c> daily chests crashing.
 
-## <cj>v1.6.0-beta.3</c> <cb>(2026-04-24)</c>
+## <co>v1.6.0-beta.3</c> <cb>(2026-04-24)</c>
 * <cg>Added</c> back leaderboards & moderator list.
 * <cg>Added</c> back custom backgrounds.
 * <cy>Fixed</c> daily chests being ignore on claiming.
 * <cy>Fixed</c> GDUtils badges crashing when clicking to view details.
 
-## <cj>v1.6.0-beta.2</c> <cb>(2026-03-08)</c>
+## <co>v1.6.0-beta.2</c> <cb>(2026-03-08)</c>
 * <cy>Fixed</c> chests crashing upon opening for Android.
 
-## <cj>v1.6.0-beta.1</c> <cb>(2026-03-08)</c>
+## <co>v1.6.0-beta.1</c> <cb>(2026-03-08)</c>
 * <cp>GDUtils ported to Geode 5.0.0 (GD 2.2081)</c>
 * <cy>Changed</c> logic for chest notifications.
 * <cy>Changed</c> locations for where GDUtils stores files.
