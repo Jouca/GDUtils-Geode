@@ -257,7 +257,7 @@ class $modify(GDUtilsProfilePage, ProfilePage) {
                 } else if (id == "8") {
                     alertTitle = name;
                 } else if (id == "9") {
-                    alertDesc = name;
+                    alertDesc = geode::utils::string::replace(name, "\\n", "\n").c_str();
                 } else if (id == "10") {
                     alertWidth = numFromString<float>(name).unwrapOrDefault();
                 } else if (id == "11") {
@@ -379,7 +379,7 @@ class $modify(CustomBadgesCommentCell, CommentCell) {
                 } else if (id == "8") {
                     alertTitle = name;
                 } else if (id == "9") {
-                    alertDesc = name;
+                    alertDesc = geode::utils::string::replace(name, "\\n", "\n").c_str();
                 } else if (id == "10") {
                     alertWidth = geode::utils::numFromString<float>(name).unwrapOrDefault();
                 } else if (id == "11") {
