@@ -17,7 +17,7 @@ typedef unsigned int GLuint;
 namespace videoplayer {
     class VideoPlayer : public cocos2d::CCNodeRGBA {
     protected:
-        bool init(std::filesystem::path const& path, bool loop);
+        bool init(asp::fs::Path const& path, bool loop);
         
         void initAudio();
         static FMOD_RESULT F_CALLBACK audioCallback(FMOD_CHANNELCONTROL *chanControl, FMOD_CHANNELCONTROL_TYPE controlType, FMOD_CHANNELCONTROL_CALLBACK_TYPE callbackType, void *commandData1, void *commandData2);
@@ -33,7 +33,7 @@ namespace videoplayer {
 
         static FMOD_RESULT F_CALLBACK PCMRead(FMOD_SOUND *sound, void *data, unsigned int length);
 
-        std::filesystem::path m_path;
+        asp::fs::Path m_path;
         plm_t* m_stream;
 
         cocos2d::CCSize m_dimensions;
@@ -56,7 +56,7 @@ namespace videoplayer {
          * @param loop Whether or not playback should loop upon completion.
          * @return A new initialized video player
          */
-        static VideoPlayer* create(std::filesystem::path const& path, bool loop=false);
+        static VideoPlayer* create(asp::fs::Path const& path, bool loop=false);
 
         /**
          * @brief Sets the content height of the video player, maintaining aspect ratio

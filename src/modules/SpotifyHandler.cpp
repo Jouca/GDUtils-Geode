@@ -7,7 +7,6 @@ bool is_muted = false;
 #include <Geode/modify/PauseLayer.hpp>
 #ifdef GEODE_IS_WINDOWS
 #include <commdlg.h>
-#include <filesystem>
 #include <locale>
 #include <codecvt>
 #include <cstring>
@@ -151,7 +150,8 @@ void toggleSpotifyMute(bool automatic = false, bool muted = false) {
     } else {
         log::info("Unmuting Spotify...");
     }
-    std::wstring targetExeName = Mod::get()->template getSettingValue<std::filesystem::path>("spotifyApp").filename().wstring();
+    auto targetApp = Mod::get()->template getSettingValue<asp::fs::Path>("spotifyApp");
+    std::wstring targetExeName = targetApp.filename().value_or("").native();
     DWORD processId = GetProcessIdByName(targetExeName);
     if (processId) {
         MuteAudioSessionByProcessId(processId, is_muted);
@@ -185,7 +185,8 @@ bool isApplicationRunning(const std::string& appName) {
     return (result.find("true") != std::string::npos);
 }
 void MuteApplication() {
-    std::string targetName = Mod::get()->template getSettingValue<std::filesystem::path>("spotifyApp").filename().string();
+    auto targetApp = Mod::get()->template getSettingValue<asp::fs::Path>("spotifyApp");
+    std::string targetName = targetApp.filename().value_or("").string();
     // Remove the ".app" extension if it exists
     size_t dotAppPos = targetName.find(".app");
     if (dotAppPos != std::string::npos) {
@@ -227,8 +228,8 @@ void toggleSpotifyMute(bool automatic = false, bool muted = false) {
 #endif
 #ifdef GEODE_IS_DESKTOP
 class $modify(PlayLayer) {
-    bool init(GJGameLevel* level, bool p1, bool p2) {
-        if (!PlayLayer::init(level, p1, p2)) return false;
+    bool init(GJGameLevel* level, bool dontCreateObjects) {
+        if (!PlayLayer::init(level, dontCreateObjects)) return false;
         if (FMODAudioEngine::sharedEngine()->m_musicVolume > 0.0F) {
             toggleSpotifyMute(true, true);
         }

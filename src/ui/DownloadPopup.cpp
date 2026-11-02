@@ -36,7 +36,7 @@ RobProgressBar* RobProgressBar::create() {
     return nullptr;
 }
 
-bool DownloadPopup::init(const char* url, std::filesystem::path destination, std::function<void()> callback) {
+bool DownloadPopup::init(const char* url, asp::fs::Path destination, std::function<void()> callback) {
     if (!Popup::init(300.f, 150.f)) return false;
     Build<CCLabelBMFont>::create("Downloading...", "bigFont.fnt").scale(0.8f).parentAtPos(m_mainLayer, Anchor::Top, {0, -25});
 
@@ -68,7 +68,7 @@ bool DownloadPopup::init(const char* url, std::filesystem::path destination, std
     return true;
 }
 
-DownloadPopup* DownloadPopup::create(const char* url, std::filesystem::path destination, std::function<void()> callback) {
+DownloadPopup* DownloadPopup::create(const char* url, asp::fs::Path destination, std::function<void()> callback) {
     auto ret = new DownloadPopup();
     if (ret && ret->init(url, destination, callback)) {
         ret->autorelease();

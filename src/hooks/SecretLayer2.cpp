@@ -23,7 +23,7 @@ class $modify(SecretVault, SecretLayer2) {
     }
 
     void onSubmit(CCObject* obj) {
-        gd::string input = m_searchInput->getString();
+        std::string input = m_searchInput->getString();
         SecretLayer2::onSubmit(obj);
         if (m_fields->m_menu == nullptr) {
             Build<CCMenu>::create().pos(50, 200).contentSize({100, 200}).layout(
@@ -122,7 +122,7 @@ class $modify(SecretVault, SecretLayer2) {
     }
 
     void onLaunchBadApple(CCObject* pSender) {
-        if (std::filesystem::exists(Mod::get()->getSaveDir() / "bad_apple.mpg")) {
+        if ((Mod::get()->getSaveDir() / "bad_apple.mpg").exists()) {
             SecretVault::launchBadApple();
         } else {
             log::info("wait for bad apple");
@@ -144,7 +144,7 @@ class $modify(SecretVault, SecretLayer2) {
     }
 
     void onLaunchCOTE(CCObject* pSender) {
-        if (std::filesystem::exists(Mod::get()->getSaveDir() / "cote.mpg")) {
+        if ((Mod::get()->getSaveDir() / "cote.mpg").exists()) {
             SecretVault::launchCOTE();
         } else {
             log::info("wait for cote");

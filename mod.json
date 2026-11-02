@@ -1,11 +1,11 @@
 {
-    "geode": "5.8.2",
+    "geode": "6.0.0-alpha.1",
     "version": "v1.6.1",
     "gd": {
-        "win": "2.2081",
-        "mac": "2.2081",
-        "android": "2.2081",
-        "ios": "2.2081"
+        "win": "2.2091",
+        "mac": "2.2091",
+        "android": "2.2091",
+        "ios": "2.2091"
     },
     "id": "gdutilsdevs.gdutils",
     "name": "GDUtils",
@@ -270,7 +270,7 @@
         },
         "clickableBadges": {
             "name": "Clickable Badges",
-            "description": "Makes badges in <cg>Profile</c>'s clickable, showing more information about them.",
+            "description": "Makes <cy>GDUtils</c> custom badges in <cg>Profile</c>'s clickable, showing more information about them.",
             "type": "bool",
             "default": true
         },
@@ -280,12 +280,6 @@
             "type": "bool",
             "default": true,
             "enable-if": "clickableBadges"
-        },
-        "friendSearch": {
-            "name": "Search Friends",
-            "description": "Whether or not to show the search button in the <cg>Friends List Menu</c>.",
-            "type": "bool",
-            "default": true
         },
         "demonListPlacement": {
             "name": "Demon Placements",

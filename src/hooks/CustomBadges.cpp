@@ -95,130 +95,8 @@ He is the <cy>only developer of the game</c> and is responsible for <cy>all the 
         300.0f
     )->show();
 }
-static void onModBadgePressed(int badgeID) {
-    switch (badgeID) {
-                            case 1:
-                                #ifndef GEODE_IS_ANDROID
-                                FLAlertLayer::create(
-                                    nullptr,
-                                    "Geometry Dash Moderator",
-                    R"text(
-A <cl>Geometry Dash Moderator</c> is a user that has been chosen by <cj>RobTop</c> and other <cy>Moderators</c> on the team by suggestions.
 
-Their first task is to suggest levels to be rated to <cj>RobTop</c>, the current developer of the game and the maintainer of the <co>level rating system</c>, he is the only one that can rate levels.
-
-<cr>How to become a Geometry Dash Moderator?</c>
-
-Many community members want to become a <cl>Moderator</c> to be able to suggest levels for a rating. Similar to rating, Moderator promotions are solely done by <cj>RobTop</c> himself on a case-by-case basis, so there are no clear steps to getting it. Here are some general criteria:
-<cg>- Be nice.</c>
-<cg>- Be active in the community.</c>
-<cg>- Be trustworthy.</c>
-<cg>- Be able to judge levels well.</c>
-
-If you display these qualities over time, there is a chance that <cy>other Moderators</c> may suggest you to <cj>RobTop</c>. Of course, showing that you are qualified may be difficult if you do not share circles with pre-existing Moderators. If you are interested, you can apply to join the team using our application form. Make sure you read the information in it clearly before submitting. Here is the link:
-
-<cl>https://forms.gle/XyRGtFzD3hshDUQV7</c>
-                    )text",
-                                    "OK",
-                                    nullptr,
-                                    400.0f,
-                                    true,
-                                    100.0f,
-                                    1.0f
-                                )->show();
-                                #else
-                                FLAlertLayer::create(
-                                    nullptr,
-                                    "Geometry Dash Moderator",
-                    R"text(
-A <cl>Geometry Dash Moderator</c> is a user that has been chosen by <cj>RobTop</c> and other <cy>Moderators</c> on the team by suggestions.
-
-Their first task is to suggest levels to be rated to <cj>RobTop</c>, the current developer of the game and the maintainer of the <co>level rating system</c>, he is the only one that can rate levels.
-                    )text",
-                                    "OK",
-                                    nullptr,
-                                    400.0f,
-                                    true,
-                                    100.0f,
-                                    1.0f
-                                )->show();
-
-                            #endif
-                            break;
-        case 2:
-            #ifndef GEODE_IS_ANDROID // android height broken
-                FLAlertLayer::create(
-                    nullptr,
-                    "Geometry Dash Elder Moderator",
-                    R"text(
-A <cg>Geometry Dash Elder Moderator</c> is a user that has been chosen by <cj>RobTop</c> and other <cy>Moderators</c> on the team by suggestions and was already a <cy>Geometry Dash Moderator</c> before his promotion. They are the <cp>pillars</c> of the moderation team.
-
-Their first task is to suggest levels to be rated to <cj>RobTop</c>, the current developer of the game and the maintainer of the <co>level rating system</c>, which he is the only one that can rate levels. But they also have the power to <cg>moderate comments</c>, <cg>whitelists Newgrounds artists</c> and <cg>unlocks updates for old rated levels</c>.
-
-<cr>How to become a Geometry Dash Moderator?</c>
-
-Many community members want to become a <cl>Moderator</c> to be able to suggest levels for a rating. Similar to rating, Moderator promotions are solely done by <cj>RobTop</c> himself on a case-by-case basis, so there are no clear steps to getting it. Here are some general criteria:
-<cg>- Be nice.</c>
-<cg>- Be active in the community.</c>
-<cg>- Be trustworthy.</c>
-<cg>- Be able to judge levels well.</c>
-
-If you display these qualities over time, there is a chance that <cy>other Moderators</c> may suggest you to <cj>RobTop</c>. Of course, showing that you are qualified may be difficult if you do not share circles with pre-existing Moderators. If you are interested, you can apply to join the team using our application form. Make sure you read the information in it clearly before submitting. Here is the link:
-
-<cl>https://forms.gle/XyRGtFzD3hshDUQV7</c>
-                    )text",
-                                "OK",
-                                nullptr,
-                                400.0f,
-                                true,
-                                100.0f,
-                                1.0f
-                            )->show();
-                    #else 
-                            FLAlertLayer::create(
-                                nullptr,
-                                "Geometry Dash Elder Moderator",
-                    R"text(
-A <cg>Geometry Dash Elder Moderator</c> is a user that has been chosen by <cj>RobTop</c> and other <cy>Moderators</c> on the team by suggestions and was already a <cy>Geometry Dash Moderator</c> before his promotion. They are the <cp>pillars</c> of the moderation team.
-
-Their first task is to suggest levels to be rated to <cj>RobTop</c>, the current developer of the game and the maintainer of the <co>level rating system</c>, which he is the only one that can rate levels. But they also have the power to <cg>moderate comments</c>, <cg>whitelists Newgrounds artists</c> and <cg>unlocks updates for old rated levels</c>.
-                    )text",
-                                "OK",
-                                nullptr,
-                                400.0f,
-                                true,
-                                100.0f,
-                                1.0f
-                            )->show();
-            #endif
-                            break;
-                        case 3:
-                            FLAlertLayer::create(
-                                nullptr,
-                                "Geometry Dash Leaderboard Moderator",
-                R"text(
-A <cb>Geometry Dash Leaderboard Moderator</c> is a user that has been chosen by <cj>RobTop</c> and other <cy>Leaderboard Moderators</c> on the team by suggestions.
-
-Their first task is to moderate the <co>Top 100 / Global leaderboard</c> (as well as <cy>level-specific ones</c>) and <cm>ban cheaters</c> to keep the leaderboards clean.
-
-<cr>How to become a Geometry Dash Leaderboard Moderator?</c>
-
-If you are interested, you can apply to join the team using our application form. Make sure you read the information in it clearly before submitting. Here is the link:
-
-<cl>https://docs.google.com/forms/d/e/1FAIpQLSfrJyIVM7KzPyTgzGZ0CSuGBPv40160W9I6bPiMgLRawjJJBg/viewform</c>
-                )text",
-                                "OK",
-                                nullptr,
-                                500.0f,
-                                true,
-                                40.0f,
-                                1.0f
-                            )->show();
-                            break;
-                        }
-}
-
-// Mod badges descriptions & GDUtils dev badge
+// RobTop badge & GDUtils custom badges
 class $modify(GDUtilsProfilePage, ProfilePage) {
     struct Fields {
         async::TaskHolder<web::WebResponse> m_listener;
@@ -268,7 +146,7 @@ class $modify(GDUtilsProfilePage, ProfilePage) {
             }
             if (accountID_data == accountID) {
                 if (!m_mainLayer->getChildByIDRecursive(badge_id)) {
-                    auto* sprite = Build<CCSprite>::createSpriteName(fmt::format("{}"_spr, badge_sprite).c_str())
+                    auto* sprite = Build<CCSprite>::createSpriteName(fmt::format(fmt::runtime("{}"_spr), badge_sprite).c_str())
                         .scale(badge_scale)
                         .collect();
                     auto* btn = makeBadgeButton(sprite, badge_id, [title = alertTitle, desc = alertDesc, isKofi, width = alertWidth]() {
@@ -291,15 +169,11 @@ class $modify(GDUtilsProfilePage, ProfilePage) {
         if (m_mainLayer) {
             auto menu = m_mainLayer->getChildByID("username-menu");
             if (!menu) return;
-            if (auto modBadge = menu->getChildByID("mod-badge")) {
-                modBadge->removeFromParentAndCleanup(true);
-                if (score->m_userName == "RobTop" && Mod::get()->getSettingValue<bool>("customBadges")) {
+            if (score->m_userName == "RobTop" && Mod::get()->getSettingValue<bool>("customBadges")) {
+                if (auto modBadge = menu->getChildByID("mod-badge")) {
+                    modBadge->removeFromParentAndCleanup(true);
                     auto* spr = Build<CCSprite>::createSpriteName("robtop_badge.png"_spr).collect();
                     menu->addChild(makeBadgeButton(spr, "mod-badge", []() { onRobTopBadgePressed(); }));
-                } else {
-                    int badgeID = score->m_modBadge;
-                    auto* spr = Build<CCSprite>::createSpriteName(fmt::format("modBadge_0{}_001.png", badgeID).c_str()).collect();
-                    menu->addChild(makeBadgeButton(spr, "mod-badge", [badgeID]() { onModBadgePressed(badgeID); }));
                 }
             }
             if (Mod::get()->getSettingValue<bool>("customBadges")) {
@@ -410,7 +284,7 @@ class $modify(CustomBadgesCommentCell, CommentCell) {
                     }
                 }
                 if (!m_mainLayer->getChildByIDRecursive(badge_id)) {
-                    auto* sprite = Build<CCSprite>::createSpriteName(fmt::format("{}"_spr, badge_sprite).c_str())
+                    auto* sprite = Build<CCSprite>::createSpriteName(fmt::format(fmt::runtime("{}"_spr), badge_sprite).c_str())
                         .scale(badge_scale)
                         .collect();
                     auto* btn = makeBadgeButton(sprite, badge_id, [title = alertTitle, desc = alertDesc, isKofi, width = alertWidth]() {
@@ -437,21 +311,16 @@ class $modify(CustomBadgesCommentCell, CommentCell) {
         if (comment->m_commentDeleted) return;
         auto menu = m_mainLayer->getChildByIDRecursive("username-menu");
         if (!menu) return;
-        if (auto modBadge = menu->getChildByID("mod-badge")) {
-            modBadge->removeFromParentAndCleanup(true);
-            CCMenuItemSpriteExtra* badgeBtn;
-            if (m_comment->m_userName == "RobTop" && Mod::get()->getSettingValue<bool>("customBadges")) {
+        if (m_comment->m_userName == "RobTop" && Mod::get()->getSettingValue<bool>("customBadges")) {
+            if (auto modBadge = menu->getChildByID("mod-badge")) {
+                modBadge->removeFromParentAndCleanup(true);
                 auto* spr = Build<CCSprite>::createSpriteName("robtop_badge.png"_spr).scale(0.75f).collect();
-                badgeBtn = makeBadgeButton(spr, "mod-badge", []() { onRobTopBadgePressed(); });
-            } else {
-                int badgeID = comment->m_modBadge;
-                auto* spr = Build<CCSprite>::createSpriteName(fmt::format("modBadge_0{}_001.png", badgeID).c_str()).scale(0.6f).collect();
-                badgeBtn = makeBadgeButton(spr, "mod-badge", [badgeID]() { onModBadgePressed(badgeID); });
-            }
-            if (getChildByIDRecursive("percentage-label")) {
-                menu->insertBefore(badgeBtn, getChildByIDRecursive("percentage-label"));
-            } else {
-                menu->addChild(badgeBtn);
+                auto* badgeBtn = makeBadgeButton(spr, "mod-badge", []() { onRobTopBadgePressed(); });
+                if (getChildByIDRecursive("percentage-label")) {
+                    menu->insertBefore(badgeBtn, getChildByIDRecursive("percentage-label"));
+                } else {
+                    menu->addChild(badgeBtn);
+                }
             }
         }
         if (Mod::get()->getSettingValue<bool>("customBadges")) {

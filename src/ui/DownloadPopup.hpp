@@ -16,12 +16,12 @@ class RobProgressBar : public CCNode {
 };
 class DownloadPopup : public geode::Popup {
     protected:
-        bool init(const char* url, std::filesystem::path, std::function<void()>);
+        bool init(const char* url, asp::fs::Path, std::function<void()>);
         RobProgressBar* m_progressBar;
         LoadingCircle* loading_circle = LoadingCircle::create();
         async::TaskHolder<web::WebResponse> m_listener;
     public:
-        static DownloadPopup* create(const char* url, std::filesystem::path, std::function<void()>); //, cocos2d::SEL_MenuHandler callback
+        static DownloadPopup* create(const char* url, asp::fs::Path, std::function<void()>); //, cocos2d::SEL_MenuHandler callback
         virtual void onClose(CCObject*) override {
             m_listener.cancel();
             Popup::onClose(nullptr);

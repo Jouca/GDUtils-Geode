@@ -224,5 +224,10 @@
   "Cosmos": {
     "background": { "sprite": "cosmos_gauntlet.png", "scale": 1.245, "offsetY": 3 },
     "itemZOrder": 1
+  },
+  "Random": {
+    "background": { "sprite": "random_gauntlet.png", "scale": 1.445, "offsetY": 3 },
+    "gauntlet": { "position": [0.0, 27.0], "scale": 0.9, "zOrder": 3 },
+    "itemZOrder": 1
   }
 }

@@ -60,11 +60,8 @@ __**Join the Discord and Follow the instructions to Receive your In-Game Perks!*
 ### Custom backgrounds
 * Custom your **backgrounds colors** or you can even make it **transparent**!
 
-### Extra additions to Friends List
-* The additions added include being able to **search usernames** if you have a long friend list, or using the **scroll buttons**!
-
-### Moderator Info
-* You can view a description of either the Moderator, Elder Moderator, or other badges users have by clicking on the badge itself on the profile!
+### Custom Badges Info
+* You can view a description of the GDUtils custom badges users have by clicking on the badge itself on the profile!
 
 ## API Usage
 Incase you want to utilize GDUtils for your Geode Mod, you can do so by using it's events!

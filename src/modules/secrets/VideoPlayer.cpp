@@ -7,6 +7,7 @@
 #include "fmod.h"
 #define PL_MPEG_IMPLEMENTATION
 #include "VideoPlayer.hpp"
+#include <asp/fs/std.hpp>
 #ifdef GEODE_IS_WINDOWS
 #include <math.h>
 
@@ -52,12 +53,15 @@ const char* APP_FRAGMENT_SHADER_YCRCB = APP_SHADER_SOURCE(
 );
 
 namespace videoplayer {
-    bool VideoPlayer::init(std::filesystem::path const& path, bool loop) {
+    bool VideoPlayer::init(asp::fs::Path const& path, bool loop) {
         if (!CCNode::init()) return false;
 
         // GENERAL
         m_path = path;
-        m_stream = plm_create_with_filename(m_path.string().c_str());
+        // plm uses fopen, which expects the system codepage and not the UTF-8 from Path::string()
+        auto stdPath = m_path.toStdPath();
+        if (stdPath.isErr()) return false;
+        m_stream = plm_create_with_filename(stdPath.unwrap().string().c_str());
         
         if (!m_stream) {
             return false;
@@ -244,7 +248,7 @@ namespace videoplayer {
         return FMOD_OK;
     }
 
-    VideoPlayer* VideoPlayer::create(std::filesystem::path const& path, bool loop) {
+    VideoPlayer* VideoPlayer::create(asp::fs::Path const& path, bool loop) {
         VideoPlayer* ret = new VideoPlayer;
         if (ret && ret->init(path, loop)) {
             ret->autorelease();

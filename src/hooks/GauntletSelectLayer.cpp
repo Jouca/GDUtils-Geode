@@ -223,7 +223,7 @@ Thanks for their contributions!
                 auto bgPos = bg->getPosition();
                 bgPos.y += gd.bgOffsetY;
 
-                auto* bgSprite = CCSprite::create(fmt::format("{}"_spr, gd.background).c_str());
+                auto* bgSprite = CCSprite::create(fmt::format(fmt::runtime("{}"_spr), gd.background).c_str());
                 bgSprite->setPosition(bgPos);
                 bgSprite->setScale(gd.scaleBg / scaleFactor);
                 bgSprite->setZOrder(0);
@@ -251,7 +251,7 @@ Thanks for their contributions!
                     p->setScaleX(pd.scale.x);
                     p->setScaleY(pd.scale.y);
                     if (pd.rotation != 0.f) p->setRotation(pd.rotation);
-                    p->setID(fmt::format("gauntlet-particles-{}"_spr, k + 1));
+                    p->setID(fmt::format(fmt::runtime("gauntlet-particles-{}"_spr), k + 1));
                 }
             }
         }

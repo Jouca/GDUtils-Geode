@@ -29,10 +29,6 @@ A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute,
 ### View Demon List Placement
 * Instead of having to go to [Pointercrate](https://pointercrate.com/) to view the demon placement of a level, you can now <cy>view the position</c> of an extreme demon!
 
-### Level URL Sharing Feature (Windows Only)
-* You can <cg>share levels easily by copying the URL</c> of it and sending it to your friends! Or you can quickly go to a level by going to `https://gdutils.com/{levelid}` (Replacing `{levelid}` with the ID of the level)
-* With the compatility of <cy>Thumbnail Mod</c>, you will be able to see it by sending it on <cl>Discord</c>!
-
 ### Moderator List 
 * You can <cy>view the list</c> of <cp>Elder Moderators</c>/<cy>Moderators</c>/<cl>Leaderboard Moderators</c> and their socials!
 
@@ -43,11 +39,8 @@ A Geometry Dash Mod for adding more tools such as Notifications, auto-song mute,
 ### Custom backgrounds
 * Custom your <cy>backgrounds colors</c> or you can even make it **transparent**!
 
-### Extra additions to Friends List
-* The additions added include being able to <cy>search usernames</c> if you have a long friend list, or using the <cy>scroll buttons</c>!
-
-### Moderator Info
-* You can <cy>view a description</c> of either the <cy>Moderator</c>, <cp>Elder Moderator</c>, or other badges users have by <cy>clicking on the badge itself</c> on the profile!
+### Custom Badges Info
+* You can <cy>view a description</c> of the <cy>GDUtils custom badges</c> users have by <cy>clicking on the badge itself</c> on the profile!
 
 # Credits
 * [Jouca](https://x.com/JoucaJouca)
