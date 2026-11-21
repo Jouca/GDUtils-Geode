@@ -4,12 +4,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
 
-if ("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS" OR IOS)
-    set(CMAKE_OSX_ARCHITECTURES "arm64")
-    add_definitions(-DGLES_SILENCE_DEPRECATION)
-else()
-    set(CMAKE_OSX_ARCHITECTURES "arm64;x86_64")
-endif()
+# if ("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS" OR IOS)
+#     set(CMAKE_OSX_ARCHITECTURES "arm64")
+#     add_definitions(-DGLES_SILENCE_DEPRECATION)
+# else()
+#     set(CMAKE_OSX_ARCHITECTURES "arm64;x86_64")
+# endif()
 
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 include(cmake/CPM.cmake)
