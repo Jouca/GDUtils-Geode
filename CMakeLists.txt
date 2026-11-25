@@ -22,6 +22,10 @@ file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS src/*.cpp)
 # Set up the mod binary
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
 
+if (WIN32)
+  add_compile_definitions(strdup=_strdup)
+endif()
+
 set(ENABLE_SSL_SUPPORT OFF)
 set(BUILD_EXAMPLES OFF)
 set(BUILD_SHARED_LIBS OFF)
