@@ -37,13 +37,12 @@ jobs:
           git submodule update --init --recursive
           
       - name: Build the mod
-        uses: geode-sdk/build-geode-mod-docker@main
+        uses: geode-sdk/build-geode-mod-docker@v1
         with:
           build-config: 'RelWithDebInfo'
           export-pdb: true
           upload: true
           target: ${{ matrix.config.target }}
-          sdk: 6.0.0-beta.1
 
   package:
     name: Package builds
